@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/models/time_entries_provider.dart';
-import 'package:open_project_time_tracker/screens/time_entries_list/work_package_item.dart';
+import 'package:open_project_time_tracker/screens/time_entries_list/time_entry_list_item.dart';
 import 'package:provider/provider.dart';
 
 class TimeEntriesListScreen extends StatelessWidget {
@@ -25,7 +25,7 @@ class TimeEntriesListScreen extends StatelessWidget {
               itemCount: timeEntries.items.length,
               itemBuilder: ((context, index) {
                 final timeEntry = timeEntries.items[index];
-                return TimeEntryItem(
+                return TimeEntryListItem(
                   workPackageSubject: timeEntry.workPackageSubject,
                   projectTitle: timeEntry.projectTitle,
                   hours: timeEntry.hours,
