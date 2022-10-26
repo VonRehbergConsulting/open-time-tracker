@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:open_project_time_tracker/models/timer_provider.dart';
 import 'package:open_project_time_tracker/models/work_packages_provider.dart';
+import 'package:open_project_time_tracker/screens/timer_screen.dart';
 import 'package:open_project_time_tracker/screens/work_packages_list/work_packages_list_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -58,10 +62,6 @@ class MyApp extends StatelessWidget {
                 : AuthScreen();
           }),
         ),
-        routes: {
-          WorkPackagesListScreen.routeName: (context) =>
-              const WorkPackagesListScreen(),
-        },
       ),
     );
   }

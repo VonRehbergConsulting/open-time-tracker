@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/models/time_entries_provider.dart';
-import 'package:open_project_time_tracker/screens/time_entries_list/time_entry_list_item.dart';
-import 'package:open_project_time_tracker/screens/work_packages_list/work_packages_list_screen.dart';
 import 'package:provider/provider.dart';
+
+import '/models/time_entries_provider.dart';
+import '/screens/time_entries_list/time_entry_list_item.dart';
+import '/services/routes_factory.dart';
 
 class TimeEntriesListScreen extends StatelessWidget {
   const TimeEntriesListScreen({super.key});
 
   void _addButtonAction(BuildContext context) {
-    Navigator.of(context).pushNamed(WorkPackagesListScreen.routeName);
+    Navigator.of(context).push(RoutesFactory.workPackagesList);
   }
 
   @override
@@ -16,7 +17,7 @@ class TimeEntriesListScreen extends StatelessWidget {
     Provider.of<TimeEntriesProvider>(context, listen: false).reload();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recent work'),
+        title: const Text('Recent work'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),

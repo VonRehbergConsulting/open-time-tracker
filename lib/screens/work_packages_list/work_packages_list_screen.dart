@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 import '/models/work_packages_provider.dart';
 
 class WorkPackagesListScreen extends StatelessWidget {
-  static const routeName = '/work-packages';
-
   const WorkPackagesListScreen({super.key});
 
   @override
