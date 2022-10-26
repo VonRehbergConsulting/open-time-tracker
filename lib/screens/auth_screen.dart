@@ -1,7 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/providers/authorization_provider.dart';
+import 'package:open_project_time_tracker/models/network_provider.dart';
 import 'package:provider/provider.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -13,7 +11,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   void _authorize() {
-    Provider.of<AuthorizationProvider>(context, listen: false).authorize();
+    Provider.of<NetworkProvider>(context, listen: false).authorize();
   }
 
   @override
