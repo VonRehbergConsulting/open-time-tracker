@@ -1,55 +1,52 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:iso_duration_parser/iso_duration_parser.dart';
 import 'package:open_project_time_tracker/models/network_provider.dart';
-import 'package:open_project_time_tracker/models/time_entry.dart';
 import 'package:open_project_time_tracker/models/user_data_provider.dart';
+import 'package:open_project_time_tracker/models/work_package.dart';
 import 'package:open_project_time_tracker/services/endpoints.dart';
 
-class TimeEntriesProvider with ChangeNotifier {
+class WorkPackagesProvider with ChangeNotifier {
   // Properties
 
   NetworkProvider? networkProvider;
   UserDataProvider? userDataProvider;
 
-  List<TimeEntry> _items = [];
+  List<WorkPackage> _items = [];
 
-  List<TimeEntry> get items {
+  List<WorkPackage> get items {
     return [..._items];
   }
 
   // Private methods
 
-  List<TimeEntry> _parseListResponse(Map<String, dynamic> jsonResponse) {
-    List<TimeEntry> items = [];
+  List<WorkPackage> _parseListResponse(Map<String, dynamic> jsonResponse) {
+    List<WorkPackage> items = [];
     final embedded = jsonResponse['_embedded'];
     final elements = embedded['elements'] as List<dynamic>;
     elements.forEach((element) {
       final id = element['id'];
 
-      final comment = element["comment"];
-      final commentRaw = comment["raw"];
+      final subject = element["subject"];
 
       final links = element["_links"];
       final project = links["project"];
       final projectTitle = project["title"];
-      final workPackage = links["workPackage"];
-      final workPackageTitle = workPackage["title"];
+      final projectHref = project["href"];
 
-      final hoursString = element["hours"];
-      final hours =
-          Duration(seconds: IsoDuration.parse(hoursString).toSeconds().round());
-      items.add(TimeEntry(
-        id: id,
-        workPackageSubject: workPackageTitle,
-        projectTitle: projectTitle,
-        hours: hours,
-        comment: commentRaw,
-      ));
+      final priority = links["priority"];
+      final priorityTitle = priority['title'];
+
+      final status = links["status"];
+      final statusTitle = status['title'];
+
+      items.add(WorkPackage(
+          id: id,
+          subject: subject,
+          projectTitle: projectTitle,
+          priority: priorityTitle,
+          status: statusTitle));
     });
-
     return items;
   }
 
@@ -67,10 +64,9 @@ class TimeEntriesProvider with ChangeNotifier {
     if (userId == null) {
       return;
     }
-    final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
     var filters =
-        '[{"user":{"operator":"=","values":["$userId"]}}, {"spent_on":{"operator":"=d","values":["$date"]}}]';
-    final url = Uri.parse(Endpoints.timeEntries).replace(queryParameters: {
+        '[{"assignee":{"operator":"=","values":["$userId"]}}, {"status":{"operator":"!","values":["12"]}}]';
+    final url = Uri.parse(Endpoints.workPackages).replace(queryParameters: {
       'filters': filters,
       'pageSize': 40.toString(),
     });
@@ -80,7 +76,7 @@ class TimeEntriesProvider with ChangeNotifier {
       _items = _parseListResponse(parsedResponse);
       notifyListeners();
     } catch (error) {
-      print('Time entries loading error');
+      print('Work packages loading error');
     }
   }
 }

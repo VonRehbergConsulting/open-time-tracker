@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class TimeEntryListItem extends StatelessWidget {
+class WorkPackageListItem extends StatelessWidget {
   // Properties
 
-  final String workPackageSubject;
+  final String subject;
   final String projectTitle;
-  final Duration hours;
-  final String comment;
+  final String priority;
+  final String status;
 
   // Init
-  const TimeEntryListItem({
+  const WorkPackageListItem({
     super.key,
-    required this.workPackageSubject,
+    required this.subject,
     required this.projectTitle,
-    required this.hours,
-    required this.comment,
+    required this.priority,
+    required this.status,
   });
 
   // Private methods
@@ -32,15 +32,15 @@ class TimeEntryListItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: ListTile(
-          title: Text(workPackageSubject),
+          title: Text(subject),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(priority),
               Text(projectTitle),
-              Text(comment),
             ],
           ),
-          trailing: Text(hours.toString()),
+          trailing: Text(status),
         ),
       ),
     );

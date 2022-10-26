@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/models/network_provider.dart';
+import 'package:open_project_time_tracker/services/endpoints.dart';
 
 class UserDataProvider with ChangeNotifier {
   // Properties
@@ -22,7 +23,7 @@ class UserDataProvider with ChangeNotifier {
   }
 
   Future<void> loadUserId() async {
-    final url = Uri.parse('http://192.168.1.3:8080/api/v3/users/me');
+    final url = Uri.parse(Endpoints.userData);
     try {
       final response = await networkProvider?.get(url);
       if (response == null) {

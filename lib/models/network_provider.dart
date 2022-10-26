@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_project_time_tracker/services/endpoints.dart';
 
 import 'package:open_project_time_tracker/services/token_storage.dart';
 
@@ -45,8 +44,8 @@ class NetworkProvider with ChangeNotifier {
           'OaQ4maL8tXdpS88op2pjD-lJ2P8k-2ja95Tu-2VHOds',
           'openprojecttimetracker://oauth-callback',
           serviceConfiguration: const AuthorizationServiceConfiguration(
-            authorizationEndpoint: 'http://192.168.1.3:8080/oauth/authorize',
-            tokenEndpoint: 'http://192.168.1.3:8080/oauth/token',
+            authorizationEndpoint: Endpoints.auth,
+            tokenEndpoint: Endpoints.token,
           ),
           scopes: ['api_v3'],
           preferEphemeralSession: true,
@@ -67,8 +66,8 @@ class NetworkProvider with ChangeNotifier {
           'OaQ4maL8tXdpS88op2pjD-lJ2P8k-2ja95Tu-2VHOds',
           'openprojecttimetracker://oauth-callback',
           serviceConfiguration: const AuthorizationServiceConfiguration(
-            authorizationEndpoint: 'http://192.168.178.26:8080/oauth/authorize',
-            tokenEndpoint: 'http://192.168.178.26:8080/oauth/token',
+            authorizationEndpoint: Endpoints.auth,
+            tokenEndpoint: Endpoints.token,
           ),
           refreshToken: tokenStorage.refreshToken,
           scopes: ['api_v3'],

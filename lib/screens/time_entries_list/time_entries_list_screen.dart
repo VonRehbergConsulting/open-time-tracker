@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/models/time_entries_provider.dart';
 import 'package:open_project_time_tracker/screens/time_entries_list/time_entry_list_item.dart';
+import 'package:open_project_time_tracker/screens/work_packages_list/work_packages_list_screen.dart';
 import 'package:provider/provider.dart';
 
 class TimeEntriesListScreen extends StatelessWidget {
   const TimeEntriesListScreen({super.key});
 
-  void _addButtonAction() {
-    //
+  void _addButtonAction(BuildContext context) {
+    Navigator.of(context).pushNamed(WorkPackagesListScreen.routeName);
   }
 
   @override
@@ -38,7 +39,7 @@ class TimeEntriesListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _addButtonAction(),
+        onPressed: () => _addButtonAction(context),
       ),
     );
   }

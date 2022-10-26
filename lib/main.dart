@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:open_project_time_tracker/models/work_packages_provider.dart';
+import 'package:open_project_time_tracker/screens/work_packages_list/work_packages_list_screen.dart';
 import 'package:provider/provider.dart';
 
 import '/models/network_provider.dart';
@@ -35,7 +37,14 @@ class MyApp extends StatelessWidget {
           update: ((context, network, userData, timeEntries) =>
               timeEntries ?? TimeEntriesProvider()
                 ..update(network, userData)),
-        )
+        ),
+        ChangeNotifierProxyProvider2<NetworkProvider, UserDataProvider,
+            WorkPackagesProvider>(
+          create: ((context) => WorkPackagesProvider()),
+          update: ((context, network, userData, workPackages) =>
+              workPackages ?? WorkPackagesProvider()
+                ..update(network, userData)),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -49,6 +58,10 @@ class MyApp extends StatelessWidget {
                 : AuthScreen();
           }),
         ),
+        routes: {
+          WorkPackagesListScreen.routeName: (context) =>
+              const WorkPackagesListScreen(),
+        },
       ),
     );
   }
