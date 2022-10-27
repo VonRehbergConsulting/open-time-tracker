@@ -12,11 +12,11 @@ import '/screens/time_entries_list/time_entries_list_screen.dart';
 import '/services/token_storage.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

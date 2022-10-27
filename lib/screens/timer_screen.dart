@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '/models/timer_provider.dart';
-import '/services/DurationFormatter.dart';
+import '/services/duration_formatter.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
@@ -48,7 +48,7 @@ class _TimerScreenState extends State<TimerScreen> {
             Provider.of<TimerProvider>(context, listen: false).reset();
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.close),
+          icon: const Icon(Icons.close),
         ),
       ),
       body: Column(
@@ -58,7 +58,7 @@ class _TimerScreenState extends State<TimerScreen> {
             child: Consumer<TimerProvider>(
               builder: (context, timerProvider, child) => Text(
                 DurationFormatter.longWatch(timerProvider.timeSpent),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 50,
                 ),
               ),
