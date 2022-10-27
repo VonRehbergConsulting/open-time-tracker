@@ -16,7 +16,7 @@ class TimeEntriesListScreen extends StatelessWidget {
         title: const Text('Recent work'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Consumer<TimeEntriesProvider>(
           builder: (context, timeEntries, child) {
             return ListView.builder(
@@ -36,7 +36,7 @@ class TimeEntriesListScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () => AppRouter.routeToWorkPackagesList(context),
       ),
     );

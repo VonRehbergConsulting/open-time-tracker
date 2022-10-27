@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:open_project_time_tracker/screens/launch_screen.dart';
 import 'package:provider/provider.dart';
 
 import '/models/network_provider.dart';
@@ -23,8 +25,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) =>
-              NetworkProvider(const FlutterAppAuth(), TokenStorage()),
+          create: (context) => NetworkProvider(
+              const FlutterAppAuth(),
+              TokenStorage(
+                const FlutterSecureStorage(),
+              )),
         ),
         ChangeNotifierProxyProvider<NetworkProvider, UserDataProvider>(
           create: ((context) => UserDataProvider()),
@@ -56,9 +61,18 @@ class MyApp extends StatelessWidget {
         ),
         home: Consumer2<NetworkProvider, UserDataProvider>(
           builder: ((context, network, userData, child) {
-            return network.isAuthorized && userData.userId != null
-                ? const TimeEntriesListScreen()
-                : const AuthScreen();
+            if (network.authorizationState == AuthorizationStatate.undefined) {
+              return const LaunchScreen();
+            }
+            if (network.authorizationState ==
+                AuthorizationStatate.unauthorized) {
+              return const AuthScreen();
+            }
+            if (network.authorizationState == AuthorizationStatate.authorized &&
+                userData.userId != null) {
+              return const TimeEntriesListScreen();
+            }
+            return const LaunchScreen();
           }),
         ),
       ),

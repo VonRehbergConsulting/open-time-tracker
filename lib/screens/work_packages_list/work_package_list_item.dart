@@ -28,7 +28,7 @@ class WorkPackageListItem extends StatelessWidget {
     return GestureDetector(
       onTap: () => action(),
       child: Card(
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           vertical: 4,
           horizontal: 15,
         ),

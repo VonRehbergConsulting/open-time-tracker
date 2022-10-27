@@ -25,7 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
             children: [
               Image.asset('assets/images/open_project_logo.png'),
               ElevatedButton(
-                  child: Text('Log in'), onPressed: () => _authorize())
+                  child: const Text('Log in'), onPressed: () => _authorize())
             ],
           ),
         ),

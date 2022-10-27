@@ -5,19 +5,21 @@ import 'package:open_project_time_tracker/services/endpoints.dart';
 
 import 'package:open_project_time_tracker/services/token_storage.dart';
 
+enum AuthorizationStatate { authorized, unauthorized, undefined }
+
 class NetworkProvider with ChangeNotifier {
   // Properties
 
   FlutterAppAuth appAuth;
   TokenStorage tokenStorage;
 
-  bool get isAuthorized {
-    return tokenStorage.accessToken != null;
-  }
+  AuthorizationStatate authorizationState = AuthorizationStatate.undefined;
 
   // Init
 
-  NetworkProvider(this.appAuth, this.tokenStorage);
+  NetworkProvider(this.appAuth, this.tokenStorage) {
+    refreshToken();
+  }
 
   // Private methods
 
@@ -29,9 +31,12 @@ class NetworkProvider with ChangeNotifier {
         accessToken: accessToken,
         refreshToken: refreshToken,
       );
+      authorizationState = AuthorizationStatate.authorized;
       notifyListeners();
     } else {
       print('Parsing tokens error');
+      authorizationState = AuthorizationStatate.unauthorized;
+      notifyListeners();
     }
   }
 
@@ -60,6 +65,7 @@ class NetworkProvider with ChangeNotifier {
   }
 
   Future<void> refreshToken() async {
+    final refreshToken = await tokenStorage.refreshToken;
     try {
       final result = await appAuth.token(
         TokenRequest(
@@ -69,7 +75,7 @@ class NetworkProvider with ChangeNotifier {
             authorizationEndpoint: Endpoints.auth,
             tokenEndpoint: Endpoints.token,
           ),
-          refreshToken: tokenStorage.refreshToken,
+          refreshToken: refreshToken,
           scopes: ['api_v3'],
         ),
       );
@@ -90,10 +96,11 @@ class NetworkProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<http.Response> get(Uri url, {Map<String, String>? headers}) {
+  Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
+    final accessToken = await tokenStorage.accessToken;
     var headersWithToken = headers ?? {};
     headersWithToken.addAll({
-      'Authorization': 'Bearer ${tokenStorage.accessToken}',
+      'Authorization': 'Bearer $accessToken',
     });
     return http.get(url, headers: headersWithToken);
   }
