@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/services/app_router.dart';
 import 'package:provider/provider.dart';
 
 import '/models/timer_provider.dart';
@@ -46,7 +47,7 @@ class _TimerScreenState extends State<TimerScreen> {
         leading: IconButton(
           onPressed: () {
             Provider.of<TimerProvider>(context, listen: false).reset();
-            Navigator.of(context).pop();
+            AppRouter.routeToTimeEntriesList(context, widget);
           },
           icon: const Icon(Icons.close),
         ),

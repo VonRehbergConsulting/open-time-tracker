@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:open_project_time_tracker/screens/launch_screen.dart';
+import 'package:open_project_time_tracker/screens/timer_screen.dart';
 import 'package:provider/provider.dart';
 
 import '/models/network_provider.dart';
@@ -70,7 +71,8 @@ class MyApp extends StatelessWidget {
             }
             if (network.authorizationState == AuthorizationStatate.authorized &&
                 userData.userId != null) {
-              return const TimeEntriesListScreen();
+              // return const TimeEntriesListScreen();
+              return TimerScreen();
             }
             return const LaunchScreen();
           }),

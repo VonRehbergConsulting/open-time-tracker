@@ -1,5 +1,5 @@
 class Endpoints {
-  static const _baseUrl = 'http://192.168.178.26:8080';
+  static const _baseUrl = 'http://localhost:8080';
 
   static const auth = '$_baseUrl/oauth/authorize';
   static const token = '$_baseUrl/oauth/token';
