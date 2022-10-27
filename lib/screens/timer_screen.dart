@@ -33,6 +33,10 @@ class _TimerScreenState extends State<TimerScreen> {
     timer = null;
   }
 
+  void _finish() {
+    _stopTimer();
+  }
+
   @override
   void dispose() {
     timer?.cancel();
@@ -41,12 +45,20 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final timerProvider = Provider.of<TimerProvider>(context);
+    var leftButtonTitle = 'Start';
+    if (timerProvider.isActive) {
+      leftButtonTitle = 'Pause';
+    } else if (timerProvider.hasStarted) {
+      leftButtonTitle = 'Resume';
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Timer'),
         leading: IconButton(
           onPressed: () {
-            Provider.of<TimerProvider>(context, listen: false).reset();
+            timerProvider.reset();
             AppRouter.routeToTimeEntriesList(context, widget);
           },
           icon: const Icon(Icons.close),
@@ -56,12 +68,10 @@ class _TimerScreenState extends State<TimerScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-            child: Consumer<TimerProvider>(
-              builder: (context, timerProvider, child) => Text(
-                DurationFormatter.longWatch(timerProvider.timeSpent),
-                style: const TextStyle(
-                  fontSize: 50,
-                ),
+            child: Text(
+              DurationFormatter.longWatch(timerProvider.timeSpent),
+              style: const TextStyle(
+                fontSize: 50,
               ),
             ),
           ),
@@ -69,12 +79,14 @@ class _TimerScreenState extends State<TimerScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: (() => _startTimer()),
-                child: const Text('Start'),
+                onPressed: (timerProvider.isActive
+                    ? () => _stopTimer()
+                    : () => _startTimer()),
+                child: Text(leftButtonTitle),
               ),
               ElevatedButton(
-                onPressed: (() => _stopTimer()),
-                child: const Text('Stop'),
+                onPressed: (timerProvider.hasStarted ? () => _finish() : null),
+                child: const Text('Finish'),
               ),
             ],
           ),

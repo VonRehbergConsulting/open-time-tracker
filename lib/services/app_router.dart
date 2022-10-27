@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/helpers/slide_right_route.dart';
+import 'package:open_project_time_tracker/helpers/enter_exit_route.dart';
 import 'package:open_project_time_tracker/screens/time_entries_list/time_entries_list_screen.dart';
 import 'package:provider/provider.dart';
 

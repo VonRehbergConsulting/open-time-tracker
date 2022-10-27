@@ -18,6 +18,14 @@ class TimerProvider with ChangeNotifier {
     return greaterTime.difference(_startTime!);
   }
 
+  bool get isActive {
+    return _startTime != null && _stopTime == null;
+  }
+
+  bool get hasStarted {
+    return _startTime != null;
+  }
+
   // Init
 
   TimerProvider({this.timeEntry});
