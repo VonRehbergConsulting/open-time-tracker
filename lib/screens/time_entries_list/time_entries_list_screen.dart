@@ -3,14 +3,10 @@ import 'package:provider/provider.dart';
 
 import '/models/time_entries_provider.dart';
 import '/screens/time_entries_list/time_entry_list_item.dart';
-import '/services/routes_factory.dart';
+import '/services/app_router.dart';
 
 class TimeEntriesListScreen extends StatelessWidget {
   const TimeEntriesListScreen({super.key});
-
-  void _addButtonAction(BuildContext context) {
-    Navigator.of(context).push(RoutesFactory.workPackagesList);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +28,7 @@ class TimeEntriesListScreen extends StatelessWidget {
                   projectTitle: timeEntry.projectTitle,
                   hours: timeEntry.hours,
                   comment: timeEntry.comment ?? '',
+                  action: () => AppRouter.routeToTimer(context, timeEntry),
                 );
               }),
             );
@@ -40,7 +37,7 @@ class TimeEntriesListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _addButtonAction(context),
+        onPressed: () => AppRouter.routeToWorkPackagesList(context),
       ),
     );
   }

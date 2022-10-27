@@ -1,5 +1,7 @@
+import '/models/work_package.dart';
+
 class TimeEntry {
-  int id;
+  int? id;
   String workPackageSubject;
   String projectTitle;
   Duration hours;
@@ -12,4 +14,9 @@ class TimeEntry {
     required this.hours,
     this.comment,
   });
+
+  TimeEntry.forWorkPackage(WorkPackage workPackage)
+      : workPackageSubject = workPackage.subject,
+        projectTitle = workPackage.projectTitle,
+        hours = const Duration();
 }

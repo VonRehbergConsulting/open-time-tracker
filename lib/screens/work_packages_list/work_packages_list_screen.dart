@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/screens/work_packages_list/work_package_list_item.dart';
 import 'package:provider/provider.dart';
 
+import '/models/time_entry.dart';
+import '/screens/work_packages_list/work_package_list_item.dart';
+import '/services/app_router.dart';
 import '/models/work_packages_provider.dart';
 
 class WorkPackagesListScreen extends StatelessWidget {
@@ -27,6 +29,10 @@ class WorkPackagesListScreen extends StatelessWidget {
                   projectTitle: workPackage.projectTitle,
                   status: workPackage.status,
                   priority: workPackage.priority,
+                  action: () => AppRouter.routeToTimer(
+                    context,
+                    TimeEntry.forWorkPackage(workPackage),
+                  ),
                 );
               }),
             );

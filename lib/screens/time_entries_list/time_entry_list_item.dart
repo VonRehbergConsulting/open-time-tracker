@@ -7,6 +7,7 @@ class TimeEntryListItem extends StatelessWidget {
   final String projectTitle;
   final Duration hours;
   final String comment;
+  final Function action;
 
   // Init
   const TimeEntryListItem({
@@ -15,32 +16,34 @@ class TimeEntryListItem extends StatelessWidget {
     required this.projectTitle,
     required this.hours,
     required this.comment,
+    required this.action,
   });
-
-  // Private methods
 
   // Lifecycle
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(
-        vertical: 4,
-        horizontal: 15,
-      ),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: ListTile(
-          title: Text(workPackageSubject),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(projectTitle),
-              Text(comment),
-            ],
+    return GestureDetector(
+      onTap: () => action(),
+      child: Card(
+        margin: EdgeInsets.symmetric(
+          vertical: 4,
+          horizontal: 15,
+        ),
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ListTile(
+            title: Text(workPackageSubject),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(projectTitle),
+                Text(comment),
+              ],
+            ),
+            trailing: Text(hours.toString()),
           ),
-          trailing: Text(hours.toString()),
         ),
       ),
     );
