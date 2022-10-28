@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
   // Properties
 
   final _form = GlobalKey<FormState>();
+  final _timeFieldController = TextEditingController();
 
   var _isLoading = false;
 
@@ -53,10 +55,43 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
     }
   }
 
+  void _showTimePicker() {
+    final hours = widget.timeEntry.hours.inHours;
+    final minutes = widget.timeEntry.hours.inMinutes.remainder(60);
+    showCupertinoModalPopup(
+      context: context,
+      builder: ((context) => Container(
+            height: 300,
+            color: Theme.of(context).canvasColor,
+            child: CupertinoDatePicker(
+              initialDateTime: DateTime(
+                2000,
+                1,
+                1,
+                hours,
+                minutes,
+              ),
+              mode: CupertinoDatePickerMode.time,
+              use24hFormat: true,
+              onDateTimeChanged: ((value) {
+                setState(() {
+                  widget.timeEntry.hours = Duration(
+                    hours: value.hour,
+                    minutes: value.minute,
+                  );
+                });
+              }),
+            ),
+          )),
+    );
+  }
+
   // Lifecycle
 
   @override
   Widget build(BuildContext context) {
+    _timeFieldController.text =
+        DurationFormatter.shortWatch(widget.timeEntry.hours);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Summary'),
@@ -78,20 +113,20 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
                             initialValue: widget.timeEntry.workPackageSubject,
                             decoration:
                                 const InputDecoration(labelText: 'Task'),
-                            readOnly: true,
+                            enabled: false,
                           ),
                           TextFormField(
                             initialValue: widget.timeEntry.projectTitle,
                             decoration:
                                 const InputDecoration(labelText: 'Project'),
-                            readOnly: true,
+                            enabled: false,
                           ),
                           TextFormField(
-                            initialValue: DurationFormatter.longWatch(
-                                widget.timeEntry.hours),
+                            controller: _timeFieldController,
                             decoration:
                                 const InputDecoration(labelText: 'Time spent'),
                             readOnly: true,
+                            onTap: () => _showTimePicker(),
                           ),
                           TextFormField(
                             initialValue: widget.timeEntry.comment,

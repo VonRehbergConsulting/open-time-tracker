@@ -20,8 +20,13 @@ class TimerProvider with ChangeNotifier {
 
   void setTimeEntry(TimeEntry timeEntry) {
     _timeEntry = timeEntry;
-    _stopTime = DateTime.now();
-    _startTime = _stopTime?.add(-timeEntry.hours);
+    if (timeEntry.hours.inSeconds > 0) {
+      _stopTime = DateTime.now();
+      _startTime = _stopTime?.add(-timeEntry.hours);
+    } else {
+      _startTime = null;
+      _stopTime = null;
+    }
     _saveData();
   }
 

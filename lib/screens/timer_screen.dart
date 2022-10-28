@@ -42,6 +42,9 @@ class _TimerScreenState extends State<TimerScreen> {
     final timeEntry =
         Provider.of<TimerProvider>(context, listen: false).timeEntry;
     if (timeEntry != null) {
+      if (timeEntry.hours.inMinutes < 1) {
+        timeEntry.hours = Duration(minutes: 1);
+      }
       AppRouter.routeToTimeEntrySummary(context, timeEntry);
     }
   }

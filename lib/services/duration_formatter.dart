@@ -14,6 +14,23 @@ class DurationFormatter {
     return '$hours:$minutes';
   }
 
+  static String withLetters(Duration duration) {
+    var result = '';
+    if (duration.inHours > 0) {
+      result += '${duration.inHours}h';
+    }
+    if (duration.inMinutes.remainder(60) > 0) {
+      result += ' ${duration.inMinutes.remainder(60)}m';
+    }
+    if (duration.inSeconds.remainder(60) > 0) {
+      result += ' ${duration.inSeconds.remainder(60)}s';
+    }
+    if (result.startsWith(' ')) {
+      result = result.substring(1);
+    }
+    return result;
+  }
+
   static String toISO8601(Duration duration) {
     var result = 'PT';
     if (duration.inHours > 0) {

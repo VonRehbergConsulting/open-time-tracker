@@ -44,7 +44,12 @@ class TimeEntryListItem extends StatelessWidget {
                 Text(comment),
               ],
             ),
-            trailing: Text(DurationFormatter.longWatch(hours)),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(DurationFormatter.withLetters(hours)),
+              ],
+            ),
           ),
         ),
       ),
