@@ -19,11 +19,23 @@ class TimeEntrySummaryScreen extends StatefulWidget {
 }
 
 class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
+  // Properties
+
+  final _form = GlobalKey<FormState>();
+
+  var _isLoading = false;
+
+  // Private methods
+
   void _submit(BuildContext context) async {
     final userId = Provider.of<UserDataProvider>(context, listen: false).userId;
     if (userId == null) {
       return;
     }
+    _form.currentState?.save();
+    setState(() {
+      _isLoading = true;
+    });
     try {
       if (widget.timeEntry.id == null) {
         await Provider.of<TimeEntriesProvider>(context, listen: false)
@@ -35,8 +47,13 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
       AppRouter.routeToTimeEntriesList(context, widget);
     } catch (error) {
       print('Error while creating time entry');
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
+
+  // Lifecycle
 
   @override
   Widget build(BuildContext context) {
@@ -44,47 +61,57 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
       appBar: AppBar(
         title: const Text('Summary'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Form(
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    TextFormField(
-                      initialValue: widget.timeEntry.workPackageSubject,
-                      decoration: const InputDecoration(labelText: 'Task'),
-                      readOnly: true,
+                    Form(
+                      key: _form,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            initialValue: widget.timeEntry.workPackageSubject,
+                            decoration:
+                                const InputDecoration(labelText: 'Task'),
+                            readOnly: true,
+                          ),
+                          TextFormField(
+                            initialValue: widget.timeEntry.projectTitle,
+                            decoration:
+                                const InputDecoration(labelText: 'Project'),
+                            readOnly: true,
+                          ),
+                          TextFormField(
+                            initialValue: DurationFormatter.longWatch(
+                                widget.timeEntry.hours),
+                            decoration:
+                                const InputDecoration(labelText: 'Time spent'),
+                            readOnly: true,
+                          ),
+                          TextFormField(
+                            initialValue: widget.timeEntry.comment,
+                            decoration:
+                                const InputDecoration(labelText: 'Comment'),
+                            readOnly: false,
+                            onSaved: (newValue) =>
+                                widget.timeEntry.comment = newValue,
+                          ),
+                        ],
+                      ),
                     ),
-                    TextFormField(
-                      initialValue: widget.timeEntry.projectTitle,
-                      decoration: const InputDecoration(labelText: 'Project'),
-                      readOnly: true,
-                    ),
-                    TextFormField(
-                      initialValue:
-                          DurationFormatter.longWatch(widget.timeEntry.hours),
-                      decoration:
-                          const InputDecoration(labelText: 'Time spent'),
-                      readOnly: true,
-                    ),
-                    TextFormField(
-                      initialValue: widget.timeEntry.comment,
-                      decoration: const InputDecoration(labelText: 'Comment'),
-                      readOnly: false,
+                    ElevatedButton(
+                      onPressed: () => _submit(context),
+                      child: const Text('Save'),
                     ),
                   ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: () => _submit(context),
-                child: const Text('Save'),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
