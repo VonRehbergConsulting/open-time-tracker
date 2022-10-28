@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '/services/timer_storage.dart';
 import '/models/time_entry.dart';
 
 class TimerProvider with ChangeNotifier {
   // Properties
+
+  TimerStorage storage;
+  bool _isLoading = true;
+  bool get isLoading {
+    return _isLoading;
+  }
 
   TimeEntry? _timeEntry;
 
@@ -11,16 +18,11 @@ class TimerProvider with ChangeNotifier {
     return _timeEntry;
   }
 
-  set timeEntry(TimeEntry? timeEntry) {
-    reset();
-    if (timeEntry == null) {
-      return;
-    }
+  void setTimeEntry(TimeEntry timeEntry) {
     _timeEntry = timeEntry;
     _stopTime = DateTime.now();
     _startTime = _stopTime?.add(-timeEntry.hours);
-
-    notifyListeners();
+    _saveData();
   }
 
   DateTime? _startTime;
@@ -44,7 +46,30 @@ class TimerProvider with ChangeNotifier {
 
   // Init
 
-  TimerProvider(this._timeEntry);
+  TimerProvider(this.storage) {
+    _loadData();
+  }
+
+  void _loadData() async {
+    _isLoading = true;
+    notifyListeners();
+    _timeEntry = await storage.getTimeEntry();
+    _startTime = await storage.getStartTime();
+    _stopTime = await storage.getStopTime();
+    if (_timeEntry == null || _startTime == null) {
+      reset();
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  // Private methods
+  void _saveData() {
+    storage.setTimeEntry(_timeEntry);
+    storage.setStartTime(_startTime);
+    storage.setStopTime(_stopTime);
+    notifyListeners();
+  }
 
   // Public methods
 
@@ -57,7 +82,7 @@ class TimerProvider with ChangeNotifier {
       _startTime = _startTime?.add(duration);
       _stopTime = null;
     }
-    notifyListeners();
+    _saveData();
   }
 
   void stopTimer() {
@@ -65,13 +90,13 @@ class TimerProvider with ChangeNotifier {
       _stopTime = DateTime.now();
     }
     _timeEntry?.hours = _stopTime!.difference(_startTime!);
-    notifyListeners();
+    _saveData();
   }
 
   void reset() {
     _timeEntry = null;
     _startTime = null;
     _stopTime = null;
-    notifyListeners();
+    _saveData();
   }
 }

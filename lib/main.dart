@@ -12,6 +12,9 @@ import '/screens/auth_screen.dart';
 import '/screens/time_entries_list/time_entries_list_screen.dart';
 import '/services/token_storage.dart';
 import '/screens/launch_screen.dart';
+import '/screens/timer_screen.dart';
+import '/services/preferences_storage.dart';
+import '/services/timer_storage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,7 +54,11 @@ class MyApp extends StatelessWidget {
                 ..updateProvider(network, userData)),
         ),
         ChangeNotifierProvider(
-          create: (context) => TimerProvider(null),
+          create: (context) => TimerProvider(
+            TimerStorage(
+              PreferencesStorage(),
+            ),
+          ),
         ),
       ],
       child: MaterialApp(
@@ -59,8 +66,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
         ),
-        home: Consumer2<NetworkProvider, UserDataProvider>(
-          builder: ((context, network, userData, child) {
+        home: Consumer3<NetworkProvider, UserDataProvider, TimerProvider>(
+          builder: ((context, network, userData, timer, child) {
             if (network.authorizationState == AuthorizationStatate.undefined) {
               return const LaunchScreen();
             }
@@ -69,9 +76,11 @@ class MyApp extends StatelessWidget {
               return const AuthScreen();
             }
             if (network.authorizationState == AuthorizationStatate.authorized &&
-                userData.userId != null) {
-              // return const TimeEntriesListScreen();
-              return TimeEntriesListScreen();
+                userData.userId != null &&
+                timer.isLoading == false) {
+              return timer.timeEntry == null
+                  ? const TimeEntriesListScreen()
+                  : const TimerScreen();
             }
             return const LaunchScreen();
           }),

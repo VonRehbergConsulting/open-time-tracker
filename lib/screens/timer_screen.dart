@@ -19,6 +19,10 @@ class _TimerScreenState extends State<TimerScreen> {
 
   void _startTimer() {
     Provider.of<TimerProvider>(context, listen: false).startTimer();
+    _createUpdateTimer();
+  }
+
+  void _createUpdateTimer() {
     timer ??= Timer.periodic(
       const Duration(milliseconds: 500),
       (timer) {
@@ -42,6 +46,8 @@ class _TimerScreenState extends State<TimerScreen> {
     }
   }
 
+  // Lifecycle
+
   @override
   void dispose() {
     timer?.cancel();
@@ -53,6 +59,7 @@ class _TimerScreenState extends State<TimerScreen> {
     final timerProvider = Provider.of<TimerProvider>(context);
     var leftButtonTitle = 'Start';
     if (timerProvider.isActive) {
+      _createUpdateTimer();
       leftButtonTitle = 'Pause';
     } else if (timerProvider.hasStarted) {
       leftButtonTitle = 'Resume';

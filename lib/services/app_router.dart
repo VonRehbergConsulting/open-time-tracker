@@ -11,7 +11,7 @@ import '/screens/time_entry_summary_screen.dart';
 
 class AppRouter {
   static void routeToTimer(BuildContext context, TimeEntry timeEntry) {
-    Provider.of<TimerProvider>(context, listen: false).timeEntry = timeEntry;
+    Provider.of<TimerProvider>(context, listen: false).setTimeEntry(timeEntry);
     final route = CupertinoPageRoute(
       builder: ((context) => const TimerScreen()),
     );
