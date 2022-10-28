@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/models/network_provider.dart';
-import 'package:open_project_time_tracker/models/user_data_provider.dart';
-import 'package:open_project_time_tracker/models/work_package.dart';
-import 'package:open_project_time_tracker/services/endpoints.dart';
+
+import '/models/network_provider.dart';
+import '/models/user_data_provider.dart';
+import '/models/work_package.dart';
+import '/services/endpoints.dart';
 
 class WorkPackagesProvider with ChangeNotifier {
   // Properties
@@ -34,6 +35,9 @@ class WorkPackagesProvider with ChangeNotifier {
       final projectTitle = project["title"];
       final projectHref = project["href"];
 
+      final self = links["self"];
+      final selfHref = self["href"];
+
       final priority = links["priority"];
       final priorityTitle = priority['title'];
 
@@ -43,7 +47,9 @@ class WorkPackagesProvider with ChangeNotifier {
       items.add(WorkPackage(
           id: id,
           subject: subject,
+          href: selfHref,
           projectTitle: projectTitle,
+          projectHref: projectHref,
           priority: priorityTitle,
           status: statusTitle));
     });
@@ -52,7 +58,7 @@ class WorkPackagesProvider with ChangeNotifier {
 
   // Public methods
 
-  void update(
+  void updateProvider(
       NetworkProvider? networkProvider, UserDataProvider? userDataProvider) {
     this.networkProvider = networkProvider;
     this.userDataProvider = userDataProvider;
@@ -66,7 +72,7 @@ class WorkPackagesProvider with ChangeNotifier {
     }
     var filters =
         '[{"assignee":{"operator":"=","values":["$userId"]}}, {"status":{"operator":"!","values":["12"]}}]';
-    final url = Uri.parse(Endpoints.workPackages).replace(queryParameters: {
+    final url = Endpoints.workPackages.replace(queryParameters: {
       'filters': filters,
       'pageSize': 40.toString(),
     });

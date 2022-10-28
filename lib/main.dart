@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:open_project_time_tracker/screens/launch_screen.dart';
-import 'package:open_project_time_tracker/screens/timer_screen.dart';
 import 'package:provider/provider.dart';
 
 import '/models/network_provider.dart';
@@ -13,6 +11,7 @@ import '/models/work_packages_provider.dart';
 import '/screens/auth_screen.dart';
 import '/screens/time_entries_list/time_entries_list_screen.dart';
 import '/services/token_storage.dart';
+import '/screens/launch_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,24 +34,24 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<NetworkProvider, UserDataProvider>(
           create: ((context) => UserDataProvider()),
           update: (context, network, userData) => userData ?? UserDataProvider()
-            ..update(network),
+            ..updateProvider(network),
         ),
         ChangeNotifierProxyProvider2<NetworkProvider, UserDataProvider,
             TimeEntriesProvider>(
           create: ((context) => TimeEntriesProvider()),
           update: ((context, network, userData, timeEntries) =>
               timeEntries ?? TimeEntriesProvider()
-                ..update(network, userData)),
+                ..updateProvider(network, userData)),
         ),
         ChangeNotifierProxyProvider2<NetworkProvider, UserDataProvider,
             WorkPackagesProvider>(
           create: ((context) => WorkPackagesProvider()),
           update: ((context, network, userData, workPackages) =>
               workPackages ?? WorkPackagesProvider()
-                ..update(network, userData)),
+                ..updateProvider(network, userData)),
         ),
         ChangeNotifierProvider(
-          create: (context) => TimerProvider(),
+          create: (context) => TimerProvider(null),
         ),
       ],
       child: MaterialApp(
@@ -72,7 +71,7 @@ class MyApp extends StatelessWidget {
             if (network.authorizationState == AuthorizationStatate.authorized &&
                 userData.userId != null) {
               // return const TimeEntriesListScreen();
-              return TimerScreen();
+              return TimeEntriesListScreen();
             }
             return const LaunchScreen();
           }),

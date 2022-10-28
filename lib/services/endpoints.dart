@@ -4,7 +4,11 @@ class Endpoints {
   static const auth = '$_baseUrl/oauth/authorize';
   static const token = '$_baseUrl/oauth/token';
 
-  static const userData = '$_baseUrl/api/v3/users/me';
-  static const timeEntries = '$_baseUrl/api/v3/time_entries';
-  static const workPackages = '$_baseUrl/api/v3/work_packages';
+  static final userData = Uri.parse('$_baseUrl/api/v3/users/me');
+  static final workPackages = Uri.parse('$_baseUrl/api/v3/work_packages');
+
+  static final timeEntries = Uri.parse('$_baseUrl/api/v3/time_entries');
+  static Uri timeEntry(int id) {
+    return Uri.parse('$_baseUrl/api/v3/time_entries/${id..toString()}');
+  }
 }

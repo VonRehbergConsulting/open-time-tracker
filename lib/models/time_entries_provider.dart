@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:iso_duration_parser/iso_duration_parser.dart';
-import 'package:open_project_time_tracker/models/network_provider.dart';
-import 'package:open_project_time_tracker/models/time_entry.dart';
-import 'package:open_project_time_tracker/models/user_data_provider.dart';
-import 'package:open_project_time_tracker/services/endpoints.dart';
+
+import '/models/network_provider.dart';
+import '/models/time_entry.dart';
+import '/models/user_data_provider.dart';
+import '/services/duration_formatter.dart';
+import '/services/endpoints.dart';
 
 class TimeEntriesProvider with ChangeNotifier {
   // Properties
@@ -35,8 +37,10 @@ class TimeEntriesProvider with ChangeNotifier {
       final links = element["_links"];
       final project = links["project"];
       final projectTitle = project["title"];
+      final projectHref = project["href"];
       final workPackage = links["workPackage"];
       final workPackageTitle = workPackage["title"];
+      final workPackageHref = workPackage["href"];
 
       final hoursString = element["hours"];
       final hours =
@@ -44,7 +48,9 @@ class TimeEntriesProvider with ChangeNotifier {
       items.add(TimeEntry(
         id: id,
         workPackageSubject: workPackageTitle,
+        workPackageHref: workPackageHref,
         projectTitle: projectTitle,
+        projectHref: projectHref,
         hours: hours,
         comment: commentRaw,
       ));
@@ -55,7 +61,7 @@ class TimeEntriesProvider with ChangeNotifier {
 
   // Public methods
 
-  void update(
+  void updateProvider(
       NetworkProvider? networkProvider, UserDataProvider? userDataProvider) {
     this.networkProvider = networkProvider;
     this.userDataProvider = userDataProvider;
@@ -70,7 +76,7 @@ class TimeEntriesProvider with ChangeNotifier {
     final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
     var filters =
         '[{"user":{"operator":"=","values":["$userId"]}}, {"spent_on":{"operator":"=d","values":["$date"]}}]';
-    final url = Uri.parse(Endpoints.timeEntries).replace(queryParameters: {
+    final url = Endpoints.timeEntries.replace(queryParameters: {
       'filters': filters,
       'pageSize': 40.toString(),
     });
@@ -82,5 +88,44 @@ class TimeEntriesProvider with ChangeNotifier {
     } catch (error) {
       print('Time entries loading error');
     }
+  }
+
+  Future<void> create(
+      {required TimeEntry timeEntry, required int userId}) async {
+    final body = jsonEncode({
+      'user': {'id': userId},
+      'workPackage': {'href': timeEntry.workPackageHref},
+      'project': {'href': timeEntry.projectHref},
+      'spentOn': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      'hours': DurationFormatter.toISO8601(timeEntry.hours),
+      'comment': {
+        'format': 'plain',
+        'raw': timeEntry.comment,
+      },
+    });
+    final headers = {"Content-Type": "application/json"};
+    final url = Endpoints.timeEntries;
+    final response =
+        await networkProvider?.post(url, body: body, headers: headers);
+    print(jsonDecode(response!.body));
+  }
+
+  Future<void> update({required TimeEntry timeEntry}) async {
+    final timeEntryId = timeEntry.id;
+    if (timeEntryId == null) {
+      throw Error();
+    }
+    final body = jsonEncode({
+      'hours': DurationFormatter.toISO8601(timeEntry.hours),
+      'comment': {
+        'format': 'plain',
+        'raw': timeEntry.comment,
+      },
+    });
+    final headers = {"Content-Type": "application/json"};
+    final url = Endpoints.timeEntry(timeEntryId);
+    final response =
+        await networkProvider?.patch(url, body: body, headers: headers);
+    print(jsonDecode(response!.body));
   }
 }

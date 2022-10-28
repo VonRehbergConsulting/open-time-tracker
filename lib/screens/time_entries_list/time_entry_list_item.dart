@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '/services/duration_formatter.dart';
+
 class TimeEntryListItem extends StatelessWidget {
   // Properties
 
@@ -42,7 +44,7 @@ class TimeEntryListItem extends StatelessWidget {
                 Text(comment),
               ],
             ),
-            trailing: Text(hours.toString()),
+            trailing: Text(DurationFormatter.longWatch(hours)),
           ),
         ),
       ),

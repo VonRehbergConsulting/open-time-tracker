@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/services/app_router.dart';
 import 'package:provider/provider.dart';
 
+import '/services/app_router.dart';
 import '/models/timer_provider.dart';
 import '/services/duration_formatter.dart';
 
@@ -20,7 +20,7 @@ class _TimerScreenState extends State<TimerScreen> {
   void _startTimer() {
     Provider.of<TimerProvider>(context, listen: false).startTimer();
     timer ??= Timer.periodic(
-      const Duration(seconds: 1),
+      const Duration(milliseconds: 500),
       (timer) {
         setState(() {});
       },
@@ -35,6 +35,11 @@ class _TimerScreenState extends State<TimerScreen> {
 
   void _finish() {
     _stopTimer();
+    final timeEntry =
+        Provider.of<TimerProvider>(context, listen: false).timeEntry;
+    if (timeEntry != null) {
+      AppRouter.routeToTimeEntrySummary(context, timeEntry);
+    }
   }
 
   @override

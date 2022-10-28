@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/helpers/enter_exit_route.dart';
-import 'package:open_project_time_tracker/screens/time_entries_list/time_entries_list_screen.dart';
 import 'package:provider/provider.dart';
 
 import '/models/timer_provider.dart';
 import '/screens/timer_screen.dart';
 import '/screens/work_packages_list/work_packages_list_screen.dart';
 import '/models/time_entry.dart';
+import '/helpers/enter_exit_route.dart';
+import '/screens/time_entries_list/time_entries_list_screen.dart';
+import '/screens/time_entry_summary_screen.dart';
 
 class AppRouter {
   static void routeToTimer(BuildContext context, TimeEntry timeEntry) {
@@ -31,5 +31,15 @@ class AppRouter {
     final route =
         EnterExitRoute(exitScreen: currentScreen, enterScreen: newScreen);
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
+  }
+
+  static void routeToTimeEntrySummary(
+      BuildContext context, TimeEntry timeEntry) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => TimeEntrySummaryScreen(
+            timeEntry: timeEntry,
+          )),
+    );
+    Navigator.of(context).push(route);
   }
 }

@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:http/http.dart' as http;
-import 'package:open_project_time_tracker/services/endpoints.dart';
 
-import 'package:open_project_time_tracker/services/token_storage.dart';
+import '/services/endpoints.dart';
+import '/services/token_storage.dart';
 
 enum AuthorizationStatate { authorized, unauthorized, undefined }
 
@@ -103,5 +105,27 @@ class NetworkProvider with ChangeNotifier {
       'Authorization': 'Bearer $accessToken',
     });
     return http.get(url, headers: headersWithToken);
+  }
+
+  Future<http.Response> post(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+    final accessToken = await tokenStorage.accessToken;
+    var headersWithToken = headers ?? {};
+    headersWithToken.addAll({
+      'Authorization': 'Bearer $accessToken',
+    });
+    return http.post(url,
+        headers: headersWithToken, body: body, encoding: encoding);
+  }
+
+  Future<http.Response> patch(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+    final accessToken = await tokenStorage.accessToken;
+    var headersWithToken = headers ?? {};
+    headersWithToken.addAll({
+      'Authorization': 'Bearer $accessToken',
+    });
+    return http.patch(url,
+        headers: headersWithToken, body: body, encoding: encoding);
   }
 }
