@@ -140,7 +140,6 @@ class NetworkProvider with ChangeNotifier {
         ),
       );
       _handleResponse(result);
-    } on Error catch (error) {
     } on PlatformException catch (exception) {
       print('Invalid token');
       if (exception.code == 'token_failed') {
