@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/models/network_provider.dart';
 import 'package:provider/provider.dart';
 
 import '/models/time_entries_provider.dart';
@@ -31,6 +32,11 @@ class _TimeEntriesListScreenState extends State<TimeEntriesListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Recent work'),
+        leading: IconButton(
+            onPressed: (() =>
+                Provider.of<NetworkProvider>(context, listen: false)
+                    .unauthorize()),
+            icon: const Icon(Icons.exit_to_app_sharp)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),

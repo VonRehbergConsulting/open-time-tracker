@@ -151,12 +151,8 @@ class NetworkProvider with ChangeNotifier {
   }
 
   Future<void> unauthorize() async {
-    appAuth.endSession(
-      EndSessionRequest(
-        preferEphemeralSession: true,
-      ),
-    );
     tokenStorage.clear;
+    authorizationState = AuthorizationStatate.unauthorized;
     notifyListeners();
   }
 
