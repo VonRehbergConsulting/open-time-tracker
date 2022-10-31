@@ -25,6 +25,16 @@ class NetworkProvider with ChangeNotifier {
 
   // Private methods
 
+  void _setAuthorized() {
+    authorizationState = AuthorizationStatate.authorized;
+    notifyListeners();
+  }
+
+  void _setUnauthorized() {
+    authorizationState = AuthorizationStatate.unauthorized;
+    notifyListeners();
+  }
+
   void _handleResponse(TokenResponse? response) {
     final accessToken = response?.accessToken;
     final refreshToken = response?.refreshToken;
@@ -33,12 +43,10 @@ class NetworkProvider with ChangeNotifier {
         accessToken: accessToken,
         refreshToken: refreshToken,
       );
-      authorizationState = AuthorizationStatate.authorized;
-      notifyListeners();
+      _setAuthorized();
     } else {
       print('Parsing tokens error');
-      authorizationState = AuthorizationStatate.unauthorized;
-      notifyListeners();
+      _setUnauthorized();
     }
   }
 
@@ -68,6 +76,9 @@ class NetworkProvider with ChangeNotifier {
 
   Future<void> refreshToken() async {
     final refreshToken = await tokenStorage.refreshToken;
+    if (refreshToken == null) {
+      _setUnauthorized();
+    }
     try {
       final result = await appAuth.token(
         TokenRequest(
@@ -83,6 +94,7 @@ class NetworkProvider with ChangeNotifier {
       );
       _handleResponse(result);
     } catch (error) {
+      print(error);
       print('Refresh error');
       notifyListeners();
     }
@@ -100,6 +112,9 @@ class NetworkProvider with ChangeNotifier {
 
   Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
     final accessToken = await tokenStorage.accessToken;
+    if (accessToken == null) {
+      _setUnauthorized();
+    }
     var headersWithToken = headers ?? {};
     headersWithToken.addAll({
       'Authorization': 'Bearer $accessToken',
@@ -110,6 +125,9 @@ class NetworkProvider with ChangeNotifier {
   Future<http.Response> post(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     final accessToken = await tokenStorage.accessToken;
+    if (accessToken == null) {
+      _setUnauthorized();
+    }
     var headersWithToken = headers ?? {};
     headersWithToken.addAll({
       'Authorization': 'Bearer $accessToken',
@@ -121,6 +139,9 @@ class NetworkProvider with ChangeNotifier {
   Future<http.Response> patch(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     final accessToken = await tokenStorage.accessToken;
+    if (accessToken == null) {
+      _setUnauthorized();
+    }
     var headersWithToken = headers ?? {};
     headersWithToken.addAll({
       'Authorization': 'Bearer $accessToken',

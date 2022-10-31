@@ -5,34 +5,59 @@ import '/models/time_entries_provider.dart';
 import '/screens/time_entries_list/time_entry_list_item.dart';
 import '/services/app_router.dart';
 
-class TimeEntriesListScreen extends StatelessWidget {
+class TimeEntriesListScreen extends StatefulWidget {
   const TimeEntriesListScreen({super.key});
 
   @override
+  State<TimeEntriesListScreen> createState() => _TimeEntriesListScreenState();
+}
+
+class _TimeEntriesListScreenState extends State<TimeEntriesListScreen> {
+  // Properties
+
+  late Future _listFuture;
+
+  // Lifecycle
+
+  @override
+  void initState() {
+    super.initState();
+    _listFuture =
+        Provider.of<TimeEntriesProvider>(context, listen: false).reload();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Provider.of<TimeEntriesProvider>(context, listen: false).reload();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Recent work'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: Consumer<TimeEntriesProvider>(
-          builder: (context, timeEntries, child) {
-            return ListView.builder(
-              itemCount: timeEntries.items.length,
-              itemBuilder: ((context, index) {
-                final timeEntry = timeEntries.items[index];
-                return TimeEntryListItem(
-                  workPackageSubject: timeEntry.workPackageSubject,
-                  projectTitle: timeEntry.projectTitle,
-                  hours: timeEntry.hours,
-                  comment: timeEntry.comment ?? '',
-                  action: () => AppRouter.routeToTimer(context, timeEntry),
-                );
-              }),
-            );
-          },
+        child: FutureBuilder(
+          future: _listFuture,
+          builder: ((context, snapshot) {
+            return snapshot.connectionState == ConnectionState.waiting
+                ? const Center(child: CircularProgressIndicator())
+                : Consumer<TimeEntriesProvider>(
+                    builder: (context, timeEntries, child) {
+                      return ListView.builder(
+                        itemCount: timeEntries.items.length,
+                        itemBuilder: ((context, index) {
+                          final timeEntry = timeEntries.items[index];
+                          return TimeEntryListItem(
+                            workPackageSubject: timeEntry.workPackageSubject,
+                            projectTitle: timeEntry.projectTitle,
+                            hours: timeEntry.hours,
+                            comment: timeEntry.comment ?? '',
+                            action: () =>
+                                AppRouter.routeToTimer(context, timeEntry),
+                          );
+                        }),
+                      );
+                    },
+                  );
+          }),
         ),
       ),
       floatingActionButton: FloatingActionButton(
