@@ -36,6 +36,8 @@ class UserDataProvider with ChangeNotifier {
       print('userId: $id');
     } catch (error) {
       print('Error getting user id');
+      _userId = null;
+      notifyListeners();
     }
   }
 }

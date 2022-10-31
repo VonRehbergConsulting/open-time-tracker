@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,13 +27,17 @@ class NetworkProvider with ChangeNotifier {
   // Private methods
 
   void _setAuthorized() {
-    authorizationState = AuthorizationStatate.authorized;
-    notifyListeners();
+    if (authorizationState != AuthorizationStatate.authorized) {
+      authorizationState = AuthorizationStatate.authorized;
+      notifyListeners();
+    }
   }
 
   void _setUnauthorized() {
-    authorizationState = AuthorizationStatate.unauthorized;
-    notifyListeners();
+    if (authorizationState != AuthorizationStatate.unauthorized) {
+      authorizationState = AuthorizationStatate.unauthorized;
+      notifyListeners();
+    }
   }
 
   void _handleResponse(TokenResponse? response) {
@@ -48,6 +53,47 @@ class NetworkProvider with ChangeNotifier {
       print('Parsing tokens error');
       _setUnauthorized();
     }
+  }
+
+  Future<http.Response?> _get(Uri url, {Map<String, String>? headers}) async {
+    final accessToken = await tokenStorage.accessToken;
+    if (accessToken == null) {
+      _setUnauthorized();
+      return null;
+    }
+    var headersWithToken = headers ?? {};
+    headersWithToken.addAll({
+      'Authorization': 'Bearer $accessToken',
+    });
+    return http.get(url, headers: headersWithToken);
+  }
+
+  Future<http.Response?> _post(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+    final accessToken = await tokenStorage.accessToken;
+    if (accessToken == null) {
+      _setUnauthorized();
+    }
+    var headersWithToken = headers ?? {};
+    headersWithToken.addAll({
+      'Authorization': 'Bearer $accessToken',
+    });
+    return http.post(url,
+        headers: headersWithToken, body: body, encoding: encoding);
+  }
+
+  Future<http.Response?> _patch(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+    final accessToken = await tokenStorage.accessToken;
+    if (accessToken == null) {
+      _setUnauthorized();
+    }
+    var headersWithToken = headers ?? {};
+    headersWithToken.addAll({
+      'Authorization': 'Bearer $accessToken',
+    });
+    return http.patch(url,
+        headers: headersWithToken, body: body, encoding: encoding);
   }
 
   // Public methods
@@ -75,6 +121,7 @@ class NetworkProvider with ChangeNotifier {
   }
 
   Future<void> refreshToken() async {
+    print('Refreshing token');
     final refreshToken = await tokenStorage.refreshToken;
     if (refreshToken == null) {
       _setUnauthorized();
@@ -93,10 +140,14 @@ class NetworkProvider with ChangeNotifier {
         ),
       );
       _handleResponse(result);
-    } catch (error) {
-      print(error);
-      print('Refresh error');
-      notifyListeners();
+    } on Error catch (error) {
+    } on PlatformException catch (exception) {
+      print('Invalid token');
+      if (exception.code == 'token_failed') {
+        _setUnauthorized();
+      }
+    } catch (e) {
+      print('Can\'t refresh token');
     }
   }
 
@@ -110,43 +161,46 @@ class NetworkProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
-    final accessToken = await tokenStorage.accessToken;
-    if (accessToken == null) {
-      _setUnauthorized();
+  Future<http.Response?> get(Uri url, {Map<String, String>? headers}) async {
+    if (authorizationState == AuthorizationStatate.unauthorized) {
+      return null;
     }
-    var headersWithToken = headers ?? {};
-    headersWithToken.addAll({
-      'Authorization': 'Bearer $accessToken',
-    });
-    return http.get(url, headers: headersWithToken);
+    final response = await _get(url, headers: headers);
+    if (response?.statusCode == 401) {
+      await refreshToken();
+      return _get(url, headers: headers);
+    } else {
+      return response;
+    }
   }
 
-  Future<http.Response> post(Uri url,
+  Future<http.Response?> post(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    final accessToken = await tokenStorage.accessToken;
-    if (accessToken == null) {
-      _setUnauthorized();
+    if (authorizationState == AuthorizationStatate.unauthorized) {
+      return null;
     }
-    var headersWithToken = headers ?? {};
-    headersWithToken.addAll({
-      'Authorization': 'Bearer $accessToken',
-    });
-    return http.post(url,
-        headers: headersWithToken, body: body, encoding: encoding);
+    final response =
+        await _post(url, headers: headers, body: body, encoding: encoding);
+    if (response?.statusCode == 401) {
+      await refreshToken();
+      return _post(url, headers: headers, body: body, encoding: encoding);
+    } else {
+      return response;
+    }
   }
 
-  Future<http.Response> patch(Uri url,
+  Future<http.Response?> patch(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    final accessToken = await tokenStorage.accessToken;
-    if (accessToken == null) {
-      _setUnauthorized();
+    if (authorizationState == AuthorizationStatate.unauthorized) {
+      return null;
     }
-    var headersWithToken = headers ?? {};
-    headersWithToken.addAll({
-      'Authorization': 'Bearer $accessToken',
-    });
-    return http.patch(url,
-        headers: headersWithToken, body: body, encoding: encoding);
+    final response =
+        await _patch(url, headers: headers, body: body, encoding: encoding);
+    if (response?.statusCode == 401) {
+      await refreshToken();
+      return _patch(url, headers: headers, body: body, encoding: encoding);
+    } else {
+      return response;
+    }
   }
 }
