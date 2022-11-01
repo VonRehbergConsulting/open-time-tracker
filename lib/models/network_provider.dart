@@ -103,7 +103,7 @@ class NetworkProvider with ChangeNotifier {
     try {
       final response = await appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
-          Env.userId,
+          Env.clientId,
           'openprojecttimetracker://oauth-callback',
           serviceConfiguration: const AuthorizationServiceConfiguration(
             authorizationEndpoint: Endpoints.auth,
