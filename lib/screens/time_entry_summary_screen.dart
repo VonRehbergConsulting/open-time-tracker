@@ -26,6 +26,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
   final _timeFieldController = TextEditingController();
 
   var _isLoading = false;
+  var _shouldClose = false;
 
   // Private methods
 
@@ -46,13 +47,19 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
         await Provider.of<TimeEntriesProvider>(context, listen: false)
             .update(timeEntry: widget.timeEntry);
       }
-      AppRouter.routeToTimeEntriesList(context, widget);
+      setState(() {
+        _shouldClose = true;
+      });
     } catch (error) {
       print('Error while creating time entry');
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  void _routeToTimeEntriesList(BuildContext context) {
+    AppRouter.routeToTimeEntriesList(context, widget);
   }
 
   void _showTimePicker() {
@@ -90,6 +97,9 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_shouldClose) {
+      _routeToTimeEntriesList(context);
+    }
     _timeFieldController.text =
         DurationFormatter.shortWatch(widget.timeEntry.hours);
     return Scaffold(
