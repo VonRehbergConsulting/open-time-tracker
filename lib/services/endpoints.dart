@@ -1,5 +1,7 @@
+import '/env/env.dart';
+
 class Endpoints {
-  static const _baseUrl = 'http://localhost:8080';
+  static const _baseUrl = Env.baseUrl;
 
   static const auth = '$_baseUrl/oauth/authorize';
   static const token = '$_baseUrl/oauth/token';

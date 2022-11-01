@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 import '/services/endpoints.dart';
 import '/services/token_storage.dart';
+import '/env/env.dart';
 
 enum AuthorizationStatate { authorized, unauthorized, undefined }
 
@@ -102,7 +103,7 @@ class NetworkProvider with ChangeNotifier {
     try {
       final response = await appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
-          'OaQ4maL8tXdpS88op2pjD-lJ2P8k-2ja95Tu-2VHOds',
+          Env.userId,
           'openprojecttimetracker://oauth-callback',
           serviceConfiguration: const AuthorizationServiceConfiguration(
             authorizationEndpoint: Endpoints.auth,

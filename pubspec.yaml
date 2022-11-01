@@ -43,6 +43,7 @@ dependencies:
   iso_duration_parser: '1.1.1'
   flutter_secure_storage: '6.0.0'
   shared_preferences: '2.0.15'
+  envied: '0.2.3'
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +55,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  envied_generator: '0.2.3'
+  build_runner: '2.3.2'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
