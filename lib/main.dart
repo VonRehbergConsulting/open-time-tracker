@@ -67,6 +67,8 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
         ),
         home: Consumer3<NetworkProvider, UserDataProvider, TimerProvider>(
           builder: ((context, network, userData, timer, child) {

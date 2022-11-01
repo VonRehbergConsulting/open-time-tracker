@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '/services/app_router.dart';
@@ -68,44 +71,73 @@ class _TimerScreenState extends State<TimerScreen> {
       leftButtonTitle = 'Resume';
     }
 
+    final deviceSize = MediaQuery.of(context).size;
+    final buttonWidth = deviceSize.width * 0.35;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Timer'),
-        leading: IconButton(
-          onPressed: () {
-            timerProvider.reset();
-            AppRouter.routeToTimeEntriesList(context, widget);
-          },
-          icon: const Icon(Icons.close),
-        ),
+      floatingActionButton: IconButton(
+        onPressed: () {
+          timerProvider.reset();
+          AppRouter.routeToTimeEntriesList(context, widget);
+        },
+        icon: const Icon(Icons.close),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Spacer(flex: 11),
+            Text(
               DurationFormatter.longWatch(timerProvider.timeSpent),
               style: const TextStyle(
-                fontSize: 50,
-              ),
+                  fontSize: 60,
+                  fontWeight: FontWeight.w300,
+                  fontFeatures: [
+                    FontFeature.tabularFigures(),
+                  ]),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: (timerProvider.isActive
-                    ? () => _stopTimer()
-                    : () => _startTimer()),
-                child: Text(leftButtonTitle),
-              ),
-              ElevatedButton(
-                onPressed: (timerProvider.hasStarted ? () => _finish() : null),
-                child: const Text('Finish'),
-              ),
-            ],
-          ),
-        ],
+            const Spacer(flex: 2),
+            Text(
+              timerProvider.timeEntry?.workPackageSubject ?? '',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const Spacer(),
+            Text(
+              timerProvider.timeEntry?.projectTitle ?? '',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const Spacer(flex: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: buttonWidth,
+                  child: CupertinoButton.filled(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                    onPressed: (timerProvider.isActive
+                        ? () => _stopTimer()
+                        : () => _startTimer()),
+                    child: Text(leftButtonTitle),
+                  ),
+                ),
+                SizedBox(
+                  width: buttonWidth,
+                  child: CupertinoButton.filled(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                    onPressed:
+                        (timerProvider.hasStarted ? () => _finish() : null),
+                    child: const Text('Finish'),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(flex: 14),
+          ],
+        ),
       ),
     );
   }
