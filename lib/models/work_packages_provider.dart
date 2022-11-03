@@ -25,7 +25,7 @@ class WorkPackagesProvider with ChangeNotifier {
     List<WorkPackage> items = [];
     final embedded = jsonResponse['_embedded'];
     final elements = embedded['elements'] as List<dynamic>;
-    elements.forEach((element) {
+    for (var element in elements) {
       final id = element['id'];
 
       final subject = element["subject"];
@@ -52,7 +52,7 @@ class WorkPackagesProvider with ChangeNotifier {
           projectHref: projectHref,
           priority: priorityTitle,
           status: statusTitle));
-    });
+    }
     return items;
   }
 

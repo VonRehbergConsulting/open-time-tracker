@@ -24,7 +24,9 @@ class TimeEntriesProvider with ChangeNotifier {
 
   Duration get totalDuration {
     var total = const Duration();
-    _items.forEach((element) => total += element.hours);
+    for (var element in _items) {
+      total += element.hours;
+    }
     return total;
   }
 
@@ -34,7 +36,7 @@ class TimeEntriesProvider with ChangeNotifier {
     List<TimeEntry> items = [];
     final embedded = jsonResponse['_embedded'];
     final elements = embedded['elements'] as List<dynamic>;
-    elements.forEach((element) {
+    for (var element in elements) {
       final id = element['id'];
 
       final comment = element["comment"];
@@ -60,7 +62,7 @@ class TimeEntriesProvider with ChangeNotifier {
         hours: hours,
         comment: commentRaw,
       ));
-    });
+    }
 
     return items;
   }
@@ -93,6 +95,7 @@ class TimeEntriesProvider with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       print('Time entries loading error');
+      print(error);
     }
   }
 
@@ -136,7 +139,6 @@ class TimeEntriesProvider with ChangeNotifier {
   }
 
   Future<List<String>> loadComments({required int workPackageId}) async {
-    final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
     var filters =
         '[{"workPackage":{"operator":"=","values":["$workPackageId"]}}]';
     final url = Endpoints.timeEntries.replace(queryParameters: {
@@ -152,6 +154,7 @@ class TimeEntriesProvider with ChangeNotifier {
       return comments;
     } catch (error) {
       print('Time entries comments loading error');
+      print(error);
       return [];
     }
   }
