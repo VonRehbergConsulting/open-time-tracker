@@ -134,4 +134,25 @@ class TimeEntriesProvider with ChangeNotifier {
         await networkProvider?.patch(url, body: body, headers: headers);
     print(jsonDecode(response!.body));
   }
+
+  Future<List<String>> loadComments({required int workPackageId}) async {
+    final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    var filters =
+        '[{"workPackage":{"operator":"=","values":["$workPackageId"]}}]';
+    final url = Endpoints.timeEntries.replace(queryParameters: {
+      'filters': filters,
+      'pageSize': 40.toString(),
+    });
+    try {
+      final response = await networkProvider?.get(url);
+      final parsedResponse = jsonDecode(response!.body) as Map<String, dynamic>;
+      final items = _parseListResponse(parsedResponse);
+      var comments = items.map((e) => e.comment ?? '').toSet().toList();
+      comments.remove('');
+      return comments;
+    } catch (error) {
+      print('Time entries comments loading error');
+      return [];
+    }
+  }
 }

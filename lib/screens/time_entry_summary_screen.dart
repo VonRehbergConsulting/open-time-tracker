@@ -24,8 +24,11 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
 
   final _form = GlobalKey<FormState>();
   final _timeFieldController = TextEditingController();
+  final _commentFieldController = TextEditingController();
 
   var _isLoading = false;
+
+  List<String> _commentSuggestions = [];
 
   // Private methods
 
@@ -83,7 +86,41 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
     );
   }
 
+  void _showCommentSuggestions(BuildContext context) {
+    AppRouter.routeToCommentSuggestions(
+      context: context,
+      comments: _commentSuggestions,
+      handler: (comment) {
+        setState(() {
+          _commentFieldController.text = comment;
+        });
+      },
+    );
+  }
+
+  void _loadCommentSuggestions() async {
+    final workPackageIdString =
+        widget.timeEntry.workPackageHref.split('/').last;
+    final workPackageId = int.tryParse(workPackageIdString);
+    if (workPackageId == null) {
+      return;
+    }
+    final comments =
+        await Provider.of<TimeEntriesProvider>(context, listen: false)
+            .loadComments(workPackageId: workPackageId);
+    setState(() {
+      _commentSuggestions = comments;
+    });
+  }
+
   // Lifecycle
+
+  @override
+  void initState() {
+    super.initState();
+    _commentFieldController.text = widget.timeEntry.comment ?? '';
+    _loadCommentSuggestions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,9 +163,16 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
                             onTap: () => _showTimePicker(),
                           ),
                           TextFormField(
-                            initialValue: widget.timeEntry.comment,
-                            decoration:
-                                const InputDecoration(labelText: 'Comment'),
+                            controller: _commentFieldController,
+                            decoration: InputDecoration(
+                              labelText: 'Comment',
+                              suffixIcon: _commentSuggestions.isEmpty
+                                  ? null
+                                  : IconButton(
+                                      onPressed: () =>
+                                          _showCommentSuggestions(context),
+                                      icon: const Icon(Icons.more_horiz)),
+                            ),
                             readOnly: false,
                             onSaved: (newValue) =>
                                 widget.timeEntry.comment = newValue,

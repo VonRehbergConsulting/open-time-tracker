@@ -8,6 +8,7 @@ import '/models/time_entry.dart';
 import '/helpers/enter_exit_route.dart';
 import '/screens/time_entries_list/time_entries_list_screen.dart';
 import '/screens/time_entry_summary_screen.dart';
+import '/screens/comment_suggestions_screen.dart';
 
 class AppRouter {
   static void routeToTimer(BuildContext context, TimeEntry timeEntry) {
@@ -38,6 +39,23 @@ class AppRouter {
     final route = CupertinoPageRoute(
       builder: ((context) => TimeEntrySummaryScreen(
             timeEntry: timeEntry,
+          )),
+    );
+    Navigator.of(context).push(route);
+  }
+
+  static void routeToCommentSuggestions({
+    required BuildContext context,
+    required List<String> comments,
+    required Function(String comment) handler,
+  }) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => CommentSuggestionsScreen(
+            comments,
+            ((comment) {
+              handler(comment);
+              Navigator.of(context).pop();
+            }),
           )),
     );
     Navigator.of(context).push(route);
