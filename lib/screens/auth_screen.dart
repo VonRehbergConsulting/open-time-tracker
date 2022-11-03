@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/models/network_provider.dart';
 import 'package:provider/provider.dart';
+
+import '/models/network_provider.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
