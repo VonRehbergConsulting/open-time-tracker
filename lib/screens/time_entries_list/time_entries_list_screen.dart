@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/models/network_provider.dart';
 import 'package:provider/provider.dart';
 
+import '/services/duration_formatter.dart';
 import '/models/time_entries_provider.dart';
 import '/screens/time_entries_list/time_entry_list_item.dart';
+import '/screens/time_entries_list/total_time_list_item.dart';
 import '/services/app_router.dart';
 
 class TimeEntriesListScreen extends StatefulWidget {
@@ -48,9 +50,13 @@ class _TimeEntriesListScreenState extends State<TimeEntriesListScreen> {
                 : Consumer<TimeEntriesProvider>(
                     builder: (context, timeEntries, child) {
                       return ListView.builder(
-                        itemCount: timeEntries.items.length,
+                        itemCount: timeEntries.items.length + 1,
                         itemBuilder: ((context, index) {
-                          final timeEntry = timeEntries.items[index];
+                          if (index == 0) {
+                            return TotalTimeListItem(
+                                'Time spent today: ${DurationFormatter.shortWatch(timeEntries.totalDuration)}');
+                          }
+                          final timeEntry = timeEntries.items[index - 1];
                           return TimeEntryListItem(
                             workPackageSubject: timeEntry.workPackageSubject,
                             projectTitle: timeEntry.projectTitle,

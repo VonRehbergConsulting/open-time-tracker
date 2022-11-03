@@ -28,13 +28,9 @@ class TimeEntryListItem extends StatelessWidget {
     return GestureDetector(
       onTap: () => action(),
       child: Card(
-        margin: const EdgeInsets.symmetric(
-          vertical: 4,
-          horizontal: 15,
-        ),
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
           child: ListTile(
             title: Text(workPackageSubject),
             subtitle: Column(

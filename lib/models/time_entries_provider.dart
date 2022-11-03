@@ -22,6 +22,12 @@ class TimeEntriesProvider with ChangeNotifier {
     return [..._items];
   }
 
+  Duration get totalDuration {
+    var total = const Duration();
+    _items.forEach((element) => total += element.hours);
+    return total;
+  }
+
   // Private methods
 
   List<TimeEntry> _parseListResponse(Map<String, dynamic> jsonResponse) {
