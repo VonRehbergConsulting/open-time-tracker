@@ -33,7 +33,7 @@ class TimeEntriesProvider with ChangeNotifier {
   // Private methods
 
   List<TimeEntry> _parseListResponse(Map<String, dynamic> jsonResponse) {
-    List<TimeEntry> items = [];
+    Map<TimeEntry, DateTime> items = {};
     final embedded = jsonResponse['_embedded'];
     final elements = embedded['elements'] as List<dynamic>;
     for (var element in elements) {
@@ -51,9 +51,15 @@ class TimeEntriesProvider with ChangeNotifier {
       final workPackageHref = workPackage["href"];
 
       final hoursString = element["hours"];
-      final hours =
+      var hours =
           Duration(seconds: IsoDuration.parse(hoursString).toSeconds().round());
-      items.add(TimeEntry(
+      if (hours.inSeconds.remainder(60) == 59) {
+        hours += const Duration(seconds: 1);
+      }
+
+      final updatedAt =
+          DateTime.tryParse(element['updatedAt']) ?? DateTime.now();
+      items[TimeEntry(
         id: id,
         workPackageSubject: workPackageTitle,
         workPackageHref: workPackageHref,
@@ -61,10 +67,14 @@ class TimeEntriesProvider with ChangeNotifier {
         projectHref: projectHref,
         hours: hours,
         comment: commentRaw,
-      ));
+      )] = updatedAt;
     }
+    final sortedItems = Map.fromEntries(items.entries.toList()
+          ..sort((e1, e2) => e2.value.compareTo(e1.value)))
+        .keys
+        .toList();
 
-    return items;
+    return sortedItems;
   }
 
   // Public methods
