@@ -42,21 +42,29 @@ class _WorkPackagesListScreenState extends State<WorkPackagesListScreen> {
                 ? const Center(child: CircularProgressIndicator())
                 : Consumer<WorkPackagesProvider>(
                     builder: (context, workPackages, child) {
-                      return ListView.builder(
-                        itemCount: workPackages.items.length,
-                        itemBuilder: ((context, index) {
-                          final workPackage = workPackages.items[index];
-                          return WorkPackageListItem(
-                            subject: workPackage.subject,
-                            projectTitle: workPackage.projectTitle,
-                            status: workPackage.status,
-                            priority: workPackage.priority,
-                            action: () => AppRouter.routeToTimer(
-                              context,
-                              TimeEntry.forWorkPackage(workPackage),
-                            ),
-                          );
-                        }),
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          await Provider.of<WorkPackagesProvider>(context,
+                                  listen: false)
+                              .reload();
+                          setState(() {});
+                        },
+                        child: ListView.builder(
+                          itemCount: workPackages.items.length,
+                          itemBuilder: ((context, index) {
+                            final workPackage = workPackages.items[index];
+                            return WorkPackageListItem(
+                              subject: workPackage.subject,
+                              projectTitle: workPackage.projectTitle,
+                              status: workPackage.status,
+                              priority: workPackage.priority,
+                              action: () => AppRouter.routeToTimer(
+                                context,
+                                TimeEntry.forWorkPackage(workPackage),
+                              ),
+                            );
+                          }),
+                        ),
                       );
                     },
                   );

@@ -49,23 +49,31 @@ class _TimeEntriesListScreenState extends State<TimeEntriesListScreen> {
                 ? const Center(child: CircularProgressIndicator())
                 : Consumer<TimeEntriesProvider>(
                     builder: (context, timeEntries, child) {
-                      return ListView.builder(
-                        itemCount: timeEntries.items.length + 1,
-                        itemBuilder: ((context, index) {
-                          if (index == 0) {
-                            return TotalTimeListItem(
-                                'Time spent today: ${DurationFormatter.shortWatch(timeEntries.totalDuration)}');
-                          }
-                          final timeEntry = timeEntries.items[index - 1];
-                          return TimeEntryListItem(
-                            workPackageSubject: timeEntry.workPackageSubject,
-                            projectTitle: timeEntry.projectTitle,
-                            hours: timeEntry.hours,
-                            comment: timeEntry.comment ?? '',
-                            action: () =>
-                                AppRouter.routeToTimer(context, timeEntry),
-                          );
-                        }),
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          await Provider.of<TimeEntriesProvider>(context,
+                                  listen: false)
+                              .reload();
+                          setState(() {});
+                        },
+                        child: ListView.builder(
+                          itemCount: timeEntries.items.length + 1,
+                          itemBuilder: ((context, index) {
+                            if (index == 0) {
+                              return TotalTimeListItem(
+                                  'Time spent today: ${DurationFormatter.shortWatch(timeEntries.totalDuration)}');
+                            }
+                            final timeEntry = timeEntries.items[index - 1];
+                            return TimeEntryListItem(
+                              workPackageSubject: timeEntry.workPackageSubject,
+                              projectTitle: timeEntry.projectTitle,
+                              hours: timeEntry.hours,
+                              comment: timeEntry.comment ?? '',
+                              action: () =>
+                                  AppRouter.routeToTimer(context, timeEntry),
+                            );
+                          }),
+                        ),
                       );
                     },
                   );
