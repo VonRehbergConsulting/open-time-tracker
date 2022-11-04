@@ -5,17 +5,18 @@ import '/models/timer_provider.dart';
 import '/screens/timer_screen.dart';
 import '/screens/work_packages_list/work_packages_list_screen.dart';
 import '/models/time_entry.dart';
-import '/helpers/enter_exit_route.dart';
+import '../helpers/slide_transition.dart';
 import '/screens/time_entries_list/time_entries_list_screen.dart';
 import '/screens/time_entry_summary_screen.dart';
 import '/screens/comment_suggestions_screen.dart';
 
 class AppRouter {
-  static void routeToTimer(BuildContext context, TimeEntry timeEntry) {
+  static void routeToTimer(
+      BuildContext context, TimeEntry timeEntry, Widget currentScreen) {
     Provider.of<TimerProvider>(context, listen: false).setTimeEntry(timeEntry);
-    final route = CupertinoPageRoute(
-      builder: ((context) => const TimerScreen()),
-    );
+    const newScreen = TimerScreen();
+    final route =
+        SlideToRightTransition(toScreen: newScreen, fromScreen: currentScreen);
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 
@@ -30,7 +31,7 @@ class AppRouter {
       BuildContext context, Widget currentScreen) {
     const newScreen = TimeEntriesListScreen();
     final route =
-        EnterExitRoute(exitScreen: currentScreen, enterScreen: newScreen);
+        SlideToLeftTransition(fromScreen: currentScreen, toScreen: newScreen);
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 

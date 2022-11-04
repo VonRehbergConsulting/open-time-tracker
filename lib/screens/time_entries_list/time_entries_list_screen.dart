@@ -69,8 +69,11 @@ class _TimeEntriesListScreenState extends State<TimeEntriesListScreen> {
                               projectTitle: timeEntry.projectTitle,
                               hours: timeEntry.hours,
                               comment: timeEntry.comment ?? '',
-                              action: () =>
-                                  AppRouter.routeToTimer(context, timeEntry),
+                              action: () => AppRouter.routeToTimer(
+                                context,
+                                timeEntry,
+                                widget,
+                              ),
                             );
                           }),
                         ),

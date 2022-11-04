@@ -59,9 +59,9 @@ class _WorkPackagesListScreenState extends State<WorkPackagesListScreen> {
                               status: workPackage.status,
                               priority: workPackage.priority,
                               action: () => AppRouter.routeToTimer(
-                                context,
-                                TimeEntry.forWorkPackage(workPackage),
-                              ),
+                                  context,
+                                  TimeEntry.forWorkPackage(workPackage),
+                                  widget),
                             );
                           }),
                         ),
