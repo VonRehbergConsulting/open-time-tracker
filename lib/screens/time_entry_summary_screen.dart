@@ -51,6 +51,25 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
       }
       AppRouter.routeToTimeEntriesList(context, widget);
     } catch (error) {
+      showDialog(
+        context: context,
+        builder: ((context) => CupertinoAlertDialog(
+              title: const Text('Unable to log your work'),
+              content: const Text('Please try again later'),
+              actions: [
+                CupertinoButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    'Close',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ),
+              ],
+            )),
+      );
+      setState(() {
+        _isLoading = false;
+      });
       print('Error while creating time entry');
     }
   }
