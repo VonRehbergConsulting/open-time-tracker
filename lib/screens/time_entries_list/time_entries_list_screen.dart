@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/models/network_provider.dart';
 import 'package:provider/provider.dart';
 
 import '/services/duration_formatter.dart';
@@ -8,6 +7,7 @@ import '/screens/time_entries_list/time_entry_list_item.dart';
 import '/screens/time_entries_list/total_time_list_item.dart';
 import '/services/app_router.dart';
 import '/widgets/activity_indicator.dart';
+import '/models/network_provider.dart';
 
 class TimeEntriesListScreen extends StatefulWidget {
   const TimeEntriesListScreen({super.key});
