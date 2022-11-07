@@ -28,7 +28,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
 
   var _isLoading = false;
 
-  List<String> _commentSuggestions = [];
+  List<String>? _commentSuggestions;
 
   // Private methods
 
@@ -108,7 +108,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
   void _showCommentSuggestions(BuildContext context) {
     AppRouter.routeToCommentSuggestions(
       context: context,
-      comments: _commentSuggestions,
+      comments: _commentSuggestions ?? [],
       handler: (comment) {
         setState(() {
           _commentFieldController.text = comment;
@@ -185,12 +185,14 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
                             controller: _commentFieldController,
                             decoration: InputDecoration(
                               labelText: 'Comment',
-                              suffixIcon: _commentSuggestions.isEmpty
-                                  ? null
-                                  : IconButton(
-                                      onPressed: () =>
-                                          _showCommentSuggestions(context),
-                                      icon: const Icon(Icons.more_horiz)),
+                              suffixIcon: _commentSuggestions == null
+                                  ? const CupertinoActivityIndicator()
+                                  : _commentSuggestions!.isEmpty
+                                      ? null
+                                      : IconButton(
+                                          onPressed: () =>
+                                              _showCommentSuggestions(context),
+                                          icon: const Icon(Icons.more_horiz)),
                             ),
                             readOnly: false,
                             onSaved: (newValue) =>
