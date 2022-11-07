@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LaunchScreen extends StatelessWidget {
@@ -7,7 +8,7 @@ class LaunchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Launching...'),
+        child: CupertinoActivityIndicator(),
       ),
     );
   }

@@ -7,6 +7,7 @@ import '/models/time_entries_provider.dart';
 import '/screens/time_entries_list/time_entry_list_item.dart';
 import '/screens/time_entries_list/total_time_list_item.dart';
 import '/services/app_router.dart';
+import '/widgets/activity_indicator.dart';
 
 class TimeEntriesListScreen extends StatefulWidget {
   const TimeEntriesListScreen({super.key});
@@ -46,7 +47,7 @@ class _TimeEntriesListScreenState extends State<TimeEntriesListScreen> {
           future: _listFuture,
           builder: ((context, snapshot) {
             return snapshot.connectionState == ConnectionState.waiting
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(child: ActivityIndicator())
                 : Consumer<TimeEntriesProvider>(
                     builder: (context, timeEntries, child) {
                       return RefreshIndicator(

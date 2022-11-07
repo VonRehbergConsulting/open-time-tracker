@@ -8,6 +8,7 @@ import '/models/user_data_provider.dart';
 import '/services/app_router.dart';
 import '/services/duration_formatter.dart';
 import '/extensions/duration.dart';
+import '/widgets/activity_indicator.dart';
 
 class TimeEntrySummaryScreen extends StatefulWidget {
   final TimeEntry timeEntry;
@@ -152,9 +153,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
         title: const Text('Summary'),
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? const Center(child: ActivityIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(

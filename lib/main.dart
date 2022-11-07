@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Open Project Time Tracker',
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
           splashColor: Colors.transparent,

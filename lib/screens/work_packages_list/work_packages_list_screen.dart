@@ -5,6 +5,7 @@ import '/models/time_entry.dart';
 import '/screens/work_packages_list/work_package_list_item.dart';
 import '/services/app_router.dart';
 import '/models/work_packages_provider.dart';
+import '/widgets/activity_indicator.dart';
 
 class WorkPackagesListScreen extends StatefulWidget {
   const WorkPackagesListScreen({super.key});
@@ -39,7 +40,7 @@ class _WorkPackagesListScreenState extends State<WorkPackagesListScreen> {
           future: _listFuture,
           builder: ((context, snapshot) {
             return snapshot.connectionState == ConnectionState.waiting
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(child: ActivityIndicator())
                 : Consumer<WorkPackagesProvider>(
                     builder: (context, workPackages, child) {
                       return RefreshIndicator(
