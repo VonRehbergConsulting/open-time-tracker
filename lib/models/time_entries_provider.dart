@@ -8,7 +8,6 @@ import '/models/network_provider.dart';
 import '/models/time_entry.dart';
 import '/models/user_data_provider.dart';
 import '/helpers/duration_formatter.dart';
-import '/helpers/endpoints.dart';
 
 class TimeEntriesProvider with ChangeNotifier {
   // Properties
@@ -94,10 +93,15 @@ class TimeEntriesProvider with ChangeNotifier {
     final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
     var filters =
         '[{"user":{"operator":"=","values":["$userId"]}}, {"spent_on":{"operator":"=d","values":["$date"]}}]';
-    final url = Endpoints.timeEntries.replace(queryParameters: {
+    final url = networkProvider?.endpointsFactory.timeEntries
+        ?.replace(queryParameters: {
       'filters': filters,
       'pageSize': 40.toString(),
     });
+    if (url == null) {
+      print('Can\'t create url');
+      return;
+    }
     try {
       final response = await networkProvider?.get(url);
       final parsedResponse = jsonDecode(response!.body) as Map<String, dynamic>;
@@ -123,7 +127,11 @@ class TimeEntriesProvider with ChangeNotifier {
       },
     });
     final headers = {"Content-Type": "application/json"};
-    final url = Endpoints.timeEntries;
+    final url = networkProvider?.endpointsFactory.timeEntries;
+    if (url == null) {
+      print('Can\'t create url');
+      return;
+    }
     final response =
         await networkProvider?.post(url, body: body, headers: headers);
     print(jsonDecode(response!.body));
@@ -142,7 +150,11 @@ class TimeEntriesProvider with ChangeNotifier {
       },
     });
     final headers = {"Content-Type": "application/json"};
-    final url = Endpoints.timeEntry(timeEntryId);
+    final url = networkProvider?.endpointsFactory.timeEntry(timeEntryId);
+    if (url == null) {
+      print('Can\'t create url');
+      return;
+    }
     final response =
         await networkProvider?.patch(url, body: body, headers: headers);
     print(jsonDecode(response!.body));
@@ -151,10 +163,15 @@ class TimeEntriesProvider with ChangeNotifier {
   Future<List<String>> loadComments({required int workPackageId}) async {
     var filters =
         '[{"workPackage":{"operator":"=","values":["$workPackageId"]}}]';
-    final url = Endpoints.timeEntries.replace(queryParameters: {
+    final url = networkProvider?.endpointsFactory.timeEntries
+        ?.replace(queryParameters: {
       'filters': filters,
       'pageSize': 40.toString(),
     });
+    if (url == null) {
+      print('Can\'t create url');
+      return Future.value();
+    }
     try {
       final response = await networkProvider?.get(url);
       final parsedResponse = jsonDecode(response!.body) as Map<String, dynamic>;

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '/models/network_provider.dart';
 import '/models/user_data_provider.dart';
 import '/models/work_package.dart';
-import '/helpers/endpoints.dart';
 
 class WorkPackagesProvider with ChangeNotifier {
   // Properties
@@ -72,10 +71,15 @@ class WorkPackagesProvider with ChangeNotifier {
     }
     var filters =
         '[{"assignee":{"operator":"=","values":["$userId"]}}, {"status":{"operator":"!","values":["12"]}}]';
-    final url = Endpoints.workPackages.replace(queryParameters: {
+    final url = networkProvider?.endpointsFactory.workPackages
+        ?.replace(queryParameters: {
       'filters': filters,
       'pageSize': 40.toString(),
     });
+    if (url == null) {
+      print('Can\'t create url');
+      return;
+    }
     try {
       final response = await networkProvider?.get(url);
       final parsedResponse = jsonDecode(response!.body) as Map<String, dynamic>;

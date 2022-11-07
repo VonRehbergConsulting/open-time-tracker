@@ -15,6 +15,8 @@ import '/screens/launch_screen.dart';
 import '/screens/timer_screen.dart';
 import '/helpers/preferences_storage.dart';
 import '/helpers/timer_storage.dart';
+import '/helpers/endpoints_factory.dart';
+import '/models/instance_configiration_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +25,16 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  NetworkProvider _createNetworkProvider() {
+    return NetworkProvider(
+      appAuth: const FlutterAppAuth(),
+      tokenStorage: TokenStorage(
+        const FlutterSecureStorage(),
+      ),
+      endpointsFactory: EndpointsFactory(''),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     precacheImage(
@@ -30,11 +42,16 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => NetworkProvider(
-              const FlutterAppAuth(),
-              TokenStorage(
-                const FlutterSecureStorage(),
+          create: ((context) => InstanceConfigurationProvider(
+                PreferencesStorage(),
               )),
+        ),
+        ChangeNotifierProxyProvider<InstanceConfigurationProvider,
+            NetworkProvider>(
+          create: (context) => _createNetworkProvider(),
+          update: (context, instance, network) =>
+              network ?? _createNetworkProvider()
+                ..updateProvider(instance),
         ),
         ChangeNotifierProxyProvider<NetworkProvider, UserDataProvider>(
           create: ((context) => UserDataProvider()),

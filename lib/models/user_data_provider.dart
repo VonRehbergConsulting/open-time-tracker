@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '/models/network_provider.dart';
-import '/helpers/endpoints.dart';
 
 class UserDataProvider with ChangeNotifier {
   // Properties
@@ -24,9 +23,14 @@ class UserDataProvider with ChangeNotifier {
   }
 
   Future<void> loadUserId() async {
-    final url = Endpoints.userData;
+    final url = networkProvider?.endpointsFactory.userData;
+    if (url == null) {
+      print('Can\'t create url');
+      return;
+    }
     try {
       final response = await networkProvider?.get(url);
+
       if (response == null) {
         throw Error;
       }

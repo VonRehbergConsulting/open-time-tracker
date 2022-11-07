@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:http/http.dart' as http;
 
-import '/helpers/endpoints.dart';
+import 'instance_configiration_provider.dart';
+import '../helpers/endpoints_factory.dart';
 import '/helpers/token_storage.dart';
-import '/env/env.dart';
 
 enum AuthorizationStatate { authorized, unauthorized, undefined }
 
@@ -16,27 +16,46 @@ class NetworkProvider with ChangeNotifier {
 
   FlutterAppAuth appAuth;
   TokenStorage tokenStorage;
+  EndpointsFactory endpointsFactory;
+  InstanceConfigurationProvider? instanceConfigurationProvider;
 
-  AuthorizationStatate authorizationState = AuthorizationStatate.undefined;
+  String _clientId = '';
+
+  var _authorizationState = AuthorizationStatate.undefined;
+  AuthorizationStatate get authorizationState {
+    return _authorizationState;
+  }
 
   // Init
 
-  NetworkProvider(this.appAuth, this.tokenStorage) {
-    refreshToken();
+  NetworkProvider({
+    required this.appAuth,
+    required this.tokenStorage,
+    required this.endpointsFactory,
+    this.instanceConfigurationProvider,
+  }) {
+    _update();
   }
 
   // Private methods
 
+  void _update() async {
+    endpointsFactory.baseUrl =
+        await instanceConfigurationProvider?.baseUrl ?? '';
+    _clientId = await instanceConfigurationProvider?.clientId ?? '';
+    refreshToken();
+  }
+
   void _setAuthorized() {
-    if (authorizationState != AuthorizationStatate.authorized) {
-      authorizationState = AuthorizationStatate.authorized;
+    if (_authorizationState != AuthorizationStatate.authorized) {
+      _authorizationState = AuthorizationStatate.authorized;
       notifyListeners();
     }
   }
 
   void _setUnauthorized() {
-    if (authorizationState != AuthorizationStatate.unauthorized) {
-      authorizationState = AuthorizationStatate.unauthorized;
+    if (_authorizationState != AuthorizationStatate.unauthorized) {
+      _authorizationState = AuthorizationStatate.unauthorized;
       notifyListeners();
     }
   }
@@ -99,15 +118,26 @@ class NetworkProvider with ChangeNotifier {
 
   // Public methods
 
+  void updateProvider(
+      InstanceConfigurationProvider instanceConfigurationProvider) {
+    this.instanceConfigurationProvider = instanceConfigurationProvider;
+    _update();
+  }
+
   Future<void> authorize() async {
+    bool isValidProtocol = endpointsFactory.auth.contains('http://') ||
+        endpointsFactory.auth.contains('https://');
     try {
+      if (Uri.tryParse(endpointsFactory.auth) == null || !isValidProtocol) {
+        throw ErrorDescription('invalid_url');
+      }
       final response = await appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
-          Env.clientId,
+          _clientId,
           'openprojecttimetracker://oauth-callback',
-          serviceConfiguration: const AuthorizationServiceConfiguration(
-            authorizationEndpoint: Endpoints.auth,
-            tokenEndpoint: Endpoints.token,
+          serviceConfiguration: AuthorizationServiceConfiguration(
+            authorizationEndpoint: endpointsFactory.auth,
+            tokenEndpoint: endpointsFactory.token,
           ),
           scopes: ['api_v3'],
           preferEphemeralSession: true,
@@ -130,11 +160,11 @@ class NetworkProvider with ChangeNotifier {
     try {
       final result = await appAuth.token(
         TokenRequest(
-          Env.clientId,
+          _clientId,
           'openprojecttimetracker://oauth-callback',
-          serviceConfiguration: const AuthorizationServiceConfiguration(
-            authorizationEndpoint: Endpoints.auth,
-            tokenEndpoint: Endpoints.token,
+          serviceConfiguration: AuthorizationServiceConfiguration(
+            authorizationEndpoint: endpointsFactory.auth,
+            tokenEndpoint: endpointsFactory.token,
           ),
           refreshToken: refreshToken,
           scopes: ['api_v3'],
@@ -154,12 +184,12 @@ class NetworkProvider with ChangeNotifier {
 
   Future<void> unauthorize() async {
     tokenStorage.clear();
-    authorizationState = AuthorizationStatate.unauthorized;
+    _authorizationState = AuthorizationStatate.unauthorized;
     notifyListeners();
   }
 
   Future<http.Response?> get(Uri url, {Map<String, String>? headers}) async {
-    if (authorizationState == AuthorizationStatate.unauthorized) {
+    if (_authorizationState == AuthorizationStatate.unauthorized) {
       return null;
     }
     final response = await _get(url, headers: headers);
@@ -173,7 +203,7 @@ class NetworkProvider with ChangeNotifier {
 
   Future<http.Response?> post(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    if (authorizationState == AuthorizationStatate.unauthorized) {
+    if (_authorizationState == AuthorizationStatate.unauthorized) {
       return null;
     }
     final response =
@@ -188,7 +218,7 @@ class NetworkProvider with ChangeNotifier {
 
   Future<http.Response?> patch(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    if (authorizationState == AuthorizationStatate.unauthorized) {
+    if (_authorizationState == AuthorizationStatate.unauthorized) {
       return null;
     }
     final response =

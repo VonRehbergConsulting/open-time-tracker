@@ -9,6 +9,7 @@ import '../transitions/slide_transition.dart';
 import '/screens/time_entries_list/time_entries_list_screen.dart';
 import '/screens/time_entry_summary_screen.dart';
 import '/screens/comment_suggestions_screen.dart';
+import '/screens/instance_configuration_screen.dart';
 
 class AppRouter {
   static void routeToTimer(
@@ -57,6 +58,21 @@ class AppRouter {
               handler(comment);
               Navigator.of(context).pop();
             }),
+          )),
+    );
+    Navigator.of(context).push(route);
+  }
+
+  static void routeToInstanceConfiguration({
+    required BuildContext context,
+    required Function completion,
+  }) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => InstanceConfigurationScreen(
+            () {
+              completion();
+              Navigator.of(context).pop();
+            },
           )),
     );
     Navigator.of(context).push(route);
