@@ -153,7 +153,7 @@ class NetworkProvider with ChangeNotifier {
   }
 
   Future<void> unauthorize() async {
-    tokenStorage.clear;
+    tokenStorage.clear();
     authorizationState = AuthorizationStatate.unauthorized;
     notifyListeners();
   }
