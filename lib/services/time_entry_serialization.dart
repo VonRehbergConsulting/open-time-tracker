@@ -15,13 +15,13 @@ class TimeEntrySerialization {
 
   static TimeEntry? parse(Map<String, dynamic> object) {
     try {
-      final id = object['id'] as int;
+      final id = object['id'] as int?;
       final String workPackageSubject = object['workPackageSubject'];
       final String workPackageHref = object['workPackageHref'];
       final String projectTitle = object['projectTitle'];
       final String projectHref = object['projectHref'];
       final Duration hours = Duration(seconds: object['hours'] as int);
-      final String comment = object['comment'];
+      final String? comment = object['comment'];
       return TimeEntry(
         id: id,
         workPackageSubject: workPackageSubject,
