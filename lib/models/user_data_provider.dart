@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '/models/network_provider.dart';
-import '/services/endpoints.dart';
+import '/helpers/endpoints.dart';
 
 class UserDataProvider with ChangeNotifier {
   // Properties

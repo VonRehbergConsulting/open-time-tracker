@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/services/timer_storage.dart';
+import '/helpers/timer_storage.dart';
 import '/models/time_entry.dart';
 
 class TimerProvider with ChangeNotifier {

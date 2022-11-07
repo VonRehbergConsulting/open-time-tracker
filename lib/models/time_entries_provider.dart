@@ -7,8 +7,8 @@ import 'package:iso_duration_parser/iso_duration_parser.dart';
 import '/models/network_provider.dart';
 import '/models/time_entry.dart';
 import '/models/user_data_provider.dart';
-import '/services/duration_formatter.dart';
-import '/services/endpoints.dart';
+import '/helpers/duration_formatter.dart';
+import '/helpers/endpoints.dart';
 
 class TimeEntriesProvider with ChangeNotifier {
   // Properties

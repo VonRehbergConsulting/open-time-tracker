@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '/models/network_provider.dart';
 import '/models/user_data_provider.dart';
 import '/models/work_package.dart';
-import '/services/endpoints.dart';
+import '/helpers/endpoints.dart';
 
 class WorkPackagesProvider with ChangeNotifier {
   // Properties

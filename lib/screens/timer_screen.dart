@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '/services/app_router.dart';
+import '/helpers/app_router.dart';
 import '/models/timer_provider.dart';
-import '/services/duration_formatter.dart';
+import '/helpers/duration_formatter.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});

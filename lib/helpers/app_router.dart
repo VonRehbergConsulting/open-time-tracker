@@ -5,7 +5,7 @@ import '/models/timer_provider.dart';
 import '/screens/timer_screen.dart';
 import '/screens/work_packages_list/work_packages_list_screen.dart';
 import '/models/time_entry.dart';
-import '../helpers/slide_transition.dart';
+import '../transitions/slide_transition.dart';
 import '/screens/time_entries_list/time_entries_list_screen.dart';
 import '/screens/time_entry_summary_screen.dart';
 import '/screens/comment_suggestions_screen.dart';

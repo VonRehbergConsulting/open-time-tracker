@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:http/http.dart' as http;
 
-import '/services/endpoints.dart';
-import '/services/token_storage.dart';
+import '/helpers/endpoints.dart';
+import '/helpers/token_storage.dart';
 import '/env/env.dart';
 
 enum AuthorizationStatate { authorized, unauthorized, undefined }

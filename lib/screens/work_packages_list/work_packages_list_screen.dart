@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '/models/time_entry.dart';
 import '/screens/work_packages_list/work_package_list_item.dart';
-import '/services/app_router.dart';
+import '/helpers/app_router.dart';
 import '/models/work_packages_provider.dart';
 import '/widgets/activity_indicator.dart';
 

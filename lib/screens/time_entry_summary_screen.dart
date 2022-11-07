@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import '/models/time_entries_provider.dart';
 import '/models/time_entry.dart';
 import '/models/user_data_provider.dart';
-import '/services/app_router.dart';
-import '/services/duration_formatter.dart';
+import '/helpers/app_router.dart';
+import '/helpers/duration_formatter.dart';
 import '/extensions/duration.dart';
 import '/widgets/activity_indicator.dart';
 

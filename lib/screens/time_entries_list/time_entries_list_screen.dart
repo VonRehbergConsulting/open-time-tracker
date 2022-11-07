@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '/services/duration_formatter.dart';
+import '/helpers/duration_formatter.dart';
 import '/models/time_entries_provider.dart';
 import '/screens/time_entries_list/time_entry_list_item.dart';
 import '/screens/time_entries_list/total_time_list_item.dart';
-import '/services/app_router.dart';
+import '/helpers/app_router.dart';
 import '/widgets/activity_indicator.dart';
 import '/models/network_provider.dart';
 

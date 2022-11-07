@@ -10,11 +10,11 @@ import '/models/timer_provider.dart';
 import '/models/work_packages_provider.dart';
 import '/screens/auth_screen.dart';
 import '/screens/time_entries_list/time_entries_list_screen.dart';
-import '/services/token_storage.dart';
+import '/helpers/token_storage.dart';
 import '/screens/launch_screen.dart';
 import '/screens/timer_screen.dart';
-import '/services/preferences_storage.dart';
-import '/services/timer_storage.dart';
+import '/helpers/preferences_storage.dart';
+import '/helpers/timer_storage.dart';
 
 void main() {
   runApp(const MyApp());

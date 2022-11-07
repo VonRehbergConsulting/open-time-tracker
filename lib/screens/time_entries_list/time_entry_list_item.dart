@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/services/duration_formatter.dart';
+import '/helpers/duration_formatter.dart';
 
 class TimeEntryListItem extends StatelessWidget {
   // Properties

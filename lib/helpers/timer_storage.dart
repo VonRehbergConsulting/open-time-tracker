@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import '/services/preferences_storage.dart';
-import '/services/time_entry_serialization.dart';
+import '/helpers/preferences_storage.dart';
+import '/helpers/time_entry_serialization.dart';
 import '/models/time_entry.dart';
 
 class TimerStorage {
