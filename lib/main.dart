@@ -35,6 +35,14 @@ class MyApp extends StatelessWidget {
     );
   }
 
+  TimerProvider _createTimerProvider() {
+    return TimerProvider(
+      TimerStorage(
+        PreferencesStorage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     precacheImage(
@@ -72,12 +80,16 @@ class MyApp extends StatelessWidget {
               workPackages ?? WorkPackagesProvider()
                 ..updateProvider(network, userData)),
         ),
-        ChangeNotifierProvider(
-          create: (context) => TimerProvider(
-            TimerStorage(
-              PreferencesStorage(),
-            ),
-          ),
+        ChangeNotifierProxyProvider<NetworkProvider, TimerProvider>(
+          create: (context) => _createTimerProvider(),
+          update: (context, network, timer) {
+            final provider = timer ?? _createTimerProvider();
+            if (network.authorizationState ==
+                AuthorizationStatate.unauthorized) {
+              provider.reset();
+            }
+            return provider;
+          },
         ),
       ],
       child: MaterialApp(
