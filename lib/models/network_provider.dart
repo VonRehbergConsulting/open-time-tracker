@@ -130,7 +130,7 @@ class NetworkProvider with ChangeNotifier {
     try {
       final result = await appAuth.token(
         TokenRequest(
-          'OaQ4maL8tXdpS88op2pjD-lJ2P8k-2ja95Tu-2VHOds',
+          Env.clientId,
           'openprojecttimetracker://oauth-callback',
           serviceConfiguration: const AuthorizationServiceConfiguration(
             authorizationEndpoint: Endpoints.auth,
@@ -142,6 +142,7 @@ class NetworkProvider with ChangeNotifier {
       );
       _handleResponse(result);
     } on PlatformException catch (exception) {
+      print(exception);
       if (exception.code == 'token_failed') {
         print('Invalid token');
         _setUnauthorized();
