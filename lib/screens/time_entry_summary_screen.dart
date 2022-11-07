@@ -7,6 +7,7 @@ import '/models/time_entry.dart';
 import '/models/user_data_provider.dart';
 import '/services/app_router.dart';
 import '/services/duration_formatter.dart';
+import '/extensions/duration.dart';
 
 class TimeEntrySummaryScreen extends StatefulWidget {
   final TimeEntry timeEntry;
@@ -138,6 +139,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
   void initState() {
     super.initState();
     _commentFieldController.text = widget.timeEntry.comment ?? '';
+    widget.timeEntry.hours = widget.timeEntry.hours.roundedToMinutes;
     _loadCommentSuggestions();
   }
 
