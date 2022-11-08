@@ -7,7 +7,7 @@ import 'package:iso_duration_parser/iso_duration_parser.dart';
 import '/models/network_provider.dart';
 import '/models/time_entry.dart';
 import '/models/user_data_provider.dart';
-import '/helpers/duration_formatter.dart';
+import '/extensions/duration.dart';
 
 class TimeEntriesProvider with ChangeNotifier {
   // Properties
@@ -120,7 +120,7 @@ class TimeEntriesProvider with ChangeNotifier {
       'workPackage': {'href': timeEntry.workPackageHref},
       'project': {'href': timeEntry.projectHref},
       'spentOn': DateFormat('yyyy-MM-dd').format(DateTime.now()),
-      'hours': DurationFormatter.toISO8601(timeEntry.hours),
+      'hours': timeEntry.hours.toISO8601(),
       'comment': {
         'format': 'plain',
         'raw': timeEntry.comment,
@@ -143,7 +143,7 @@ class TimeEntriesProvider with ChangeNotifier {
       throw Error();
     }
     final body = jsonEncode({
-      'hours': DurationFormatter.toISO8601(timeEntry.hours),
+      'hours': timeEntry.hours.toISO8601(),
       'comment': {
         'format': 'plain',
         'raw': timeEntry.comment,

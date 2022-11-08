@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 import '/helpers/app_router.dart';
 import '/models/timer_provider.dart';
-import '/helpers/duration_formatter.dart';
+import '/extensions/duration.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
@@ -91,7 +91,7 @@ class _TimerScreenState extends State<TimerScreen> {
           children: [
             const Spacer(flex: 11),
             Text(
-              DurationFormatter.longWatch(timerProvider.timeSpent),
+              timerProvider.timeSpent.longWatch(),
               style: const TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.w300,

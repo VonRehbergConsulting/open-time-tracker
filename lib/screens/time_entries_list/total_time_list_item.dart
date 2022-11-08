@@ -2,8 +2,9 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/helpers/duration_formatter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+
+import '/extensions/duration.dart';
 
 class TotalTimeListItem extends StatelessWidget {
   final Duration timeSpent;
@@ -71,15 +72,15 @@ class TotalTimeListItem extends StatelessWidget {
                   children: [
                     _createIconText(
                       Icons.check_outlined,
-                      DurationFormatter.shortWatch(timeSpent),
+                      timeSpent.shortWatch(),
                     ),
                     _createIconText(
                       Icons.timer_outlined,
-                      DurationFormatter.shortWatch(timeLeft),
+                      timeLeft.shortWatch(),
                     ),
                     _createIconText(
                       Icons.calendar_month_outlined,
-                      DurationFormatter.shortWatch(workingHours),
+                      workingHours.shortWatch(),
                     ),
                     // GestureDetector(
                     //   onTap: () {},

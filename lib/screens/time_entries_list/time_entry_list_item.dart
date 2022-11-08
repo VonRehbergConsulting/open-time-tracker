@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/widgets/list_item.dart';
 
-import '/helpers/duration_formatter.dart';
+import '/extensions/duration.dart';
+import '/widgets/list_item.dart';
 
 class TimeEntryListItem extends StatelessWidget {
   // Properties
@@ -26,7 +26,7 @@ class TimeEntryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trailing = DurationFormatter.withLetters(hours);
+    final trailing = hours.withLetters();
     return ListItem(
       title: workPackageSubject,
       subtitle: projectTitle,

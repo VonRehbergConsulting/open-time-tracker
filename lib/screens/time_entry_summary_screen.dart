@@ -6,7 +6,6 @@ import '/models/time_entries_provider.dart';
 import '/models/time_entry.dart';
 import '/models/user_data_provider.dart';
 import '/helpers/app_router.dart';
-import '/helpers/duration_formatter.dart';
 import '/extensions/duration.dart';
 import '/widgets/activity_indicator.dart';
 
@@ -146,8 +145,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _timeFieldController.text =
-        DurationFormatter.shortWatch(widget.timeEntry.hours);
+    _timeFieldController.text = widget.timeEntry.hours.shortWatch();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
