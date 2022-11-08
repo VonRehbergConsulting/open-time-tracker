@@ -95,6 +95,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Open Project Time Tracker',
         theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            elevation: 0,
+          ),
+          scaffoldBackgroundColor: Colors.white,
           primarySwatch: Colors.blueGrey,
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
