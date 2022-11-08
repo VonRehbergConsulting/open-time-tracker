@@ -59,7 +59,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
               title: const Text('Unable to log your work'),
               content: const Text('Please try again later'),
               actions: [
-                CupertinoButton(
+                CupertinoDialogAction(
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text(
                     'Close',
