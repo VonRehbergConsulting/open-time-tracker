@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/widgets/list_item.dart';
 
 import '/helpers/duration_formatter.dart';
 
@@ -25,30 +26,13 @@ class TimeEntryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => action(),
-      child: Card(
-        elevation: 4,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-          child: ListTile(
-            title: Text(workPackageSubject),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(projectTitle),
-                Text(comment),
-              ],
-            ),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(DurationFormatter.withLetters(hours)),
-              ],
-            ),
-          ),
-        ),
-      ),
+    final trailing = DurationFormatter.withLetters(hours);
+    return ListItem(
+      title: workPackageSubject,
+      subtitle: projectTitle,
+      comment: comment,
+      trailing: trailing,
+      action: action,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/widgets/list_item.dart';
 
 class WorkPackageListItem extends StatelessWidget {
   // Properties
@@ -25,29 +26,12 @@ class WorkPackageListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => action(),
-      child: Card(
-        margin: const EdgeInsets.symmetric(
-          vertical: 4,
-          horizontal: 15,
-        ),
-        elevation: 4,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: ListTile(
-            title: Text(subject),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(priority),
-                Text(projectTitle),
-              ],
-            ),
-            trailing: Text(status),
-          ),
-        ),
-      ),
+    return ListItem(
+      title: subject,
+      subtitle: projectTitle,
+      comment: priority,
+      trailing: status,
+      action: action,
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '/helpers/duration_formatter.dart';
 import '/models/time_entries_provider.dart';
 import '/screens/time_entries_list/time_entry_list_item.dart';
 import '/screens/time_entries_list/total_time_list_item.dart';
@@ -42,7 +41,7 @@ class _TimeEntriesListScreenState extends State<TimeEntriesListScreen> {
             icon: const Icon(Icons.exit_to_app_sharp)),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
         child: FutureBuilder(
           future: _listFuture,
           builder: ((context, snapshot) {
@@ -62,7 +61,7 @@ class _TimeEntriesListScreenState extends State<TimeEntriesListScreen> {
                           itemBuilder: ((context, index) {
                             if (index == 0) {
                               return TotalTimeListItem(
-                                  'Time spent today: ${DurationFormatter.shortWatch(timeEntries.totalDuration)}');
+                                  timeEntries.totalDuration);
                             }
                             final timeEntry = timeEntries.items[index - 1];
                             return TimeEntryListItem(

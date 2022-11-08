@@ -75,6 +75,7 @@ class _TimerScreenState extends State<TimerScreen> {
     final buttonWidth = deviceSize.width * 0.35;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       floatingActionButton: IconButton(
         onPressed: () {
           timerProvider.reset();

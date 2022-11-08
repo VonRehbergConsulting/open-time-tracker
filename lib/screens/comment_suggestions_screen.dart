@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/widgets/list_item.dart';
 
 class CommentSuggestionsScreen extends StatelessWidget {
   final List<String> comments;
@@ -15,12 +16,15 @@ class CommentSuggestionsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(8),
         children: comments
-            .map((comment) => GestureDetector(
-                  onTap: () => handler(comment),
-                  child: Card(
-                    child: ListTile(title: Text(comment)),
-                  ),
-                ))
+            .map(
+              (comment) => ListItem(
+                title: comment,
+                subtitle: null,
+                comment: null,
+                trailing: null,
+                action: () => handler(comment),
+              ),
+            )
             .toList(),
       ),
     );
