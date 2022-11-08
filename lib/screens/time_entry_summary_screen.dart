@@ -149,6 +149,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
     _timeFieldController.text =
         DurationFormatter.shortWatch(widget.timeEntry.hours);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Summary'),
       ),
