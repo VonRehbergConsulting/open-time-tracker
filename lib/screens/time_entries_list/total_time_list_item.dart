@@ -78,10 +78,6 @@ class TotalTimeListItem extends StatelessWidget {
                       Icons.timer_outlined,
                       timeLeft.shortWatch(),
                     ),
-                    _createIconText(
-                      Icons.calendar_month_outlined,
-                      workingHours.shortWatch(),
-                    ),
                     // GestureDetector(
                     //   onTap: () {},
                     //   child: const Text(
