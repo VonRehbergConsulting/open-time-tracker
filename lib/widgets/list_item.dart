@@ -39,9 +39,11 @@ class ListItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (title != null)
-                    Text(
-                      title!,
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Expanded(
+                      child: Text(
+                        title!,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                     ),
                   if (trailing != null)
                     Text(
@@ -50,9 +52,9 @@ class ListItem extends StatelessWidget {
                     ),
                 ],
               ),
-              SizedBox(height: subtitle != null ? 2 : 0),
+              SizedBox(height: subtitle != null ? 4 : 0),
               if (subtitle != null) Text(subtitle!),
-              SizedBox(height: comment != null ? 2 : 0),
+              SizedBox(height: comment != null ? 4 : 0),
               if (comment != null)
                 Text(
                   comment!,
