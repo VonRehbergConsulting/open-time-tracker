@@ -15,18 +15,42 @@ class TimeEntriesListScreen extends StatefulWidget {
   State<TimeEntriesListScreen> createState() => _TimeEntriesListScreenState();
 }
 
-class _TimeEntriesListScreenState extends State<TimeEntriesListScreen> {
+class _TimeEntriesListScreenState extends State<TimeEntriesListScreen>
+    with WidgetsBindingObserver {
   // Properties
 
   late Future _listFuture;
 
+  // Private methods
+
+  void _reloadList() async {
+    _listFuture =
+        Provider.of<TimeEntriesProvider>(context, listen: false).reload();
+  }
+
   // Lifecycle
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _reloadList();
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _listFuture =
-        Provider.of<TimeEntriesProvider>(context, listen: false).reload();
+    WidgetsBinding.instance.addObserver(this);
+    _reloadList();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
