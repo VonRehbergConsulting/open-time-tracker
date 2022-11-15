@@ -8,6 +8,7 @@ import '/models/user_data_provider.dart';
 import '/helpers/app_router.dart';
 import '/extensions/duration.dart';
 import '/widgets/activity_indicator.dart';
+import '/widgets/time_picker.dart';
 
 class TimeEntrySummaryScreen extends StatefulWidget {
   final TimeEntry timeEntry;
@@ -80,28 +81,17 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
     final minutes = widget.timeEntry.hours.inMinutes.remainder(60);
     showCupertinoModalPopup(
       context: context,
-      builder: ((context) => Container(
-            height: 300,
-            color: Theme.of(context).canvasColor,
-            child: CupertinoDatePicker(
-              initialDateTime: DateTime(
-                2000,
-                1,
-                1,
-                hours,
-                minutes,
-              ),
-              mode: CupertinoDatePickerMode.time,
-              use24hFormat: true,
-              onDateTimeChanged: ((value) {
-                setState(() {
-                  widget.timeEntry.hours = Duration(
-                    hours: value.hour,
-                    minutes: value.minute,
-                  );
-                });
-              }),
-            ),
+      builder: ((context) => TimePicker(
+            hours: hours,
+            minutes: minutes,
+            onTimeChanged: ((value) {
+              setState(() {
+                widget.timeEntry.hours = Duration(
+                  hours: value.hour,
+                  minutes: value.minute,
+                );
+              });
+            }),
           )),
     );
   }

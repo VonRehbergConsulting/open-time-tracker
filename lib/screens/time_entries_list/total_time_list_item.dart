@@ -1,14 +1,17 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
+import '../../widgets/time_picker.dart';
 import '/extensions/duration.dart';
+import '/models/settings_provider.dart';
 
 class TotalTimeListItem extends StatelessWidget {
   final Duration timeSpent;
-  final Duration workingHours = const Duration(hours: 8);
   const TotalTimeListItem(this.timeSpent, {super.key});
 
   Widget _createIconText(IconData icon, String text) {
@@ -29,10 +32,34 @@ class TotalTimeListItem extends StatelessWidget {
     );
   }
 
+  void _showTimePicker(
+    BuildContext passedContext,
+    Duration initialValue,
+  ) {
+    final hours = initialValue.inHours;
+    final minutes = initialValue.inMinutes.remainder(60);
+    showCupertinoModalPopup(
+      context: passedContext,
+      builder: ((context) => TimePicker(
+            hours: hours,
+            minutes: minutes,
+            onTimeChanged: ((value) {
+              Provider.of<SettingsProvider>(passedContext, listen: false)
+                  .workingHours = Duration(
+                hours: value.hour,
+                minutes: value.minute,
+              );
+            }),
+          )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final percent = timeSpent.inMinutes / 480;
-    final percentText = '${(percent * 100).toStringAsFixed(0)}%';
+    final workingHours = Provider.of<SettingsProvider>(context).workingHours;
+    final percent = timeSpent.inMinutes / workingHours.inMinutes;
+    final percentText =
+        percent > 1 ? '>100%' : '${(percent * 100).toStringAsFixed(0)}%';
     var timeLeft = workingHours - timeSpent;
     if (timeLeft.inSeconds < 0) {
       timeLeft = const Duration();
@@ -52,7 +79,7 @@ class TotalTimeListItem extends StatelessWidget {
               children: [
                 CircularPercentIndicator(
                   radius: 50,
-                  animation: true,
+                  animation: false,
                   animationDuration: 1000,
                   lineWidth: 15.0,
                   percent: min(percent, 1.0),
@@ -78,13 +105,15 @@ class TotalTimeListItem extends StatelessWidget {
                       Icons.timer_outlined,
                       timeLeft.shortWatch(),
                     ),
-                    // GestureDetector(
-                    //   onTap: () {},
-                    //   child: const Text(
-                    //     'Change working hours',
-                    //     style: TextStyle(color: Colors.black54),
-                    //   ),
-                    // ),
+                    GestureDetector(
+                      onTap: () {
+                        _showTimePicker(context, workingHours);
+                      },
+                      child: const Text(
+                        'Change working hours',
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                    ),
                   ],
                 ),
               ],
