@@ -48,6 +48,16 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: '0.10.0'
+
+# to set icons run
+# flutter pub run flutter_launcher_icons:main
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets_dev/icon.png"
+  adaptive_icon_background: #FFFFFF
+  adaptive_icon_foreground: "assets_dev/icon.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
