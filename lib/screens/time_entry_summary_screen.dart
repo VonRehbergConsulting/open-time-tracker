@@ -172,6 +172,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
                             onTap: () => _showTimePicker(),
                           ),
                           TextFormField(
+                            textCapitalization: TextCapitalization.sentences,
                             controller: _commentFieldController,
                             decoration: InputDecoration(
                               labelText: 'Comment',
