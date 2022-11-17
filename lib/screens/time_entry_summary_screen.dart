@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/models/timer_provider.dart';
 import 'package:provider/provider.dart';
 
 import '/models/time_entries_provider.dart';
@@ -51,6 +52,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
         await Provider.of<TimeEntriesProvider>(context, listen: false)
             .update(timeEntry: widget.timeEntry);
       }
+      Provider.of<TimerProvider>(context, listen: false).reset();
       AppRouter.routeToTimeEntriesList(context, widget);
     } catch (error) {
       showDialog(
