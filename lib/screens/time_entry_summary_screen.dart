@@ -62,11 +62,9 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
               content: const Text('Please try again later'),
               actions: [
                 CupertinoDialogAction(
+                  isDefaultAction: true,
                   onPressed: () => Navigator.of(context).pop(),
-                  child: Text(
-                    'Close',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
+                  child: Text('Close'),
                 ),
               ],
             )),
