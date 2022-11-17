@@ -52,6 +52,33 @@ class _TimerScreenState extends State<TimerScreen> {
     }
   }
 
+  void _showCloseDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: ((context) => CupertinoAlertDialog(
+            title: const Text('Warning'),
+            content:
+                const Text('Your current changes will not be saved. Continue?'),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('No'),
+              ),
+              CupertinoDialogAction(
+                isDestructiveAction: true,
+                onPressed: () {
+                  final timerProvider =
+                      Provider.of<TimerProvider>(context, listen: false);
+                  AppRouter.routeToTimeEntriesList(
+                      context, widget, timerProvider.reset);
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          )),
+    );
+  }
+
   // Lifecycle
 
   @override
@@ -77,10 +104,7 @@ class _TimerScreenState extends State<TimerScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: IconButton(
-        onPressed: () {
-          AppRouter.routeToTimeEntriesList(
-              context, widget, timerProvider.reset);
-        },
+        onPressed: () => _showCloseDialog(context),
         icon: const Icon(Icons.close),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
