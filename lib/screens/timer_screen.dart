@@ -78,8 +78,8 @@ class _TimerScreenState extends State<TimerScreen> {
       backgroundColor: Colors.white,
       floatingActionButton: IconButton(
         onPressed: () {
-          timerProvider.reset();
-          AppRouter.routeToTimeEntriesList(context, widget);
+          AppRouter.routeToTimeEntriesList(
+              context, widget, timerProvider.reset);
         },
         icon: const Icon(Icons.close),
       ),

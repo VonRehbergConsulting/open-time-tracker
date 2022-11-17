@@ -29,11 +29,12 @@ class AppRouter {
   }
 
   static void routeToTimeEntriesList(
-      BuildContext context, Widget currentScreen) {
+      BuildContext context, Widget currentScreen, VoidCallback completion) {
     const newScreen = TimeEntriesListScreen();
     final route =
         SlideToLeftTransition(fromScreen: currentScreen, toScreen: newScreen);
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
+    completion();
   }
 
   static void routeToTimeEntrySummary(
