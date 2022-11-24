@@ -19,7 +19,10 @@ class UserDataProvider with ChangeNotifier {
 
   void updateProvider(NetworkProvider provider) {
     networkProvider = provider;
-    loadUserId();
+    if (networkProvider?.authorizationState ==
+        AuthorizationStatate.authorized) {
+      loadUserId();
+    }
   }
 
   Future<void> loadUserId() async {

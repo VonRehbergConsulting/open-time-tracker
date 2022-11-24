@@ -105,25 +105,25 @@ class MyApp extends StatelessWidget {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
         ),
-        home: Consumer3<NetworkProvider, UserDataProvider, TimerProvider>(
-          builder: ((context, network, userData, timer, child) {
-            if (network.authorizationState == AuthorizationStatate.undefined) {
+        home: Consumer<NetworkProvider>(builder: (context, network, child) {
+          switch (network.authorizationState) {
+            case AuthorizationStatate.undefined:
               return const LaunchScreen();
-            }
-            if (network.authorizationState ==
-                AuthorizationStatate.unauthorized) {
+            case AuthorizationStatate.unauthorized:
               return const AuthScreen();
-            }
-            if (network.authorizationState == AuthorizationStatate.authorized &&
-                userData.userId != null &&
-                timer.isLoading == false) {
-              return timer.timeEntry == null
-                  ? const TimeEntriesListScreen()
-                  : const TimerScreen();
-            }
-            return const LaunchScreen();
-          }),
-        ),
+            case AuthorizationStatate.authorized:
+              return Consumer2<UserDataProvider, TimerProvider>(
+                builder: ((context, userData, timer, child) {
+                  if (userData.userId != null && timer.isLoading == false) {
+                    return timer.timeEntry == null
+                        ? const TimeEntriesListScreen()
+                        : const TimerScreen();
+                  }
+                  return const LaunchScreen();
+                }),
+              );
+          }
+        }),
       ),
     );
   }

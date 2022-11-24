@@ -61,7 +61,6 @@ class WorkPackagesProvider with ChangeNotifier {
       NetworkProvider? networkProvider, UserDataProvider? userDataProvider) {
     this.networkProvider = networkProvider;
     this.userDataProvider = userDataProvider;
-    notifyListeners();
   }
 
   Future<void> reload() async {

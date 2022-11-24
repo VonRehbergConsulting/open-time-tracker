@@ -47,6 +47,9 @@ class _InstanceConfigurationScreenState
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
+    final buttonWidth = deviceSize.width * 0.35;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -81,9 +84,13 @@ class _InstanceConfigurationScreenState
                   ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: _save,
-                child: const Text('Save'),
+              SizedBox(height: 16),
+              SizedBox(
+                width: buttonWidth,
+                child: ElevatedButton(
+                  onPressed: _save,
+                  child: const Text('Save'),
+                ),
               )
             ],
           ),

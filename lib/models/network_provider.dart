@@ -54,10 +54,10 @@ class NetworkProvider with ChangeNotifier {
   }
 
   void _setUnauthorized() {
-    if (_authorizationState != AuthorizationStatate.unauthorized) {
-      _authorizationState = AuthorizationStatate.unauthorized;
-      notifyListeners();
-    }
+    // if (_authorizationState != AuthorizationStatate.unauthorized) {
+    _authorizationState = AuthorizationStatate.unauthorized;
+    notifyListeners();
+    // }
   }
 
   void _handleResponse(TokenResponse? response) {
@@ -179,13 +179,13 @@ class NetworkProvider with ChangeNotifier {
       }
     } catch (e) {
       print('Can\'t refresh token');
+      _setUnauthorized();
     }
   }
 
   Future<void> unauthorize() async {
     tokenStorage.clear();
-    _authorizationState = AuthorizationStatate.unauthorized;
-    notifyListeners();
+    _setUnauthorized();
   }
 
   Future<http.Response?> get(Uri url, {Map<String, String>? headers}) async {
