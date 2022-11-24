@@ -70,7 +70,7 @@ class WorkPackagesProvider with ChangeNotifier {
       return;
     }
     var filters =
-        '[{"assignee":{"operator":"=","values":["$userId"]}}, {"status":{"operator":"!","values":["12"]}}]';
+        '[{"assignee":{"operator":"=","values":["$userId"]}}, {"status":{"operator":"!","values":["12", "14"]}}]';
     final url = networkProvider?.endpointsFactory.workPackages
         ?.replace(queryParameters: {
       'filters': filters,
