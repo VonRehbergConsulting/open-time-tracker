@@ -43,6 +43,7 @@ class ListItem extends StatelessWidget {
                       child: Text(
                         title!,
                         style: Theme.of(context).textTheme.titleMedium,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   if (trailing != null)

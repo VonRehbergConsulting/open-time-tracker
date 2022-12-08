@@ -124,9 +124,13 @@ class _TimerScreenState extends State<TimerScreen> {
                   ]),
             ),
             const Spacer(flex: 2),
-            Text(
-              timerProvider.timeEntry?.workPackageSubject ?? '',
-              style: Theme.of(context).textTheme.titleLarge,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                timerProvider.timeEntry?.workPackageSubject ?? '',
+                style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
+              ),
             ),
             const Spacer(),
             Text(
