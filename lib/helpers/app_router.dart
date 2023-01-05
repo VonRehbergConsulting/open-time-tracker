@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:open_project_time_tracker/screens/auth_screen.dart';
 import 'package:provider/provider.dart';
 
 import '/models/timer_provider.dart';
@@ -77,5 +78,12 @@ class AppRouter {
           )),
     );
     Navigator.of(context).push(route);
+  }
+
+  static void routeToAuth({required BuildContext context}) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => AuthScreen()),
+    );
+    Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 }

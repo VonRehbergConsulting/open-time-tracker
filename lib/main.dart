@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:open_project_time_tracker/modules/authorization/ui/authorization_checker/authorization_checker_page.dart';
 import 'package:provider/provider.dart';
 
 import '/models/network_provider.dart';
@@ -8,17 +9,15 @@ import '/models/time_entries_provider.dart';
 import '/models/user_data_provider.dart';
 import '/models/timer_provider.dart';
 import '/models/work_packages_provider.dart';
-import '/screens/auth_screen.dart';
-import '/screens/time_entries_list/time_entries_list_screen.dart';
 import '/helpers/token_storage.dart';
-import '/screens/launch_screen.dart';
-import '/screens/timer_screen.dart';
 import '/helpers/preferences_storage.dart';
 import '/helpers/timer_storage.dart';
 import '/helpers/endpoints_factory.dart';
 import '/models/instance_configiration_provider.dart';
+import 'app/di/inject.dart';
 
 void main() {
+  configureDependencies();
   runApp(const MyApp());
 }
 
@@ -105,25 +104,26 @@ class MyApp extends StatelessWidget {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
         ),
-        home: Consumer<NetworkProvider>(builder: (context, network, child) {
-          switch (network.authorizationState) {
-            case AuthorizationStatate.undefined:
-              return const LaunchScreen();
-            case AuthorizationStatate.unauthorized:
-              return const AuthScreen();
-            case AuthorizationStatate.authorized:
-              return Consumer2<UserDataProvider, TimerProvider>(
-                builder: ((context, userData, timer, child) {
-                  if (userData.userId != null && timer.isLoading == false) {
-                    return timer.timeEntry == null
-                        ? const TimeEntriesListScreen()
-                        : const TimerScreen();
-                  }
-                  return const LaunchScreen();
-                }),
-              );
-          }
-        }),
+        home: AuthorizationCheckerPage(),
+        // Consumer<NetworkProvider>(builder: (context, network, child) {
+        //   switch (network.authorizationState) {
+        //     case AuthorizationStatate.undefined:
+        //       return const LaunchScreen();
+        //     case AuthorizationStatate.unauthorized:
+        //       return const AuthScreen();
+        //     case AuthorizationStatate.authorized:
+        //       return Consumer2<UserDataProvider, TimerProvider>(
+        //         builder: ((context, userData, timer, child) {
+        //           if (userData.userId != null && timer.isLoading == false) {
+        //             return timer.timeEntry == null
+        //                 ? const TimeEntriesListScreen()
+        //                 : const TimerScreen();
+        //           }
+        //           return const LaunchScreen();
+        //         }),
+        //       );
+        //   }
+        // }),
       ),
     );
   }

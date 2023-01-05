@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '/extensions/duration.dart';
-import '/widgets/list_item.dart';
 
 class TimeEntryListItem extends StatelessWidget {
   // Properties

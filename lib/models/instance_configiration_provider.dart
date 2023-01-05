@@ -8,7 +8,7 @@ class InstanceConfigurationProvider with ChangeNotifier {
   PreferencesStorage storage;
 
   final String _baseUrlKey = 'baseUrl';
-  final String _clientIdKey = 'elientId';
+  final String _clientIdKey = 'clientId';
 
   // Init
 
