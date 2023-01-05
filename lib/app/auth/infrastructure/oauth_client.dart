@@ -16,7 +16,7 @@ class OAuthClient implements AuthClient {
   );
 
   @override
-  Future<AuthToken> requestToken() async {
+  Future<void> requestToken() async {
     try {
       final baseUrl = await _instanceConfigurationRepository.baseUrl;
       final clientID = await _instanceConfigurationRepository.clientID;
@@ -47,10 +47,10 @@ class OAuthClient implements AuthClient {
       if (accessToken == null || refreshToken == null) {
         throw ErrorDescription('tokens_are_null');
       }
-      return AuthToken(
+      await _authTokenStorage.setToken(AuthToken(
         accessToken: accessToken,
         refreshToken: refreshToken,
-      );
+      ));
     } catch (e) {
       rethrow;
     }

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:open_project_time_tracker/screens/auth_screen.dart';
+import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
 import 'package:provider/provider.dart';
 
 import '/models/timer_provider.dart';
@@ -31,11 +31,19 @@ class AppRouter {
 
   static void routeToTimeEntriesList(
       BuildContext context, Widget currentScreen, VoidCallback completion) {
+    // TODO: remove method
     const newScreen = TimeEntriesListScreen();
     final route =
         SlideToLeftTransition(fromScreen: currentScreen, toScreen: newScreen);
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
     completion();
+  }
+
+  static void routeToTimeEntriesListTemporary(BuildContext context) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => TimeEntriesListScreen()),
+    );
+    Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 
   static void routeToTimeEntrySummary(
@@ -82,7 +90,7 @@ class AppRouter {
 
   static void routeToAuth({required BuildContext context}) {
     final route = CupertinoPageRoute(
-      builder: ((context) => AuthScreen()),
+      builder: ((context) => AuthorizationPage()),
     );
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }

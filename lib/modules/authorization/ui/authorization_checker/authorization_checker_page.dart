@@ -16,6 +16,7 @@ class AuthorizationCheckerPage extends EffectBlocPage<AuthorizationCheckerBloc,
       },
       timeEntries: () {
         print('Go to time entries');
+        AppRouter.routeToTimeEntriesListTemporary(context);
       },
       timer: () {
         print('Go to timer');
