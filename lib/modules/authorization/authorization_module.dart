@@ -6,6 +6,7 @@ import 'package:open_project_time_tracker/modules/authorization/domain/user_data
 import 'package:open_project_time_tracker/modules/authorization/infrastructure/api_user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/authorization/infrastructure/user_data_api.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_bloc.dart';
+import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_bloc.dart';
 
 import 'ui/authorization_checker/authorization_checker_bloc.dart';
 
@@ -40,4 +41,10 @@ abstract class AuthorizationModule {
         instanceConfigurationRepository,
         authClient,
       );
+
+  @injectable
+  InstanceConfigurationBloc instanceConfigurationBloc(
+    InstanceConfigurationRepository instanceConfigurationRepository,
+  ) =>
+      InstanceConfigurationBloc(instanceConfigurationRepository);
 }

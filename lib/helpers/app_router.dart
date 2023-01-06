@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization_checker/authorization_checker_page.dart';
+import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_page.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,6 @@ import '/models/time_entry.dart';
 import '../transitions/slide_transition.dart';
 import '/screens/time_entry_summary_screen.dart';
 import '/screens/comment_suggestions_screen.dart';
-import '/screens/instance_configuration_screen.dart';
 
 class AppRouter {
   static void routeToTimer(
@@ -69,12 +69,7 @@ class AppRouter {
     required Function completion,
   }) {
     final route = CupertinoPageRoute(
-      builder: ((context) => InstanceConfigurationScreen(
-            () {
-              completion();
-              Navigator.of(context).pop();
-            },
-          )),
+      builder: ((context) => InstanceConfigurationPage(completion)),
     );
     Navigator.of(context).push(route);
   }
