@@ -3,16 +3,24 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/widgets/time_picker.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-import '../../widgets/time_picker.dart';
 import '/extensions/duration.dart';
 import '/models/settings_provider.dart';
 
 class TotalTimeListItem extends StatelessWidget {
+  final Duration workingHours;
   final Duration timeSpent;
-  const TotalTimeListItem(this.timeSpent, {super.key});
+  final Function(DateTime) onWorkingHoursChange;
+
+  const TotalTimeListItem(
+    this.workingHours,
+    this.timeSpent,
+    this.onWorkingHoursChange, {
+    super.key,
+  });
 
   Widget _createIconText(IconData icon, String text) {
     return Row(
@@ -43,20 +51,13 @@ class TotalTimeListItem extends StatelessWidget {
       builder: ((context) => TimePicker(
             hours: hours,
             minutes: minutes,
-            onTimeChanged: ((value) {
-              Provider.of<SettingsProvider>(passedContext, listen: false)
-                  .workingHours = Duration(
-                hours: value.hour,
-                minutes: value.minute,
-              );
-            }),
+            onTimeChanged: onWorkingHoursChange,
           )),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final workingHours = Provider.of<SettingsProvider>(context).workingHours;
     final percent = timeSpent.inMinutes / workingHours.inMinutes;
     final percentText =
         percent > 1 ? '>100%' : '${(percent * 100).toStringAsFixed(0)}%';

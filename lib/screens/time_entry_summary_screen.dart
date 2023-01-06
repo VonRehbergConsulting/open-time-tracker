@@ -53,7 +53,7 @@ class _TimeEntrySummaryScreenState extends State<TimeEntrySummaryScreen> {
             .update(timeEntry: widget.timeEntry);
       }
       final timerProvider = Provider.of<TimerProvider>(context, listen: false);
-      AppRouter.routeToTimeEntriesList(context, widget, timerProvider.reset);
+      // AppRouter.routeToTimeEntriesList(context, widget, timerProvider.reset);
     } catch (error) {
       showDialog(
         context: context,

@@ -10,11 +10,7 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
   void onEffect(BuildContext context, AuthorizationEffect effect) {
     effect.when(
       complete: () {
-        AppRouter.routeToTimeEntriesList(
-          context,
-          this,
-          () {},
-        );
+        AppRouter.routeToAuthCheck(context);
       },
       error: ((message) {
         // TODO: implement

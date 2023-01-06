@@ -69,8 +69,8 @@ class _TimerScreenState extends State<TimerScreen> {
                 onPressed: () {
                   final timerProvider =
                       Provider.of<TimerProvider>(context, listen: false);
-                  AppRouter.routeToTimeEntriesList(
-                      context, widget, timerProvider.reset);
+                  // AppRouter.routeToTimeEntriesList(
+                  // context, widget, timerProvider.reset);
                 },
                 child: Text('Yes'),
               ),

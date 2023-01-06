@@ -44,9 +44,9 @@ class AuthorizationBloc
     ));
   }
 
-  void authorize() {
+  Future<void> authorize() async {
     try {
-      _authClient.requestToken();
+      await _authClient.requestToken();
       emitEffect(AuthorizationEffect.complete());
     } catch (e) {
       // TODO: show 'cannot authorize effect'

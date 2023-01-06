@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
+import 'package:open_project_time_tracker/modules/authorization/ui/authorization_checker/authorization_checker_page.dart';
+import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
 import 'package:provider/provider.dart';
 
 import '/models/timer_provider.dart';
@@ -7,7 +9,6 @@ import '/screens/timer_screen.dart';
 import '/screens/work_packages_list/work_packages_list_screen.dart';
 import '/models/time_entry.dart';
 import '../transitions/slide_transition.dart';
-import '/screens/time_entries_list/time_entries_list_screen.dart';
 import '/screens/time_entry_summary_screen.dart';
 import '/screens/comment_suggestions_screen.dart';
 import '/screens/instance_configuration_screen.dart';
@@ -29,19 +30,9 @@ class AppRouter {
     Navigator.of(context).push(route);
   }
 
-  static void routeToTimeEntriesList(
-      BuildContext context, Widget currentScreen, VoidCallback completion) {
-    // TODO: remove method
-    const newScreen = TimeEntriesListScreen();
-    final route =
-        SlideToLeftTransition(fromScreen: currentScreen, toScreen: newScreen);
-    Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
-    completion();
-  }
-
   static void routeToTimeEntriesListTemporary(BuildContext context) {
     final route = CupertinoPageRoute(
-      builder: ((context) => TimeEntriesListScreen()),
+      builder: ((context) => TimeEntriesListPage()),
     );
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
@@ -91,6 +82,13 @@ class AppRouter {
   static void routeToAuth({required BuildContext context}) {
     final route = CupertinoPageRoute(
       builder: ((context) => AuthorizationPage()),
+    );
+    Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
+  }
+
+  static void routeToAuthCheck(BuildContext context) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => AuthorizationCheckerPage()),
     );
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
