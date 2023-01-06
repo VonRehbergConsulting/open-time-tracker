@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_client.dart';
-import 'package:open_project_time_tracker/app/ui/bloc.dart';
+import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
@@ -50,7 +50,9 @@ class TimeEntriesListBloc extends Cubit<TimeEntriesListState> {
         timeEntries: items,
         totalDuration: totalDuration,
       ));
-    } catch (e) {}
+    } catch (e) {
+      // TODO: show error
+    }
   }
 
   Future<void> updateWorkingHours(Duration value) async {

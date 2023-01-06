@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 
-import 'package:open_project_time_tracker/app/ui/bloc_page.dart';
 import 'package:open_project_time_tracker/helpers/app_router.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/widgets/total_time_list_item.dart';
-import 'package:open_project_time_tracker/widgets/activity_indicator.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
 
 import 'widgets/time_entry_list_item.dart';
 

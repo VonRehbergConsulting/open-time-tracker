@@ -15,23 +15,13 @@ abstract class TimeEntriesApi {
 }
 
 class TimeEntryResponse {
-  late int? id;
+  late int id;
   late String workPackageSubject;
   late String workPackageHref;
   late String projectTitle;
   late String projectHref;
   late Duration hours;
   late String? comment;
-
-  TimeEntryResponse({
-    required this.id,
-    required this.workPackageSubject,
-    required this.workPackageHref,
-    required this.projectTitle,
-    required this.projectHref,
-    required this.hours,
-    this.comment,
-  });
 
   TimeEntryResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];

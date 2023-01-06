@@ -8,7 +8,7 @@ abstract class TimeEntriesRepository {
 }
 
 class TimeEntry {
-  late int? id;
+  late int id;
   late String workPackageSubject;
   late String workPackageHref;
   late String projectTitle;

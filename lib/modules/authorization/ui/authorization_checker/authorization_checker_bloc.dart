@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:open_project_time_tracker/app/ui/bloc.dart';
+import 'package:open_project_time_tracker/app/ui/bloc/effect_bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 
 part 'authorization_checker_bloc.freezed.dart';

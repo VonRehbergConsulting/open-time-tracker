@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_client.dart';
-import 'package:open_project_time_tracker/app/ui/bloc.dart';
+import 'package:open_project_time_tracker/app/ui/bloc/effect_bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/instance_configuration_repository.dart';
 
 part 'authorization_bloc.freezed.dart';

@@ -8,8 +8,8 @@ import '/models/time_entry.dart';
 import '/models/user_data_provider.dart';
 import '/helpers/app_router.dart';
 import '/extensions/duration.dart';
-import '/widgets/activity_indicator.dart';
-import '/widgets/time_picker.dart';
+import '../app/ui/widgets/activity_indicator.dart';
+import '../app/ui/widgets/time_picker.dart';
 
 class TimeEntrySummaryScreen extends StatefulWidget {
   final TimeEntry timeEntry;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/widgets/list_item.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/list_item.dart';
 
 class WorkPackageListItem extends StatelessWidget {
   // Properties
