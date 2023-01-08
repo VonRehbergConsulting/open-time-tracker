@@ -1,4 +1,4 @@
-import '../models/time_entry.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 
 class TimeEntrySerialization {
   static Map<String, dynamic> toMap(TimeEntry timeEntry) {

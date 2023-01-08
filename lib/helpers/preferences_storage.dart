@@ -3,8 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PreferencesStorage {
   final prefs = SharedPreferences.getInstance();
 
-  void setString(String key, String value) async {
-    prefs.then((prefs) {
+  Future<void> setString(String key, String value) async {
+    await prefs.then((prefs) {
       prefs.setString(key, value);
     });
   }

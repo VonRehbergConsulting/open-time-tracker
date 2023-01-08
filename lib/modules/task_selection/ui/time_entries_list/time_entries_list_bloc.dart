@@ -4,6 +4,7 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
+import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
 part 'time_entries_list_bloc.freezed.dart';
 
@@ -22,6 +23,7 @@ class TimeEntriesListBloc extends Cubit<TimeEntriesListState> {
   UserDataRepository _userDataRepository;
   SettingsRepository _settingsRepository;
   AuthClient _authClient;
+  TimerRepository _timerRepository;
 
   List<TimeEntry> items = [];
   Duration workingHours = Duration(hours: 0);
@@ -32,6 +34,7 @@ class TimeEntriesListBloc extends Cubit<TimeEntriesListState> {
     this._userDataRepository,
     this._settingsRepository,
     this._authClient,
+    this._timerRepository,
   ) : super(const TimeEntriesListState.loading());
 
   Future<void> reload() async {
@@ -67,5 +70,13 @@ class TimeEntriesListBloc extends Cubit<TimeEntriesListState> {
 
   Future<void> unauthorize() async {
     await _authClient.invalidateTokens();
+  }
+
+  Future<void> setTimeEntry(
+    TimeEntry timeEntry,
+  ) async {
+    await _timerRepository.setTimeEntry(
+      timeEntry: timeEntry,
+    );
   }
 }

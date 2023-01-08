@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/work_packages_repository.dart';
 
 import '/models/network_provider.dart';
 import '/models/user_data_provider.dart';
-import '/models/work_package.dart';
 
 class WorkPackagesProvider with ChangeNotifier {
   // Properties

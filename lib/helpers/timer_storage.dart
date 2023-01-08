@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
+
 import '/helpers/preferences_storage.dart';
 import '/helpers/time_entry_serialization.dart';
-import '/models/time_entry.dart';
 
 class TimerStorage {
   // Properties
@@ -19,13 +20,13 @@ class TimerStorage {
 
   //Private methods
 
-  void _saveDateTime(String key, DateTime? dateTime) {
+  Future<void> _saveDateTime(String key, DateTime? dateTime) async {
     if (dateTime == null) {
       storage.remove(key);
       return;
     }
     final value = dateTime.toIso8601String();
-    storage.setString(key, value);
+    await storage.setString(key, value);
   }
 
   Future<DateTime?> _loadDateTime(String key) async {
@@ -50,7 +51,7 @@ class TimerStorage {
     }
   }
 
-  void setTimeEntry(TimeEntry? timeEntry) async {
+  Future<void> setTimeEntry(TimeEntry? timeEntry) async {
     if (timeEntry == null) {
       storage.remove(_timeEntryKey);
       return;
@@ -58,7 +59,7 @@ class TimerStorage {
     final string = jsonEncode(
       TimeEntrySerialization.toMap(timeEntry),
     );
-    storage.setString(_timeEntryKey, string);
+    await storage.setString(_timeEntryKey, string);
     print('Time entry saved');
   }
 
@@ -66,7 +67,7 @@ class TimerStorage {
     return _loadDateTime(_startTimeKey);
   }
 
-  void setStartTime(DateTime? dateTime) async {
+  Future<void> setStartTime(DateTime? dateTime) async {
     return _saveDateTime(_startTimeKey, dateTime);
   }
 
@@ -74,7 +75,7 @@ class TimerStorage {
     return _loadDateTime(_stopTimeKey);
   }
 
-  void setStopTime(DateTime? dateTime) async {
+  Future<void> setStopTime(DateTime? dateTime) async {
     return _saveDateTime(_stopTimeKey, dateTime);
   }
 }

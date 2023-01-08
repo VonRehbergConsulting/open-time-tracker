@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/models/timer_provider.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:provider/provider.dart';
 
 import '/models/time_entries_provider.dart';
-import '/models/time_entry.dart';
 import '/models/user_data_provider.dart';
-import '/helpers/app_router.dart';
+import '../app/app_router.dart';
 import '/extensions/duration.dart';
 import '../app/ui/widgets/activity_indicator.dart';
 import '../app/ui/widgets/time_picker.dart';

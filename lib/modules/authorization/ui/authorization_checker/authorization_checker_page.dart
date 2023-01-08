@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
-import 'package:open_project_time_tracker/helpers/app_router.dart';
+import 'package:open_project_time_tracker/app/app_router.dart';
 
 import 'authorization_checker_bloc.dart';
 

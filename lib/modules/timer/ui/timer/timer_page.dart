@@ -1,61 +1,18 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:open_project_time_tracker/app/app_router.dart';
+import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
+import 'package:open_project_time_tracker/extensions/duration.dart';
+import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_bloc.dart';
 
-import '../app/app_router.dart';
-import '/models/timer_provider.dart';
-import '/extensions/duration.dart';
-
-class TimerScreen extends StatefulWidget {
-  const TimerScreen({super.key});
-
-  @override
-  State<TimerScreen> createState() => _TimerScreenState();
-}
-
-class _TimerScreenState extends State<TimerScreen> {
-  Timer? timer;
-
-  void _startTimer() {
-    Provider.of<TimerProvider>(context, listen: false).startTimer();
-    _createUpdateTimer();
-  }
-
-  void _createUpdateTimer() {
-    timer ??= Timer.periodic(
-      const Duration(milliseconds: 500),
-      (timer) {
-        setState(() {});
-      },
-    );
-  }
-
-  void _stopTimer() {
-    Provider.of<TimerProvider>(context, listen: false).stopTimer();
-    timer?.cancel();
-    timer = null;
-  }
-
-  void _finish() {
-    _stopTimer();
-    final timeEntry =
-        Provider.of<TimerProvider>(context, listen: false).timeEntry;
-    if (timeEntry != null) {
-      if (timeEntry.hours.inMinutes < 1) {
-        timeEntry.hours = const Duration(minutes: 1);
-      }
-      AppRouter.routeToTimeEntrySummary(context, timeEntry);
-    }
-  }
-
+class TimerPage extends BlocPage<TimerBloc, TimerState> {
   void _showCloseDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: ((context) => CupertinoAlertDialog(
+      builder: ((_) => CupertinoAlertDialog(
             title: const Text('Warning'),
             content:
                 const Text('Your current changes will not be saved. Continue?'),
@@ -66,11 +23,9 @@ class _TimerScreenState extends State<TimerScreen> {
               ),
               CupertinoDialogAction(
                 isDestructiveAction: true,
-                onPressed: () {
-                  final timerProvider =
-                      Provider.of<TimerProvider>(context, listen: false);
-                  // AppRouter.routeToTimeEntriesList(
-                  // context, widget, timerProvider.reset);
+                onPressed: () async {
+                  await context.read<TimerBloc>().reset();
+                  AppRouter.routeToTimeEntriesListTemporary(context);
                 },
                 child: Text('Yes'),
               ),
@@ -79,22 +34,12 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 
-  // Lifecycle
-
   @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final timerProvider = Provider.of<TimerProvider>(context);
+  Widget buildState(BuildContext context, TimerState state) {
     var leftButtonTitle = 'Start';
-    if (timerProvider.isActive) {
-      _createUpdateTimer();
+    if (state.isActive) {
       leftButtonTitle = 'Pause';
-    } else if (timerProvider.hasStarted) {
+    } else if (state.hasStarted) {
       leftButtonTitle = 'Resume';
     }
 
@@ -115,7 +60,7 @@ class _TimerScreenState extends State<TimerScreen> {
           children: [
             const Spacer(flex: 11),
             Text(
-              timerProvider.timeSpent.longWatch(),
+              state.timeSpent.longWatch(),
               style: const TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.w300,
@@ -127,14 +72,14 @@ class _TimerScreenState extends State<TimerScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                timerProvider.timeEntry?.workPackageSubject ?? '',
+                state.title,
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
             ),
             const Spacer(),
             Text(
-              timerProvider.timeEntry?.projectTitle ?? '',
+              state.subtitle,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const Spacer(flex: 4),
@@ -146,9 +91,9 @@ class _TimerScreenState extends State<TimerScreen> {
                   child: CupertinoButton.filled(
                     padding:
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                    onPressed: (timerProvider.isActive
-                        ? () => _stopTimer()
-                        : () => _startTimer()),
+                    onPressed: (state.isActive
+                        ? context.read<TimerBloc>().stop
+                        : context.read<TimerBloc>().start),
                     child: Text(leftButtonTitle),
                   ),
                 ),
@@ -157,8 +102,9 @@ class _TimerScreenState extends State<TimerScreen> {
                   child: CupertinoButton.filled(
                     padding:
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                    onPressed:
-                        (timerProvider.hasStarted ? () => _finish() : null),
+                    onPressed: (state.hasStarted
+                        ? context.read<TimerBloc>().finish
+                        : null),
                     child: const Text('Finish'),
                   ),
                 ),

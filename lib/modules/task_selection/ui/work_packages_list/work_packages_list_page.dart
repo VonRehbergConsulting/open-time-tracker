@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
@@ -23,15 +24,19 @@ class WorkPackagesListPage
         },
         child: ListView.builder(
           itemCount: workPackages.length,
-          itemBuilder: ((context, index) {
+          itemBuilder: ((_, index) {
             final workPackage = workPackages[index];
             return WorkPackageListItem(
                 subject: workPackage.subject,
                 projectTitle: workPackage.projectTitle,
                 status: workPackage.status,
                 priority: workPackage.priority,
-                action: () {
-                  // TODO: route to timer
+                action: () async {
+                  // TODO: switch to effects
+                  await context
+                      .read<WorkPackagesListBloc>()
+                      .setTimeEntry(workPackage);
+                  AppRouter.routeToTimer(context);
                 });
           }),
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 
 import '/helpers/timer_storage.dart';
-import '/models/time_entry.dart';
 
 class TimerProvider with ChangeNotifier {
   // Properties

@@ -2,24 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization_checker/authorization_checker_page.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_page.dart';
-import 'package:provider/provider.dart';
+import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_page.dart';
 
-import '/models/timer_provider.dart';
-import '/screens/timer_screen.dart';
-import '/models/time_entry.dart';
-import '../transitions/slide_transition.dart';
 import '/screens/time_entry_summary_screen.dart';
 import '/screens/comment_suggestions_screen.dart';
 
 class AppRouter {
   static void routeToTimer(
-      BuildContext context, TimeEntry timeEntry, Widget currentScreen) {
-    Provider.of<TimerProvider>(context, listen: false).setTimeEntry(timeEntry);
-    const newScreen = TimerScreen();
-    final route =
-        SlideToRightTransition(toScreen: newScreen, fromScreen: currentScreen);
+    BuildContext context,
+  ) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => TimerPage()),
+    );
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 

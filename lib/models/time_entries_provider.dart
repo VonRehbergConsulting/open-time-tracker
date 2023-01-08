@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:iso_duration_parser/iso_duration_parser.dart';
+import 'package:open_project_time_tracker/extensions/duration.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 
 import '/models/network_provider.dart';
-import '/models/time_entry.dart';
 import '/models/user_data_provider.dart';
-import '/extensions/duration.dart';
 
 class TimeEntriesProvider with ChangeNotifier {
   // Properties

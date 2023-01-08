@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 
-import 'package:open_project_time_tracker/helpers/app_router.dart';
+import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/widgets/total_time_list_item.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
@@ -49,14 +49,17 @@ class TimeEntriesListPage
               }
               final timeEntry = timeEntries[index - 1];
               return TimeEntryListItem(
-                workPackageSubject: timeEntry.workPackageSubject,
-                projectTitle: timeEntry.projectTitle,
-                hours: timeEntry.hours,
-                comment: timeEntry.comment,
-                action: () {
-                  // TODO: route to timer
-                },
-              );
+                  workPackageSubject: timeEntry.workPackageSubject,
+                  projectTitle: timeEntry.projectTitle,
+                  hours: timeEntry.hours,
+                  comment: timeEntry.comment,
+                  action: () async {
+                    // TODO: switch to effects
+                    await context
+                        .read<TimeEntriesListBloc>()
+                        .setTimeEntry(timeEntry);
+                    AppRouter.routeToTimer(context);
+                  });
             }),
           ),
         ),
