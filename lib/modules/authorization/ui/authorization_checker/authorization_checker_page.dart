@@ -20,6 +20,7 @@ class AuthorizationCheckerPage extends EffectBlocPage<AuthorizationCheckerBloc,
       },
       timer: () {
         print('Go to timer');
+        AppRouter.routeToTimer(context);
       },
     );
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -8,7 +9,10 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_bloc.dart';
 
-class TimerPage extends BlocPage<TimerBloc, TimerState> {
+// ignore: must_be_immutable
+class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
+  Timer? timer;
+
   void _showCloseDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -35,6 +39,17 @@ class TimerPage extends BlocPage<TimerBloc, TimerState> {
   }
 
   @override
+  void onEffect(BuildContext context, TimerEffect effect) {
+    // TODO: implement transition
+  }
+
+  @override
+  void onCreate(BuildContext context, TimerBloc bloc) {
+    super.onCreate(context, bloc);
+    bloc.updateState();
+  }
+
+  @override
   Widget buildState(BuildContext context, TimerState state) {
     var leftButtonTitle = 'Start';
     if (state.isActive) {
@@ -45,6 +60,18 @@ class TimerPage extends BlocPage<TimerBloc, TimerState> {
 
     final deviceSize = MediaQuery.of(context).size;
     final buttonWidth = deviceSize.width * 0.35;
+
+    if (state.isActive) {
+      timer ??= Timer.periodic(
+        const Duration(milliseconds: 500),
+        (timer) {
+          context.read<TimerBloc>().updateState();
+        },
+      );
+    } else {
+      timer?.cancel();
+      timer = null;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,

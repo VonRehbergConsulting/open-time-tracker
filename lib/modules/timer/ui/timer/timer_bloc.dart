@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
+import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
@@ -16,7 +16,12 @@ class TimerState with _$TimerState {
   }) = _Idle;
 }
 
-class TimerBloc extends Cubit<TimerState> {
+@freezed
+class TimerEffect with _$TimerEffect {
+  const factory TimerEffect.finish() = _Finish;
+}
+
+class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   final TimerRepository _timerRepository;
 
   TimerBloc(this._timerRepository)
@@ -28,23 +33,23 @@ class TimerBloc extends Cubit<TimerState> {
             hasStarted: false,
             isActive: false,
           ),
-        ) {
-    loadData();
-  }
+        );
 
-  Future<void> loadData() async {
+  Future<void> updateState() async {
     final data = await Future.wait([
       _timerRepository.timeEntry,
       _timerRepository.hasStarted,
       _timerRepository.isActive,
+      _timerRepository.timeSpent,
     ]);
     try {
       final timeEntry = data[0] as TimeEntry;
       final hasStarted = data[1] as bool;
       final isActive = data[2] as bool;
+      final timeSpent = data[3] as Duration;
       emit(
         TimerState.idle(
-          timeSpent: timeEntry.hours,
+          timeSpent: timeSpent,
           title: timeEntry.workPackageSubject,
           subtitle: timeEntry.projectTitle,
           hasStarted: hasStarted,
@@ -61,14 +66,18 @@ class TimerBloc extends Cubit<TimerState> {
   }
 
   Future<void> start() async {
-    //
+    await _timerRepository.startTimer(startTime: DateTime.now());
+    await updateState();
   }
 
   Future<void> stop() async {
-    //
+    await _timerRepository.stopTimer(stopTime: DateTime.now());
+    await updateState();
   }
 
   Future<void> finish() async {
-    //
+    await _timerRepository.stopTimer(stopTime: DateTime.now());
+    await updateState();
+    emitEffect(TimerEffect.finish());
   }
 }

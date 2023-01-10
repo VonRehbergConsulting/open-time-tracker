@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/effect_bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
+import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
 part 'authorization_checker_bloc.freezed.dart';
 
@@ -19,16 +20,23 @@ class AuthorizationCheckerEffect with _$AuthorizationCheckerEffect {
 class AuthorizationCheckerBloc
     extends EffectCubit<AuthorizationCheckerState, AuthorizationCheckerEffect> {
   UserDataRepository _userDataRepository;
+  TimerRepository _timerRepository;
+
   AuthorizationCheckerBloc(
     this._userDataRepository,
+    this._timerRepository,
   ) : super(AuthorizationCheckerState.idle());
 
   void checkState() async {
     try {
       final userID = await _userDataRepository.loadUserID();
       print('User ID: $userID');
-      // TODO: check current timer
-      emitEffect(const AuthorizationCheckerEffect.timeEntries());
+      final isTimerSet = await _timerRepository.isSet;
+      if (isTimerSet) {
+        emitEffect(const AuthorizationCheckerEffect.timer());
+      } else {
+        emitEffect(const AuthorizationCheckerEffect.timeEntries());
+      }
     } catch (e) {
       print(e);
       // TODO: check if no connection
