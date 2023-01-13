@@ -14,6 +14,7 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
   Future<List<TimeEntry>> list({
     int? userId,
     DateTime? date,
+    int? workPackageId,
   }) async {
     List<String> filters = [];
     if (userId != null) {
@@ -21,6 +22,10 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
     }
     if (date != null) {
       filters.add('{"spent_on":{"operator":"=d","values":["$date"]}}');
+    }
+    if (workPackageId != null) {
+      filters
+          .add('{"workPackage":{"operator":"=","values":["$workPackageId"]}}');
     }
     final filtersString = '[${filters.join(', ')}]';
     final result = await _restApi.timeEntries(

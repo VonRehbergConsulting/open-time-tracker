@@ -5,6 +5,7 @@ abstract class TimeEntriesRepository {
   Future<List<TimeEntry>> list({
     int? userId,
     DateTime? date,
+    int? workPackageId,
   });
 
   Future<void> create({

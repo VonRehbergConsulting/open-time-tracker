@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/list_item.dart';
 
-class CommentSuggestionsScreen extends StatelessWidget {
+class CommentSuggestionsPage extends StatelessWidget {
   final List<String> comments;
   final Function(String) handler;
 
-  const CommentSuggestionsScreen(this.comments, this.handler, {super.key});
+  const CommentSuggestionsPage(this.comments, this.handler, {super.key});
 
   @override
   Widget build(BuildContext context) {

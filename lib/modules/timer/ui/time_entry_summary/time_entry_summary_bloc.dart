@@ -14,6 +14,7 @@ class TimeEntrySummaryState with _$TimeEntrySummaryState {
     required String projectTitle,
     required Duration timeSpent,
     required String? comment,
+    required List<String> commentSuggestions,
   }) = _Idle;
 }
 
@@ -29,6 +30,7 @@ class TimeEntrySummaryBloc
   TimerRepository _timerRepository;
 
   late TimeEntry timeEntry;
+  List<String> _commentSuggestions = [];
 
   TimeEntrySummaryBloc(
     this._timeEntriesRepository,
@@ -45,6 +47,7 @@ class TimeEntrySummaryBloc
         projectTitle: timeEntry.projectTitle,
         timeSpent: timeEntry.hours,
         comment: timeEntry.comment,
+        commentSuggestions: _commentSuggestions,
       ),
     );
   }
@@ -53,6 +56,16 @@ class TimeEntrySummaryBloc
     final timeEntry = await _timerRepository.timeEntry;
     if (timeEntry != null) {
       this.timeEntry = timeEntry;
+      try {
+        final workPackageIdString = timeEntry.workPackageHref.split('/').last;
+        final workPackageId = int.tryParse(workPackageIdString);
+        final timeEntries =
+            await _timeEntriesRepository.list(workPackageId: workPackageId);
+        var comments = timeEntries.map((e) => e.comment ?? '').toSet().toList();
+        comments.remove('');
+        _commentSuggestions = comments;
+      } catch (e) {}
+
       _emitIdleState();
     } else {
       // TODO: show error

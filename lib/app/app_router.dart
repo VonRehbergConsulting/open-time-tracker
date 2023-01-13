@@ -4,10 +4,9 @@ import 'package:open_project_time_tracker/modules/authorization/ui/authorization
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_page.dart';
+import 'package:open_project_time_tracker/modules/timer/ui/comment_suggestions_page.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/time_entry_summary/time_entry_summary_page.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_page.dart';
-
-import '/screens/comment_suggestions_screen.dart';
 
 class AppRouter {
   static void routeToTimer(
@@ -46,7 +45,7 @@ class AppRouter {
     required Function(String comment) handler,
   }) {
     final route = CupertinoPageRoute(
-      builder: ((context) => CommentSuggestionsScreen(
+      builder: ((context) => CommentSuggestionsPage(
             comments,
             ((comment) {
               handler(comment);

@@ -37,6 +37,20 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
     }
   }
 
+  void _showCommentSuggestions(
+    BuildContext context,
+    List<String> commentSuggestions,
+  ) {
+    AppRouter.routeToCommentSuggestions(
+      context: context,
+      comments: commentSuggestions,
+      handler: (comment) {
+        context.read<TimeEntrySummaryBloc>().updateComment(comment);
+        _commentFieldController.text = comment;
+      },
+    );
+  }
+
   Future<void> _submit(BuildContext context) async {
     _form.currentState?.save();
     context.read<TimeEntrySummaryBloc>().submit();
@@ -53,7 +67,13 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
   void onStateChange(BuildContext context, TimeEntrySummaryState state) {
     super.onStateChange(context, state);
     state.whenOrNull(
-      idle: (title, projectTitle, timeSpent, comment) {
+      idle: (
+        title,
+        projectTitle,
+        timeSpent,
+        comment,
+        commentSuggestions,
+      ) {
         this.timeSpent = timeSpent;
         // TODO: fix comment lose after hot reload
         _commentFieldController.text = comment ?? '';
@@ -73,6 +93,7 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
         projectTitle,
         timeSpent,
         comment,
+        commentSuggestions,
       ) {
         this.timeSpent = timeSpent;
         _timeFieldController.text = timeSpent.shortWatch();
@@ -107,14 +128,16 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
                         controller: _commentFieldController,
                         decoration: InputDecoration(
                           labelText: 'Comment',
-                          // suffixIcon: _commentSuggestions == null
-                          //     ? const CupertinoActivityIndicator()
-                          //     : _commentSuggestions!.isEmpty
-                          //         ? null
-                          //         : IconButton(
-                          //             onPressed: () =>
-                          //                 _showCommentSuggestions(context),
-                          //             icon: const Icon(Icons.more_horiz)),
+                          suffixIcon: commentSuggestions.isEmpty
+                              ? const CupertinoActivityIndicator()
+                              : commentSuggestions.isEmpty
+                                  ? null
+                                  : IconButton(
+                                      onPressed: () => _showCommentSuggestions(
+                                            context,
+                                            commentSuggestions,
+                                          ),
+                                      icon: const Icon(Icons.more_horiz)),
                         ),
                         readOnly: false,
                         onChanged: (_) => context
