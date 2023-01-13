@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../app/app_router.dart';
 import '/models/timer_provider.dart';
 import '/extensions/duration.dart';
 
@@ -48,7 +47,7 @@ class _TimerScreenState extends State<TimerScreen> {
       if (timeEntry.hours.inMinutes < 1) {
         timeEntry.hours = const Duration(minutes: 1);
       }
-      AppRouter.routeToTimeEntrySummary(context, timeEntry);
+      // AppRouter.routeToTimeEntrySummary(context, timeEntry);
     }
   }
 

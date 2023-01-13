@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' hide Headers;
 import 'package:iso_duration_parser/iso_duration_parser.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -11,6 +11,23 @@ abstract class TimeEntriesApi {
   @GET('/time_entries')
   Future<TimeEntriesResponse> timeEntries({
     @Query('filters') String? filters,
+  });
+
+  @POST('/time_entries')
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+  })
+  Future<void> createTimeEntry({
+    @Body() required Map<String, dynamic> body,
+  });
+
+  @PATCH('/time_entries/{id}')
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json",
+  })
+  Future<void> updateTimeEntry({
+    @Path() required id,
+    @Body() required Map<String, dynamic> body,
   });
 }
 

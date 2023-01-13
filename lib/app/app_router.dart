@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization_checker/authorization_checker_page.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
-import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_page.dart';
+import 'package:open_project_time_tracker/modules/timer/ui/time_entry_summary/time_entry_summary_page.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_page.dart';
 
-import '/screens/time_entry_summary_screen.dart';
 import '/screens/comment_suggestions_screen.dart';
 
 class AppRouter {
@@ -34,12 +33,9 @@ class AppRouter {
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 
-  static void routeToTimeEntrySummary(
-      BuildContext context, TimeEntry timeEntry) {
+  static void routeToTimeEntrySummary(BuildContext context) {
     final route = CupertinoPageRoute(
-      builder: ((context) => TimeEntrySummaryScreen(
-            timeEntry: timeEntry,
-          )),
+      builder: ((context) => TimeEntrySummaryPage()),
     );
     Navigator.of(context).push(route);
   }

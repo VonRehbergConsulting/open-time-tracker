@@ -40,7 +40,7 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
 
   @override
   void onEffect(BuildContext context, TimerEffect effect) {
-    // TODO: implement transition
+    effect.when(finish: () => AppRouter.routeToTimeEntrySummary(context));
   }
 
   @override

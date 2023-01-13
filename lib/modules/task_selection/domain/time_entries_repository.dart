@@ -6,6 +6,15 @@ abstract class TimeEntriesRepository {
     int? userId,
     DateTime? date,
   });
+
+  Future<void> create({
+    required TimeEntry timeEntry,
+    required int userId,
+  });
+
+  Future<void> update({
+    required TimeEntry timeEntry,
+  });
 }
 
 class TimeEntry {
