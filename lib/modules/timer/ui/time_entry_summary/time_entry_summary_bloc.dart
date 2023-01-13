@@ -101,7 +101,9 @@ class TimeEntrySummaryBloc
       await _timerRepository.reset();
       emitEffect(TimeEntrySummaryEffect.complete());
     } catch (e) {
+      // TODO: show error
       print(e);
+      _emitIdleState();
     }
   }
 }

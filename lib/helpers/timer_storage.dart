@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 
 import '/helpers/preferences_storage.dart';
-import '/helpers/time_entry_serialization.dart';
 
 class TimerStorage {
   // Properties
@@ -44,7 +43,7 @@ class TimerStorage {
     try {
       final decoded = jsonDecode(string!);
       print('Time entry loaded');
-      return TimeEntrySerialization.parse(decoded);
+      return _TimeEntrySerialization.parse(decoded);
     } catch (error) {
       print('Can\'t load time entry');
       return null;
@@ -57,7 +56,7 @@ class TimerStorage {
       return;
     }
     final string = jsonEncode(
-      TimeEntrySerialization.toMap(timeEntry),
+      _TimeEntrySerialization.toMap(timeEntry),
     );
     await storage.setString(_timeEntryKey, string);
     print('Time entry saved');
@@ -77,5 +76,43 @@ class TimerStorage {
 
   Future<void> setStopTime(DateTime? dateTime) async {
     return _saveDateTime(_stopTimeKey, dateTime);
+  }
+}
+
+class _TimeEntrySerialization {
+  static Map<String, dynamic> toMap(TimeEntry timeEntry) {
+    return {
+      'id': timeEntry.id,
+      'workPackageSubject': timeEntry.workPackageSubject,
+      'workPackageHref': timeEntry.workPackageHref,
+      'projectTitle': timeEntry.projectTitle,
+      'projectHref': timeEntry.projectHref,
+      'hours': timeEntry.hours.inSeconds,
+      'comment': timeEntry.comment,
+    };
+  }
+
+  static TimeEntry? parse(Map<String, dynamic> object) {
+    try {
+      final id = object['id'] as int?;
+      final String workPackageSubject = object['workPackageSubject'];
+      final String workPackageHref = object['workPackageHref'];
+      final String projectTitle = object['projectTitle'];
+      final String projectHref = object['projectHref'];
+      final Duration hours = Duration(seconds: object['hours'] as int);
+      final String? comment = object['comment'];
+      return TimeEntry(
+        id: id,
+        workPackageSubject: workPackageSubject,
+        workPackageHref: workPackageHref,
+        projectTitle: projectTitle,
+        projectHref: projectHref,
+        hours: hours,
+        comment: comment,
+      );
+    } catch (error) {
+      print('Can\'t parse time entry');
+      return null;
+    }
   }
 }

@@ -9,6 +9,7 @@ import 'package:open_project_time_tracker/modules/timer/ui/time_entry_summary/ti
 import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_page.dart';
 
 class AppRouter {
+  // TODO: rebuild routing
   static void routeToTimer(
     BuildContext context,
   ) {

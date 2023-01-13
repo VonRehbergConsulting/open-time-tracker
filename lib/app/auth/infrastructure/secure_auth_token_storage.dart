@@ -15,8 +15,8 @@ class SecureAuthTokenStorage implements AuthTokenStorage {
 
   @override
   Future<void> clear() async {
-    // TODO: delete only tokens
-    await _storage.deleteAll();
+    await _storage.write(key: _accessTokenKey, value: null);
+    await _storage.write(key: _refreshTokenKey, value: null);
   }
 
   @override

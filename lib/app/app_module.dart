@@ -44,7 +44,8 @@ abstract class AppModule {
         authTokenStorage,
         authClient,
         () {
-          // TODO: implement unauthorization
+          authTokenStorage.clear();
+          // TODO: go to auth check
         },
       );
 }

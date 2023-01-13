@@ -12,9 +12,7 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
       complete: () {
         AppRouter.routeToAuthCheck(context);
       },
-      error: ((message) {
-        // TODO: implement
-      }),
+      error: ((message) {}),
     );
   }
 
