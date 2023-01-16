@@ -29,6 +29,7 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
     final result = await _restApi.timeEntries(
       filters: filtersString,
     );
+    result.timeEntries.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     final items = result.timeEntries
         .map(
           (e) => TimeEntry(
