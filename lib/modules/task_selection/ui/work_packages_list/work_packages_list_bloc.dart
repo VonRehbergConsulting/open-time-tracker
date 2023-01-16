@@ -15,7 +15,16 @@ class WorkPackagesListState with _$WorkPackagesListState {
   }) = _Idle;
 }
 
-class WorkPackagesListBloc extends Cubit<WorkPackagesListState> {
+@freezed
+class WorkPackagesListEffect with _$WorkPackagesListEffect {
+  const factory WorkPackagesListEffect.complete() = _Complete;
+  const factory WorkPackagesListEffect.error({
+    required String message,
+  }) = _Error;
+}
+
+class WorkPackagesListBloc
+    extends EffectCubit<WorkPackagesListState, WorkPackagesListEffect> {
   WorkPackagesRepository _workPackagesRepository;
   UserDataRepository _userDataRepository;
   TimerRepository _timerRepository;
@@ -35,16 +44,21 @@ class WorkPackagesListBloc extends Cubit<WorkPackagesListState> {
         workPackages: items,
       ));
     } catch (e) {
-      // TODO: show error
+      emitEffect(WorkPackagesListEffect.error(message: 'Something went wrong'));
     }
   }
 
   Future<void> setTimeEntry(
     WorkPackage workPackage,
   ) async {
-    final timeEntry = TimeEntry.fromWorkPackage(workPackage);
-    await _timerRepository.setTimeEntry(
-      timeEntry: timeEntry,
-    );
+    try {
+      final timeEntry = TimeEntry.fromWorkPackage(workPackage);
+      await _timerRepository.setTimeEntry(
+        timeEntry: timeEntry,
+      );
+      emitEffect(WorkPackagesListEffect.complete());
+    } catch (e) {
+      emitEffect(WorkPackagesListEffect.error(message: 'Something went wrong'));
+    }
   }
 }

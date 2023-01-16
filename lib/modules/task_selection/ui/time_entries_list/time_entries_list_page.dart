@@ -8,12 +8,22 @@ import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart
 
 import 'widgets/time_entry_list_item.dart';
 
-class TimeEntriesListPage
-    extends BlocPage<TimeEntriesListBloc, TimeEntriesListState> {
+class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
+    TimeEntriesListState, TimeEntriesListEffect> {
   @override
   void onCreate(BuildContext context, TimeEntriesListBloc bloc) {
     super.onCreate(context, bloc);
     bloc.reload();
+  }
+
+  @override
+  void onEffect(BuildContext context, TimeEntriesListEffect effect) {
+    effect.when(
+      complete: () => AppRouter.routeToTimer(context),
+      error: (message) {
+        // TODO: show error
+      },
+    );
   }
 
   @override
@@ -53,12 +63,8 @@ class TimeEntriesListPage
                   projectTitle: timeEntry.projectTitle,
                   hours: timeEntry.hours,
                   comment: timeEntry.comment,
-                  action: () async {
-                    // TODO: switch to effects
-                    await context
-                        .read<TimeEntriesListBloc>()
-                        .setTimeEntry(timeEntry);
-                    AppRouter.routeToTimer(context);
+                  action: () {
+                    context.read<TimeEntriesListBloc>().setTimeEntry(timeEntry);
                   });
             }),
           ),

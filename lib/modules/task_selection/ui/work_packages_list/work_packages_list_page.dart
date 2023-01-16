@@ -6,12 +6,22 @@ import 'package:open_project_time_tracker/modules/task_selection/ui/work_package
 
 import 'widgets/work_package_list_item.dart';
 
-class WorkPackagesListPage
-    extends BlocPage<WorkPackagesListBloc, WorkPackagesListState> {
+class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
+    WorkPackagesListState, WorkPackagesListEffect> {
   @override
   void onCreate(BuildContext context, WorkPackagesListBloc bloc) {
     super.onCreate(context, bloc);
     bloc.reload();
+  }
+
+  @override
+  void onEffect(BuildContext context, WorkPackagesListEffect effect) {
+    effect.when(
+      complete: () => AppRouter.routeToTimer(context),
+      error: (message) {
+        // TODO: show error
+      },
+    );
   }
 
   @override
@@ -31,12 +41,10 @@ class WorkPackagesListPage
                 projectTitle: workPackage.projectTitle,
                 status: workPackage.status,
                 priority: workPackage.priority,
-                action: () async {
-                  // TODO: switch to effects
-                  await context
+                action: () {
+                  context
                       .read<WorkPackagesListBloc>()
                       .setTimeEntry(workPackage);
-                  AppRouter.routeToTimer(context);
                 });
           }),
         ),

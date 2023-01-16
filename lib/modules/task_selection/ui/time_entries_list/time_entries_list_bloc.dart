@@ -18,7 +18,16 @@ class TimeEntriesListState with _$TimeEntriesListState {
   }) = _Idle;
 }
 
-class TimeEntriesListBloc extends Cubit<TimeEntriesListState> {
+@freezed
+class TimeEntriesListEffect with _$TimeEntriesListEffect {
+  const factory TimeEntriesListEffect.complete() = _Complete;
+  const factory TimeEntriesListEffect.error({
+    required String message,
+  }) = _Error;
+}
+
+class TimeEntriesListBloc
+    extends EffectCubit<TimeEntriesListState, TimeEntriesListEffect> {
   TimeEntriesRepository _timeEntriesRepository;
   UserDataRepository _userDataRepository;
   SettingsRepository _settingsRepository;
@@ -54,7 +63,7 @@ class TimeEntriesListBloc extends Cubit<TimeEntriesListState> {
         totalDuration: totalDuration,
       ));
     } catch (e) {
-      // TODO: show error
+      emitEffect(TimeEntriesListEffect.error(message: 'Something went wrong'));
     }
   }
 
@@ -78,5 +87,6 @@ class TimeEntriesListBloc extends Cubit<TimeEntriesListState> {
     await _timerRepository.setTimeEntry(
       timeEntry: timeEntry,
     );
+    emitEffect(TimeEntriesListEffect.complete());
   }
 }

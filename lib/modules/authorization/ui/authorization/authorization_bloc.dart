@@ -49,7 +49,9 @@ class AuthorizationBloc
       await _authClient.requestToken();
       emitEffect(AuthorizationEffect.complete());
     } catch (e) {
-      // TODO: show 'cannot authorize effect'
+      emitEffect(AuthorizationEffect.error(
+        message: 'Something went wrong',
+      ));
     }
   }
 }
