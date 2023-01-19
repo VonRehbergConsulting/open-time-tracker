@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
+
 import '/helpers/preferences_storage.dart';
-import '/helpers/time_entry_serialization.dart';
-import '/models/time_entry.dart';
 
 class TimerStorage {
   // Properties
@@ -19,13 +19,13 @@ class TimerStorage {
 
   //Private methods
 
-  void _saveDateTime(String key, DateTime? dateTime) {
+  Future<void> _saveDateTime(String key, DateTime? dateTime) async {
     if (dateTime == null) {
       storage.remove(key);
       return;
     }
     final value = dateTime.toIso8601String();
-    storage.setString(key, value);
+    await storage.setString(key, value);
   }
 
   Future<DateTime?> _loadDateTime(String key) async {
@@ -43,22 +43,22 @@ class TimerStorage {
     try {
       final decoded = jsonDecode(string!);
       print('Time entry loaded');
-      return TimeEntrySerialization.parse(decoded);
+      return _TimeEntrySerialization.parse(decoded);
     } catch (error) {
       print('Can\'t load time entry');
       return null;
     }
   }
 
-  void setTimeEntry(TimeEntry? timeEntry) async {
+  Future<void> setTimeEntry(TimeEntry? timeEntry) async {
     if (timeEntry == null) {
       storage.remove(_timeEntryKey);
       return;
     }
     final string = jsonEncode(
-      TimeEntrySerialization.toMap(timeEntry),
+      _TimeEntrySerialization.toMap(timeEntry),
     );
-    storage.setString(_timeEntryKey, string);
+    await storage.setString(_timeEntryKey, string);
     print('Time entry saved');
   }
 
@@ -66,7 +66,7 @@ class TimerStorage {
     return _loadDateTime(_startTimeKey);
   }
 
-  void setStartTime(DateTime? dateTime) async {
+  Future<void> setStartTime(DateTime? dateTime) async {
     return _saveDateTime(_startTimeKey, dateTime);
   }
 
@@ -74,7 +74,45 @@ class TimerStorage {
     return _loadDateTime(_stopTimeKey);
   }
 
-  void setStopTime(DateTime? dateTime) async {
+  Future<void> setStopTime(DateTime? dateTime) async {
     return _saveDateTime(_stopTimeKey, dateTime);
+  }
+}
+
+class _TimeEntrySerialization {
+  static Map<String, dynamic> toMap(TimeEntry timeEntry) {
+    return {
+      'id': timeEntry.id,
+      'workPackageSubject': timeEntry.workPackageSubject,
+      'workPackageHref': timeEntry.workPackageHref,
+      'projectTitle': timeEntry.projectTitle,
+      'projectHref': timeEntry.projectHref,
+      'hours': timeEntry.hours.inSeconds,
+      'comment': timeEntry.comment,
+    };
+  }
+
+  static TimeEntry? parse(Map<String, dynamic> object) {
+    try {
+      final id = object['id'] as int?;
+      final String workPackageSubject = object['workPackageSubject'];
+      final String workPackageHref = object['workPackageHref'];
+      final String projectTitle = object['projectTitle'];
+      final String projectHref = object['projectHref'];
+      final Duration hours = Duration(seconds: object['hours'] as int);
+      final String? comment = object['comment'];
+      return TimeEntry(
+        id: id,
+        workPackageSubject: workPackageSubject,
+        workPackageHref: workPackageHref,
+        projectTitle: projectTitle,
+        projectHref: projectHref,
+        hours: hours,
+        comment: comment,
+      );
+    } catch (error) {
+      print('Can\'t parse time entry');
+      return null;
+    }
   }
 }
