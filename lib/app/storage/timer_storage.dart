@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 
-import '/helpers/preferences_storage.dart';
+import 'preferences_storage.dart';
 
 class TimerStorage {
   // Properties

@@ -1,4 +1,4 @@
-import 'package:open_project_time_tracker/helpers/preferences_storage.dart';
+import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 
 class LocalSettingsRepository implements SettingsRepository {
