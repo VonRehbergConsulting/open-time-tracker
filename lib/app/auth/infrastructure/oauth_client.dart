@@ -6,17 +6,15 @@ import 'package:open_project_time_tracker/modules/authorization/domain/instance_
 
 class OAuthClient implements AuthClient {
   FlutterAppAuth _flutterAppAuth;
-  AuthTokenStorage _authTokenStorage;
   InstanceConfigurationRepository _instanceConfigurationRepository;
 
   OAuthClient(
     this._flutterAppAuth,
-    this._authTokenStorage,
     this._instanceConfigurationRepository,
   );
 
   @override
-  Future<void> requestToken() async {
+  Future<AuthToken> requestToken() async {
     try {
       final baseUrl = await _instanceConfigurationRepository.baseUrl;
       final clientID = await _instanceConfigurationRepository.clientID;
@@ -47,10 +45,10 @@ class OAuthClient implements AuthClient {
       if (accessToken == null || refreshToken == null) {
         throw ErrorDescription('tokens_are_null');
       }
-      await _authTokenStorage.setToken(AuthToken(
+      return AuthToken(
         accessToken: accessToken,
         refreshToken: refreshToken,
-      ));
+      );
     } catch (e) {
       rethrow;
     }
@@ -95,10 +93,5 @@ class OAuthClient implements AuthClient {
     } catch (e) {
       rethrow;
     }
-  }
-
-  @override
-  Future<void> invalidateTokens() async {
-    await _authTokenStorage.clear();
   }
 }
