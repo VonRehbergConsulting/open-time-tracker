@@ -75,8 +75,15 @@ class AppRouter {
   }
 
   static void routeToAuthCheck(BuildContext context) {
-    final route = CupertinoPageRoute(
-      builder: ((context) => AuthorizationCheckerPage()),
+    final route = PageRouteBuilder(
+      pageBuilder: ((
+        context,
+        animation1,
+        animation2,
+      ) =>
+          AuthorizationCheckerPage()),
+      transitionDuration: Duration.zero,
+      reverseTransitionDuration: Duration.zero,
     );
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }

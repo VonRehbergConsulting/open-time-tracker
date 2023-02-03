@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:open_project_time_tracker/app/auth/domain/auth_client.dart';
+import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
@@ -31,7 +31,7 @@ class TimeEntriesListBloc
   TimeEntriesRepository _timeEntriesRepository;
   UserDataRepository _userDataRepository;
   SettingsRepository _settingsRepository;
-  AuthClient _authClient;
+  AuthService _authService;
   TimerRepository _timerRepository;
 
   List<TimeEntry> items = [];
@@ -42,7 +42,7 @@ class TimeEntriesListBloc
     this._timeEntriesRepository,
     this._userDataRepository,
     this._settingsRepository,
-    this._authClient,
+    this._authService,
     this._timerRepository,
   ) : super(const TimeEntriesListState.loading());
 
@@ -78,7 +78,7 @@ class TimeEntriesListBloc
   }
 
   Future<void> unauthorize() async {
-    await _authClient.invalidateTokens();
+    await _authService.logout();
   }
 
   Future<void> setTimeEntry(

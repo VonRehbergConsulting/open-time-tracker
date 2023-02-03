@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
-import 'package:open_project_time_tracker/helpers/preferences_storage.dart';
-import 'package:open_project_time_tracker/helpers/timer_storage.dart';
+import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
+import 'package:open_project_time_tracker/app/storage/timer_storage.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';

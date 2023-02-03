@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/api/rest_api_client.dart';
-import 'package:open_project_time_tracker/app/auth/domain/auth_client.dart';
-import 'package:open_project_time_tracker/helpers/preferences_storage.dart';
+import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
+import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
@@ -59,14 +59,14 @@ abstract class TaskSelectionModule {
     TimeEntriesRepository timeEntriesRepository,
     UserDataRepository userDataRepository,
     SettingsRepository settingsRepository,
-    AuthClient authClient,
+    AuthService authService,
     TimerRepository timerRepository,
   ) =>
       TimeEntriesListBloc(
         timeEntriesRepository,
         userDataRepository,
         settingsRepository,
-        authClient,
+        authService,
         timerRepository,
       );
 

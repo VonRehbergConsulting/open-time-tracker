@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:open_project_time_tracker/app/auth/domain/auth_client.dart';
+import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/effect_bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/instance_configuration_repository.dart';
 
@@ -23,11 +23,11 @@ class AuthorizationEffect with _$AuthorizationEffect {
 class AuthorizationBloc
     extends EffectCubit<AuthorizationState, AuthorizationEffect> {
   InstanceConfigurationRepository _instanceConfigurationRepository;
-  AuthClient _authClient;
+  AuthService _authService;
 
   AuthorizationBloc(
     this._instanceConfigurationRepository,
-    this._authClient,
+    this._authService,
   ) : super(AuthorizationState.idle(
           canAuthorize: false,
         ));
@@ -46,7 +46,7 @@ class AuthorizationBloc
 
   Future<void> authorize() async {
     try {
-      await _authClient.requestToken();
+      await _authService.login();
       emitEffect(AuthorizationEffect.complete());
     } catch (e) {
       emitEffect(AuthorizationEffect.error(

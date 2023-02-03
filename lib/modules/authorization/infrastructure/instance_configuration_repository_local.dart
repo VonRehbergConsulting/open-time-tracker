@@ -1,4 +1,4 @@
-import 'package:open_project_time_tracker/helpers/preferences_storage.dart';
+import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/instance_configuration_repository.dart';
 
 class InstanceConfigurationRepositoryLocal

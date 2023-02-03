@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/api/rest_api_client.dart';
-import 'package:open_project_time_tracker/app/auth/domain/auth_client.dart';
+import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/instance_configuration_repository.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/authorization/infrastructure/api_user_data_repository.dart';
@@ -38,11 +38,11 @@ abstract class AuthorizationModule {
   @injectable
   AuthorizationBloc authorizationBloc(
     InstanceConfigurationRepository instanceConfigurationRepository,
-    AuthClient authClient,
+    AuthService authService,
   ) =>
       AuthorizationBloc(
         instanceConfigurationRepository,
-        authClient,
+        authService,
       );
 
   @injectable
