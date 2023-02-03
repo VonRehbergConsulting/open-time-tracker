@@ -30,7 +30,10 @@ class InstanceConfigurationPage extends EffectBlocPage<
         _baseUrlController.text = baseUrl;
         _clientIdController.text = clientID;
       },
-      complete: () => Navigator.of(context).pop(),
+      complete: () {
+        completion();
+        Navigator.of(context).pop();
+      },
     );
   }
 

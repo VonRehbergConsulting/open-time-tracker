@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/api/rest_api_client.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
+import 'package:open_project_time_tracker/app/auth/domain/auth_token_storage.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/instance_configuration_repository.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/authorization/infrastructure/api_user_data_repository.dart';
@@ -29,10 +30,12 @@ abstract class AuthorizationModule {
   AuthorizationCheckerBloc authorizationCheckerBloc(
     UserDataRepository userDataRepository,
     TimerRepository timerRepository,
+    AuthTokenStorage authTokenStorage,
   ) =>
       AuthorizationCheckerBloc(
         userDataRepository,
         timerRepository,
+        authTokenStorage,
       );
 
   @injectable

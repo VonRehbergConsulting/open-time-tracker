@@ -18,7 +18,7 @@ class InstanceConfigurationRepositoryLocal
     if (value == null) {
       _storage.remove(_baseUrlKey);
     } else {
-      _storage.setString(_baseUrlKey, value);
+      await _storage.setString(_baseUrlKey, value);
     }
   }
 
@@ -30,7 +30,7 @@ class InstanceConfigurationRepositoryLocal
     if (value == null) {
       _storage.remove(_clientIdKey);
     } else {
-      _storage.setString(_clientIdKey, value);
+      await _storage.setString(_clientIdKey, value);
     }
   }
 }
