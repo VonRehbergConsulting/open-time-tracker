@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/modules/authorization/ui/authorization_checker/authorization_checker_page.dart';
+import 'package:open_project_time_tracker/app/navigation/app_auth_router.dart';
 import 'app/di/inject.dart';
 
 void main() {
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      home: AuthorizationCheckerPage(),
+      home: AppRouter(),
     );
   }
 }

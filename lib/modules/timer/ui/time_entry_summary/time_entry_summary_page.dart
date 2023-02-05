@@ -59,7 +59,7 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
   @override
   void onEffect(BuildContext context, TimeEntrySummaryEffect effect) {
     effect.when(
-      complete: () => AppRouter.routeToAuthCheck(context),
+      complete: () => Navigator.of(context).popUntil((route) => route.isFirst),
     );
   }
 
@@ -129,15 +129,13 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
                         decoration: InputDecoration(
                           labelText: 'Comment',
                           suffixIcon: commentSuggestions.isEmpty
-                              ? const CupertinoActivityIndicator()
-                              : commentSuggestions.isEmpty
-                                  ? null
-                                  : IconButton(
-                                      onPressed: () => _showCommentSuggestions(
-                                            context,
-                                            commentSuggestions,
-                                          ),
-                                      icon: const Icon(Icons.more_horiz)),
+                              ? null
+                              : IconButton(
+                                  onPressed: () => _showCommentSuggestions(
+                                        context,
+                                        commentSuggestions,
+                                      ),
+                                  icon: const Icon(Icons.more_horiz)),
                         ),
                         readOnly: false,
                         onChanged: (_) => context

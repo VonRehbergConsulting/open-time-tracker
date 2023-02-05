@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
@@ -17,7 +16,9 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
   @override
   void onEffect(BuildContext context, WorkPackagesListEffect effect) {
     effect.when(
-      complete: () => AppRouter.routeToTimer(context),
+      complete: () {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      },
       error: (message) {
         // TODO: show error
       },

@@ -9,9 +9,6 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
   @override
   void onEffect(BuildContext context, AuthorizationEffect effect) {
     effect.when(
-      complete: () {
-        AppRouter.routeToAuthCheck(context);
-      },
       error: ((message) {
         // TODO: show error
       }),

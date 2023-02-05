@@ -17,7 +17,7 @@ import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.
 
 @module
 abstract class TaskSelectionModule {
-  @injectable
+  @lazySingleton
   TimeEntriesApi timeEntriesApi(
     RestApiClient client,
   ) =>
@@ -25,7 +25,7 @@ abstract class TaskSelectionModule {
         client.dio,
       );
 
-  @injectable
+  @lazySingleton
   WorkPackagesApi workPackagesApi(
     RestApiClient client,
   ) =>
@@ -33,7 +33,7 @@ abstract class TaskSelectionModule {
         client.dio,
       );
 
-  @injectable
+  @lazySingleton
   TimeEntriesRepository timeEntriesRepository(
     TimeEntriesApi timeEntriesApi,
   ) =>
@@ -41,7 +41,7 @@ abstract class TaskSelectionModule {
         timeEntriesApi,
       );
 
-  @injectable
+  @lazySingleton
   WorkPackagesRepository workPackagesRepository(
     WorkPackagesApi workPackagesApi,
   ) =>
@@ -49,7 +49,7 @@ abstract class TaskSelectionModule {
         workPackagesApi,
       );
 
-  @injectable
+  @lazySingleton
   SettingsRepository settingsRepository() => LocalSettingsRepository(
         PreferencesStorage(),
       );

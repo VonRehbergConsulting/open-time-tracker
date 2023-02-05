@@ -1,13 +1,27 @@
 import 'package:open_project_time_tracker/app/storage/timer_storage.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
+import 'package:rxdart/rxdart.dart';
 
 class LocalTimerRepository implements TimerRepository {
   TimerStorage _timerStorage;
 
+  final _state = BehaviorSubject<bool>();
+
   LocalTimerRepository(
     this._timerStorage,
   );
+
+  @override
+  Stream<bool> observeIsSet() => _state.doOnListen(
+        () async {
+          await _init();
+        },
+      );
+
+  Future<void> _init() async {
+    _state.add(await isSet);
+  }
 
   Future<bool> get isSet async {
     final timeEntry = await _timerStorage.getTimeEntry();
@@ -53,6 +67,8 @@ class LocalTimerRepository implements TimerRepository {
       _timerStorage.setStartTime(startTime),
       _timerStorage.setStopTime(stopTime),
     ]);
+    print('ASD time entry set');
+    _state.add(true);
   }
 
   Future<void> startTimer({
@@ -95,5 +111,7 @@ class LocalTimerRepository implements TimerRepository {
       _timerStorage.setStartTime(null),
       _timerStorage.setStopTime(null),
     ]);
+    print('ASD time entry removed');
+    _state.add(false);
   }
 }

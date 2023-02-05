@@ -19,7 +19,6 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
   @override
   void onEffect(BuildContext context, TimeEntriesListEffect effect) {
     effect.when(
-      complete: () => AppRouter.routeToTimer(context),
       error: (message) {
         // TODO: show error
       },
@@ -77,7 +76,6 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
         leading: IconButton(
             onPressed: () {
               context.read<TimeEntriesListBloc>().unauthorize();
-              AppRouter.routeToAuthCheck(context);
             },
             icon: const Icon(Icons.exit_to_app_sharp)),
       ),

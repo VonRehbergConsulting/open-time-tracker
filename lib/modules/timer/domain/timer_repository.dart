@@ -8,6 +8,8 @@ abstract class TimerRepository {
   Future<TimeEntry?> get timeEntry;
   Future<Duration> get timeSpent;
 
+  Stream<bool> observeIsSet();
+
   Future<void> setTimeEntry({
     required TimeEntry timeEntry,
   });
