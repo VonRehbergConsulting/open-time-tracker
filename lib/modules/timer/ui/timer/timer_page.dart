@@ -29,7 +29,7 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
                 isDestructiveAction: true,
                 onPressed: () async {
                   await context.read<TimerBloc>().reset();
-                  AppRouter.routeToTimeEntriesListTemporary(context);
+                  Navigator.of(context).pop();
                 },
                 child: Text('Yes'),
               ),

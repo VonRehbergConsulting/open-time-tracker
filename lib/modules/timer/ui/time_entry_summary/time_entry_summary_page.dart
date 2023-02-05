@@ -59,7 +59,7 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
   @override
   void onEffect(BuildContext context, TimeEntrySummaryEffect effect) {
     effect.when(
-      complete: () => AppRouter.routeToAuthCheck(context),
+      complete: () => Navigator.of(context).popUntil((route) => route.isFirst),
     );
   }
 

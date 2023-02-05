@@ -20,7 +20,6 @@ class TimeEntriesListState with _$TimeEntriesListState {
 
 @freezed
 class TimeEntriesListEffect with _$TimeEntriesListEffect {
-  const factory TimeEntriesListEffect.complete() = _Complete;
   const factory TimeEntriesListEffect.error({
     required String message,
   }) = _Error;
@@ -87,6 +86,5 @@ class TimeEntriesListBloc
     await _timerRepository.setTimeEntry(
       timeEntry: timeEntry,
     );
-    emitEffect(TimeEntriesListEffect.complete());
   }
 }

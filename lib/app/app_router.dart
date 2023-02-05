@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
-import 'package:open_project_time_tracker/modules/authorization/ui/authorization_checker/authorization_checker_page.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_page.dart';
@@ -70,20 +69,6 @@ class AppRouter {
   static void routeToAuth({required BuildContext context}) {
     final route = CupertinoPageRoute(
       builder: ((context) => AuthorizationPage()),
-    );
-    Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
-  }
-
-  static void routeToAuthCheck(BuildContext context) {
-    final route = PageRouteBuilder(
-      pageBuilder: ((
-        context,
-        animation1,
-        animation2,
-      ) =>
-          AuthorizationCheckerPage()),
-      transitionDuration: Duration.zero,
-      reverseTransitionDuration: Duration.zero,
     );
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
