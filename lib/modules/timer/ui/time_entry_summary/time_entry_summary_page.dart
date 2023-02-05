@@ -129,15 +129,13 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
                         decoration: InputDecoration(
                           labelText: 'Comment',
                           suffixIcon: commentSuggestions.isEmpty
-                              ? const CupertinoActivityIndicator()
-                              : commentSuggestions.isEmpty
-                                  ? null
-                                  : IconButton(
-                                      onPressed: () => _showCommentSuggestions(
-                                            context,
-                                            commentSuggestions,
-                                          ),
-                                      icon: const Icon(Icons.more_horiz)),
+                              ? null
+                              : IconButton(
+                                  onPressed: () => _showCommentSuggestions(
+                                        context,
+                                        commentSuggestions,
+                                      ),
+                                  icon: const Icon(Icons.more_horiz)),
                         ),
                         readOnly: false,
                         onChanged: (_) => context
