@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
@@ -55,6 +57,8 @@ class TimeEntrySummaryBloc
   Future<void> _init() async {
     final timeEntry = await _timerRepository.timeEntry;
     if (timeEntry != null) {
+      final minutes = max(timeEntry.hours.inMinutes, 1);
+      timeEntry.hours = Duration(minutes: minutes);
       this.timeEntry = timeEntry;
       try {
         final workPackageIdString = timeEntry.workPackageHref.split('/').last;
