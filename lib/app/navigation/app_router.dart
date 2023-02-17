@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/di/inject.dart';
-import 'package:open_project_time_tracker/app/navigation/app_auth_router_bloc.dart';
+import 'package:open_project_time_tracker/app/navigation/app_router_bloc.dart';
 import 'package:open_project_time_tracker/app/navigation/app_authorized_router.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/splash_screen.dart';

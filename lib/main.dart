@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/app/navigation/app_auth_router.dart';
+import 'package:open_project_time_tracker/app/navigation/app_router.dart';
 import 'app/di/inject.dart';
 
 void main() {

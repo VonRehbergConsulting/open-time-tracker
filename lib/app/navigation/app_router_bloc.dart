@@ -6,7 +6,7 @@ import 'package:open_project_time_tracker/modules/authorization/domain/user_data
 
 import '../ui/bloc/bloc.dart';
 
-part 'app_auth_router_bloc.freezed.dart';
+part 'app_router_bloc.freezed.dart';
 
 @freezed
 class AppRouterState with _$AppRouterState {
