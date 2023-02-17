@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/app/di/inject.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
@@ -7,13 +6,11 @@ import 'package:open_project_time_tracker/modules/task_selection/ui/work_package
 import 'widgets/work_package_list_item.dart';
 
 class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
-    WorkPackagesListState, WorkPackagesListEffect> with WidgetsBindingObserver {
+    WorkPackagesListState, WorkPackagesListEffect> {
   @override
   void onCreate(BuildContext context, WorkPackagesListBloc bloc) {
     super.onCreate(context, bloc);
     bloc.reload();
-    // TODO: fix memory leak since observer is never removed
-    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -30,14 +27,6 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       },
     );
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      inject<WorkPackagesListBloc>().reload(showLoading: true);
-    }
-    super.didChangeAppLifecycleState(state);
   }
 
   @override

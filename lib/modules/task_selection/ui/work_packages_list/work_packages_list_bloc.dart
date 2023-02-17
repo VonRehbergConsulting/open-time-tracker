@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
@@ -24,7 +25,8 @@ class WorkPackagesListEffect with _$WorkPackagesListEffect {
 }
 
 class WorkPackagesListBloc
-    extends EffectCubit<WorkPackagesListState, WorkPackagesListEffect> {
+    extends EffectCubit<WorkPackagesListState, WorkPackagesListEffect>
+    with WidgetsBindingObserver {
   WorkPackagesRepository _workPackagesRepository;
   UserDataRepository _userDataRepository;
   TimerRepository _timerRepository;
@@ -33,7 +35,23 @@ class WorkPackagesListBloc
     this._workPackagesRepository,
     this._userDataRepository,
     this._timerRepository,
-  ) : super(WorkPackagesListState.loading());
+  ) : super(WorkPackagesListState.loading()) {
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  Future<void> close() {
+    WidgetsBinding.instance.removeObserver(this);
+    return super.close();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      reload(showLoading: true);
+    }
+    super.didChangeAppLifecycleState(state);
+  }
 
   Future<void> reload({
     bool showLoading = false,
