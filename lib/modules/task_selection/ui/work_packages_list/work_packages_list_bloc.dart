@@ -35,8 +35,13 @@ class WorkPackagesListBloc
     this._timerRepository,
   ) : super(WorkPackagesListState.loading());
 
-  Future<void> reload() async {
+  Future<void> reload({
+    bool showLoading = false,
+  }) async {
     try {
+      if (showLoading) {
+        emit(WorkPackagesListState.loading());
+      }
       final items = await _workPackagesRepository.list(
         userId: _userDataRepository.userID,
       );

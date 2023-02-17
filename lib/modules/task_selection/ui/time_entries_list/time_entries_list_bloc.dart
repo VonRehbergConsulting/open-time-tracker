@@ -45,8 +45,13 @@ class TimeEntriesListBloc
     this._timerRepository,
   ) : super(const TimeEntriesListState.loading());
 
-  Future<void> reload() async {
+  Future<void> reload({
+    bool showLoading = false,
+  }) async {
     try {
+      if (showLoading) {
+        emit(TimeEntriesListState.loading());
+      }
       items = await _timeEntriesRepository.list(
         userId: _userDataRepository.userID,
         date: DateTime.now(),

@@ -54,7 +54,7 @@ abstract class TaskSelectionModule {
         PreferencesStorage(),
       );
 
-  @injectable
+  @lazySingleton
   TimeEntriesListBloc timeEntriesListBloc(
     TimeEntriesRepository timeEntriesRepository,
     UserDataRepository userDataRepository,
@@ -70,7 +70,7 @@ abstract class TaskSelectionModule {
         timerRepository,
       );
 
-  @injectable
+  @lazySingleton
   WorkPackagesListBloc workPackagesListBloc(
     WorkPackagesRepository workPackagesRepository,
     UserDataRepository userDataRepository,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/app/di/inject.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 
 import 'package:open_project_time_tracker/app/app_router.dart';
@@ -9,11 +10,21 @@ import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart
 import 'widgets/time_entry_list_item.dart';
 
 class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
-    TimeEntriesListState, TimeEntriesListEffect> {
+    TimeEntriesListState, TimeEntriesListEffect> with WidgetsBindingObserver {
   @override
   void onCreate(BuildContext context, TimeEntriesListBloc bloc) {
     super.onCreate(context, bloc);
+    // TODO: fix memory leak since observer is never removed
+    WidgetsBinding.instance.addObserver(this);
     bloc.reload();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      inject<TimeEntriesListBloc>().reload(showLoading: true);
+    }
+    super.didChangeAppLifecycleState(state);
   }
 
   @override

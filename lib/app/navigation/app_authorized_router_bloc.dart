@@ -29,13 +29,11 @@ class AppAuthorizedRouterBloc extends Cubit<AppAuthorizedRouterState> {
   }
 
   Future<void> _onStateChanged(bool isTimerSet) async {
-    print('ASD isSet: $isTimerSet');
     emit(AppAuthorizedRouterState.idle(isTimerSet: isTimerSet));
   }
 
   @override
   Future<void> close() async {
-    print('ASD cancel');
     await _timerStateSubscribtion?.cancel();
     return super.close();
   }
