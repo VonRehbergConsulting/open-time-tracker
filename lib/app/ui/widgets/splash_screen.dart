@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: ActivityIndicator(),
+        child: LayoutBuilder(
+            builder: (context, constraints) => Container(
+                width: constraints.maxWidth * 0.3,
+                child: Image.asset('assets/images/open_project_logo.png'))),
       ),
     );
   }
