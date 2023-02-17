@@ -10,7 +10,11 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
   void onEffect(BuildContext context, AuthorizationEffect effect) {
     effect.when(
       error: ((message) {
-        // TODO: show error
+        final snackBar = SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 2),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }),
     );
   }

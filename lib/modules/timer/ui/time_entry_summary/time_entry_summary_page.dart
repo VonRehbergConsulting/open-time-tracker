@@ -60,6 +60,13 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
   void onEffect(BuildContext context, TimeEntrySummaryEffect effect) {
     effect.when(
       complete: () => Navigator.of(context).popUntil((route) => route.isFirst),
+      error: (message) {
+        final snackBar = SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 2),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
     );
   }
 

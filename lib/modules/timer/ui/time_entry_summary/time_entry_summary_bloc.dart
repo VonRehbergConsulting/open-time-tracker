@@ -23,6 +23,9 @@ class TimeEntrySummaryState with _$TimeEntrySummaryState {
 @freezed
 class TimeEntrySummaryEffect with _$TimeEntrySummaryEffect {
   const factory TimeEntrySummaryEffect.complete() = _Complete;
+  const factory TimeEntrySummaryEffect.error({
+    required String message,
+  }) = _Error;
 }
 
 class TimeEntrySummaryBloc
@@ -72,7 +75,7 @@ class TimeEntrySummaryBloc
 
       _emitIdleState();
     } else {
-      // TODO: show error
+      emitEffect(TimeEntrySummaryEffect.error(message: 'Something went wrong'));
     }
   }
 
@@ -105,9 +108,8 @@ class TimeEntrySummaryBloc
       await _timerRepository.reset();
       emitEffect(TimeEntrySummaryEffect.complete());
     } catch (e) {
-      // TODO: show error
-      print(e);
       _emitIdleState();
+      emitEffect(TimeEntrySummaryEffect.error(message: 'Something went wrong'));
     }
   }
 }
