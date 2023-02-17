@@ -67,7 +67,6 @@ class LocalTimerRepository implements TimerRepository {
       _timerStorage.setStartTime(startTime),
       _timerStorage.setStopTime(stopTime),
     ]);
-    print('ASD time entry set');
     _state.add(true);
   }
 
@@ -111,7 +110,6 @@ class LocalTimerRepository implements TimerRepository {
       _timerStorage.setStartTime(null),
       _timerStorage.setStopTime(null),
     ]);
-    print('ASD time entry removed');
     _state.add(false);
   }
 }

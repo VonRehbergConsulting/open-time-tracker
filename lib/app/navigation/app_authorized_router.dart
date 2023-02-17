@@ -22,7 +22,6 @@ class _AppAuthorizedRouterState extends State<AppAuthorizedRouter> {
         () => inject(),
       )..init(),
       builder: (context, state) {
-        print('ASD rebuild');
         return state.when(
           initializing: () => const SplashScreen(),
           idle: (isTimerSet) {
