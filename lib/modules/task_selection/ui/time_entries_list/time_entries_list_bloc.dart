@@ -67,6 +67,11 @@ class TimeEntriesListBloc
         totalDuration: totalDuration,
       ));
     } catch (e) {
+      emit(TimeEntriesListState.idle(
+        workingHours: workingHours,
+        timeEntries: [],
+        totalDuration: Duration(),
+      ));
       emitEffect(TimeEntriesListEffect.error(message: 'Something went wrong'));
     }
   }

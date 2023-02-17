@@ -49,6 +49,9 @@ class WorkPackagesListBloc
         workPackages: items,
       ));
     } catch (e) {
+      emit(WorkPackagesListState.idle(
+        workPackages: [],
+      ));
       emitEffect(WorkPackagesListEffect.error(message: 'Something went wrong'));
     }
   }
