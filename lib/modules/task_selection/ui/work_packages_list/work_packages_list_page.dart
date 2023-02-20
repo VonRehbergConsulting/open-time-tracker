@@ -37,22 +37,28 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
         onRefresh: () async {
           context.read<WorkPackagesListBloc>().reload();
         },
-        child: ListView.builder(
-          itemCount: workPackages.length,
-          itemBuilder: ((_, index) {
-            final workPackage = workPackages[index];
-            return WorkPackageListItem(
-                subject: workPackage.subject,
-                projectTitle: workPackage.projectTitle,
-                status: workPackage.status,
-                priority: workPackage.priority,
-                action: () {
-                  context
-                      .read<WorkPackagesListBloc>()
-                      .setTimeEntry(workPackage);
-                });
-          }),
-        ),
+        child: workPackages.length == 0
+            ? Center(
+                child: Text(
+                  'No tasks assigned to you',
+                ),
+              )
+            : ListView.builder(
+                itemCount: workPackages.length,
+                itemBuilder: ((_, index) {
+                  final workPackage = workPackages[index];
+                  return WorkPackageListItem(
+                      subject: workPackage.subject,
+                      projectTitle: workPackage.projectTitle,
+                      status: workPackage.status,
+                      priority: workPackage.priority,
+                      action: () {
+                        context
+                            .read<WorkPackagesListBloc>()
+                            .setTimeEntry(workPackage);
+                      });
+                }),
+              ),
       ),
     );
     return Scaffold(
