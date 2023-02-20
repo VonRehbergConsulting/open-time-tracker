@@ -108,9 +108,10 @@ class TotalTimeListItem extends StatelessWidget {
                       onTap: () {
                         _showTimePicker(context, workingHours);
                       },
-                      child: const Text(
+                      child: Text(
                         'Change working hours',
-                        style: TextStyle(color: Colors.black54),
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColorDark),
                       ),
                     ),
                   ],
