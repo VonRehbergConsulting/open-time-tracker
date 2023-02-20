@@ -7,6 +7,7 @@ import 'package:open_project_time_tracker/app/ui/widgets/time_picker.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '/extensions/duration.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TotalTimeListItem extends StatelessWidget {
   final Duration workingHours;
@@ -109,7 +110,8 @@ class TotalTimeListItem extends StatelessWidget {
                         _showTimePicker(context, workingHours);
                       },
                       child: Text(
-                        'Change working hours',
+                        AppLocalizations.of(context)
+                            .time_entries_list_change_working_hours,
                         style: TextStyle(
                             color: Theme.of(context).primaryColorDark),
                       ),

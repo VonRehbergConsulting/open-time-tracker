@@ -21,9 +21,7 @@ class TimeEntriesListState with _$TimeEntriesListState {
 
 @freezed
 class TimeEntriesListEffect with _$TimeEntriesListEffect {
-  const factory TimeEntriesListEffect.error({
-    required String message,
-  }) = _Error;
+  const factory TimeEntriesListEffect.error() = _Error;
 }
 
 class TimeEntriesListBloc
@@ -90,7 +88,7 @@ class TimeEntriesListBloc
         timeEntries: [],
         totalDuration: Duration(),
       ));
-      emitEffect(TimeEntriesListEffect.error(message: 'Something went wrong'));
+      emitEffect(TimeEntriesListEffect.error());
     }
   }
 

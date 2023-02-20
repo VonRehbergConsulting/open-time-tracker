@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/list_item.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class CommentSuggestionsPage extends StatelessWidget {
   final List<String> comments;
   final Function(String) handler;
@@ -11,7 +13,7 @@ class CommentSuggestionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choose a comment'),
+        title: Text(AppLocalizations.of(context).comment_suggestions_title),
       ),
       body: ListView(
         padding: const EdgeInsets.all(8),

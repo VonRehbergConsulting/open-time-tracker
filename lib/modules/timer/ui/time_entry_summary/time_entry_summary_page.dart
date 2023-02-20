@@ -7,6 +7,8 @@ import 'package:open_project_time_tracker/app/ui/widgets/time_picker.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/time_entry_summary/time_entry_summary_bloc.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 // ignore: must_be_immutable
 class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
     TimeEntrySummaryState, TimeEntrySummaryEffect> {
@@ -60,9 +62,9 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
   void onEffect(BuildContext context, TimeEntrySummaryEffect effect) {
     effect.when(
       complete: () => Navigator.of(context).popUntil((route) => route.isFirst),
-      error: (message) {
+      error: () {
         final snackBar = SnackBar(
-          content: Text(message),
+          content: Text(AppLocalizations.of(context).generic_error),
           duration: const Duration(seconds: 2),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -115,18 +117,23 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
                     children: [
                       TextFormField(
                         initialValue: title,
-                        decoration: const InputDecoration(labelText: 'Task'),
+                        decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)
+                                .time_entry_summary_task),
                         enabled: false,
                       ),
                       TextFormField(
                         initialValue: projectTitle,
-                        decoration: const InputDecoration(labelText: 'Project'),
+                        decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)
+                                .time_entry_summary_project),
                         enabled: false,
                       ),
                       TextFormField(
                         controller: _timeFieldController,
-                        decoration:
-                            const InputDecoration(labelText: 'Time spent'),
+                        decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)
+                                .time_entry_summary_time_spent),
                         readOnly: true,
                         onTap: () => _showTimePicker(context),
                       ),
@@ -134,7 +141,8 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
                         textCapitalization: TextCapitalization.sentences,
                         controller: _commentFieldController,
                         decoration: InputDecoration(
-                          labelText: 'Comment',
+                          labelText: AppLocalizations.of(context)
+                              .time_entry_summary_comment,
                           suffixIcon: commentSuggestions.isEmpty
                               ? null
                               : IconButton(
@@ -159,7 +167,7 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
                   width: buttonWidth,
                   child: ElevatedButton(
                     onPressed: () => _submit(context),
-                    child: const Text('Save'),
+                    child: Text(AppLocalizations.of(context).generic_save),
                   ),
                 ),
               ],
@@ -171,7 +179,7 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Summary'),
+        title: Text(AppLocalizations.of(context).time_entry_summary_title),
       ),
       body: body,
     );

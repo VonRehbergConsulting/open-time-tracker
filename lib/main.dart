@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/navigation/app_router.dart';
 import 'app/di/inject.dart';
 
@@ -15,6 +17,16 @@ class MyApp extends StatelessWidget {
     precacheImage(
         const AssetImage('assets/images/open_project_logo.png'), context);
     return MaterialApp(
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('de'),
+      ],
       title: 'Open Project Time Tracker',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(

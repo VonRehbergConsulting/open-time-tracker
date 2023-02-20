@@ -1,0 +1,34 @@
+{
+    "generic_error": "Something went wrong",
+    "generic_save": "Save",
+    "generic_yes": "Yes",
+    "generic_no": "No",
+    "generic_warning": "Warning",
+
+    "authorization_log_in": "Log in",
+    "authorization_configure_instance": "Configure instance",
+
+    "instance_configuration_title": "Instance Configuration",
+    "instance_configuration_base_url": "Base URL",
+    "instance_configuration_client_id": "Client ID",
+
+    "time_entries_list_title": "Recent work",
+    "time_entries_list_change_working_hours": "Change working hours",
+
+    "work_packages_list_title": "Active tasks",
+    "work_package_list_empty": "No tasks assigned to you",
+
+    "time_entry_summary_title": "Summary",
+    "time_entry_summary_task": "Task",
+    "time_entry_summary_project": "Project",
+    "time_entry_summary_time_spent": "Time spent",
+    "time_entry_summary_comment": "Comment",
+
+    "timer_warning": "Your current changes will not be saved. Continue?",
+    "timer_start": "Start",
+    "timer_pause": "Pause",
+    "timer_resume": "Resume",
+    "timer_finish": "Finish",
+    
+    "comment_suggestions_title": "Choose a comment"
+}

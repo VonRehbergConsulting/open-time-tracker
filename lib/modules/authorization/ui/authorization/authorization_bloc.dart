@@ -14,9 +14,7 @@ class AuthorizationState with _$AuthorizationState {
 
 @freezed
 class AuthorizationEffect with _$AuthorizationEffect {
-  const factory AuthorizationEffect.error({
-    required String message,
-  }) = _Error;
+  const factory AuthorizationEffect.error() = _Error;
 }
 
 class AuthorizationBloc
@@ -47,9 +45,7 @@ class AuthorizationBloc
     try {
       await _authService.login();
     } catch (e) {
-      emitEffect(AuthorizationEffect.error(
-        message: 'Something went wrong',
-      ));
+      emitEffect(AuthorizationEffect.error());
     }
   }
 }

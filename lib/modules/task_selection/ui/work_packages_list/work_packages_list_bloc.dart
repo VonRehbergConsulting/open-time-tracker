@@ -19,9 +19,7 @@ class WorkPackagesListState with _$WorkPackagesListState {
 @freezed
 class WorkPackagesListEffect with _$WorkPackagesListEffect {
   const factory WorkPackagesListEffect.complete() = _Complete;
-  const factory WorkPackagesListEffect.error({
-    required String message,
-  }) = _Error;
+  const factory WorkPackagesListEffect.error() = _Error;
 }
 
 class WorkPackagesListBloc
@@ -70,7 +68,7 @@ class WorkPackagesListBloc
       emit(WorkPackagesListState.idle(
         workPackages: [],
       ));
-      emitEffect(WorkPackagesListEffect.error(message: 'Something went wrong'));
+      emitEffect(WorkPackagesListEffect.error());
     }
   }
 
@@ -84,7 +82,7 @@ class WorkPackagesListBloc
       );
       emitEffect(WorkPackagesListEffect.complete());
     } catch (e) {
-      emitEffect(WorkPackagesListEffect.error(message: 'Something went wrong'));
+      emitEffect(WorkPackagesListEffect.error());
     }
   }
 }

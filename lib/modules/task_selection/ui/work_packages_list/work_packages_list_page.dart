@@ -5,6 +5,8 @@ import 'package:open_project_time_tracker/modules/task_selection/ui/work_package
 
 import 'widgets/work_package_list_item.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
     WorkPackagesListState, WorkPackagesListEffect> {
   @override
@@ -19,9 +21,9 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
       complete: () {
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
-      error: (message) {
+      error: () {
         final snackBar = SnackBar(
-          content: Text(message),
+          content: Text(AppLocalizations.of(context).generic_error),
           duration: const Duration(seconds: 2),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -40,7 +42,7 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
         child: workPackages.length == 0
             ? Center(
                 child: Text(
-                  'No tasks assigned to you',
+                  AppLocalizations.of(context).work_package_list_empty,
                 ),
               )
             : ListView.builder(
@@ -63,7 +65,7 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
     );
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Active tasks'),
+        title: Text(AppLocalizations.of(context).work_packages_list_title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),

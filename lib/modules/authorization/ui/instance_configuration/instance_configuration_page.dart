@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class InstanceConfigurationPage extends EffectBlocPage<
@@ -45,7 +46,7 @@ class InstanceConfigurationPage extends EffectBlocPage<
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Instance Configuration'),
+        title: Text(AppLocalizations.of(context).instance_configuration_title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -59,12 +60,16 @@ class InstanceConfigurationPage extends EffectBlocPage<
                   children: [
                     TextFormField(
                       controller: _baseUrlController,
-                      decoration: const InputDecoration(labelText: 'Base URL'),
+                      decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)
+                              .instance_configuration_base_url),
                       onSaved: (newValue) => _baseUrl = newValue ?? '',
                     ),
                     TextFormField(
                       controller: _clientIdController,
-                      decoration: const InputDecoration(labelText: 'Client ID'),
+                      decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)
+                              .instance_configuration_client_id),
                       onSaved: (newValue) => _clientID = newValue ?? '',
                     ),
                   ],
@@ -74,10 +79,9 @@ class InstanceConfigurationPage extends EffectBlocPage<
               SizedBox(
                 width: buttonWidth,
                 child: ElevatedButton(
-                  onPressed: () => _save(context),
-                  child: const Text('Save'),
-                ),
-              )
+                    onPressed: () => _save(context),
+                    child: Text(AppLocalizations.of(context).generic_save)),
+              ),
             ],
           ),
         ),

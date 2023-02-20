@@ -9,6 +9,8 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_bloc.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 // ignore: must_be_immutable
 class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
   Timer? timer;
@@ -17,13 +19,12 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
     showDialog(
       context: context,
       builder: ((_) => CupertinoAlertDialog(
-            title: const Text('Warning'),
-            content:
-                const Text('Your current changes will not be saved. Continue?'),
+            title: Text(AppLocalizations.of(context).generic_warning),
+            content: Text(AppLocalizations.of(context).timer_warning),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text('No'),
+                child: Text(AppLocalizations.of(context).generic_no),
               ),
               CupertinoDialogAction(
                 isDestructiveAction: true,
@@ -31,7 +32,7 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
                   await context.read<TimerBloc>().reset();
                   Navigator.of(context).pop();
                 },
-                child: Text('Yes'),
+                child: Text(AppLocalizations.of(context).generic_yes),
               ),
             ],
           )),
@@ -51,11 +52,11 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
 
   @override
   Widget buildState(BuildContext context, TimerState state) {
-    var leftButtonTitle = 'Start';
+    var leftButtonTitle = AppLocalizations.of(context).timer_start;
     if (state.isActive) {
-      leftButtonTitle = 'Pause';
+      leftButtonTitle = AppLocalizations.of(context).timer_pause;
     } else if (state.hasStarted) {
-      leftButtonTitle = 'Resume';
+      leftButtonTitle = AppLocalizations.of(context).timer_resume;
     }
 
     final deviceSize = MediaQuery.of(context).size;
@@ -132,7 +133,7 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
                     onPressed: (state.hasStarted
                         ? context.read<TimerBloc>().finish
                         : null),
-                    child: const Text('Finish'),
+                    child: Text(AppLocalizations.of(context).timer_finish),
                   ),
                 ),
               ],

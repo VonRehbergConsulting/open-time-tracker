@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 
 import 'package:open_project_time_tracker/app/app_router.dart';
@@ -19,9 +20,9 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
   @override
   void onEffect(BuildContext context, TimeEntriesListEffect effect) {
     effect.when(
-      error: (message) {
+      error: () {
         final snackBar = SnackBar(
-          content: Text(message),
+          content: Text(AppLocalizations.of(context).generic_error),
           duration: const Duration(seconds: 2),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -76,7 +77,7 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
     );
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Recent work'),
+        title: Text(AppLocalizations.of(context).time_entries_list_title),
         leading: IconButton(
             onPressed: () {
               context.read<TimeEntriesListBloc>().unauthorize();

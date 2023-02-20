@@ -4,14 +4,16 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_bloc.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
     AuthorizationState, AuthorizationEffect> {
   @override
   void onEffect(BuildContext context, AuthorizationEffect effect) {
     effect.when(
-      error: ((message) {
+      error: (() {
         final snackBar = SnackBar(
-          content: Text(message),
+          content: Text(AppLocalizations.of(context).generic_error),
           duration: const Duration(seconds: 2),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -44,7 +46,8 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
                     onPressed: state.canAuthorize
                         ? context.read<AuthorizationBloc>().authorize
                         : null,
-                    child: const Text('Log in'),
+                    child:
+                        Text(AppLocalizations.of(context).authorization_log_in),
                   ),
                   CupertinoButton(
                     onPressed: () => AppRouter.routeToInstanceConfiguration(
@@ -53,7 +56,8 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
                           .read<AuthorizationBloc>()
                           .checkInstanceConfiguration,
                     ),
-                    child: const Text('Configure instance'),
+                    child: Text(AppLocalizations.of(context)
+                        .authorization_configure_instance),
                   ),
                 ],
               )

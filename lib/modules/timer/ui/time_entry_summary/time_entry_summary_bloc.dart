@@ -23,9 +23,7 @@ class TimeEntrySummaryState with _$TimeEntrySummaryState {
 @freezed
 class TimeEntrySummaryEffect with _$TimeEntrySummaryEffect {
   const factory TimeEntrySummaryEffect.complete() = _Complete;
-  const factory TimeEntrySummaryEffect.error({
-    required String message,
-  }) = _Error;
+  const factory TimeEntrySummaryEffect.error() = _Error;
 }
 
 class TimeEntrySummaryBloc
@@ -75,7 +73,7 @@ class TimeEntrySummaryBloc
 
       _emitIdleState();
     } else {
-      emitEffect(TimeEntrySummaryEffect.error(message: 'Something went wrong'));
+      emitEffect(TimeEntrySummaryEffect.error());
     }
   }
 
@@ -109,7 +107,7 @@ class TimeEntrySummaryBloc
       emitEffect(TimeEntrySummaryEffect.complete());
     } catch (e) {
       _emitIdleState();
-      emitEffect(TimeEntrySummaryEffect.error(message: 'Something went wrong'));
+      emitEffect(TimeEntrySummaryEffect.error());
     }
   }
 }
