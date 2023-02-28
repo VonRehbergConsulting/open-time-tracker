@@ -4,6 +4,7 @@
     "generic_yes": "Yes",
     "generic_no": "No",
     "generic_warning": "Warning",
+    "generic_retry": "Try again",
 
     "authorization_log_in": "Log in",
     "authorization_configure_instance": "Configure instance",

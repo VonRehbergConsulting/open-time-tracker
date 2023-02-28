@@ -43,7 +43,10 @@ class AuthorizationBloc
 
   Future<void> authorize() async {
     try {
-      await _authService.login();
+      final state = await _authService.login();
+      if (state == AuthState.undefined()) {
+        throw Error();
+      }
     } catch (e) {
       emitEffect(AuthorizationEffect.error());
     }
