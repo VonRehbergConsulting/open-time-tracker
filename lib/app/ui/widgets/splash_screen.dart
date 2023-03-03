@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/app/ui/asset_images.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -8,9 +9,11 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: LayoutBuilder(
-            builder: (context, constraints) => Container(
-                width: constraints.maxWidth * 0.3,
-                child: Image.asset('assets/images/open_project_logo.png'))),
+          builder: (context, constraints) => Container(
+            width: constraints.maxWidth * 0.3,
+            child: Image.asset(AssetImages.logo),
+          ),
+        ),
       ),
     );
   }
