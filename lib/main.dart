@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
     precacheImage(
         const AssetImage('assets/images/open_project_logo.png'), context);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
