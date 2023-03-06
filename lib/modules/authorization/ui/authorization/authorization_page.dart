@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/app/ui/asset_images.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_bloc.dart';
@@ -37,9 +38,16 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
         padding: const EdgeInsets.all(8),
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/open_project_logo.png'),
+              Spacer(flex: 4),
+              LayoutBuilder(
+                builder: (context, constraints) => Container(
+                  width: constraints.maxWidth * 0.3,
+                  child: Image.asset(AssetImages.logo),
+                ),
+              ),
+              Spacer(flex: 3),
               Column(
                 children: [
                   CupertinoButton.filled(
@@ -60,7 +68,8 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
                         .authorization_configure_instance),
                   ),
                 ],
-              )
+              ),
+              Spacer(flex: 1),
             ],
           ),
         ),
