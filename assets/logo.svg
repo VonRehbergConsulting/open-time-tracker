@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg fill="#000000" version="1.1" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <linearGradient id="a" x1="465.32" x2="206.82" y1="364.72" y2="623.22" gradientUnits="userSpaceOnUse">
+   <stop offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <circle cx="400" cy="400" r="400" color="#000000" color-rendering="auto" fill="#1c8adb" fill-rule="evenodd" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="isolation:auto;mix-blend-mode:normal"/>
+ <path d="m399.79 188.77c-59.134 0-112.55 24.35-150.85 63.551l-238.08 238.08a400 400 0 0 0 298.57 298.78l238.17-238.17c39.265-38.359 63.641-91.857 63.641-151.02 0-116.6-94.63-211.23-211.44-211.23z" fill="url(#a)" opacity=".42"/>
+ <path d="m399.79 188.77c-116.6 0-211.02 94.629-211.02 211.23 0 116.6 94.418 211.23 211.02 211.23 116.81 0 211.44-94.631 211.44-211.23 0-116.6-94.631-211.23-211.44-211.23zm0.21066 42.244c93.363 0 168.98 75.62 168.98 168.98 0 93.363-75.62 168.98-168.98 168.98-93.363 0-168.98-75.62-168.98-168.98 0-93.363 75.62-168.98 168.98-168.98zm-21.121 63.37v126.74l110.89 66.537 15.843-25.981-95.053-56.399v-110.89h-31.683z" fill="#fff"/>
+</svg>

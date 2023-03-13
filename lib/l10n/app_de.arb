@@ -1,0 +1,35 @@
+{
+    "generic_error": "Ein Fehler ist aufgetreten",
+    "generic_save": "Speichern",
+    "generic_yes": "Ja",
+    "generic_no": "Nein",
+    "generic_warning": "Achtung",
+    "generic_retry": "Wiederholen",
+
+    "authorization_log_in": "Anmelden",
+    "authorization_configure_instance": "Instanz konfigurieren",
+
+    "instance_configuration_title": "Instanzkonfiguration",
+    "instance_configuration_base_url": "Base URL",
+    "instance_configuration_client_id": "Client ID",
+
+    "time_entries_list_title": "Jüngste Arbeit",
+    "time_entries_list_change_working_hours": "Arbeitszeit ändern",
+
+    "work_packages_list_title": "Aktive Aufgaben",
+    "work_package_list_empty": "Ihnen keine Aufgaben zugewiesen sind",
+
+    "time_entry_summary_title": "Zusammenfassung",
+    "time_entry_summary_task": "Aufgabe",
+    "time_entry_summary_project": "Projekt",
+    "time_entry_summary_time_spent": "Zeitaufwand",
+    "time_entry_summary_comment": "Kommentar",
+
+    "timer_warning": "Ihre aktuellen Änderungen werden nicht gespeichert. Weiter?",
+    "timer_start": "Start",
+    "timer_pause": "Pause",
+    "timer_resume": "Fortsetzen",
+    "timer_finish": "Beenden",
+    
+    "comment_suggestions_title": "Einen Kommentar wählen"
+}
