@@ -31,8 +31,8 @@ class RestApiClient {
             RequestOptions options,
             RequestInterceptorHandler handler,
           ) async {
-            options.connectTimeout = 15000;
-            options.receiveTimeout = 15000;
+            options.connectTimeout = const Duration(seconds: 5);
+            options.receiveTimeout = const Duration(seconds: 3);
             return handler.next(options);
           },
         ),
