@@ -29,6 +29,7 @@ class TimePicker extends StatelessWidget {
         mode: CupertinoDatePickerMode.time,
         use24hFormat: true,
         onDateTimeChanged: onTimeChanged,
+        minuteInterval: 5,
       ),
     );
   }
