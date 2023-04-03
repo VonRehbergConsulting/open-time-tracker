@@ -82,7 +82,7 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
             onPressed: () {
               context.read<TimeEntriesListBloc>().unauthorize();
             },
-            icon: const Icon(Icons.exit_to_app_sharp)),
+            icon: const Icon(Icons.logout)),
       ),
       body: body,
       floatingActionButton: FloatingActionButton(
