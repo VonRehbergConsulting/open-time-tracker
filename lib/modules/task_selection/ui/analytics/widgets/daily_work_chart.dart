@@ -47,13 +47,34 @@ class DailyWorkChart extends StatelessWidget {
       children: [
         ConfiguredBarChart(
           data: [
-            _hours(data.monday),
-            _hours(data.tuesday),
-            _hours(data.wednesday),
-            _hours(data.thursday),
-            _hours(data.friday),
-            _hours(data.saturday),
-            _hours(data.sunday),
+            ConfiguredBarChartItem(
+              title: AppLocalizations.of(context).generic_monday_short,
+              value: _hours(data.monday),
+            ),
+            ConfiguredBarChartItem(
+              title: AppLocalizations.of(context).generic_tuesday_short,
+              value: _hours(data.tuesday),
+            ),
+            ConfiguredBarChartItem(
+              title: AppLocalizations.of(context).generic_wednesday_short,
+              value: _hours(data.wednesday),
+            ),
+            ConfiguredBarChartItem(
+              title: AppLocalizations.of(context).generic_thursday_short,
+              value: _hours(data.thursday),
+            ),
+            ConfiguredBarChartItem(
+              title: AppLocalizations.of(context).generic_friday_short,
+              value: _hours(data.friday),
+            ),
+            ConfiguredBarChartItem(
+              title: AppLocalizations.of(context).generic_saturday_short,
+              value: _hours(data.saturday),
+            ),
+            ConfiguredBarChartItem(
+              title: AppLocalizations.of(context).generic_sunday_short,
+              value: _hours(data.sunday),
+            ),
           ],
         ),
         SizedBox(height: 8.0),

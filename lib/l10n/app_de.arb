@@ -6,6 +6,13 @@
     "generic_warning": "Achtung",
     "generic_retry": "Wiederholen",
     "generic_total": "Gesamt",
+    "generic_monday_short": "Mo",
+    "generic_tuesday_short": "Di",
+    "generic_wednesday_short": "Mi",
+    "generic_thursday_short": "Do",
+    "generic_friday_short": "Fr",
+    "generic_saturday_short": "Sa",
+    "generic_sunday_short": "So",
 
     "authorization_log_in": "Anmelden",
     "authorization_configure_instance": "Instanz konfigurieren",

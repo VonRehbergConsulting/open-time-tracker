@@ -4,8 +4,31 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/chart_text_style.dart';
 
+class ConfiguredBarChartItem {
+  final String title;
+  final double value;
+
+  ConfiguredBarChartItem({
+    required this.title,
+    required this.value,
+  });
+}
+
+class ConfiguredBarChart extends StatelessWidget {
+  final List<ConfiguredBarChartItem> data;
+  const ConfiguredBarChart({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.6,
+      child: _BarChart(data),
+    );
+  }
+}
+
 class _BarChart extends StatelessWidget {
-  final List<double> data;
+  final List<ConfiguredBarChartItem> data;
   const _BarChart(this.data);
 
   @override
@@ -18,7 +41,8 @@ class _BarChart extends StatelessWidget {
         barGroups: barGroups,
         gridData: FlGridData(show: false),
         alignment: BarChartAlignment.spaceAround,
-        maxY: data.reduce((first, second) => max(first, second)) + 1,
+        maxY:
+            data.fold(0.0, (current, second) => max(current, second.value)) + 1,
       ),
     );
   }
@@ -46,33 +70,7 @@ class _BarChart extends StatelessWidget {
 
   Widget getTitles(double value, TitleMeta meta) {
     final style = ChartTextstyle();
-    String text;
-    switch (value.toInt()) {
-      case 0:
-        text = 'Mon';
-        break;
-      case 1:
-        text = 'Tue';
-        break;
-      case 2:
-        text = 'Wed';
-        break;
-      case 3:
-        text = 'Thu';
-        break;
-      case 4:
-        text = 'Fri';
-        break;
-      case 5:
-        text = 'Sat';
-        break;
-      case 6:
-        text = 'Sun';
-        break;
-      default:
-        text = '';
-        break;
-    }
+    String text = data[value.toInt()].title;
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 4,
@@ -132,20 +130,7 @@ class _BarChart extends StatelessWidget {
     return data
         .asMap()
         .entries
-        .map((entry) => _bar(entry.key, entry.value))
+        .map((entry) => _bar(entry.key, entry.value.value))
         .toList();
-  }
-}
-
-class ConfiguredBarChart extends StatelessWidget {
-  final List<double> data;
-  const ConfiguredBarChart({super.key, required this.data});
-
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.6,
-      child: _BarChart(data),
-    );
   }
 }

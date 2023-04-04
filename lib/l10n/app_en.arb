@@ -6,6 +6,13 @@
     "generic_warning": "Warning",
     "generic_retry": "Try again",
     "generic_total": "Total",
+    "generic_monday_short": "Mon",
+    "generic_tuesday_short": "Tue",
+    "generic_wednesday_short": "Wed",
+    "generic_thursday_short": "Thu",
+    "generic_friday_short": "Fri",
+    "generic_saturday_short": "Sat",
+    "generic_sunday_short": "Sun",
 
     "authorization_log_in": "Log in",
     "authorization_configure_instance": "Configure instance",
