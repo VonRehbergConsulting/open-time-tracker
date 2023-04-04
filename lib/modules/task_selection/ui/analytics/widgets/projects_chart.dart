@@ -37,7 +37,7 @@ class ProjectsChart extends StatelessWidget {
           value: hours / 60,
           text:
               hours.toStringAsFixed(hours.truncateToDouble() == hours ? 0 : 1),
-          color: colors[entry.key],
+          color: colors[entry.key % colors.length],
         );
       }).toList(),
     );
