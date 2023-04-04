@@ -45,6 +45,7 @@ class DailyWorkChart extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        SizedBox(height: 8.0),
         ConfiguredBarChart(
           data: [
             ConfiguredBarChartItem(
