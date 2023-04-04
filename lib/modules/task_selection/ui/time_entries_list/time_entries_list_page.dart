@@ -83,6 +83,12 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
               context.read<TimeEntriesListBloc>().unauthorize();
             },
             icon: const Icon(Icons.logout)),
+        actions: [
+          IconButton(
+            onPressed: () => AppRouter.routeToAnalytics(context),
+            icon: Icon(Icons.bar_chart),
+          ),
+        ],
       ),
       body: body,
       floatingActionButton: FloatingActionButton(

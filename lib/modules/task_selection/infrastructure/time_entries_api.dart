@@ -40,6 +40,7 @@ class TimeEntryResponse {
   late Duration hours;
   late String? comment;
   late DateTime updatedAt;
+  late DateTime spentOn;
 
   TimeEntryResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -62,6 +63,8 @@ class TimeEntryResponse {
       hours += const Duration(seconds: 1);
     }
     updatedAt = DateTime.tryParse(json['updatedAt']) ?? DateTime.now();
+
+    spentOn = DateTime.parse(json['spentOn']);
   }
 }
 

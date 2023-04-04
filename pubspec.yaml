@@ -52,6 +52,7 @@ dependencies:
   retrofit: '4.0.1'
   dio: '5.0.3'
   json_serializable: '6.5.4'
+  fl_chart: '0.61.0'
 
 dev_dependencies:
   flutter_test:

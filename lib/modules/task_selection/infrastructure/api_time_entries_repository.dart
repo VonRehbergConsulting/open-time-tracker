@@ -11,15 +11,17 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
   @override
   Future<List<TimeEntry>> list({
     int? userId,
-    DateTime? date,
+    DateTime? startDate,
+    DateTime? endDate,
     int? workPackageId,
   }) async {
     List<String> filters = [];
     if (userId != null) {
       filters.add('{"user":{"operator":"=","values":["$userId"]}}');
     }
-    if (date != null) {
-      filters.add('{"spent_on":{"operator":"=d","values":["$date"]}}');
+    if (startDate != null && endDate != null) {
+      filters.add(
+          '{"spent_on":{"operator":"<>d","values":["$startDate", "$endDate"]}}');
     }
     if (workPackageId != null) {
       filters
@@ -33,13 +35,15 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
     final items = result.timeEntries
         .map(
           (e) => TimeEntry(
-              id: e.id,
-              workPackageSubject: e.workPackageSubject,
-              workPackageHref: e.workPackageHref,
-              projectTitle: e.projectTitle,
-              projectHref: e.projectHref,
-              hours: e.hours,
-              comment: e.comment),
+            id: e.id,
+            workPackageSubject: e.workPackageSubject,
+            workPackageHref: e.workPackageHref,
+            projectTitle: e.projectTitle,
+            projectHref: e.projectHref,
+            hours: e.hours,
+            spentOn: e.spentOn,
+            comment: e.comment,
+          ),
         )
         .toList();
     return items;

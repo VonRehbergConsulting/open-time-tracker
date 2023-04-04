@@ -5,6 +5,7 @@
     "generic_no": "Nein",
     "generic_warning": "Achtung",
     "generic_retry": "Wiederholen",
+    "generic_total": "Gesamt",
 
     "authorization_log_in": "Anmelden",
     "authorization_configure_instance": "Instanz konfigurieren",
@@ -18,6 +19,8 @@
 
     "work_packages_list_title": "Aktive Aufgaben",
     "work_package_list_empty": "Ihnen keine Aufgaben zugewiesen sind",
+
+    "analytics_title": "Diese Woche",
 
     "time_entry_summary_title": "Zusammenfassung",
     "time_entry_summary_task": "Aufgabe",

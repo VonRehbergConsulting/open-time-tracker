@@ -4,7 +4,8 @@ import 'package:open_project_time_tracker/modules/task_selection/domain/work_pac
 abstract class TimeEntriesRepository {
   Future<List<TimeEntry>> list({
     int? userId,
-    DateTime? date,
+    DateTime? startDate,
+    DateTime? endDate,
     int? workPackageId,
   });
 
@@ -25,6 +26,7 @@ class TimeEntry {
   late String projectTitle;
   late String projectHref;
   late Duration hours;
+  late DateTime spentOn;
   late String? comment;
 
   TimeEntry({
@@ -34,6 +36,7 @@ class TimeEntry {
     required this.projectTitle,
     required this.projectHref,
     required this.hours,
+    required this.spentOn,
     required this.comment,
   });
 
@@ -50,6 +53,7 @@ class TimeEntry {
     final workPackage = links["workPackage"];
     workPackageSubject = workPackage["title"];
     workPackageHref = workPackage["href"];
+    spentOn = DateTime.parse(json['spentOn']);
 
     final hoursString = json["hours"];
     hours =
@@ -66,5 +70,6 @@ class TimeEntry {
         projectTitle = workPackage.projectTitle,
         projectHref = workPackage.projectHref,
         hours = const Duration(),
+        spentOn = DateTime.now(),
         comment = null;
 }

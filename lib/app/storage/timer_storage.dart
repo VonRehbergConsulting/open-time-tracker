@@ -88,6 +88,7 @@ class _TimeEntrySerialization {
       'projectTitle': timeEntry.projectTitle,
       'projectHref': timeEntry.projectHref,
       'hours': timeEntry.hours.inSeconds,
+      'spentOn': timeEntry.spentOn.toString(),
       'comment': timeEntry.comment,
     };
   }
@@ -100,6 +101,7 @@ class _TimeEntrySerialization {
       final String projectTitle = object['projectTitle'];
       final String projectHref = object['projectHref'];
       final Duration hours = Duration(seconds: object['hours'] as int);
+      final DateTime spentOn = DateTime.parse(object['spentOn']);
       final String? comment = object['comment'];
       return TimeEntry(
         id: id,
@@ -108,6 +110,7 @@ class _TimeEntrySerialization {
         projectTitle: projectTitle,
         projectHref: projectHref,
         hours: hours,
+        spentOn: spentOn,
         comment: comment,
       );
     } catch (error) {

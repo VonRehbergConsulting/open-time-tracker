@@ -70,7 +70,8 @@ class TimeEntriesListBloc
       }
       items = await _timeEntriesRepository.list(
         userId: _userDataRepository.userID,
-        date: DateTime.now(),
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
       );
       workingHours = await _settingsRepository.workingHours;
       totalDuration = const Duration();

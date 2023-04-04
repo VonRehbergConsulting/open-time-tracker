@@ -5,6 +5,7 @@
     "generic_no": "No",
     "generic_warning": "Warning",
     "generic_retry": "Try again",
+    "generic_total": "Total",
 
     "authorization_log_in": "Log in",
     "authorization_configure_instance": "Configure instance",
@@ -18,6 +19,8 @@
 
     "work_packages_list_title": "Active tasks",
     "work_package_list_empty": "No tasks assigned to you",
+
+    "analytics_title": "This week",
 
     "time_entry_summary_title": "Summary",
     "time_entry_summary_task": "Task",
