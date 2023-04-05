@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/filled_button.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_bloc.dart';
 
@@ -60,7 +61,8 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
     }
 
     final deviceSize = MediaQuery.of(context).size;
-    final buttonWidth = deviceSize.width * 0.35;
+    final buttonWidth = deviceSize.width * 0.39;
+    final addButtonWidth = deviceSize.width * 0.23;
 
     if (state.isActive) {
       timer ??= Timer.periodic(
@@ -115,25 +117,54 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
+                  width: addButtonWidth,
+                  child: FilledButton(
+                    text: AppLocalizations.of(context).timer_add_5_min,
+                    textStyle: TextStyle(fontSize: 14),
+                    onPressed: () =>
+                        context.read<TimerBloc>().add(Duration(minutes: 5)),
+                  ),
+                ),
+                SizedBox(
+                  width: addButtonWidth,
+                  child: FilledButton(
+                    text: AppLocalizations.of(context).timer_add_15_min,
+                    textStyle: TextStyle(fontSize: 14),
+                    onPressed: () =>
+                        context.read<TimerBloc>().add(Duration(minutes: 15)),
+                  ),
+                ),
+                SizedBox(
+                  width: addButtonWidth,
+                  child: FilledButton(
+                    text: AppLocalizations.of(context).timer_add_30_min,
+                    textStyle: TextStyle(fontSize: 14),
+                    onPressed: () =>
+                        context.read<TimerBloc>().add(Duration(minutes: 30)),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(flex: 1),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
                   width: buttonWidth,
-                  child: CupertinoButton.filled(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                  child: FilledButton(
                     onPressed: (state.isActive
                         ? context.read<TimerBloc>().stop
                         : context.read<TimerBloc>().start),
-                    child: Text(leftButtonTitle),
+                    text: leftButtonTitle,
                   ),
                 ),
                 SizedBox(
                   width: buttonWidth,
-                  child: CupertinoButton.filled(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                  child: FilledButton(
                     onPressed: (state.hasStarted
                         ? context.read<TimerBloc>().finish
                         : null),
-                    child: Text(AppLocalizations.of(context).timer_finish),
+                    text: AppLocalizations.of(context).timer_finish,
                   ),
                 ),
               ],

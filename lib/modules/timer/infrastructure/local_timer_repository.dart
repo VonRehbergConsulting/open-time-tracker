@@ -96,9 +96,11 @@ class LocalTimerRepository implements TimerRepository {
     final startTime = await _timerStorage.getStartTime();
     DateTime? stopTime = await _timerStorage.getStopTime();
     final timeEntry = await _timerStorage.getTimeEntry();
-    if (startTime != null && stopTime == null) {
+    if (stopTime == null) {
       stopTime = DateTime.now();
       await _timerStorage.setStopTime(stopTime);
+    }
+    if (startTime != null) {
       timeEntry?.hours = stopTime.difference(startTime);
       await _timerStorage.setTimeEntry(timeEntry);
     }
@@ -111,5 +113,17 @@ class LocalTimerRepository implements TimerRepository {
       _timerStorage.setStopTime(null),
     ]);
     _state.add(false);
+  }
+
+  @override
+  Future<void> add(Duration duration) async {
+    var startTime = await _timerStorage.getStartTime();
+    if (startTime == null) {
+      final date = DateTime.now();
+      _timerStorage.setStopTime(date);
+      startTime = date;
+    }
+    final newStartTime = startTime.add(-duration);
+    await _timerStorage.setStartTime(newStartTime);
   }
 }

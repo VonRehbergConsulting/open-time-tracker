@@ -112,8 +112,7 @@ class TotalTimeListItem extends StatelessWidget {
                       child: Text(
                         AppLocalizations.of(context)
                             .time_entries_list_change_working_hours,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark),
+                        style: TextStyle(color: Theme.of(context).primaryColor),
                       ),
                     ),
                   ],

@@ -40,6 +40,9 @@
     "timer_pause": "Pause",
     "timer_resume": "Fortsetzen",
     "timer_finish": "Beenden",
+    "timer_add_5_min": "+5 Min",
+    "timer_add_15_min": "+15 Min",
+    "timer_add_30_min": "+30 Min",
     
     "comment_suggestions_title": "Einen Kommentar wählen"
 }
