@@ -19,6 +19,7 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
   @override
   Widget buildState(BuildContext context, AnaliticsState state) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).analytics_title),
       ),
@@ -28,37 +29,41 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
           dailyHours,
           projectHours,
         ) =>
-            Container(
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                DailyWorkChart(
-                  data: DailyWorkChartData(
-                    monday: dailyHours.monday,
-                    tuesday: dailyHours.tuesday,
-                    wednesday: dailyHours.wednesday,
-                    thursday: dailyHours.thursday,
-                    friday: dailyHours.friday,
-                    saturday: dailyHours.saturday,
-                    sunday: dailyHours.sunday,
+            SingleChildScrollView(
+          child: Container(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 8.0,
                   ),
-                ),
-                const SizedBox(
-                  height: 16.0,
-                ),
-                ProjectsChart(
-                  items: projectHours
-                      .map(
-                        (item) => ProjectChartData(
-                          title: item.title,
-                          duration: item.duration,
-                        ),
-                      )
-                      .toList(),
-                ),
-              ],
+                  DailyWorkChart(
+                    data: DailyWorkChartData(
+                      monday: dailyHours.monday,
+                      tuesday: dailyHours.tuesday,
+                      wednesday: dailyHours.wednesday,
+                      thursday: dailyHours.thursday,
+                      friday: dailyHours.friday,
+                      saturday: dailyHours.saturday,
+                      sunday: dailyHours.sunday,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  ProjectsChart(
+                    items: projectHours
+                        .map(
+                          (item) => ProjectChartData(
+                            title: item.title,
+                            duration: item.duration,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

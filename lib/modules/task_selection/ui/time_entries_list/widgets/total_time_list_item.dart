@@ -84,7 +84,7 @@ class TotalTimeListItem extends StatelessWidget {
                   lineWidth: 15.0,
                   percent: min(percent, 1.0),
                   circularStrokeCap: CircularStrokeCap.round,
-                  progressColor: Theme.of(context).primaryColor,
+                  progressColor: Theme.of(context).primaryColorDark,
                   center: Text(
                     percentText,
                     style: const TextStyle(
