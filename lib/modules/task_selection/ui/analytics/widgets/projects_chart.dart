@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/extensions/duration.dart';
 import '../../../../../app/ui/widgets/configured_pie_chart.dart';
 
 class ProjectChartData {
