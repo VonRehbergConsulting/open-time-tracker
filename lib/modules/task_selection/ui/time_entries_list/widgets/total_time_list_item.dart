@@ -67,7 +67,7 @@ class TotalTimeListItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Card(
-        shape: const RoundedRectangleBorder(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         child: Padding(
@@ -84,7 +84,7 @@ class TotalTimeListItem extends StatelessWidget {
                   lineWidth: 15.0,
                   percent: min(percent, 1.0),
                   circularStrokeCap: CircularStrokeCap.round,
-                  progressColor: Theme.of(context).primaryColorDark,
+                  progressColor: Theme.of(context).primaryColor,
                   center: Text(
                     percentText,
                     style: const TextStyle(

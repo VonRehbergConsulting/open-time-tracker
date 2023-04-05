@@ -12,6 +12,8 @@ import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_bloc.dart
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../../app/ui/widgets/configured_outlined_button.dart';
+
 // ignore: must_be_immutable
 class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
   Timer? timer;
@@ -118,7 +120,7 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
               children: [
                 SizedBox(
                   width: addButtonWidth,
-                  child: FilledButton(
+                  child: ConfiguredOutlinedButton(
                     text: AppLocalizations.of(context).timer_add_5_min,
                     textStyle: TextStyle(fontSize: 14),
                     onPressed: () =>
@@ -127,7 +129,7 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
                 ),
                 SizedBox(
                   width: addButtonWidth,
-                  child: FilledButton(
+                  child: ConfiguredOutlinedButton(
                     text: AppLocalizations.of(context).timer_add_15_min,
                     textStyle: TextStyle(fontSize: 14),
                     onPressed: () =>
@@ -136,7 +138,7 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
                 ),
                 SizedBox(
                   width: addButtonWidth,
-                  child: FilledButton(
+                  child: ConfiguredOutlinedButton(
                     text: AppLocalizations.of(context).timer_add_30_min,
                     textStyle: TextStyle(fontSize: 14),
                     onPressed: () =>
