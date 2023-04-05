@@ -1,0 +1,51 @@
+name: Build and test
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.3.5'
+        channel: "stable"
+
+    - name: Setup project
+      run: |
+        flutter pub get
+        flutter pub run build_runner build --delete-conflicting-outputs
+
+    - name: Build for Android
+      run: flutter build apk
+
+    - name: Test
+      run: flutter test
+
+  build-for-ios:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.3.5'
+        channel: "stable"
+
+    - name: Setup project
+      run: |
+        flutter pub get
+        flutter pub run build_runner build --delete-conflicting-outputs
+
+    - name: Build for iOS
+      run: flutter build ios
