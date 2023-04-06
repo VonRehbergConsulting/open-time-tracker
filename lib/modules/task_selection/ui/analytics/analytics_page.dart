@@ -19,9 +19,8 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
   @override
   Widget buildState(BuildContext context, AnaliticsState state) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).analytics_title),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: state.when(
         loading: () => const Center(child: ActivityIndicator()),
@@ -37,11 +36,19 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.fromLTRB(12.0, 4.0, 12.0, 12.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(
-                      height: 8.0,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 16.0),
+                      child: Text(
+                        AppLocalizations.of(context).analytics_title,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                     DailyWorkChart(
                       data: DailyWorkChartData(

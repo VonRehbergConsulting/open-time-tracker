@@ -28,17 +28,25 @@ class ProjectsChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConfiguredPieChart(
-      items: items.asMap().entries.map((entry) {
-        final hours = entry.value.duration.inMinutes / 60;
-        return ConfiguredPieChardItem(
-          title: entry.value.title,
-          value: hours / 60,
-          text:
-              hours.toStringAsFixed(hours.truncateToDouble() == hours ? 0 : 1),
-          color: colors[entry.key % colors.length],
-        );
-      }).toList(),
+    return Card(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ConfiguredPieChart(
+          items: items.asMap().entries.map((entry) {
+            final hours = entry.value.duration.inMinutes / 60;
+            return ConfiguredPieChardItem(
+              title: entry.value.title,
+              value: hours / 60,
+              text: hours
+                  .toStringAsFixed(hours.truncateToDouble() == hours ? 0 : 1),
+              color: colors[entry.key % colors.length],
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 }

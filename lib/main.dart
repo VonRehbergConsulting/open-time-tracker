@@ -30,7 +30,12 @@ class MyApp extends StatelessWidget {
       ],
       title: 'Open Project Time Tracker',
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 242, 242, 242),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+        ),
+        scaffoldBackgroundColor: Color.fromARGB(255, 237, 237, 242),
         colorSchemeSeed: Color.fromRGBO(38, 92, 185, 1),
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
