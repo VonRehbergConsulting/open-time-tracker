@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../app/ui/widgets/configured_cart.dart';
 import '/extensions/duration.dart';
 
 class TimeEntryListItem extends StatelessWidget {
@@ -28,10 +29,7 @@ class TimeEntryListItem extends StatelessWidget {
     final trailing = hours.withLetters();
     return GestureDetector(
       onTap: () => action(),
-      child: Card(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
+      child: ConfiguredCard(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Column(

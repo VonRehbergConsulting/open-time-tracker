@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../app/ui/widgets/configured_cart.dart';
 import '../../../../../app/ui/widgets/configured_pie_chart.dart';
 
 class ProjectChartData {
@@ -28,12 +29,9 @@ class ProjectsChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
+    return ConfiguredCard(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
         child: ConfiguredPieChart(
           items: items.asMap().entries.map((entry) {
             final hours = entry.value.duration.inMinutes / 60;

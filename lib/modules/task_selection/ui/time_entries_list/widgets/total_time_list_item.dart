@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/time_picker.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
+import '../../../../../app/ui/widgets/configured_cart.dart';
 import '/extensions/duration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -66,10 +67,7 @@ class TotalTimeListItem extends StatelessWidget {
     }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
+      child: ConfiguredCard(
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: SizedBox(
