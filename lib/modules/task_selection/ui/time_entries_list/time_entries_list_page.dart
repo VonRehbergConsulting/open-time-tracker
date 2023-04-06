@@ -43,11 +43,10 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
         onRefresh: context.read<TimeEntriesListBloc>().reload,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-          child: ListView.builder(
-            itemCount: timeEntries.length + 1,
-            itemBuilder: ((context, index) {
-              if (index == 0) {
-                return TotalTimeListItem(
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: TotalTimeListItem(
                   workingHours,
                   totalDuration,
                   (value) {
@@ -59,18 +58,28 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
                         .read<TimeEntriesListBloc>()
                         .updateWorkingHours(duration);
                   },
-                );
-              }
-              final timeEntry = timeEntries[index - 1];
-              return TimeEntryListItem(
-                  workPackageSubject: timeEntry.workPackageSubject,
-                  projectTitle: timeEntry.projectTitle,
-                  hours: timeEntry.hours,
-                  comment: timeEntry.comment,
-                  action: () {
-                    context.read<TimeEntriesListBloc>().setTimeEntry(timeEntry);
-                  });
-            }),
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final timeEntry = timeEntries[index];
+                    return TimeEntryListItem(
+                      workPackageSubject: timeEntry.workPackageSubject,
+                      projectTitle: timeEntry.projectTitle,
+                      hours: timeEntry.hours,
+                      comment: timeEntry.comment,
+                      action: () {
+                        context
+                            .read<TimeEntriesListBloc>()
+                            .setTimeEntry(timeEntry);
+                      },
+                    );
+                  },
+                  childCount: timeEntries.length,
+                ),
+              ),
+            ],
           ),
         ),
       ),

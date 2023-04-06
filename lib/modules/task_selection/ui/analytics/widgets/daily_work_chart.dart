@@ -42,49 +42,57 @@ class DailyWorkChart extends StatelessWidget {
             data.saturday +
             data.sunday)
         .withLetters();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(height: 8.0),
-        ConfiguredBarChart(
-          data: [
-            ConfiguredBarChartItem(
-              title: AppLocalizations.of(context).generic_monday_short,
-              value: _hours(data.monday),
+    return Card(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(height: 12.0),
+            ConfiguredBarChart(
+              data: [
+                ConfiguredBarChartItem(
+                  title: AppLocalizations.of(context).generic_monday_short,
+                  value: _hours(data.monday),
+                ),
+                ConfiguredBarChartItem(
+                  title: AppLocalizations.of(context).generic_tuesday_short,
+                  value: _hours(data.tuesday),
+                ),
+                ConfiguredBarChartItem(
+                  title: AppLocalizations.of(context).generic_wednesday_short,
+                  value: _hours(data.wednesday),
+                ),
+                ConfiguredBarChartItem(
+                  title: AppLocalizations.of(context).generic_thursday_short,
+                  value: _hours(data.thursday),
+                ),
+                ConfiguredBarChartItem(
+                  title: AppLocalizations.of(context).generic_friday_short,
+                  value: _hours(data.friday),
+                ),
+                ConfiguredBarChartItem(
+                  title: AppLocalizations.of(context).generic_saturday_short,
+                  value: _hours(data.saturday),
+                ),
+                ConfiguredBarChartItem(
+                  title: AppLocalizations.of(context).generic_sunday_short,
+                  value: _hours(data.sunday),
+                ),
+              ],
             ),
-            ConfiguredBarChartItem(
-              title: AppLocalizations.of(context).generic_tuesday_short,
-              value: _hours(data.tuesday),
-            ),
-            ConfiguredBarChartItem(
-              title: AppLocalizations.of(context).generic_wednesday_short,
-              value: _hours(data.wednesday),
-            ),
-            ConfiguredBarChartItem(
-              title: AppLocalizations.of(context).generic_thursday_short,
-              value: _hours(data.thursday),
-            ),
-            ConfiguredBarChartItem(
-              title: AppLocalizations.of(context).generic_friday_short,
-              value: _hours(data.friday),
-            ),
-            ConfiguredBarChartItem(
-              title: AppLocalizations.of(context).generic_saturday_short,
-              value: _hours(data.saturday),
-            ),
-            ConfiguredBarChartItem(
-              title: AppLocalizations.of(context).generic_sunday_short,
-              value: _hours(data.sunday),
+            SizedBox(height: 8.0),
+            Text(
+              '${AppLocalizations.of(context).generic_total}: $totalTime',
+              style: ChartTextstyle(),
+              textAlign: TextAlign.end,
             ),
           ],
         ),
-        SizedBox(height: 8.0),
-        Text(
-          '${AppLocalizations.of(context).generic_total}: $totalTime',
-          style: ChartTextstyle(),
-          textAlign: TextAlign.end,
-        ),
-      ],
+      ),
     );
   }
 
