@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/configured_cart.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
 
 import '../../../../../app/ui/widgets/configured_bar_chart.dart';
@@ -42,10 +43,7 @@ class DailyWorkChart extends StatelessWidget {
             data.saturday +
             data.sunday)
         .withLetters();
-    return Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
+    return ConfiguredCard(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
