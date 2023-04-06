@@ -20,6 +20,7 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
   Widget buildState(BuildContext context, AnaliticsState state) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(AppLocalizations.of(context).analytics_title),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: state.when(
@@ -40,15 +41,8 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 16.0),
-                      child: Text(
-                        AppLocalizations.of(context).analytics_title,
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                    const SizedBox(
+                      height: 8.0,
                     ),
                     DailyWorkChart(
                       data: DailyWorkChartData(
