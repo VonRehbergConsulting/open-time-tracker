@@ -32,8 +32,7 @@ platform :ios do
       clean_install: true
     )
     match(
-      git_basic_authorization: Base64.strict_encode64(ENV['MATCH_GIT_BASIC_AUTHORIZATION']), 
-      readonly: true,
+      git_basic_authorization: Base64.strict_encode64(ENV['MATCH_GIT_BASIC_AUTHORIZATION']),
       api_key: api_key
     )
     gym(
