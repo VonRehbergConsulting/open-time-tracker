@@ -1,0 +1,47 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new release build to the App Store"
+  lane :release do
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Runner.xcodeproj"
+    )
+    api_key = app_store_connect_api_key(
+      key_id: ENV['API_KEY_ID'],
+      issuer_id: ENV['API_KEY_ISSUER_ID'],
+      key_content: ENV['API_KEY_BASE64'],
+      is_key_content_base64: true
+    )
+    cocoapods(
+      clean_install: true
+    )
+    match(
+      git_basic_authorization: Base64.strict_encode64(ENV['MATCH_GIT_BASIC_AUTHORIZATION']), 
+      readonly: true,
+      api_key: api_key
+    )
+    gym(
+      scheme: "Runner",
+      workspace: "Runner.xcworkspace",
+      export_method: "app-store",
+      clean: true
+    )
+    pilot(api_key: api_key)
+  end
+end
