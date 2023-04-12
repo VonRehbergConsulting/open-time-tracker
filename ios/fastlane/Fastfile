@@ -23,7 +23,6 @@ API_KEY_BASE64 = ENV["API_KEY_BASE64"]
 MATCH_GIT_BASIC_AUTHORIZATION = ENV["MATCH_GIT_BASIC_AUTHORIZATION"]
 DEVELOPER_APP_IDENTIFIER = ENV["DEVELOPER_APP_IDENTIFIER"]
 PROVISIONING_PROFILE_SPECIFIER = ENV["DEVELOPER_APP_IDENTIFIER"]
-DEVELOPER_APP_ID = ENV["DEVELOPER_APP_ID"]
 
 def delete_temp_keychain(name)
   delete_keychain(
@@ -59,6 +58,11 @@ platform :ios do
       in_house: false
     )
 
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      profile_name: "match AppStore #{DEVELOPER_APP_IDENTIFIER}"
+    )
+
     match(
       type: 'appstore',
       app_identifier: DEVELOPER_APP_IDENTIFIER,
@@ -81,7 +85,7 @@ platform :ios do
       clean: true,
       export_options: {
         provisioningProfiles: { 
-            DEVELOPER_APP_ID => PROVISIONING_PROFILE_SPECIFIER
+            DEVELOPER_APP_ID => DEVELOPER_APP_IDENTIFIER
         }
       }
     )
