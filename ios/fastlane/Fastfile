@@ -96,4 +96,8 @@ platform :ios do
   after_all do 
     delete_temp_keychain(keychain_name)
   end
+
+  error do 
+    delete_temp_keychain(keychain_name)
+  end
 end
