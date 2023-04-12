@@ -61,7 +61,7 @@ platform :ios do
 
     update_code_signing_settings(
       use_automatic_signing: false,
-      profile_name: "match AppStore #{DEVELOPER_APP_IDENTIFIER}"
+      profile_name: "match AppStore #{DEVELOPER_APP_IDENTIFIER}",
       bundle_identifier: DEVELOPER_APP_IDENTIFIER,
       code_sign_identity: "iPhone Distribution",
       team_id: APPLE_TEAM_ID
