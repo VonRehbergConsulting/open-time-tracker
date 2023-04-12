@@ -69,6 +69,10 @@ platform :ios do
       keychain_password: keychain_password,
       api_key: api_key
     )
+
+    cocoapods(
+      clean_install: true
+    )
     
     gym(
       scheme: "Runner",
