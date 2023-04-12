@@ -87,8 +87,13 @@ platform :ios do
         }
       }
     )
-    pilot(api_key: api_key)
+    pilot(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true
+    )
+  end
 
+  after_all do 
     delete_temp_keychain(keychain_name)
   end
 end
