@@ -48,9 +48,7 @@ end
 platform :ios do
   desc "Push a new release build to the App Store"
   lane :release do
-    keychain_name = KEYCHAIN_NAME
-    keychain_password = KEYCHAIN_PASSWORD
-    ensure_temp_keychain(keychain_name, keychain_password)
+    ensure_temp_keychain(KEYCHAIN_NAME, KEYCHAIN_PASSWORD)
 
     api_key = app_store_connect_api_key(
       key_id: API_KEY_ID,
@@ -66,8 +64,8 @@ platform :ios do
       app_identifier: DEVELOPER_APP_IDENTIFIER,
       git_basic_authorization: Base64.strict_encode64(MATCH_GIT_BASIC_AUTHORIZATION),
       readonly: true,
-      keychain_name: keychain_name,
-      keychain_password: keychain_password,
+      keychain_name: KEYCHAIN_NAME,
+      keychain_password: KEYCHAIN_PASSWORD,
       api_key: api_key
     )
 
@@ -94,10 +92,10 @@ platform :ios do
   end
 
   after_all do 
-    delete_temp_keychain(keychain_name)
+    delete_temp_keychain(KEYCHAIN_NAME)
   end
 
   error do 
-    delete_temp_keychain(keychain_name)
+    delete_temp_keychain(KEYCHAIN_NAME)
   end
 end
