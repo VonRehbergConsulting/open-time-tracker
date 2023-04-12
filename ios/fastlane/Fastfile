@@ -23,6 +23,7 @@ API_KEY_BASE64 = ENV["API_KEY_BASE64"]
 MATCH_GIT_BASIC_AUTHORIZATION = ENV["MATCH_GIT_BASIC_AUTHORIZATION"]
 DEVELOPER_APP_IDENTIFIER = ENV["DEVELOPER_APP_IDENTIFIER"]
 DEVELOPER_APP_ID = ENV["DEVELOPER_APP_ID"]
+APPLE_TEAM_ID = ENV["DEVELAPPLE_TEAM_IDOPER_APP_ID"]
 
 def delete_temp_keychain(name)
   delete_keychain(
@@ -63,8 +64,7 @@ platform :ios do
       profile_name: "match AppStore #{DEVELOPER_APP_IDENTIFIER}"
       bundle_identifier: DEVELOPER_APP_IDENTIFIER,
       code_sign_identity: "iPhone Distribution",
-      team_id: "383J7R89WY",
-
+      team_id: APPLE_TEAM_ID
     )
 
     match(
