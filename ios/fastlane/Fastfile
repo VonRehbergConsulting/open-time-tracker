@@ -58,11 +58,6 @@ platform :ios do
       in_house: false
     )
 
-    update_code_signing_settings(
-      use_automatic_signing: false,
-      profile_name: "match AppStore #{DEVELOPER_APP_IDENTIFIER}"
-    )
-
     match(
       type: 'appstore',
       app_identifier: DEVELOPER_APP_IDENTIFIER,
