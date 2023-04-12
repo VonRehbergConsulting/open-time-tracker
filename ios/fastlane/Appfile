@@ -1,0 +1,8 @@
+app_identifier("vonrehberg.timetracker") # The bundle identifier of your app
+apple_id("dshtangey@vonrehberg.consulting") # Your Apple Developer Portal username
+
+itc_team_id("125518771") # App Store Connect Team ID
+team_id("383J7R89WY") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

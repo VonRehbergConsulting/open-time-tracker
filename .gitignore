@@ -101,3 +101,7 @@ lib/env/env.g.dart
 inject.config.dart
 *.freezed.dart
 *.g.dart
+
+# Fastlane 
+
+ios/fastlane/report.xml
