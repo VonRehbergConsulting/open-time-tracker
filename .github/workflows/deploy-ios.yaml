@@ -1,6 +1,6 @@
 name: Deploy iOS
 
-on: push
+on: workflow_dispatch
 
 jobs:
   deploy-ios:
@@ -20,7 +20,7 @@ jobs:
         flutter pub get
         flutter pub run build_runner build --delete-conflicting-outputs
 
-    - name: Deploy
+    - name: Build, sign and deploy
       env:
         API_KEY_ID: ${{ secrets.API_KEY_ID }}
         API_KEY_ISSUER_ID: ${{ secrets.API_KEY_ISSUER_ID }}
