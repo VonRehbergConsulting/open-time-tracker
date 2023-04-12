@@ -15,30 +15,64 @@
 
 default_platform(:ios)
 
+KEYCHAIN_NAME = ENV["KEYCHAIN_NAME"]
+KEYCHAIN_PASSWORD = ENV["KEYCHAIN_PASSWORD"]
+API_KEY_ID = ENV["API_KEY_ID"]
+API_KEY_ISSUER_ID = ENV["API_KEY_ISSUER_ID"]
+API_KEY_BASE64 = ENV["API_KEY_BASE64"]
+MATCH_GIT_BASIC_AUTHORIZATION = ENV["MATCH_GIT_BASIC_AUTHORIZATION"]
+DEVELOPER_APP_IDENTIFIER = ENV["DEVELOPER_APP_IDENTIFIER"]
+
+def delete_temp_keychain(name)
+  delete_keychain(
+    name: name
+  ) if File.exist? File.expand_path("~/Library/Keychains/#{name}-db")
+end
+
+def create_temp_keychain(name, password)
+  create_keychain(
+    name: name,
+    password: password,
+    unlock: false,
+    timeout: 0
+  )
+end
+
+def ensure_temp_keychain(name, password)
+  delete_temp_keychain(name)
+  create_temp_keychain(name, password)
+end
+
 platform :ios do
   desc "Push a new release build to the App Store"
   lane :release do
-    update_code_signing_settings(
-      use_automatic_signing: false,
-      path: "Runner.xcodeproj"
-    )
+    keychain_name = KEYCHAIN_NAME
+    keychain_password = KEYCHAIN_PASSWORD
+    ensure_temp_keychain(keychain_name, keychain_password)
+
     api_key = app_store_connect_api_key(
-      key_id: ENV['API_KEY_ID'],
-      issuer_id: ENV['API_KEY_ISSUER_ID'],
-      key_content: ENV['API_KEY_BASE64'],
-      is_key_content_base64: true
+      key_id: API_KEY_ID,
+      issuer_id: API_KEY_ISSUER_ID,
+      key_content: API_KEY_BASE64,  
+      is_key_content_base64: true,          
+      duration: 1200,            
+      in_house: false
     )
+
     cocoapods(
       clean_install: true
     )
+
     match(
       type: 'appstore',
-      git_basic_authorization: Base64.strict_encode64(ENV['MATCH_GIT_BASIC_AUTHORIZATION']),
-      api_key: api_key,
+      app_identifier: "#{DEVELOPER_APP_IDENTIFIER}",
+      git_basic_authorization: Base64.strict_encode64(MATCH_GIT_BASIC_AUTHORIZATION),
       readonly: true,
-      keychain_name: KEYCHAIN_NAME,
-      keychain_password: KEYCHAIN_PASSWORD
+      keychain_name: keychain_name,
+      keychain_password: keychain_password,
+      api_key: api_key
     )
+    
     gym(
       scheme: "Runner",
       workspace: "Runner.xcworkspace",
@@ -46,5 +80,7 @@ platform :ios do
       clean: true
     )
     pilot(api_key: api_key)
+
+    delete_temp_keychain(keychain_name)
   end
 end
