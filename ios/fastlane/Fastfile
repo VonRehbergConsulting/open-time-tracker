@@ -32,8 +32,12 @@ platform :ios do
       clean_install: true
     )
     match(
+      type: 'appstore',
       git_basic_authorization: Base64.strict_encode64(ENV['MATCH_GIT_BASIC_AUTHORIZATION']),
-      api_key: api_key
+      api_key: api_key,
+      readonly: true,
+      keychain_name: KEYCHAIN_NAME,
+      keychain_password: KEYCHAIN_PASSWORD
     )
     gym(
       scheme: "Runner",

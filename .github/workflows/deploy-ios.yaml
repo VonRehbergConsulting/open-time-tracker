@@ -51,6 +51,7 @@ jobs:
         API_KEY_ISSUER_ID: ${{ secrets.API_KEY_ISSUER_ID }}
         API_KEY_BASE64: ${{ secrets.API_KEY_BASE64 }}
         MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+        KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
         KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       run: |
