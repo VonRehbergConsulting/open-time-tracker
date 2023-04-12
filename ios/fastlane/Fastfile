@@ -23,6 +23,7 @@ API_KEY_BASE64 = ENV["API_KEY_BASE64"]
 MATCH_GIT_BASIC_AUTHORIZATION = ENV["MATCH_GIT_BASIC_AUTHORIZATION"]
 DEVELOPER_APP_IDENTIFIER = ENV["DEVELOPER_APP_IDENTIFIER"]
 PROVISIONING_PROFILE_SPECIFIER = ENV["DEVELOPER_APP_IDENTIFIER"]
+DEVELOPER_APP_ID = ENV["DEVELOPER_APP_ID"]
 
 def delete_temp_keychain(name)
   delete_keychain(
@@ -75,10 +76,16 @@ platform :ios do
     )
     
     gym(
+      configuration: "Release",
       scheme: "Runner",
       workspace: "Runner.xcworkspace",
       export_method: "app-store",
-      clean: true
+      clean: true,
+      export_options: {
+        provisioningProfiles: { 
+            DEVELOPER_APP_ID => PROVISIONING_PROFILE_SPECIFIER
+        }
+      }
     )
     pilot(api_key: api_key)
 
