@@ -102,10 +102,6 @@ inject.config.dart
 *.freezed.dart
 *.g.dart
 
-# Certificates
-
-*.p8
-
 # Fastlane 
 
 ios/fastlane/report.xml
