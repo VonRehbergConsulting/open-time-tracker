@@ -1,4 +1,4 @@
-git_url("https://github.com/VonRehbergConsulting/fastlane-certificates")
+git_url("https://github.com/VonRehbergConsulting/time-tracker-certificates")
 
 storage_mode("git")
 
