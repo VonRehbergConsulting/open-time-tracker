@@ -16,6 +16,16 @@ class DailyHours {
   final Duration saturday;
   final Duration sunday;
 
+  bool get isEmpty {
+    return monday.inMinutes == 0 &&
+        tuesday.inMinutes == 0 &&
+        wednesday.inMinutes == 0 &&
+        thursday.inMinutes == 0 &&
+        friday.inMinutes == 0 &&
+        saturday.inMinutes == 0 &&
+        sunday.inMinutes == 0;
+  }
+
   DailyHours({
     required this.monday,
     required this.tuesday,

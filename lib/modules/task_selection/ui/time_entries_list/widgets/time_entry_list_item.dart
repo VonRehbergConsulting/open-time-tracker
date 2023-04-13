@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../app/ui/widgets/configured_cart.dart';
+import '../../../../../app/ui/widgets/configured_card.dart';
 import '/extensions/duration.dart';
 
 class TimeEntryListItem extends StatelessWidget {

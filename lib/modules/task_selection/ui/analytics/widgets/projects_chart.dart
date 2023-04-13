@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../app/ui/widgets/configured_cart.dart';
+import '../../../../../app/ui/widgets/configured_card.dart';
 import '../../../../../app/ui/widgets/configured_pie_chart.dart';
 
 class ProjectChartData {

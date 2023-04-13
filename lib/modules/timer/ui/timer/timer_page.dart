@@ -79,7 +79,6 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
       floatingActionButton: IconButton(
         onPressed: () => _showCloseDialog(context),
         icon: const Icon(Icons.close),
