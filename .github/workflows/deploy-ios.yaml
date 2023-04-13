@@ -1,6 +1,6 @@
 name: Deploy iOS
 
-on: workflow_dispatch
+on: push
 
 jobs:
   deploy-ios:
@@ -34,4 +34,4 @@ jobs:
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       run: |
         cd ios
-        bundle exec fastlane release
+        bundle exec fastlane deploy
