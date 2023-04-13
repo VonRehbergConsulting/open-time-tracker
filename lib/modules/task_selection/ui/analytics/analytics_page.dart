@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
-import 'package:open_project_time_tracker/app/ui/widgets/error_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/analytics_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/widgets/daily_work_chart.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/widgets/projects_chart.dart';

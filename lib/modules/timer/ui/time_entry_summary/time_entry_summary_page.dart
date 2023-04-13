@@ -179,6 +179,7 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(AppLocalizations.of(context).time_entry_summary_title),
       ),
       body: body,

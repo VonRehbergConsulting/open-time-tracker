@@ -47,6 +47,7 @@ class InstanceConfigurationPage extends EffectBlocPage<
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(AppLocalizations.of(context).instance_configuration_title),
       ),
       body: Padding(

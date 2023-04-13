@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/app/ui/widgets/configured_cart.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 
 class ListItem extends StatelessWidget {
   // Properties

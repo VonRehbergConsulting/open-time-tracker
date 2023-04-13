@@ -64,7 +64,6 @@ class AnalyticsBloc extends Cubit<AnaliticsState> {
       : super(const AnaliticsState.loading());
 
   Future<void> reload() async {
-    emit(AnaliticsState.loading());
     final date = DateTime.now();
     final items = await _timeEntriesRepository.list(
       userId: _userDataRepository.userID,

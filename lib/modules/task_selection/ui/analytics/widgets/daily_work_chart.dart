@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:open_project_time_tracker/app/ui/widgets/configured_cart.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
 
 import '../../../../../app/ui/widgets/configured_bar_chart.dart';
