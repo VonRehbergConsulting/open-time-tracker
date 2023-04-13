@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/error_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/analytics_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/widgets/daily_work_chart.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/widgets/projects_chart.dart';
@@ -29,51 +30,58 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
           dailyHours,
           projectHours,
         ) =>
-            RefreshIndicator(
-          onRefresh: context.read<AnalyticsBloc>().reload,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(12.0, 4.0, 12.0, 12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(
-                      height: 8.0,
+            dailyHours.isEmpty
+                ? Center(
+                    child: Text(
+                      'No time logged for this week',
+                      style: TextStyle(fontSize: 16),
                     ),
-                    DailyWorkChart(
-                      data: DailyWorkChartData(
-                        monday: dailyHours.monday,
-                        tuesday: dailyHours.tuesday,
-                        wednesday: dailyHours.wednesday,
-                        thursday: dailyHours.thursday,
-                        friday: dailyHours.friday,
-                        saturday: dailyHours.saturday,
-                        sunday: dailyHours.sunday,
+                  )
+                : RefreshIndicator(
+                    onRefresh: context.read<AnalyticsBloc>().reload,
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(12.0, 4.0, 12.0, 12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              DailyWorkChart(
+                                data: DailyWorkChartData(
+                                  monday: dailyHours.monday,
+                                  tuesday: dailyHours.tuesday,
+                                  wednesday: dailyHours.wednesday,
+                                  thursday: dailyHours.thursday,
+                                  friday: dailyHours.friday,
+                                  saturday: dailyHours.saturday,
+                                  sunday: dailyHours.sunday,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                              ProjectsChart(
+                                items: projectHours
+                                    .map(
+                                      (item) => ProjectChartData(
+                                        title: item.title,
+                                        duration: item.duration,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    ProjectsChart(
-                      items: projectHours
-                          .map(
-                            (item) => ProjectChartData(
-                              title: item.title,
-                              duration: item.duration,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+                  ),
       ),
     );
   }
