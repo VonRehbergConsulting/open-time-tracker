@@ -34,4 +34,4 @@ jobs:
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       run: |
         cd ios
-        bundle exec fastlane release
+        bundle exec fastlane build_and_deploy
