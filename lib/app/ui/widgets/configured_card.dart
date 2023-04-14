@@ -10,6 +10,7 @@ class ConfiguredCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.hardEdge,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12.0)),
       ),
