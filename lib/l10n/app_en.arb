@@ -28,6 +28,7 @@
     "work_package_list_empty": "No tasks assigned to you",
 
     "analytics_title": "Analytics",
+    "analytics_empty": "No time logged this week",
 
     "time_entry_summary_title": "Summary",
     "time_entry_summary_task": "Task",
