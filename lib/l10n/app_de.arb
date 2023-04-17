@@ -29,8 +29,8 @@
 
     "analytics_title": "Wochenübersicht",
     "analytics_empty": "Keine Zeit protokolliert für diese Woche",
-    "analytics_weekdays_title": "Weekdays distribution",
-    "analytics_projects_title": "Projects disctribution",
+    "analytics_weekdays_title": "Arbeitstagsverteilung",
+    "analytics_projects_title": "Projektverteilung",
 
     "time_entry_summary_title": "Zusammenfassung",
     "time_entry_summary_task": "Aufgabe",
