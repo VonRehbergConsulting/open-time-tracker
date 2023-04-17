@@ -16,23 +16,9 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
-
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean bundle")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
-
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    sh("flutter build")
+    sh("flutter build bundle")
     gradle(
       task: "clean bundle", 
       build_type: "Release",
