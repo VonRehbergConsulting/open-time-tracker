@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ChartTextstyle extends TextStyle {
-  ChartTextstyle({
+class ChartTextStyle extends TextStyle {
+  ChartTextStyle({
     double? fontSize,
   }) : super(
           color: Color.fromARGB(255, 38, 92, 185),

@@ -49,7 +49,12 @@ class DailyWorkChart extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 12.0),
+            Text(
+              AppLocalizations.of(context).analytics_weekdays_title,
+              style: ChartTextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 16.0),
             ConfiguredBarChart(
               data: [
                 ConfiguredBarChartItem(
@@ -85,7 +90,7 @@ class DailyWorkChart extends StatelessWidget {
             SizedBox(height: 8.0),
             Text(
               '${AppLocalizations.of(context).generic_total}: $totalTime',
-              style: ChartTextstyle(),
+              style: ChartTextStyle(),
               textAlign: TextAlign.end,
             ),
           ],
