@@ -9,21 +9,21 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    # - name: Generate api_key.json file
-    #   run: echo ${{ secrets.GOOGLE_API_JSON_BASE64 }} | base64 -d > android/fastlane/api_key.json
+    - name: Generate api_key.json file
+      run: echo ${{ secrets.GOOGLE_API_JSON_BASE64 }} | base64 -d > android/fastlane/api_key.json
 
-    # - name: Generate keystore.jks file
-    #   run: | 
-    #     cd android/app
-    #     mkdir keystore
-    #     cd keystore
-    #     echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > upload-keystore.jks
+    - name: Generate keystore.jks file
+      run: | 
+        cd android/app
+        mkdir keystore
+        cd keystore
+        echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > upload-keystore.jks
 
-    # - name: Generate key.properties file
-    #   run: |
-    #     cd android
-    #     touch key.properties
-    #     echo -e "storePassword=${{ secrets.STORE_PASSWORD }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nstoreFile=${{ secrets.KEYSTORE_FILE }}" >> key.properties
+    - name: Generate key.properties file
+      run: |
+        cd android
+        touch key.properties
+        echo -e "storePassword=${{ secrets.STORE_PASSWORD }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nstoreFile=${{ secrets.KEYSTORE_FILE }}" >> key.properties
 
     - name: Install flutter
       uses: subosito/flutter-action@v2
@@ -37,13 +37,6 @@ jobs:
         flutter pub run build_runner build --delete-conflicting-outputs
 
     - name: Build, sign and deploy
-      env:
-        KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
-        STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
-        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        GOOGLE_API_JSON_BASE64: ${{ secrets.GOOGLE_API_JSON_BASE64 }}
-        ANDROID_SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY }}
       run: |
         cd android
         fastlane deploy

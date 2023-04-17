@@ -1,35 +1,6 @@
 default_platform(:android)
 
-GOOGLE_API_JSON_BASE64 = ENV["GOOGLE_API_JSON_BASE64"]
-ANDROID_SIGNING_KEY = ENV["ANDROID_SIGNING_KEY"]
-STORE_PASSWORD = ENV["STORE_PASSWORD"]
-KEY_PASSWORD = ENV["KEY_PASSWORD"]
-KEY_ALIAS = ENV["KEY_ALIAS"]
-KEYSTORE_FILE = ENV["KEYSTORE_FILE"]
-
-def generate_api_key_file()
-  sh("echo #{ GOOGLE_API_JSON_BASE64 } | base64 -d > fastlane/api_key.json")
-end
-
-def generate_keystore_file()
-  sh("cd app")
-  sh("mkdir keystore")
-  sh("cd keystore")
-  sh("echo #{ ANDROID_SIGNING_KEY } | base64 -d > upload-keystore.jks")
-end
-
-def generate_key_properties_file()
-  sh("touch key.properties")
-  sh("echo -e \"storePassword=#{ STORE_PASSWORD }\nkeyPassword=#{ KEY_PASSWORD }\nkeyAlias=#{ KEY_ALIAS }\nstoreFile=#{ KEYSTORE_FILE }\" >> key.properties")
-end
-
 platform :android do
-  before_all do
-    generate_api_key_file()
-    generate_keystore_file()
-    generate_key_properties_file()
-  end
-
   desc "Deploy a new version to the Google Play"
   lane :deploy do
     sh("flutter build apk --debug")
