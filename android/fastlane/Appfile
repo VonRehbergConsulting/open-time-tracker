@@ -1,0 +1,2 @@
+json_key_file("./fastlane/api_key.json")
+package_name("vonrehberg.timetracker")

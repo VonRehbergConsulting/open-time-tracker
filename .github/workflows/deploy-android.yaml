@@ -1,0 +1,37 @@
+name: Deploy Android
+
+on: push
+
+jobs:
+  deploy-android:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.3.5'
+        channel: "stable"
+
+    - name: Setup project
+      run: |
+        flutter pub get
+        flutter pub run build_runner build --delete-conflicting-outputs
+    
+    - name: Generate api_key.json file
+      run: echo ${{ secrets.GOOGLE_API_JSON_BASE64 }} | base64 -d > /home/runner/work/open-time-tracker/android/fastlane/api_key.json
+
+    - name: Generate keystore.jks file
+      run: echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > /home/runner/work/open-time-tracker/android/app/upload-keystore.jks
+
+    - name: Build, sign and deploy
+      env:
+        KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
+        STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      run: |
+        cd android
+        bundle exec fastlane deploy
