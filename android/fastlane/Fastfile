@@ -32,14 +32,15 @@ platform :android do
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
+    sh("flutter build")
     gradle(
       task: "clean bundle", 
       build_type: "Release",
       properties: {
         "android.injected.signing.store.file" => ENV["KEYSTORE_FILE"],
         "android.injected.signing.store.password" => ENV["STORE_PASSWORD"],
-        "android.injected.signing.kev.alias" => ENV["KEY ALIAS"],
-        "android.injected.signing.key.password" => ENV["KEY PASSWORD"],
+        "android.injected.signing.kev.alias" => ENV["KEY_ALIAS"],
+        "android.injected.signing.key.password" => ENV["KEY_PASSWORD"],
       }
     )
     supply(
