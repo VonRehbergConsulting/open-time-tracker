@@ -34,4 +34,4 @@ jobs:
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         cd android
-        bundle exec fastlane deploy
+        fastlane deploy
