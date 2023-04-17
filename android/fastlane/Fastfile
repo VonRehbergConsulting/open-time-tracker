@@ -8,19 +8,19 @@ KEY_ALIAS = ENV["KEY_ALIAS"]
 KEYSTORE_FILE = ENV["KEYSTORE_FILE"]
 
 def generate_api_key_file()
-  sh("echo #{ secrets.GOOGLE_API_JSON_BASE64 } | base64 -d > fastlane/api_key.json")
+  sh("echo #{ GOOGLE_API_JSON_BASE64 } | base64 -d > fastlane/api_key.json")
 end
 
 def generate_keystore_file()
   sh("cd app")
   sh("mkdir keystore")
   sh("cd keystore")
-  sh("echo #{ secrets.ANDROID_SIGNING_KEY } | base64 -d > upload-keystore.jks")
+  sh("echo #{ ANDROID_SIGNING_KEY } | base64 -d > upload-keystore.jks")
 end
 
 def generate_key_properties_file()
   sh("touch key.properties")
-  sh("echo -e \"storePassword=#{ secrets.STORE_PASSWORD }\nkeyPassword=#{ secrets.KEY_PASSWORD }\nkeyAlias=#{ secrets.KEY_ALIAS }\nstoreFile=#{ secrets.KEYSTORE_FILE }\" >> key.properties")
+  sh("echo -e \"storePassword=#{ STORE_PASSWORD }\nkeyPassword=#{ KEY_PASSWORD }\nkeyAlias=#{ KEY_ALIAS }\nstoreFile=#{ KEYSTORE_FILE }\" >> key.properties")
 end
 
 platform :android do
@@ -29,6 +29,7 @@ platform :android do
     generate_keystore_file()
     generate_key_properties_file()
   end
+
   desc "Deploy a new version to the Google Play"
   lane :deploy do
     sh("flutter build apk --debug")
