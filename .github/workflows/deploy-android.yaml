@@ -15,6 +15,12 @@ jobs:
     - name: Generate keystore.jks file
       run: echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > android/app/upload-keystore.jks
 
+    - name: Generate key.properties file
+      run: |
+        cd android
+        touch key.properties
+        echo -e "storePassword=${{ secrets.STORE_PASSWORD }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nstoreFile=${{ secrets.KEYSTORE_FILE }}" >> key.properties
+
     - name: Install flutter
       uses: subosito/flutter-action@v2
       with:
