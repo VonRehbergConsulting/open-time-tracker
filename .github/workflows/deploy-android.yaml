@@ -10,9 +10,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Generate api_key.json file
-      run: |
-        touch android/fastlane/api_key.json
-        echo ${{ secrets.GOOGLE_API_JSON_BASE64 }} | base64 -d > android/fastlane/api_key.json
+      run: echo ${{ secrets.GOOGLE_API_JSON_BASE64 }} | base64 -d > android/fastlane/api_key.json
 
     - name: Generate keystore.jks file
       run: echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > android/app/upload-keystore.jks
