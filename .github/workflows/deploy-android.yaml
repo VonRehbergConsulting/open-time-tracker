@@ -9,6 +9,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Generate api_key.json file
+      run: |
+        touch android/fastlane/api_key.json
+        echo ${{ secrets.GOOGLE_API_JSON_BASE64 }} | base64 -d > android/fastlane/api_key.json
+
+    - name: Generate keystore.jks file
+      run: echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > android/app/upload-keystore.jks
+
     - name: Install flutter
       uses: subosito/flutter-action@v2
       with:
@@ -19,14 +27,6 @@ jobs:
       run: |
         flutter pub get
         flutter pub run build_runner build --delete-conflicting-outputs
-    
-    - name: Generate api_key.json file
-      run: |
-        touch /home/runner/work/open-time-tracker/android/fastlane/api_key.json
-        echo ${{ secrets.GOOGLE_API_JSON_BASE64 }} | base64 -d > /home/runner/work/open-time-tracker/android/fastlane/api_key.json
-
-    - name: Generate keystore.jks file
-      run: echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > /home/runner/work/open-time-tracker/android/app/upload-keystore.jks
 
     - name: Build, sign and deploy
       env:
