@@ -13,13 +13,15 @@ jobs:
       run: echo ${{ secrets.GOOGLE_API_JSON_BASE64 }} | base64 -d > android/fastlane/api_key.json
 
     - name: Generate keystore.jks file
-      run: echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > android/app/keystore/upload-keystore.jks
+      run: | 
+        cd android/app
+        mkdir keystore
+        cd keystore
+        echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > upload-keystore.jks
 
     - name: Generate key.properties file
       run: |
         cd android
-        mkdir keystore
-        cd keystore
         touch key.properties
         echo -e "storePassword=${{ secrets.STORE_PASSWORD }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nstoreFile=${{ secrets.KEYSTORE_FILE }}" >> key.properties
 
