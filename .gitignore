@@ -105,3 +105,7 @@ inject.config.dart
 # Fastlane 
 
 ios/fastlane/report.xml
+android/fastlane/report.xml
+android/fastlane/pc-api.json
+android/fastlane/api_key.json
+android/fastlane/metadata/
