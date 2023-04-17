@@ -18,6 +18,8 @@ jobs:
     - name: Generate key.properties file
       run: |
         cd android
+        mkdir keystore
+        cd keystore
         touch key.properties
         echo -e "storePassword=${{ secrets.STORE_PASSWORD }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nstoreFile=${{ secrets.KEYSTORE_FILE }}" >> key.properties
 
