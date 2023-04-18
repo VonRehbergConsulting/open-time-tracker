@@ -23,6 +23,7 @@
 
     "time_entries_list_title": "Heutige Arbeit",
     "time_entries_list_change_working_hours": "Arbeitszeit ändern",
+    "time_entries_list_empty": "Für heute existieren noch keine Aufzeichnungen",
 
     "work_packages_list_title": "Aktive Aufgaben",
     "work_package_list_empty": "Ihnen keine Aufgaben zugewiesen sind",

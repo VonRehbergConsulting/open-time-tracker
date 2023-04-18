@@ -23,6 +23,7 @@
 
     "time_entries_list_title": "Recent work",
     "time_entries_list_change_working_hours": "Change working hours",
+    "time_entries_list_empty": "No work logged today",
 
     "work_packages_list_title": "Active tasks",
     "work_package_list_empty": "No tasks assigned to you",
