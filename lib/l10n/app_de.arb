@@ -21,13 +21,17 @@
     "instance_configuration_base_url": "Base URL",
     "instance_configuration_client_id": "Client ID",
 
-    "time_entries_list_title": "Jüngste Arbeit",
+    "time_entries_list_title": "Heutige Arbeit",
     "time_entries_list_change_working_hours": "Arbeitszeit ändern",
+    "time_entries_list_empty": "Für heute existieren noch keine Aufzeichnungen",
 
     "work_packages_list_title": "Aktive Aufgaben",
     "work_package_list_empty": "Ihnen keine Aufgaben zugewiesen sind",
 
-    "analytics_title": "Analytik",
+    "analytics_title": "Wochenübersicht",
+    "analytics_empty": "Keine Zeit protokolliert für diese Woche",
+    "analytics_weekdays_title": "Arbeitstagsverteilung",
+    "analytics_projects_title": "Projektverteilung",
 
     "time_entry_summary_title": "Zusammenfassung",
     "time_entry_summary_task": "Aufgabe",

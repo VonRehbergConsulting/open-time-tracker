@@ -83,4 +83,9 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
       body: body,
     );
   }
+
+  @override
+  Future<void> delete({required int id}) async {
+    await _restApi.deleteTimeEntry(id: id);
+  }
 }

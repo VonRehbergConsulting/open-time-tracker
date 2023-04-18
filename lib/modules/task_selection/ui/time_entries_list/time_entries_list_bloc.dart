@@ -35,7 +35,13 @@ class TimeEntriesListBloc
 
   List<TimeEntry> items = [];
   Duration workingHours = Duration(hours: 0);
-  Duration totalDuration = Duration(hours: 0);
+  Duration get totalDuration {
+    var result = const Duration();
+    for (var element in items) {
+      result += element.hours;
+    }
+    return result;
+  }
 
   TimeEntriesListBloc(
     this._timeEntriesRepository,
@@ -74,10 +80,6 @@ class TimeEntriesListBloc
         endDate: DateTime.now(),
       );
       workingHours = await _settingsRepository.workingHours;
-      totalDuration = const Duration();
-      for (var element in items) {
-        totalDuration += element.hours;
-      }
       emit(TimeEntriesListState.idle(
         workingHours: workingHours,
         timeEntries: items,
@@ -113,5 +115,24 @@ class TimeEntriesListBloc
     await _timerRepository.setTimeEntry(
       timeEntry: timeEntry,
     );
+  }
+
+  Future<bool> deleteTimeEntry(int id) async {
+    try {
+      await _timeEntriesRepository.delete(id: id);
+      items.removeWhere((element) => element.id == id);
+
+      Future.delayed(Duration(milliseconds: 250)).then((value) {
+        emit(TimeEntriesListState.idle(
+          workingHours: workingHours,
+          timeEntries: items,
+          totalDuration: totalDuration,
+        ));
+      });
+      return true;
+    } catch (e) {
+      emitEffect(TimeEntriesListEffect.error());
+      return false;
+    }
   }
 }

@@ -32,8 +32,7 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
             dailyHours.isEmpty
                 ? Center(
                     child: Text(
-                      'No time logged for this week',
-                      style: TextStyle(fontSize: 16),
+                      AppLocalizations.of(context).analytics_empty,
                     ),
                   )
                 : RefreshIndicator(

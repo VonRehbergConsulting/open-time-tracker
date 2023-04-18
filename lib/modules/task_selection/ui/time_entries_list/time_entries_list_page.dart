@@ -78,25 +78,40 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
                     },
                   ),
                 ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final timeEntry = timeEntries[index];
-                      return TimeEntryListItem(
-                        workPackageSubject: timeEntry.workPackageSubject,
-                        projectTitle: timeEntry.projectTitle,
-                        hours: timeEntry.hours,
-                        comment: timeEntry.comment,
-                        action: () {
-                          context
-                              .read<TimeEntriesListBloc>()
-                              .setTimeEntry(timeEntry);
-                        },
-                      );
-                    },
-                    childCount: timeEntries.length,
-                  ),
-                ),
+                timeEntries.length < 1
+                    ? SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .time_entries_list_empty,
+                          ),
+                        ),
+                      )
+                    : SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final timeEntry = timeEntries[index];
+                            return TimeEntryListItem(
+                              workPackageSubject: timeEntry.workPackageSubject,
+                              projectTitle: timeEntry.projectTitle,
+                              hours: timeEntry.hours,
+                              comment: timeEntry.comment,
+                              action: () {
+                                context
+                                    .read<TimeEntriesListBloc>()
+                                    .setTimeEntry(timeEntry);
+                              },
+                              dismissAction: () async {
+                                return await context
+                                    .read<TimeEntriesListBloc>()
+                                    .deleteTimeEntry(timeEntry.id!);
+                              },
+                            );
+                          },
+                          childCount: timeEntries.length,
+                        ),
+                      ),
               ],
             ),
           ],

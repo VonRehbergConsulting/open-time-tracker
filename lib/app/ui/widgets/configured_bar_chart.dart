@@ -62,14 +62,14 @@ class _BarChart extends StatelessWidget {
             return BarTooltipItem(
               rod.toY.toStringAsFixed(
                   rod.toY.truncateToDouble() == rod.toY ? 0 : 1),
-              ChartTextstyle(),
+              ChartTextStyle(),
             );
           },
         ),
       );
 
   Widget getTitles(double value, TitleMeta meta) {
-    final style = ChartTextstyle();
+    final style = ChartTextStyle();
     String text = data[value.toInt()].title;
     return SideTitleWidget(
       axisSide: meta.axisSide,

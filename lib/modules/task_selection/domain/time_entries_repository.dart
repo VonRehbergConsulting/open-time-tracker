@@ -17,6 +17,10 @@ abstract class TimeEntriesRepository {
   Future<void> update({
     required TimeEntry timeEntry,
   });
+
+  Future<void> delete({
+    required int id,
+  });
 }
 
 class TimeEntry {
