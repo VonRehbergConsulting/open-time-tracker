@@ -29,6 +29,11 @@ abstract class TimeEntriesApi {
     @Path() required id,
     @Body() required Map<String, dynamic> body,
   });
+
+  @DELETE('/time_entries/{id}')
+  Future<void> deleteTimeEntry({
+    @Path() required id,
+  });
 }
 
 class TimeEntryResponse {

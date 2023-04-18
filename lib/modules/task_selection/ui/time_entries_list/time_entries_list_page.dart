@@ -92,6 +92,11 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
                               .read<TimeEntriesListBloc>()
                               .setTimeEntry(timeEntry);
                         },
+                        dismissAction: () async {
+                          return await context
+                              .read<TimeEntriesListBloc>()
+                              .deleteTimeEntry(timeEntry.id!);
+                        },
                       );
                     },
                     childCount: timeEntries.length,
