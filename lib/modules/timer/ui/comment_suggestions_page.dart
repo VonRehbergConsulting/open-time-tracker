@@ -16,7 +16,7 @@ class CommentSuggestionsPage extends StatelessWidget {
         title: Text(AppLocalizations.of(context).comment_suggestions_title),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(12.0),
         children: comments
             .map(
               (comment) => ListItem(

@@ -15,6 +15,8 @@ class TimePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const minuteInterval = 5;
+    final roundedMinutes = minutes - minutes % minuteInterval;
     return Container(
       height: 300,
       color: Theme.of(context).canvasColor,
@@ -24,11 +26,12 @@ class TimePicker extends StatelessWidget {
           1,
           1,
           hours,
-          minutes,
+          roundedMinutes,
         ),
         mode: CupertinoDatePickerMode.time,
         use24hFormat: true,
         onDateTimeChanged: onTimeChanged,
+        minuteInterval: minuteInterval,
       ),
     );
   }

@@ -23,4 +23,6 @@ abstract class TimerRepository {
   });
 
   Future<void> reset();
+
+  Future<void> add(Duration duration);
 }

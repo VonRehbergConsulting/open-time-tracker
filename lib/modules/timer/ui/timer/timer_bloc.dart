@@ -80,4 +80,14 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
     await updateState();
     emitEffect(TimerEffect.finish());
   }
+
+  Future<void> add(Duration duration) async {
+    _timerRepository.add(duration);
+    emit(
+      state.copyWith(
+        timeSpent: state.timeSpent + duration,
+        hasStarted: true,
+      ),
+    );
+  }
 }

@@ -32,58 +32,93 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
 
   @override
   Widget buildState(BuildContext context, TimeEntriesListState state) {
-    final Widget body = state.when(
-      loading: () => const Center(child: ActivityIndicator()),
-      idle: (
-        timeEntries,
-        workingHours,
-        totalDuration,
-      ) =>
-          RefreshIndicator(
-        onRefresh: context.read<TimeEntriesListBloc>().reload,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-          child: ListView.builder(
-            itemCount: timeEntries.length + 1,
-            itemBuilder: ((context, index) {
-              if (index == 0) {
-                return TotalTimeListItem(
-                  workingHours,
-                  totalDuration,
-                  (value) {
-                    final duration = Duration(
-                      hours: value.hour,
-                      minutes: value.minute,
-                    );
-                    context
-                        .read<TimeEntriesListBloc>()
-                        .updateWorkingHours(duration);
+    final Widget body = RefreshIndicator(
+      onRefresh: context.read<TimeEntriesListBloc>().reload,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+        child: CustomScrollView(
+          physics:
+              state.whenOrNull(loading: () => NeverScrollableScrollPhysics()),
+          slivers: [
+            SliverAppBar(
+              title: Text(AppLocalizations.of(context).time_entries_list_title),
+              leading: IconButton(
+                  onPressed: () {
+                    context.read<TimeEntriesListBloc>().unauthorize();
                   },
-                );
-              }
-              final timeEntry = timeEntries[index - 1];
-              return TimeEntryListItem(
-                  workPackageSubject: timeEntry.workPackageSubject,
-                  projectTitle: timeEntry.projectTitle,
-                  hours: timeEntry.hours,
-                  comment: timeEntry.comment,
-                  action: () {
-                    context.read<TimeEntriesListBloc>().setTimeEntry(timeEntry);
-                  });
-            }),
-          ),
+                  icon: const Icon(Icons.logout)),
+              actions: [
+                IconButton(
+                  onPressed: () => AppRouter.routeToAnalytics(context),
+                  icon: Icon(Icons.bar_chart),
+                ),
+              ],
+            ),
+            ...state.when<List<Widget>>(
+              loading: () => [
+                SliverFillRemaining(
+                  child: const Center(
+                    child: ActivityIndicator(),
+                  ),
+                ),
+              ],
+              idle: (timeEntries, workingHours, totalDuration) => [
+                SliverToBoxAdapter(
+                  child: TotalTimeListItem(
+                    workingHours,
+                    totalDuration,
+                    (value) {
+                      final duration = Duration(
+                        hours: value.hour,
+                        minutes: value.minute,
+                      );
+                      context
+                          .read<TimeEntriesListBloc>()
+                          .updateWorkingHours(duration);
+                    },
+                  ),
+                ),
+                timeEntries.length < 1
+                    ? SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .time_entries_list_empty,
+                          ),
+                        ),
+                      )
+                    : SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final timeEntry = timeEntries[index];
+                            return TimeEntryListItem(
+                              workPackageSubject: timeEntry.workPackageSubject,
+                              projectTitle: timeEntry.projectTitle,
+                              hours: timeEntry.hours,
+                              comment: timeEntry.comment,
+                              action: () {
+                                context
+                                    .read<TimeEntriesListBloc>()
+                                    .setTimeEntry(timeEntry);
+                              },
+                              dismissAction: () async {
+                                return await context
+                                    .read<TimeEntriesListBloc>()
+                                    .deleteTimeEntry(timeEntry.id!);
+                              },
+                            );
+                          },
+                          childCount: timeEntries.length,
+                        ),
+                      ),
+              ],
+            ),
+          ],
         ),
       ),
     );
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).time_entries_list_title),
-        leading: IconButton(
-            onPressed: () {
-              context.read<TimeEntriesListBloc>().unauthorize();
-            },
-            icon: const Icon(Icons.exit_to_app_sharp)),
-      ),
       body: body,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),

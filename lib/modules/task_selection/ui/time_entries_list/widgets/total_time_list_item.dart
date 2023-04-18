@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/time_picker.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
+import '../../../../../app/ui/widgets/configured_card.dart';
 import '/extensions/duration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,16 +25,20 @@ class TotalTimeListItem extends StatelessWidget {
   Widget _createIconText(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 20),
+        Icon(
+          icon,
+          size: 20,
+          color: Colors.white,
+        ),
         const SizedBox(width: 8),
         Text(
           text,
           style: const TextStyle(
-            fontSize: 18,
-            fontFeatures: [
-              FontFeature.tabularFigures(),
-            ],
-          ),
+              fontSize: 18,
+              fontFeatures: [
+                FontFeature.tabularFigures(),
+              ],
+              color: Colors.white),
         ),
       ],
     );
@@ -66,12 +71,22 @@ class TotalTimeListItem extends StatelessWidget {
     }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Card(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
+      child: ConfiguredCard(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Color.fromRGBO(33, 147, 147, 1),
+                Theme.of(context).primaryColor,
+              ],
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12.0,
+            vertical: 16.0,
+          ),
           child: SizedBox(
             height: 100,
             child: Row(
@@ -79,17 +94,20 @@ class TotalTimeListItem extends StatelessWidget {
               children: [
                 CircularPercentIndicator(
                   radius: 50,
-                  animation: false,
-                  animationDuration: 1000,
+                  animation: true,
+                  animateFromLastPercent: true,
+                  animationDuration: 500,
                   lineWidth: 15.0,
                   percent: min(percent, 1.0),
                   circularStrokeCap: CircularStrokeCap.round,
-                  progressColor: Theme.of(context).primaryColor,
+                  progressColor: Colors.white,
+                  backgroundColor: Colors.white60,
                   center: Text(
                     percentText,
                     style: const TextStyle(
                       fontWeight: FontWeight.w300,
                       fontSize: 20.0,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -112,8 +130,7 @@ class TotalTimeListItem extends StatelessWidget {
                       child: Text(
                         AppLocalizations.of(context)
                             .time_entries_list_change_working_hours,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ],

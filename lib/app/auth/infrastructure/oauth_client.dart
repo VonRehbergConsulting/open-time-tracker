@@ -16,13 +16,14 @@ class OAuthClient implements AuthClient {
   @override
   Future<AuthToken> requestToken() async {
     try {
-      final baseUrl = await _instanceConfigurationRepository.baseUrl;
+      final baseUrl =
+          (await _instanceConfigurationRepository.baseUrl)?.replaceAll(' ', '');
       final clientID = await _instanceConfigurationRepository.clientID;
       if (baseUrl == null || clientID == null) {
         throw ErrorDescription('invalid_instance');
       }
       bool isValidProtocol =
-          baseUrl.contains('http://') || baseUrl.contains('https://');
+          baseUrl.startsWith('http://') || baseUrl.startsWith('https://');
       if (Uri.tryParse(baseUrl) == null || !isValidProtocol) {
         throw ErrorDescription('invalid_url');
       }
@@ -38,6 +39,7 @@ class OAuthClient implements AuthClient {
           ),
           scopes: ['api_v3'],
           preferEphemeralSession: true,
+          allowInsecureConnections: true,
         ),
       );
       final accessToken = response?.accessToken;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 
 class ListItem extends StatelessWidget {
   // Properties
@@ -25,10 +26,7 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => action(),
-      child: Card(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
+      child: ConfiguredCard(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Column(

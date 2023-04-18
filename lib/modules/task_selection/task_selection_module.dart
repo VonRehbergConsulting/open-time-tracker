@@ -11,6 +11,7 @@ import 'package:open_project_time_tracker/modules/task_selection/infrastructure/
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/local_settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/time_entries_api.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/work_packages_api.dart';
+import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/analytics_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
@@ -80,5 +81,15 @@ abstract class TaskSelectionModule {
         workPackagesRepository,
         userDataRepository,
         timerRepository,
+      );
+
+  @injectable
+  AnalyticsBloc analyticsBloc(
+    TimeEntriesRepository timeEntriesRepository,
+    UserDataRepository userDataRepository,
+  ) =>
+      AnalyticsBloc(
+        timeEntriesRepository,
+        userDataRepository,
       );
 }

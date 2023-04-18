@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/filled_button.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -41,49 +42,51 @@ class InstanceConfigurationPage extends EffectBlocPage<
   @override
   Widget buildState(BuildContext context, InstanceConfigurationState state) {
     final deviceSize = MediaQuery.of(context).size;
-    final buttonWidth = deviceSize.width * 0.35;
+    final buttonWidth = deviceSize.width * 0.7;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(AppLocalizations.of(context).instance_configuration_title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Form(
-                key: _form,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _baseUrlController,
-                      decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)
-                              .instance_configuration_base_url),
-                      onSaved: (newValue) => _baseUrl = newValue ?? '',
-                    ),
-                    TextFormField(
-                      controller: _clientIdController,
-                      decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)
-                              .instance_configuration_client_id),
-                      onSaved: (newValue) => _clientID = newValue ?? '',
-                    ),
-                  ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Form(
+              key: _form,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _baseUrlController,
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)
+                            .instance_configuration_base_url),
+                    onSaved: (newValue) => _baseUrl = newValue ?? '',
+                  ),
+                  TextFormField(
+                    controller: _clientIdController,
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)
+                            .instance_configuration_client_id),
+                    onSaved: (newValue) => _clientID = newValue ?? '',
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 32.0),
+              child: SizedBox(
+                width: buttonWidth,
+                child: FilledButton(
+                  onPressed: () => _save(context),
+                  text: AppLocalizations.of(context).generic_save,
                 ),
               ),
-              SizedBox(height: 16),
-              SizedBox(
-                width: buttonWidth,
-                child: ElevatedButton(
-                    onPressed: () => _save(context),
-                    child: Text(AppLocalizations.of(context).generic_save)),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
