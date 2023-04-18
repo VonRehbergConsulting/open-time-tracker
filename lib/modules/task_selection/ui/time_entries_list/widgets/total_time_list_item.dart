@@ -94,8 +94,9 @@ class TotalTimeListItem extends StatelessWidget {
               children: [
                 CircularPercentIndicator(
                   radius: 50,
-                  animation: false,
-                  animationDuration: 1000,
+                  animation: true,
+                  animateFromLastPercent: true,
+                  animationDuration: 500,
                   lineWidth: 15.0,
                   percent: min(percent, 1.0),
                   circularStrokeCap: CircularStrokeCap.round,
