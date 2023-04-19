@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../app/ui/widgets/configured_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '/extensions/duration.dart';
 
 class TimeEntryListItem extends StatelessWidget {
@@ -24,6 +26,32 @@ class TimeEntryListItem extends StatelessWidget {
     required this.dismissAction,
   });
 
+  Future<bool> _showCloseDialog(BuildContext context) async {
+    var consent = false;
+    await showDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(AppLocalizations.of(context).generic_warning),
+        content: Text(AppLocalizations.of(context).generic_deletion_warning),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(AppLocalizations.of(context).generic_no),
+          ),
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              consent = true;
+              Navigator.of(context).pop();
+            },
+            child: Text(AppLocalizations.of(context).generic_yes),
+          ),
+        ],
+      ),
+    );
+    return consent ? await dismissAction() : false;
+  }
+
   // Lifecycle
 
   @override
@@ -31,7 +59,7 @@ class TimeEntryListItem extends StatelessWidget {
     final trailing = hours.withLetters();
     return Dismissible(
       key: UniqueKey(),
-      confirmDismiss: (direction) async => dismissAction(),
+      confirmDismiss: (direction) => _showCloseDialog(context),
       direction: DismissDirection.endToStart,
       background: Align(
         alignment: Alignment.centerRight,
