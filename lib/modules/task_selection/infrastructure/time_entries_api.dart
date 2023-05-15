@@ -11,6 +11,7 @@ abstract class TimeEntriesApi {
   @GET('/time_entries')
   Future<TimeEntriesResponse> timeEntries({
     @Query('filters') String? filters,
+    @Query('pageSize') int? pageSize,
   });
 
   @POST('/time_entries')
