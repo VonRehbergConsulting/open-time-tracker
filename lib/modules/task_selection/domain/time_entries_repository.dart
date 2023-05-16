@@ -7,6 +7,7 @@ abstract class TimeEntriesRepository {
     DateTime? startDate,
     DateTime? endDate,
     int? workPackageId,
+    int? pageSize,
   });
 
   Future<void> create({
