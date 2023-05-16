@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   deploy-ios:
-    runs-on: macos-latest
+    runs-on: self-hosted
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -12,7 +12,7 @@ jobs:
     - name: Install flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.3.5'
+        flutter-version: '3.7.12'
         channel: "stable"
 
     - name: Setup project
