@@ -69,6 +69,7 @@ class AnalyticsBloc extends Cubit<AnaliticsState> {
       userId: _userDataRepository.userID,
       startDate: date.thisMonday,
       endDate: date.thisSunday,
+      pageSize: 100,
     );
     emit(
       AnaliticsState.idle(
