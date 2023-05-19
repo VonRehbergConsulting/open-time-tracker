@@ -21,9 +21,9 @@ class _AppRouterState extends State<AppRouter> {
   Widget build(BuildContext context) {
     return InjectableBlocConsumer<AppRouterBloc, AppRouterState>(
       create: (context) => AppRouterBloc(
+        () => inject(instanceName: 'openProject'),
         () => inject(),
-        () => inject(),
-        () => inject(),
+        () => inject(instanceName: 'openProject'),
       )..init(),
       builder: (context, state) {
         return state.when(

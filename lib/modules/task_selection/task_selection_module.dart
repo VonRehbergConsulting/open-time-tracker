@@ -1,5 +1,4 @@
 import 'package:injectable/injectable.dart';
-import 'package:open_project_time_tracker/app/api/rest_api_client.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
@@ -16,11 +15,13 @@ import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
+import '../../app/api/api_client.dart';
+
 @module
 abstract class TaskSelectionModule {
   @lazySingleton
   TimeEntriesApi timeEntriesApi(
-    RestApiClient client,
+    @Named('openProject') ApiClient client,
   ) =>
       TimeEntriesApi(
         client.dio,
@@ -28,7 +29,7 @@ abstract class TaskSelectionModule {
 
   @lazySingleton
   WorkPackagesApi workPackagesApi(
-    RestApiClient client,
+    @Named('openProject') ApiClient client,
   ) =>
       WorkPackagesApi(
         client.dio,
@@ -60,7 +61,7 @@ abstract class TaskSelectionModule {
     TimeEntriesRepository timeEntriesRepository,
     UserDataRepository userDataRepository,
     SettingsRepository settingsRepository,
-    AuthService authService,
+    @Named('openProject') AuthService authService,
     TimerRepository timerRepository,
   ) =>
       TimeEntriesListBloc(

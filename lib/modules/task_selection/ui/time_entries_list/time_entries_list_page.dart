@@ -49,6 +49,10 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
                   icon: const Icon(Icons.logout)),
               actions: [
                 IconButton(
+                  onPressed: () => AppRouter.routeToCalendar(context),
+                  icon: Icon(Icons.calendar_month_outlined),
+                ),
+                IconButton(
                   onPressed: () => AppRouter.routeToAnalytics(context),
                   icon: Icon(Icons.bar_chart),
                 ),
