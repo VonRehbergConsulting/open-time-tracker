@@ -53,6 +53,7 @@ dependencies:
   dio: 5.0.3
   json_serializable: 6.5.4
   fl_chart: 0.61.0
+  dotenv: 4.1.0
 
 dev_dependencies:
   flutter_test:

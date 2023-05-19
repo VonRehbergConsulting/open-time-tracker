@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
-import 'package:open_project_time_tracker/modules/authorization/domain/instance_configuration_repository.dart';
+import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 
 import '../ui/bloc/bloc.dart';

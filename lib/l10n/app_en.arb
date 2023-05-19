@@ -49,5 +49,7 @@
     "timer_add_15_min": "+15 min",
     "timer_add_30_min": "+30 min",
     
-    "comment_suggestions_title": "Choose a comment"
+    "comment_suggestions_title": "Choose a comment",
+
+    "calendar_connect": "Connect calendar"
 }

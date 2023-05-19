@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
+import 'package:open_project_time_tracker/modules/calendar/ui/calendar_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/analytics_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_page.dart';
@@ -77,6 +78,13 @@ class AppRouter {
   static void routeToAnalytics(BuildContext context) {
     final route = CupertinoPageRoute(
       builder: ((context) => AnalyticsPage()),
+    );
+    Navigator.of(context).push(route);
+  }
+
+  static void routeToCalendar(BuildContext context) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => CalendarPage()),
     );
     Navigator.of(context).push(route);
   }
