@@ -1,11 +1,15 @@
 import 'package:open_project_time_tracker/app/auth/domain/auth_client_data.dart';
+import 'package:open_project_time_tracker/app/storage/env_vars.dart';
 
 class GraphAuthClientData implements AuthClientData {
   static const _baseUrl =
       'https://login.microsoftonline.com/common/oauth2/v2.0';
 
   @override
-  Future<String?> get clientID async => '';
+  Future<String?> get clientID async {
+    final clientID = EnvVars.get('GRAPH_API_CLIENT_ID');
+    return clientID;
+  }
 
   @override
   Future<String?> get baseUrl async => _baseUrl;
