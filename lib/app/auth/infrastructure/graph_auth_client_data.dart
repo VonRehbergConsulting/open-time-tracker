@@ -24,7 +24,7 @@ class GraphAuthClientData implements AuthClientData {
   Future<String?> get logoutEndpoint async => '$_baseUrl/logout';
 
   @override
-  String get redirectUrl => 'openprojecttimetracker://graph-oauth-callback';
+  String get redirectUrl => 'openprojecttimetracker://graph-oauth-callback/';
 
   @override
   List<String> get scopes => [
