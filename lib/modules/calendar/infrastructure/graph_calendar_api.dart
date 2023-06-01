@@ -65,6 +65,7 @@ class GraphScheduleResponseItem with _$GraphScheduleResponseItem {
     @JsonKey(name: 'isReminderSet') required bool isReminderSet,
     @JsonKey(name: 'start') required GraphDateTime start,
     @JsonKey(name: 'end') required GraphDateTime end,
+    @JsonKey(name: 'subject') required String subject,
   }) = _GraphScheduleResponseItem;
 
   factory GraphScheduleResponseItem.fromJson(Map<String, dynamic> json) =>

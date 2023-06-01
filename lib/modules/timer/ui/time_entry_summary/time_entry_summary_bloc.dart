@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
+import 'package:open_project_time_tracker/modules/calendar/domain/calendar_notifications_service.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
@@ -28,9 +29,10 @@ class TimeEntrySummaryEffect with _$TimeEntrySummaryEffect {
 
 class TimeEntrySummaryBloc
     extends EffectCubit<TimeEntrySummaryState, TimeEntrySummaryEffect> {
-  TimeEntriesRepository _timeEntriesRepository;
-  UserDataRepository _userDataRepository;
-  TimerRepository _timerRepository;
+  final TimeEntriesRepository _timeEntriesRepository;
+  final UserDataRepository _userDataRepository;
+  final TimerRepository _timerRepository;
+  final CalendarNotificationsService _calendarNotificationsService;
 
   late TimeEntry timeEntry;
   List<String> _commentSuggestions = [];
@@ -39,6 +41,7 @@ class TimeEntrySummaryBloc
     this._timeEntriesRepository,
     this._userDataRepository,
     this._timerRepository,
+    this._calendarNotificationsService,
   ) : super(TimeEntrySummaryState.loading()) {
     _init();
   }
@@ -103,6 +106,7 @@ class TimeEntrySummaryBloc
           timeEntry: timeEntry,
         );
       }
+      await _calendarNotificationsService.removeNotifications();
       await _timerRepository.reset();
       emitEffect(TimeEntrySummaryEffect.complete());
     } catch (e) {

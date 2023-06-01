@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/app/storage/timer_storage.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
+import 'package:open_project_time_tracker/modules/calendar/domain/calendar_notifications_service.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/infrastructure/local_timer_repository.dart';
@@ -18,9 +19,11 @@ abstract class TimerModule {
   @injectable
   TimerBloc timerBloc(
     TimerRepository timerRepository,
+    CalendarNotificationsService calendarNotificationsService,
   ) =>
       TimerBloc(
         timerRepository,
+        calendarNotificationsService,
       );
 
   @injectable
@@ -28,10 +31,12 @@ abstract class TimerModule {
     TimeEntriesRepository timeEntriesRepository,
     UserDataRepository userDataRepository,
     TimerRepository timerRepository,
+    CalendarNotificationsService calendarNotificationsService,
   ) =>
       TimeEntrySummaryBloc(
         timeEntriesRepository,
         userDataRepository,
         timerRepository,
+        calendarNotificationsService,
       );
 }
