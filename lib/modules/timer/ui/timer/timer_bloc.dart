@@ -3,6 +3,8 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
+import '../../../calendar/domain/calendar_notifications_service.dart';
+
 part 'timer_bloc.freezed.dart';
 
 @freezed
@@ -23,9 +25,12 @@ class TimerEffect with _$TimerEffect {
 
 class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   final TimerRepository _timerRepository;
+  final CalendarNotificationsService _calendarNotificationsService;
 
-  TimerBloc(this._timerRepository)
-      : super(
+  TimerBloc(
+    this._timerRepository,
+    this._calendarNotificationsService,
+  ) : super(
           TimerState.idle(
             timeSpent: Duration(),
             title: '',
@@ -33,7 +38,22 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
             hasStarted: false,
             isActive: false,
           ),
-        );
+        ) {
+    _scheduleNotifications();
+  }
+
+  Future<void> _scheduleNotifications() async {
+    try {
+      // TODO: make request only if is authorized
+      await _calendarNotificationsService.scheduleNotifications(
+        // TODO: get text from localizations
+        'You have a scheduled meeting',
+        'Click here to open the timer',
+      );
+    } catch (e) {
+      print('Cannot set notifications');
+    }
+  }
 
   Future<void> updateState() async {
     final data = await Future.wait([
@@ -62,6 +82,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   }
 
   Future<void> reset() async {
+    await _calendarNotificationsService.removeNotifications();
     await _timerRepository.reset();
   }
 

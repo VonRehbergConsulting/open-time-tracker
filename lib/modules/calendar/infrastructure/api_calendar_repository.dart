@@ -16,33 +16,39 @@ class ApiCalendarRepository implements CalendarRepository {
     required DateTime start,
     required DateTime end,
   }) async {
-    // TODO: cache username and timezone
-    final userResponse = await _graphUserApi.me();
-    final timeZoneResponse = await _graphUserApi.timeZone();
+    try {
+      // TODO: cache username and timezone
+      final userResponse = await _graphUserApi.me();
+      final timeZoneResponse = await _graphUserApi.timeZone();
 
-    final body = GetScheduleRequestBody(
-      names: [userResponse.value],
-      timeZone: timeZoneResponse.value,
-      startTime: start,
-      endTime: end,
-    );
-    final schedule = await _calendarApi.getSchedule(
-      body: body,
-    );
+      final body = GetScheduleRequestBody(
+        names: [userResponse.value],
+        timeZone: timeZoneResponse.value,
+        startTime: start,
+        endTime: end,
+      );
+      final schedule = await _calendarApi.getSchedule(
+        body: body,
+      );
 
-    final startParsed =
-        DateTime.parse(schedule.value[0].items[0].start.dateTime + 'Z')
-            .toLocal();
-    final endParsed =
-        DateTime.parse(schedule.value[0].items[0].end.dateTime + 'Z').toLocal();
+      final startParsed =
+          DateTime.parse(schedule.value[0].items[0].start.dateTime + 'Z')
+              .toLocal();
+      final endParsed =
+          DateTime.parse(schedule.value[0].items[0].end.dateTime + 'Z')
+              .toLocal();
 
-    return schedule.value[0].items
-        .map((e) => CalendarEntry(
-              isRecurring: e.isRecurring,
-              isReminderSet: e.isReminderSet,
-              start: startParsed,
-              end: endParsed,
-            ))
-        .toList();
+      return schedule.value[0].items
+          .map((e) => CalendarEntry(
+                isRecurring: e.isRecurring,
+                isReminderSet: e.isReminderSet,
+                start: startParsed,
+                end: endParsed,
+                subject: e.subject,
+              ))
+          .toList();
+    } catch (e) {
+      rethrow;
+    }
   }
 }

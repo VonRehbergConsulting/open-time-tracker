@@ -9,6 +9,7 @@ import 'package:open_project_time_tracker/app/auth/infrastructure/oauth_auth_ser
 import 'package:open_project_time_tracker/app/auth/infrastructure/oauth_client.dart';
 import 'package:open_project_time_tracker/app/auth/infrastructure/open_project_auth_client_data.dart';
 import 'package:open_project_time_tracker/app/auth/infrastructure/secure_auth_token_storage.dart';
+import 'package:open_project_time_tracker/app/services/local_notification_service.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
 import 'package:open_project_time_tracker/app/auth/infrastructure/instance_configuration_repository_local.dart';
@@ -93,4 +94,8 @@ abstract class AppModule {
           authService.logout();
         },
       );
+
+  @lazySingleton
+  LocalNotificationService localNotificationService() =>
+      LocalNotificationService();
 }

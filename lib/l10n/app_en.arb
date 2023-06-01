@@ -51,5 +51,7 @@
     
     "comment_suggestions_title": "Choose a comment",
 
-    "calendar_connect": "Connect calendar"
+    "calendar_title": "Calendar notifications",
+    "calendar_connect": "Connect calendar",
+    "calendar_disconnect": "Disconnect calendar"
 }

@@ -10,11 +10,13 @@ class CalendarEntry {
   final bool isReminderSet;
   final DateTime start;
   final DateTime end;
+  final String subject;
 
   CalendarEntry({
     required this.isRecurring,
     required this.isReminderSet,
     required this.start,
     required this.end,
+    required this.subject,
   });
 }
