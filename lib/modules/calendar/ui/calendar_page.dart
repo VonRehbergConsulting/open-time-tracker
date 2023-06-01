@@ -22,34 +22,50 @@ class CalendarPage extends BlocPage<CalendarBloc, CalendarBlocState> {
       ),
       body: Padding(
         padding: EdgeInsets.all(8.0),
-        child: state.when(
-          loading: () => Center(
-            child: ActivityIndicator(),
-          ),
-          landing: () => Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('Awesome landing text'),
-              FilledButton(
-                onPressed: context.read<CalendarBloc>().authorize,
-                text: AppLocalizations.of(context).calendar_connect,
-              ),
-            ],
-          ),
-          calendar: () => Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('Awesome, now you will recieve notifications!'),
-              FilledButton(
-                onPressed: context.read<CalendarBloc>().unauthorize,
-                text: AppLocalizations.of(context).calendar_disconnect,
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ...state.when<List<Widget>>(
+              loading: () => [
+                Center(
+                  child: ActivityIndicator(),
+                ),
+              ],
+              landing: () => _body(context, false),
+              calendar: () => _body(context, true),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  List<Widget> _body(BuildContext context, bool isAuthorized) {
+    final deviceSize = MediaQuery.of(context).size;
+    final buttonWidth = deviceSize.width * 0.7;
+
+    return [
+      Container(),
+      Text(
+        isAuthorized
+            ? 'Perfect, now you will recieve notifications!'
+            : 'Awesome landing text',
+      ),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 32.0),
+        child: SizedBox(
+          width: buttonWidth,
+          child: FilledButton(
+            onPressed: isAuthorized
+                ? context.read<CalendarBloc>().unauthorize
+                : context.read<CalendarBloc>().authorize,
+            text: isAuthorized
+                ? AppLocalizations.of(context).calendar_disconnect
+                : AppLocalizations.of(context).calendar_connect,
+          ),
+        ),
+      ),
+    ];
   }
 }
