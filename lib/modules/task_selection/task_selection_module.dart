@@ -62,6 +62,7 @@ abstract class TaskSelectionModule {
     UserDataRepository userDataRepository,
     SettingsRepository settingsRepository,
     @Named('openProject') AuthService authService,
+    @Named('graph') AuthService graphAuthService,
     TimerRepository timerRepository,
   ) =>
       TimeEntriesListBloc(
@@ -69,6 +70,7 @@ abstract class TaskSelectionModule {
         userDataRepository,
         settingsRepository,
         authService,
+        graphAuthService,
         timerRepository,
       );
 
