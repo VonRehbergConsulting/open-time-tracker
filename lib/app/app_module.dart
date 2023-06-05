@@ -86,12 +86,14 @@ abstract class AppModule {
     @Named('openProject') AuthTokenStorage authTokenStorage,
     @Named('openProject') AuthClient authClient,
     @Named('openProject') AuthService authService,
+    @Named('graph') AuthService graphAuthService,
   ) =>
       RestApiClient(
         instanceConfigurationRepository,
         authTokenStorage,
         authClient,
         () {
+          graphAuthService.logout();
           authService.logout();
         },
       );

@@ -31,6 +31,7 @@ class TimeEntriesListBloc
   UserDataRepository _userDataRepository;
   SettingsRepository _settingsRepository;
   AuthService _authService;
+  AuthService _graphAuthService;
   TimerRepository _timerRepository;
 
   List<TimeEntry> items = [];
@@ -48,6 +49,7 @@ class TimeEntriesListBloc
     this._userDataRepository,
     this._settingsRepository,
     this._authService,
+    this._graphAuthService,
     this._timerRepository,
   ) : super(const TimeEntriesListState.loading()) {
     WidgetsBinding.instance.addObserver(this);
@@ -106,6 +108,7 @@ class TimeEntriesListBloc
   }
 
   Future<void> unauthorize() async {
+    await _graphAuthService.logout();
     await _authService.logout();
   }
 
