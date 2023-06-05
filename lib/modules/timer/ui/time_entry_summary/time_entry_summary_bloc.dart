@@ -6,6 +6,7 @@ import 'package:open_project_time_tracker/modules/authorization/domain/user_data
 import 'package:open_project_time_tracker/modules/calendar/domain/calendar_notifications_service.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
+import 'package:open_project_time_tracker/modules/timer/domain/timer_service.dart';
 
 part 'time_entry_summary_bloc.freezed.dart';
 
@@ -33,6 +34,7 @@ class TimeEntrySummaryBloc
   final UserDataRepository _userDataRepository;
   final TimerRepository _timerRepository;
   final CalendarNotificationsService _calendarNotificationsService;
+  final TimerService _timerService;
 
   late TimeEntry timeEntry;
   List<String> _commentSuggestions = [];
@@ -42,6 +44,7 @@ class TimeEntrySummaryBloc
     this._userDataRepository,
     this._timerRepository,
     this._calendarNotificationsService,
+    this._timerService,
   ) : super(TimeEntrySummaryState.loading()) {
     _init();
   }
@@ -92,22 +95,7 @@ class TimeEntrySummaryBloc
   Future<void> submit() async {
     emit(TimeEntrySummaryState.loading());
     try {
-      final userId = await _userDataRepository.userID;
-      if (userId == null) {
-        throw Exception('User ID is null');
-      }
-      if (timeEntry.id == null) {
-        await _timeEntriesRepository.create(
-          timeEntry: timeEntry,
-          userId: userId,
-        );
-      } else {
-        await _timeEntriesRepository.update(
-          timeEntry: timeEntry,
-        );
-      }
-      await _calendarNotificationsService.removeNotifications();
-      await _timerRepository.reset();
+      await _timerService.submit(timeEntry: timeEntry);
       emitEffect(TimeEntrySummaryEffect.complete());
     } catch (e) {
       _emitIdleState();

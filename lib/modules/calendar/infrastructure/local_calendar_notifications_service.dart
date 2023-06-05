@@ -45,9 +45,10 @@ class LocalCalendarNotificationsService
       )
           .forEach((item) {
         _localNotificationService.addNotification(
-          title,
-          body,
-          item.start,
+          title: title,
+          body: body,
+          time: item.start,
+          type: NotificationType.meeting,
         );
       });
     } catch (e) {
