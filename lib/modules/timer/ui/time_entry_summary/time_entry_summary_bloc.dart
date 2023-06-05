@@ -31,9 +31,7 @@ class TimeEntrySummaryEffect with _$TimeEntrySummaryEffect {
 class TimeEntrySummaryBloc
     extends EffectCubit<TimeEntrySummaryState, TimeEntrySummaryEffect> {
   final TimeEntriesRepository _timeEntriesRepository;
-  final UserDataRepository _userDataRepository;
   final TimerRepository _timerRepository;
-  final CalendarNotificationsService _calendarNotificationsService;
   final TimerService _timerService;
 
   late TimeEntry timeEntry;
@@ -41,9 +39,7 @@ class TimeEntrySummaryBloc
 
   TimeEntrySummaryBloc(
     this._timeEntriesRepository,
-    this._userDataRepository,
     this._timerRepository,
-    this._calendarNotificationsService,
     this._timerService,
   ) : super(TimeEntrySummaryState.loading()) {
     _init();
