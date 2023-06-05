@@ -32,11 +32,12 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
-      sdk: flutter
+    sdk: flutter
 
   cupertino_icons: 1.0.5
   provider: 6.0.4
   flutter_appauth: 5.0.0
+  bloc: 8.1.2
   flutter_bloc: 8.1.2
   freezed_annotation: 2.2.0
   http: 0.13.5
