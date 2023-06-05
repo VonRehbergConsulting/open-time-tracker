@@ -4,7 +4,7 @@ import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.
 import 'package:rxdart/rxdart.dart';
 
 class LocalTimerRepository implements TimerRepository {
-  TimerStorage _timerStorage;
+  final TimerStorage _timerStorage;
 
   final _state = BehaviorSubject<bool>();
 
@@ -23,26 +23,31 @@ class LocalTimerRepository implements TimerRepository {
     _state.add(await isSet);
   }
 
+  @override
   Future<bool> get isSet async {
     final timeEntry = await _timerStorage.getTimeEntry();
     return timeEntry != null;
   }
 
+  @override
   Future<bool> get hasStarted async {
     final startTime = await _timerStorage.getStartTime();
     return startTime != null;
   }
 
+  @override
   Future<bool> get isActive async {
     final startTime = await _timerStorage.getStartTime();
     final stopTime = await _timerStorage.getStopTime();
     return startTime != null && stopTime == null;
   }
 
+  @override
   Future<TimeEntry?> get timeEntry async {
     return _timerStorage.getTimeEntry();
   }
 
+  @override
   Future<Duration> get timeSpent async {
     final startTime = await _timerStorage.getStartTime();
     if (startTime == null) {
@@ -53,6 +58,7 @@ class LocalTimerRepository implements TimerRepository {
     return greaterTime.difference(startTime);
   }
 
+  @override
   Future<void> setTimeEntry({
     required TimeEntry timeEntry,
   }) async {
@@ -70,6 +76,7 @@ class LocalTimerRepository implements TimerRepository {
     _state.add(true);
   }
 
+  @override
   Future<void> startTimer({
     required DateTime startTime,
   }) async {
@@ -90,6 +97,7 @@ class LocalTimerRepository implements TimerRepository {
     ]);
   }
 
+  @override
   Future<void> stopTimer({
     required DateTime stopTime,
   }) async {
@@ -106,6 +114,7 @@ class LocalTimerRepository implements TimerRepository {
     }
   }
 
+  @override
   Future<void> reset() async {
     await Future.wait([
       _timerStorage.setTimeEntry(null),

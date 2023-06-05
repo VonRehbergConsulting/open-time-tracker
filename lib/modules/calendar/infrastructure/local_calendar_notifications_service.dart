@@ -5,8 +5,8 @@ import '../domain/calendar_repository.dart';
 
 class LocalCalendarNotificationsService
     implements CalendarNotificationsService {
-  LocalNotificationService _localNotificationService;
-  CalendarRepository _calendarRepository;
+  final LocalNotificationService _localNotificationService;
+  final CalendarRepository _calendarRepository;
 
   LocalCalendarNotificationsService(
     this._localNotificationService,

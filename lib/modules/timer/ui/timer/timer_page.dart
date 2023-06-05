@@ -18,6 +18,8 @@ import '../../../../app/ui/widgets/configured_outlined_button.dart';
 class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
   Timer? timer;
 
+  TimerPage({super.key});
+
   void _showCloseDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -33,6 +35,7 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
                 isDestructiveAction: true,
                 onPressed: () async {
                   await context.read<TimerBloc>().reset();
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
                 },
                 child: Text(AppLocalizations.of(context).generic_yes),
@@ -121,27 +124,30 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
                   width: addButtonWidth,
                   child: ConfiguredOutlinedButton(
                     text: AppLocalizations.of(context).timer_add_5_min,
-                    textStyle: TextStyle(fontSize: 14),
-                    onPressed: () =>
-                        context.read<TimerBloc>().add(Duration(minutes: 5)),
+                    textStyle: const TextStyle(fontSize: 14),
+                    onPressed: () => context
+                        .read<TimerBloc>()
+                        .add(const Duration(minutes: 5)),
                   ),
                 ),
                 SizedBox(
                   width: addButtonWidth,
                   child: ConfiguredOutlinedButton(
                     text: AppLocalizations.of(context).timer_add_15_min,
-                    textStyle: TextStyle(fontSize: 14),
-                    onPressed: () =>
-                        context.read<TimerBloc>().add(Duration(minutes: 15)),
+                    textStyle: const TextStyle(fontSize: 14),
+                    onPressed: () => context
+                        .read<TimerBloc>()
+                        .add(const Duration(minutes: 15)),
                   ),
                 ),
                 SizedBox(
                   width: addButtonWidth,
                   child: ConfiguredOutlinedButton(
                     text: AppLocalizations.of(context).timer_add_30_min,
-                    textStyle: TextStyle(fontSize: 14),
-                    onPressed: () =>
-                        context.read<TimerBloc>().add(Duration(minutes: 30)),
+                    textStyle: const TextStyle(fontSize: 14),
+                    onPressed: () => context
+                        .read<TimerBloc>()
+                        .add(const Duration(minutes: 30)),
                   ),
                 ),
               ],

@@ -11,6 +11,8 @@ import 'widgets/time_entry_list_item.dart';
 
 class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
     TimeEntriesListState, TimeEntriesListEffect> {
+  const TimeEntriesListPage({super.key});
+
   @override
   void onCreate(BuildContext context, TimeEntriesListBloc bloc) {
     super.onCreate(context, bloc);
@@ -37,8 +39,8 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
         child: CustomScrollView(
-          physics:
-              state.whenOrNull(loading: () => NeverScrollableScrollPhysics()),
+          physics: state.whenOrNull(
+              loading: () => const NeverScrollableScrollPhysics()),
           slivers: [
             SliverAppBar(
               title: Text(AppLocalizations.of(context).time_entries_list_title),
@@ -50,18 +52,18 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
               actions: [
                 IconButton(
                   onPressed: () => AppRouter.routeToCalendar(context),
-                  icon: Icon(Icons.calendar_month_outlined),
+                  icon: const Icon(Icons.calendar_month_outlined),
                 ),
                 IconButton(
                   onPressed: () => AppRouter.routeToAnalytics(context),
-                  icon: Icon(Icons.bar_chart),
+                  icon: const Icon(Icons.bar_chart),
                 ),
               ],
             ),
             ...state.when<List<Widget>>(
               loading: () => [
-                SliverFillRemaining(
-                  child: const Center(
+                const SliverFillRemaining(
+                  child: Center(
                     child: ActivityIndicator(),
                   ),
                 ),
@@ -82,7 +84,7 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
                     },
                   ),
                 ),
-                timeEntries.length < 1
+                timeEntries.isEmpty
                     ? SliverFillRemaining(
                         hasScrollBody: false,
                         child: Center(

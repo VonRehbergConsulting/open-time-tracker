@@ -19,6 +19,7 @@ class GraphApiClient implements ApiClient {
     this.onAuthenticationFailed,
   );
 
+  @override
   Dio get dio {
     final dio = Dio();
 

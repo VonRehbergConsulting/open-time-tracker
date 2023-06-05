@@ -18,7 +18,7 @@ abstract class GraphApiModule {
   @Named('graph')
   @lazySingleton
   AuthTokenStorage authTokenStorage() => SecureAuthTokenStorage(
-        FlutterSecureStorage(),
+        const FlutterSecureStorage(),
         accessTokenKey: 'graphAccessToken',
         refreshTokenKey: 'graphRefreshToken',
       );
@@ -33,7 +33,7 @@ abstract class GraphApiModule {
     @Named('graph') AuthClientData authClientData,
   ) =>
       OAuthClient(
-        FlutterAppAuth(),
+        const FlutterAppAuth(),
         authClientData,
       );
 

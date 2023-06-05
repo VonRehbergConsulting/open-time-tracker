@@ -19,13 +19,13 @@ class AuthorizationEffect with _$AuthorizationEffect {
 
 class AuthorizationBloc
     extends EffectCubit<AuthorizationState, AuthorizationEffect> {
-  InstanceConfigurationReadRepository _instanceConfigurationRepository;
-  AuthService _authService;
+  final InstanceConfigurationReadRepository _instanceConfigurationRepository;
+  final AuthService _authService;
 
   AuthorizationBloc(
     this._instanceConfigurationRepository,
     this._authService,
-  ) : super(AuthorizationState.idle(
+  ) : super(const AuthorizationState.idle(
           canAuthorize: false,
         ));
 
@@ -48,7 +48,7 @@ class AuthorizationBloc
         throw Error();
       }
     } catch (e) {
-      emitEffect(AuthorizationEffect.error());
+      emitEffect(const AuthorizationEffect.error());
     }
   }
 }

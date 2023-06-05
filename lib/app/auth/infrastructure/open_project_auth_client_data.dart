@@ -2,7 +2,7 @@ import 'package:open_project_time_tracker/app/auth/domain/auth_client_data.dart'
 import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
 
 class OpenProjectAuthClientData implements AuthClientData {
-  InstanceConfigurationReadRepository _instanceConfigurationRepository;
+  final InstanceConfigurationReadRepository _instanceConfigurationRepository;
 
   OpenProjectAuthClientData(
     this._instanceConfigurationRepository,

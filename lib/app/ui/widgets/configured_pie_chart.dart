@@ -26,7 +26,7 @@ class ConfiguredPieChart extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Container(
+        SizedBox(
           height: 200,
           child: PieChart(
             PieChartData(
@@ -40,7 +40,7 @@ class ConfiguredPieChart extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 8.0),
+        const SizedBox(height: 8.0),
         Wrap(
           spacing: 8.0,
           runSpacing: 8.0,
@@ -53,8 +53,8 @@ class ConfiguredPieChart extends StatelessWidget {
   }
 
   List<PieChartSectionData> _showingSections() {
-    final fontSize = 16.0;
-    final radius = 50.0;
+    const fontSize = 16.0;
+    const radius = 50.0;
     const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
     return items
         .map(
@@ -63,7 +63,7 @@ class ConfiguredPieChart extends StatelessWidget {
             value: item.value,
             title: item.text,
             radius: radius,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -76,7 +76,7 @@ class ConfiguredPieChart extends StatelessWidget {
 
   List<Widget> _indicators() {
     List<Widget> result = [];
-    items.forEach((item) {
+    for (var item in items) {
       result.add(
         Indicator(
           color: item.color,
@@ -84,7 +84,7 @@ class ConfiguredPieChart extends StatelessWidget {
           isSquare: true,
         ),
       );
-    });
+    }
     return result;
   }
 }

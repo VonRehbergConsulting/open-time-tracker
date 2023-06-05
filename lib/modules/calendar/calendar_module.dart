@@ -41,12 +41,10 @@ abstract class CalendarModule {
   @injectable
   CalendarBloc calendarBloc(
     @Named('graph') AuthService graphAuthService,
-    CalendarRepository calendarRepository,
     LocalNotificationService localNotificationService,
   ) =>
       CalendarBloc(
         graphAuthService,
-        calendarRepository,
         localNotificationService,
       );
 

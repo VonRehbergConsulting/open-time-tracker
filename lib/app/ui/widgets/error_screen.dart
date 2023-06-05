@@ -21,7 +21,7 @@ class ErrorScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(text),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             CupertinoButton.filled(
               onPressed: action,
               child: Text(buttonText),

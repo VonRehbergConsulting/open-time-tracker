@@ -28,8 +28,8 @@ class _AppRouterState extends State<AppRouter> {
       builder: (context, state) {
         return state.when(
           loading: () => const SplashScreen(),
-          authorized: () => AppAuthorizedRouter(),
-          unaurhorized: () => AuthorizationPage(),
+          authorized: () => const AppAuthorizedRouter(),
+          unaurhorized: () => const AuthorizationPage(),
           error: () => ErrorScreen(
               text: AppLocalizations.of(context).generic_error,
               buttonText: AppLocalizations.of(context).generic_retry,

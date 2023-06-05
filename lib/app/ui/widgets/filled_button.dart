@@ -16,25 +16,25 @@ class FilledButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: text != null
-          ? Text(
-              text!,
-              style: textStyle ??
-                  TextStyle(
-                    fontSize: 16,
-                  ),
-            )
-          : null,
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
         ),
-        minimumSize: MaterialStateProperty.all<Size>(Size(48.0, 48.0)),
+        minimumSize: MaterialStateProperty.all<Size>(const Size(48.0, 48.0)),
         splashFactory: NoSplash.splashFactory,
         shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
       ),
+      child: text != null
+          ? Text(
+              text!,
+              style: textStyle ??
+                  const TextStyle(
+                    fontSize: 16,
+                  ),
+            )
+          : null,
     );
   }
 }

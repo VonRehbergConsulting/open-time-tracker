@@ -7,12 +7,12 @@ import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/di/inject.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_service.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tzData;
+import 'package:timezone/data/latest.dart' as tz_data;
 
 part 'local_notification_service.g.dart';
 
 class LocalNotificationService {
-  final _localNotificationsPlugin;
+  final FlutterLocalNotificationsPlugin _localNotificationsPlugin;
 
   LocalNotificationService(
     this._localNotificationsPlugin,
@@ -67,23 +67,23 @@ class LocalNotificationService {
     required DateTime time,
     NotificationType? type,
   }) async {
-    tzData.initializeTimeZones();
+    tz_data.initializeTimeZones();
     final scheduleTime = tz.TZDateTime.from(
       time,
       tz.local,
     );
 
-    final androidDetail = AndroidNotificationDetails(
+    const androidDetail = AndroidNotificationDetails(
       'channel',
       'channel',
     );
-    final iosDetail = DarwinNotificationDetails();
-    final noticeDetail = NotificationDetails(
+    const iosDetail = DarwinNotificationDetails();
+    const noticeDetail = NotificationDetails(
       iOS: iosDetail,
       android: androidDetail,
     );
 
-    final id = 0;
+    const id = 0;
     final payload = jsonEncode(
       NotificationPayload(
         type: type,

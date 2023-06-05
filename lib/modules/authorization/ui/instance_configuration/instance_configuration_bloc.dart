@@ -24,7 +24,7 @@ class InstanceConfigurationBloc extends EffectCubit<InstanceConfigurationState,
 
   InstanceConfigurationBloc(
     this._instanceConfigurationRepository,
-  ) : super(InstanceConfigurationState.idle()) {
+  ) : super(const InstanceConfigurationState.idle()) {
     loadData();
   }
 
@@ -43,6 +43,6 @@ class InstanceConfigurationBloc extends EffectCubit<InstanceConfigurationState,
   ) async {
     await _instanceConfigurationRepository.setBaseUrl(baseUrl);
     await _instanceConfigurationRepository.setClientID(cliendID);
-    emitEffect(InstanceConfigurationEffect.complete());
+    emitEffect(const InstanceConfigurationEffect.complete());
   }
 }

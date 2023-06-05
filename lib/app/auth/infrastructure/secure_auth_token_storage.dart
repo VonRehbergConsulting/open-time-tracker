@@ -2,7 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_token_storage.dart';
 
 class SecureAuthTokenStorage implements AuthTokenStorage {
-  FlutterSecureStorage _storage;
+  final FlutterSecureStorage _storage;
 
   final String accessTokenKey;
   final String refreshTokenKey;

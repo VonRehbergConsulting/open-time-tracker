@@ -5,7 +5,6 @@ import 'package:open_project_time_tracker/app/services/local_notification_servic
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 
 import '../../../app/auth/domain/auth_service.dart';
-import '../domain/calendar_repository.dart';
 
 part 'calendar_bloc.freezed.dart';
 
@@ -17,15 +16,13 @@ class CalendarBlocState with _$CalendarBlocState {
 }
 
 class CalendarBloc extends Cubit<CalendarBlocState> {
-  AuthService _authService;
-  CalendarRepository _calendarRepository;
-  LocalNotificationService _localNotificationService;
+  final AuthService _authService;
+  final LocalNotificationService _localNotificationService;
 
   StreamSubscription? _graphStateSubscription;
 
   CalendarBloc(
     this._authService,
-    this._calendarRepository,
     this._localNotificationService,
   ) : super(const CalendarBlocState.loading());
 
@@ -40,14 +37,14 @@ class CalendarBloc extends Cubit<CalendarBlocState> {
   Future<void> _onAuthServiceStateChanged(AuthState state) async {
     state.when(
       undefined: () {
-        emit(CalendarBlocState.loading());
+        emit(const CalendarBlocState.loading());
       },
       authenticated: () {
         _localNotificationService.setup();
-        emit(CalendarBlocState.calendar());
+        emit(const CalendarBlocState.calendar());
       },
       notAuthenticated: () {
-        emit(CalendarBlocState.landing());
+        emit(const CalendarBlocState.landing());
       },
     );
   }
