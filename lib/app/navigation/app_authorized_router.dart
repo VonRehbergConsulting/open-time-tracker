@@ -25,7 +25,7 @@ class _AppAuthorizedRouterState extends State<AppAuthorizedRouter> {
         return state.when(
           initializing: () => const SplashScreen(),
           idle: (isTimerSet) {
-            return isTimerSet ? TimerPage() : TimeEntriesListPage();
+            return isTimerSet ? TimerPage() : const TimeEntriesListPage();
           },
         );
       },

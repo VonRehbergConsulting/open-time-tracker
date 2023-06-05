@@ -57,8 +57,8 @@ class AnaliticsState with _$AnaliticsState {
 }
 
 class AnalyticsBloc extends Cubit<AnaliticsState> {
-  TimeEntriesRepository _timeEntriesRepository;
-  UserDataRepository _userDataRepository;
+  final TimeEntriesRepository _timeEntriesRepository;
+  final UserDataRepository _userDataRepository;
 
   AnalyticsBloc(this._timeEntriesRepository, this._userDataRepository)
       : super(const AnaliticsState.loading());
@@ -109,14 +109,14 @@ class AnalyticsBloc extends Cubit<AnaliticsState> {
   List<ProjectsHours> _getProjectHours(List<TimeEntry> items) {
     List<ProjectsHours> result = [];
     final projects = items.map((item) => item.projectTitle).toSet();
-    projects.forEach((project) {
+    for (var project in projects) {
       result.add(
         ProjectsHours(
           title: project,
           duration: _sumProjectDuration(items, project),
         ),
       );
-    });
+    }
     return result;
   }
 

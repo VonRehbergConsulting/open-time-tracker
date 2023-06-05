@@ -9,6 +9,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
     WorkPackagesListState, WorkPackagesListEffect> {
+  const WorkPackagesListPage({super.key});
+
   @override
   void onCreate(BuildContext context, WorkPackagesListBloc bloc) {
     super.onCreate(context, bloc);
@@ -39,7 +41,7 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
         onRefresh: () async {
           context.read<WorkPackagesListBloc>().reload();
         },
-        child: workPackages.length == 0
+        child: workPackages.isEmpty
             ? Center(
                 child: Text(
                   AppLocalizations.of(context).work_package_list_empty,

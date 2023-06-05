@@ -2,7 +2,7 @@ import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 
 class LocalSettingsRepository implements SettingsRepository {
-  PreferencesStorage _storage;
+  final PreferencesStorage _storage;
 
   final String _workingHoursKey = 'workingHours';
 
@@ -28,7 +28,7 @@ class LocalSettingsRepository implements SettingsRepository {
 
   @override
   Future<void> setWorkingHours(Duration value) async {
-    final valueString = (await value).inMinutes.toString();
+    final valueString = value.inMinutes.toString();
     _storage.setString(_workingHoursKey, valueString);
   }
 }

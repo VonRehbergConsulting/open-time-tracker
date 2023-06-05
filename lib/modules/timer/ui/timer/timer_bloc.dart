@@ -1,7 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
+import 'package:open_project_time_tracker/main.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../calendar/domain/calendar_notifications_service.dart';
 
 part 'timer_bloc.freezed.dart';
 
@@ -23,17 +27,35 @@ class TimerEffect with _$TimerEffect {
 
 class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   final TimerRepository _timerRepository;
+  final CalendarNotificationsService _calendarNotificationsService;
 
-  TimerBloc(this._timerRepository)
-      : super(
-          TimerState.idle(
+  TimerBloc(
+    this._timerRepository,
+    this._calendarNotificationsService,
+  ) : super(
+          const TimerState.idle(
             timeSpent: Duration(),
             title: '',
             subtitle: '',
             hasStarted: false,
             isActive: false,
           ),
-        );
+        ) {
+    _scheduleNotifications();
+  }
+
+  Future<void> _scheduleNotifications() async {
+    try {
+      // TODO: make request only if is authorized
+      final context = navigatorKey.currentContext!;
+      await _calendarNotificationsService.scheduleNotifications(
+        AppLocalizations.of(context).notifications_calendar_title,
+        AppLocalizations.of(context).notifications_calendar_body,
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future<void> updateState() async {
     final data = await Future.wait([
@@ -62,6 +84,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   }
 
   Future<void> reset() async {
+    await _calendarNotificationsService.removeNotifications();
     await _timerRepository.reset();
   }
 
@@ -78,7 +101,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   Future<void> finish() async {
     await _timerRepository.stopTimer(stopTime: DateTime.now());
     await updateState();
-    emitEffect(TimerEffect.finish());
+    emitEffect(const TimerEffect.finish());
   }
 
   Future<void> add(Duration duration) async {

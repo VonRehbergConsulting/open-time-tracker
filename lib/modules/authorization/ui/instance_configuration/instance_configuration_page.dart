@@ -18,7 +18,7 @@ class InstanceConfigurationPage extends EffectBlocPage<
 
   final Function completion;
 
-  InstanceConfigurationPage(this.completion);
+  InstanceConfigurationPage(this.completion, {super.key});
 
   void _save(BuildContext context) async {
     _form.currentState?.save();

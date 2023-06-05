@@ -78,7 +78,7 @@ class TotalTimeListItem extends StatelessWidget {
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               colors: [
-                Color.fromRGBO(33, 147, 147, 1),
+                const Color.fromRGBO(33, 147, 147, 1),
                 Theme.of(context).primaryColor,
               ],
             ),
@@ -130,7 +130,7 @@ class TotalTimeListItem extends StatelessWidget {
                       child: Text(
                         AppLocalizations.of(context)
                             .time_entries_list_change_working_hours,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ],

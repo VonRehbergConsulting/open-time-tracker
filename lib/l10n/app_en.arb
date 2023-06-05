@@ -49,5 +49,12 @@
     "timer_add_15_min": "+15 min",
     "timer_add_30_min": "+30 min",
     
-    "comment_suggestions_title": "Choose a comment"
+    "comment_suggestions_title": "Choose a comment",
+
+    "calendar_title": "Calendar notifications",
+    "calendar_connect": "Connect calendar",
+    "calendar_disconnect": "Disconnect calendar",
+
+    "notifications_calendar_title": "You have a scheduled meeting",
+    "notifications_calendar_body": "Click here to open the timer"
 }

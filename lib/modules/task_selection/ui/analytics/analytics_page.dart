@@ -37,13 +37,14 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
                   )
                 : RefreshIndicator(
                     onRefresh: context.read<AnalyticsBloc>().reload,
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       height: double.infinity,
                       child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
+                        physics: const AlwaysScrollableScrollPhysics(),
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(12.0, 4.0, 12.0, 12.0),
+                          padding:
+                              const EdgeInsets.fromLTRB(12.0, 4.0, 12.0, 12.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
