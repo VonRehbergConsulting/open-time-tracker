@@ -53,5 +53,8 @@
 
     "calendar_title": "Calendar notifications",
     "calendar_connect": "Connect calendar",
-    "calendar_disconnect": "Disconnect calendar"
+    "calendar_disconnect": "Disconnect calendar",
+
+    "notifications_calendar_title": "You have a scheduled meeting",
+    "notifications_calendar_body": "Click here to open the timer"
 }
