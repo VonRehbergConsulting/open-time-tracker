@@ -45,16 +45,12 @@ abstract class TimerModule {
   @injectable
   TimeEntrySummaryBloc timeEntrySummaryBloc(
     TimeEntriesRepository timeEntriesRepository,
-    UserDataRepository userDataRepository,
     TimerRepository timerRepository,
-    CalendarNotificationsService calendarNotificationsService,
     TimerService timerService,
   ) =>
       TimeEntrySummaryBloc(
         timeEntriesRepository,
-        userDataRepository,
         timerRepository,
-        calendarNotificationsService,
         timerService,
       );
 }
