@@ -47,6 +47,11 @@ jobs:
         flutter pub get
         flutter pub run build_runner build --delete-conflicting-outputs
 
+    - name: Create env file
+      run: |
+        touch .env
+        echo "GRAPH_API_CLIENT_ID=${{ secrets.GRAPH_API_CLIENT_ID }}" > .env
+
     - name: Build for iOS
       env:
         API_KEY_ID: ${{ secrets.API_KEY_ID }}
