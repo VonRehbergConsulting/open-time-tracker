@@ -37,6 +37,7 @@ class OAuthClient implements AuthClient {
           redirectUrl,
           serviceConfiguration: serviceConfiguration,
           scopes: scopes,
+          // preferEphemeralSession: true,
         ),
       );
       return _parseToken(response);

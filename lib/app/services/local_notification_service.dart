@@ -1,9 +1,37 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:open_project_time_tracker/app/di/inject.dart';
+import 'package:open_project_time_tracker/modules/timer/domain/timer_service.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;
 
+part 'local_notification_service.g.dart';
+
 class LocalNotificationService {
+  // TODO: inject
   final _localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  static callback(NotificationResponse response) async {
+    try {
+      if (response.payload == null) {
+        throw ErrorDescription('Notification payload is null');
+      }
+      final payload =
+          NotificationPayload.fromJson(jsonDecode(response.payload!));
+      switch (payload.type) {
+        case NotificationType.meeting:
+          await inject<TimerService>().submit();
+          break;
+        default:
+          throw ErrorDescription('Notification type is not provided');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future<void> setup() async {
     const androidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -13,18 +41,24 @@ class LocalNotificationService {
       iOS: iosSetting,
     );
 
-    await _localNotificationsPlugin.initialize(initSettings).then((_) {
+    try {
+      await _localNotificationsPlugin.initialize(
+        initSettings,
+        onDidReceiveBackgroundNotificationResponse: callback,
+        onDidReceiveNotificationResponse: callback,
+      );
       print('Notification setup success');
-    }).catchError((Object error) {
-      print('Error: $error');
-    });
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
-  Future<void> addNotification(
-    String title,
-    String body,
-    DateTime time,
-  ) async {
+  Future<void> addNotification({
+    required String title,
+    required String body,
+    required DateTime time,
+    NotificationType? type,
+  }) async {
     tzData.initializeTimeZones();
     final scheduleTime = tz.TZDateTime.from(
       time,
@@ -42,6 +76,11 @@ class LocalNotificationService {
     );
 
     final id = 0;
+    final payload = jsonEncode(
+      NotificationPayload(
+        type: type,
+      ).toJson(),
+    );
 
     await _localNotificationsPlugin.zonedSchedule(
       id,
@@ -52,10 +91,29 @@ class LocalNotificationService {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      payload: payload,
     );
   }
 
   Future<void> cancellAllNotifications() async {
     await _localNotificationsPlugin.cancelAll();
   }
+}
+
+@JsonSerializable()
+class NotificationPayload {
+  @JsonKey(name: 'type')
+  final NotificationType? type;
+
+  NotificationPayload({
+    this.type,
+  });
+
+  factory NotificationPayload.fromJson(Map<String, dynamic> json) =>
+      _$NotificationPayloadFromJson(json);
+  Map<String, dynamic> toJson() => _$NotificationPayloadToJson(this);
+}
+
+enum NotificationType {
+  meeting,
 }

@@ -3,12 +3,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/navigation/app_router.dart';
+import 'package:open_project_time_tracker/app/services/local_notification_service.dart';
 import 'package:open_project_time_tracker/app/ui/asset_images.dart';
 import 'app/di/inject.dart';
 
 void main() async {
   configureDependencies();
   await dotenv.load();
+  // TODO: remove notifications setup
+  LocalNotificationService().setup();
   runApp(const MyApp());
 }
 
