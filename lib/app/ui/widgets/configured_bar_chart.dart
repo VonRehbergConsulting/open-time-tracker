@@ -62,14 +62,14 @@ class _BarChart extends StatelessWidget {
             return BarTooltipItem(
               rod.toY.toStringAsFixed(
                   rod.toY.truncateToDouble() == rod.toY ? 0 : 1),
-              ChartTextStyle(),
+              const ChartTextStyle(),
             );
           },
         ),
       );
 
   Widget getTitles(double value, TitleMeta meta) {
-    final style = ChartTextStyle();
+    const style = ChartTextStyle();
     String text = data[value.toInt()].title;
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -102,7 +102,7 @@ class _BarChart extends StatelessWidget {
         show: false,
       );
 
-  LinearGradient get _barsGradient => LinearGradient(
+  LinearGradient get _barsGradient => const LinearGradient(
         colors: [
           Color.fromARGB(255, 45, 102, 201),
           Color.fromRGBO(40, 185, 185, 1),

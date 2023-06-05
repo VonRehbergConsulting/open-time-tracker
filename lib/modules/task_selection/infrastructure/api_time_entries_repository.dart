@@ -4,7 +4,7 @@ import 'package:open_project_time_tracker/modules/task_selection/domain/time_ent
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/time_entries_api.dart';
 
 class ApiTimeEntriesRepository implements TimeEntriesRepository {
-  TimeEntriesApi _restApi;
+  final TimeEntriesApi _restApi;
 
   ApiTimeEntriesRepository(this._restApi);
 

@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
-import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
-import 'package:open_project_time_tracker/modules/calendar/domain/calendar_notifications_service.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_service.dart';
@@ -41,7 +39,7 @@ class TimeEntrySummaryBloc
     this._timeEntriesRepository,
     this._timerRepository,
     this._timerService,
-  ) : super(TimeEntrySummaryState.loading()) {
+  ) : super(const TimeEntrySummaryState.loading()) {
     _init();
   }
 
@@ -71,11 +69,13 @@ class TimeEntrySummaryBloc
         var comments = timeEntries.map((e) => e.comment ?? '').toSet().toList();
         comments.remove('');
         _commentSuggestions = comments;
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
 
       _emitIdleState();
     } else {
-      emitEffect(TimeEntrySummaryEffect.error());
+      emitEffect(const TimeEntrySummaryEffect.error());
     }
   }
 
@@ -89,13 +89,13 @@ class TimeEntrySummaryBloc
   }
 
   Future<void> submit() async {
-    emit(TimeEntrySummaryState.loading());
+    emit(const TimeEntrySummaryState.loading());
     try {
       await _timerService.submit(timeEntry: timeEntry);
-      emitEffect(TimeEntrySummaryEffect.complete());
+      emitEffect(const TimeEntrySummaryEffect.complete());
     } catch (e) {
       _emitIdleState();
-      emitEffect(TimeEntrySummaryEffect.error());
+      emitEffect(const TimeEntrySummaryEffect.error());
     }
   }
 }

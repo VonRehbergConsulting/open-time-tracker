@@ -26,15 +26,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('en'),
-        const Locale('de'),
+      supportedLocales: const [
+        Locale('en'),
+        Locale('de'),
       ],
       title: 'Open Project Time Tracker',
       theme: ThemeData(
@@ -43,12 +43,12 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.black,
           elevation: 0,
         ),
-        scaffoldBackgroundColor: Color.fromARGB(255, 243, 243, 243),
-        colorSchemeSeed: Color.fromRGBO(38, 92, 185, 1),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 243, 243, 243),
+        colorSchemeSeed: const Color.fromRGBO(38, 92, 185, 1),
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      home: AppRouter(),
+      home: const AppRouter(),
     );
   }
 }

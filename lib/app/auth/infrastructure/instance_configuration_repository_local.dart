@@ -3,7 +3,7 @@ import 'package:open_project_time_tracker/app/auth/domain/instance_configuration
 
 class InstanceConfigurationRepositoryLocal
     implements InstanceConfigurationRepository {
-  PreferencesStorage _storage;
+  final PreferencesStorage _storage;
 
   final String baseUrlKey;
   final String clientIdKey;
@@ -14,10 +14,12 @@ class InstanceConfigurationRepositoryLocal
     required this.clientIdKey,
   });
 
+  @override
   Future<String?> get baseUrl {
     return _storage.getString(baseUrlKey);
   }
 
+  @override
   Future<void> setBaseUrl(String? value) async {
     if (value == null) {
       _storage.remove(baseUrlKey);
@@ -26,10 +28,12 @@ class InstanceConfigurationRepositoryLocal
     }
   }
 
+  @override
   Future<String?> get clientID {
     return _storage.getString(clientIdKey);
   }
 
+  @override
   Future<void> setClientID(String? value) async {
     if (value == null) {
       _storage.remove(clientIdKey);

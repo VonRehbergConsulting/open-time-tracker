@@ -6,8 +6,8 @@ import 'package:open_project_time_tracker/app/auth/domain/auth_token_storage.dar
 import '../domain/auth_client.dart';
 
 class OAuthClient implements AuthClient {
-  FlutterAppAuth _flutterAppAuth;
-  AuthClientData _authClientData;
+  final FlutterAppAuth _flutterAppAuth;
+  final AuthClientData _authClientData;
 
   OAuthClient(
     this._flutterAppAuth,

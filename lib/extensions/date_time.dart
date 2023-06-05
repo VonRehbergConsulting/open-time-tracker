@@ -1,6 +1,6 @@
 extension Weekdays on DateTime {
   DateTime get thisMonday {
-    return DateTime(this.year, this.month, this.day - (this.weekday - 1));
+    return DateTime(year, month, day - (weekday - 1));
   }
 
   DateTime get thisTuesday {
@@ -28,8 +28,6 @@ extension Weekdays on DateTime {
   }
 
   bool isSameDate(DateTime other) {
-    return this.year == other.year &&
-        this.month == other.month &&
-        this.day == other.day;
+    return year == other.year && month == other.month && day == other.day;
   }
 }

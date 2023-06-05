@@ -3,8 +3,8 @@ import 'package:open_project_time_tracker/modules/calendar/infrastructure/graph_
 import 'package:open_project_time_tracker/modules/calendar/infrastructure/graph_user_api.dart';
 
 class ApiCalendarRepository implements CalendarRepository {
-  GraphCalendarApi _calendarApi;
-  GraphUserApi _graphUserApi;
+  final GraphCalendarApi _calendarApi;
+  final GraphUserApi _graphUserApi;
 
   ApiCalendarRepository(
     this._calendarApi,
@@ -32,10 +32,10 @@ class ApiCalendarRepository implements CalendarRepository {
       );
 
       final startParsed =
-          DateTime.parse(schedule.value[0].items[0].start.dateTime + 'Z')
+          DateTime.parse('${schedule.value[0].items[0].start.dateTime}Z')
               .toLocal();
       final endParsed =
-          DateTime.parse(schedule.value[0].items[0].end.dateTime + 'Z')
+          DateTime.parse('${schedule.value[0].items[0].end.dateTime}Z')
               .toLocal();
 
       return schedule.value[0].items

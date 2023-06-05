@@ -2,7 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
 
 class BaseUrlInterceptor extends QueuedInterceptor {
-  InstanceConfigurationReadRepository _instanceConfigurationReadRepository;
+  final InstanceConfigurationReadRepository
+      _instanceConfigurationReadRepository;
 
   BaseUrlInterceptor(
     this._instanceConfigurationReadRepository,

@@ -10,6 +10,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
     AuthorizationState, AuthorizationEffect> {
+  const AuthorizationPage({super.key});
+
   @override
   void onEffect(BuildContext context, AuthorizationEffect effect) {
     effect.when(
@@ -44,14 +46,14 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Spacer(flex: 4),
+              const Spacer(flex: 4),
               LayoutBuilder(
-                builder: (context, constraints) => Container(
+                builder: (context, constraints) => SizedBox(
                   width: constraints.maxWidth * 0.3,
                   child: Image.asset(AssetImages.logo),
                 ),
               ),
-              Spacer(flex: 3),
+              const Spacer(flex: 3),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -75,7 +77,7 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
                   ),
                 ],
               ),
-              Spacer(flex: 1),
+              const Spacer(flex: 1),
             ],
           ),
         ),

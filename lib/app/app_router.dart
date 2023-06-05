@@ -25,14 +25,14 @@ class AppRouter {
 
   static void routeToWorkPackagesList(BuildContext context) {
     final route = CupertinoPageRoute(
-      builder: ((context) => WorkPackagesListPage()),
+      builder: ((context) => const WorkPackagesListPage()),
     );
     Navigator.of(context).push(route);
   }
 
   static void routeToTimeEntriesListTemporary(BuildContext context) {
     final route = CupertinoPageRoute(
-      builder: ((context) => TimeEntriesListPage()),
+      builder: ((context) => const TimeEntriesListPage()),
     );
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
@@ -73,21 +73,21 @@ class AppRouter {
 
   static void routeToAuth({required BuildContext context}) {
     final route = CupertinoPageRoute(
-      builder: ((context) => AuthorizationPage()),
+      builder: ((context) => const AuthorizationPage()),
     );
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 
   static void routeToAnalytics(BuildContext context) {
     final route = CupertinoPageRoute(
-      builder: ((context) => AnalyticsPage()),
+      builder: ((context) => const AnalyticsPage()),
     );
     Navigator.of(context).push(route);
   }
 
   static void routeToCalendar(BuildContext context) {
     final route = CupertinoPageRoute(
-      builder: ((context) => CalendarPage()),
+      builder: ((context) => const CalendarPage()),
     );
     Navigator.of(context).push(route);
   }
@@ -95,7 +95,8 @@ class AppRouter {
   static Future<void> showLoading(Future<void> Function() action) async {
     navigatorKey.currentState?.push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => SplashScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const SplashScreen(),
         transitionDuration: Duration.zero,
         reverseTransitionDuration: Duration.zero,
       ),

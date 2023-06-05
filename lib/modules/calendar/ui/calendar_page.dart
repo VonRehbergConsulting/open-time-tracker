@@ -8,6 +8,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../app/ui/widgets/filled_button.dart';
 
 class CalendarPage extends BlocPage<CalendarBloc, CalendarBlocState> {
+  const CalendarPage({super.key});
+
   @override
   void onCreate(BuildContext context, CalendarBloc bloc) {
     super.onCreate(context, bloc);
@@ -21,14 +23,14 @@ class CalendarPage extends BlocPage<CalendarBloc, CalendarBlocState> {
         title: Text(AppLocalizations.of(context).calendar_title),
       ),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ...state.when<List<Widget>>(
               loading: () => [
-                Center(
+                const Center(
                   child: ActivityIndicator(),
                 ),
               ],

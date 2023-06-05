@@ -28,7 +28,7 @@ class ApiTimerService implements TimerService {
       }
       timeEntry = entry;
     }
-    final userId = await _userDataRepository.userID;
+    final userId = _userDataRepository.userID;
     if (userId == null) {
       throw Exception('User ID is null');
     }

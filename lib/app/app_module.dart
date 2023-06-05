@@ -23,7 +23,7 @@ abstract class AppModule {
   @Named('openProject')
   @lazySingleton
   AuthTokenStorage authTokenStorage() => SecureAuthTokenStorage(
-        FlutterSecureStorage(),
+        const FlutterSecureStorage(),
         accessTokenKey: 'accessToken',
         refreshTokenKey: 'refreshToken',
       );
@@ -56,7 +56,7 @@ abstract class AppModule {
     @Named('openProject') AuthClientData authClientData,
   ) =>
       OAuthClient(
-        FlutterAppAuth(),
+        const FlutterAppAuth(),
         authClientData,
       );
 

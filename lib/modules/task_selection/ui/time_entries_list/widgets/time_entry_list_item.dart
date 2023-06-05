@@ -61,10 +61,10 @@ class TimeEntryListItem extends StatelessWidget {
       key: UniqueKey(),
       confirmDismiss: (direction) => _showCloseDialog(context),
       direction: DismissDirection.endToStart,
-      background: Align(
+      background: const Align(
         alignment: Alignment.centerRight,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Icon(
             Icons.delete,
           ),
