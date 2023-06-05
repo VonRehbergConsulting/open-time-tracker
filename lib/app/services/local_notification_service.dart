@@ -5,7 +5,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/di/inject.dart';
-import 'package:open_project_time_tracker/main.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_service.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;
@@ -13,8 +12,11 @@ import 'package:timezone/data/latest.dart' as tzData;
 part 'local_notification_service.g.dart';
 
 class LocalNotificationService {
-  // TODO: inject
-  final _localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final _localNotificationsPlugin;
+
+  LocalNotificationService(
+    this._localNotificationsPlugin,
+  );
 
   static callback(NotificationResponse response) async {
     try {

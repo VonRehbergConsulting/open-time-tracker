@@ -1,4 +1,5 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/api/rest_api_client.dart';
@@ -96,6 +97,13 @@ abstract class AppModule {
       );
 
   @lazySingleton
-  LocalNotificationService localNotificationService() =>
-      LocalNotificationService();
+  LocalNotificationService localNotificationService(
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
+  ) =>
+      LocalNotificationService(
+        flutterLocalNotificationsPlugin,
+      );
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin() =>
+      FlutterLocalNotificationsPlugin();
 }

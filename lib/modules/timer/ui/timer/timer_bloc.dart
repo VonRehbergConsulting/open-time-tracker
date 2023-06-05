@@ -1,7 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
+import 'package:open_project_time_tracker/main.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../calendar/domain/calendar_notifications_service.dart';
 
@@ -45,13 +47,13 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   Future<void> _scheduleNotifications() async {
     try {
       // TODO: make request only if is authorized
+      final context = navigatorKey.currentContext!;
       await _calendarNotificationsService.scheduleNotifications(
-        // TODO: get text from localizations
-        'You have a scheduled meeting',
-        'Click here to open the timer',
+        AppLocalizations.of(context).notifications_calendar_title,
+        AppLocalizations.of(context).notifications_calendar_body,
       );
     } catch (e) {
-      print('Cannot set notifications');
+      print(e);
     }
   }
 

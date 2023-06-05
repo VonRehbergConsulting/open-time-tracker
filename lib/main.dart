@@ -11,7 +11,7 @@ void main() async {
   configureDependencies();
   await dotenv.load();
   // TODO: remove notifications setup
-  LocalNotificationService().setup();
+  inject<LocalNotificationService>().setup();
   runApp(const MyApp());
 }
 
