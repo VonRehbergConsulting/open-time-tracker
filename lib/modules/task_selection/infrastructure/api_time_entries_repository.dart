@@ -14,6 +14,7 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
     DateTime? startDate,
     DateTime? endDate,
     int? workPackageId,
+    int? pageSize,
   }) async {
     List<String> filters = [];
     if (userId != null) {
@@ -30,6 +31,7 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
     final filtersString = '[${filters.join(', ')}]';
     final result = await _restApi.timeEntries(
       filters: filtersString,
+      pageSize: pageSize,
     );
     result.timeEntries.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     final items = result.timeEntries
