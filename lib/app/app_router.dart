@@ -23,11 +23,11 @@ class AppRouter {
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 
-  static void routeToWorkPackagesList(BuildContext context) {
+  static void routeToWorkPackagesList() {
     final route = CupertinoPageRoute(
       builder: ((context) => const WorkPackagesListPage()),
     );
-    Navigator.of(context).push(route);
+    navigatorKey.currentState?.push(route);
   }
 
   static void routeToTimeEntriesListTemporary(BuildContext context) {
