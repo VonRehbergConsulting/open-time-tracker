@@ -73,7 +73,11 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
       timer ??= Timer.periodic(
         const Duration(milliseconds: 500),
         (timer) {
-          context.read<TimerBloc>().updateState();
+          try {
+            context.read<TimerBloc>().updateState();
+          } catch (e) {
+            print(e);
+          }
         },
       );
     } else {

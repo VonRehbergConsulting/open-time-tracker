@@ -22,7 +22,8 @@ class ApiTimerService implements TimerService {
   Future<void> submit({TimeEntry? timeEntry}) async {
     if (timeEntry == null) {
       final entry = await _timerRepository.timeEntry;
-      entry?.hours = await _timerRepository.timeSpent;
+      final timeSpent = await _timerRepository.timeSpent;
+      entry?.hours = Duration(minutes: timeSpent.inSeconds ~/ 60);
       if (entry == null) {
         throw ErrorDescription('Time entry is null');
       }
