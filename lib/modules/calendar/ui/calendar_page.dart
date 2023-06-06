@@ -48,11 +48,24 @@ class CalendarPage extends BlocPage<CalendarBloc, CalendarBlocState> {
     final buttonWidth = deviceSize.width * 0.7;
 
     return [
-      Container(),
-      Text(
-        isAuthorized
-            ? 'Perfect, now you will recieve notifications!'
-            : 'Awesome landing text',
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              isAuthorized
+                  ? AppLocalizations.of(context).calendar_connected_1
+                  : AppLocalizations.of(context).calendar_promo_1,
+            ),
+            const SizedBox(height: 28.0),
+            Text(
+              isAuthorized
+                  ? AppLocalizations.of(context).calendar_connected_2
+                  : AppLocalizations.of(context).calendar_promo_2,
+            ),
+          ],
+        ),
       ),
       Padding(
         padding: const EdgeInsets.only(bottom: 32.0),

@@ -27,11 +27,12 @@ class LocalNotificationService {
           NotificationPayload.fromJson(jsonDecode(response.payload!));
       switch (payload.type) {
         case NotificationType.meeting:
-          AppRouter.showLoading(
+          await AppRouter.showLoading(
             () async {
               await inject<TimerService>().submit();
             },
           );
+          AppRouter.routeToWorkPackagesList();
           break;
         default:
           throw ErrorDescription('Notification type is not provided');

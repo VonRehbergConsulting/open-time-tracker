@@ -129,7 +129,7 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
-        onPressed: () => AppRouter.routeToWorkPackagesList(context),
+        onPressed: () => AppRouter.routeToWorkPackagesList(),
       ),
     );
   }

@@ -46,7 +46,6 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
 
   Future<void> _scheduleNotifications() async {
     try {
-      // TODO: make request only if is authorized
       final context = navigatorKey.currentContext!;
       await _calendarNotificationsService.scheduleNotifications(
         AppLocalizations.of(context).notifications_calendar_title,
