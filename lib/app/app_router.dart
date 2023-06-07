@@ -4,6 +4,7 @@ import 'package:open_project_time_tracker/modules/authorization/ui/authorization
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
 import 'package:open_project_time_tracker/modules/calendar/ui/calendar_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/analytics_page.dart';
+import 'package:open_project_time_tracker/modules/task_selection/ui/notification_selection_list/notification_selection_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_page.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/comment_suggestions_page.dart';
@@ -108,5 +109,12 @@ class AppRouter {
       navigatorKey.currentState?.pop();
       rethrow;
     }
+  }
+
+  static void routeToNotificationSelectionList() {
+    final route = CupertinoPageRoute(
+      builder: ((context) => const NotificationSelectionListPage()),
+    );
+    navigatorKey.currentState?.push(route);
   }
 }

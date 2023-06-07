@@ -5,10 +5,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/navigation/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/asset_images.dart';
 import 'app/di/inject.dart';
+import 'app/services/local_notification_service.dart';
 
 void main() async {
   configureDependencies();
   await dotenv.load();
+  inject<LocalNotificationService>().setup();
   runApp(const MyApp());
 }
 
