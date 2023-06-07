@@ -40,7 +40,8 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
         child: CustomScrollView(
           physics: state.whenOrNull(
-              loading: () => const NeverScrollableScrollPhysics()),
+            loading: () => const NeverScrollableScrollPhysics(),
+          ),
           slivers: [
             SliverAppBar(
               title: Text(AppLocalizations.of(context).time_entries_list_title),

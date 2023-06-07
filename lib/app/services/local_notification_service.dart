@@ -32,7 +32,7 @@ class LocalNotificationService {
               await inject<TimerService>().submit();
             },
           );
-          AppRouter.routeToWorkPackagesList();
+          AppRouter.routeToNotificationSelectionList();
           break;
         default:
           throw ErrorDescription('Notification type is not provided');

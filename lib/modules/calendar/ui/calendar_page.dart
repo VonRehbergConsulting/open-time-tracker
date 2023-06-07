@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart' hide FilledButton;
+import 'package:open_project_time_tracker/app/ui/asset_images.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/promo_text_style.dart';
 import 'package:open_project_time_tracker/modules/calendar/ui/calendar_bloc.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -46,6 +48,7 @@ class CalendarPage extends BlocPage<CalendarBloc, CalendarBlocState> {
   List<Widget> _body(BuildContext context, bool isAuthorized) {
     final deviceSize = MediaQuery.of(context).size;
     final buttonWidth = deviceSize.width * 0.7;
+    const spacing = 32.0;
 
     return [
       Padding(
@@ -53,16 +56,29 @@ class CalendarPage extends BlocPage<CalendarBloc, CalendarBlocState> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SizedBox(
+              height: deviceSize.width * 0.6,
+              child: Image.asset(AssetImages.microsoftCalendar),
+            ),
+            if (isAuthorized)
+              Icon(
+                Icons.check_circle_rounded,
+                color: Colors.green,
+                size: deviceSize.width * 0.08,
+              ),
+            const SizedBox(height: spacing),
             Text(
               isAuthorized
                   ? AppLocalizations.of(context).calendar_connected_1
                   : AppLocalizations.of(context).calendar_promo_1,
+              style: const PromoTextStyle(),
             ),
-            const SizedBox(height: 28.0),
+            const SizedBox(height: spacing),
             Text(
               isAuthorized
                   ? AppLocalizations.of(context).calendar_connected_2
                   : AppLocalizations.of(context).calendar_promo_2,
+              style: const PromoTextStyle(),
             ),
           ],
         ),
