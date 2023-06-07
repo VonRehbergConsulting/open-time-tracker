@@ -23,23 +23,19 @@ abstract class TimerModule {
     TimeEntriesRepository timeEntriesRepository,
     UserDataRepository userDataRepository,
     TimerRepository timerRepository,
-    CalendarNotificationsService calendarNotificationsService,
   ) =>
       ApiTimerService(
         timeEntriesRepository,
         userDataRepository,
         timerRepository,
-        calendarNotificationsService,
       );
 
   @injectable
   TimerBloc timerBloc(
     TimerRepository timerRepository,
-    CalendarNotificationsService calendarNotificationsService,
   ) =>
       TimerBloc(
         timerRepository,
-        calendarNotificationsService,
       );
 
   @injectable

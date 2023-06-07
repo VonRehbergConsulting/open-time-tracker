@@ -1,11 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
-import 'package:open_project_time_tracker/main.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../../calendar/domain/calendar_notifications_service.dart';
 
 part 'timer_bloc.freezed.dart';
 
@@ -27,11 +23,9 @@ class TimerEffect with _$TimerEffect {
 
 class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   final TimerRepository _timerRepository;
-  final CalendarNotificationsService _calendarNotificationsService;
 
   TimerBloc(
     this._timerRepository,
-    this._calendarNotificationsService,
   ) : super(
           const TimerState.idle(
             timeSpent: Duration(),
@@ -40,21 +34,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
             hasStarted: false,
             isActive: false,
           ),
-        ) {
-    _scheduleNotifications();
-  }
-
-  Future<void> _scheduleNotifications() async {
-    try {
-      final context = navigatorKey.currentContext!;
-      await _calendarNotificationsService.scheduleNotifications(
-        AppLocalizations.of(context).notifications_calendar_title,
-        AppLocalizations.of(context).notifications_calendar_body,
-      );
-    } catch (e) {
-      print(e);
-    }
-  }
+        );
 
   Future<void> updateState() async {
     final data = await Future.wait([
@@ -83,7 +63,6 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   }
 
   Future<void> reset() async {
-    await _calendarNotificationsService.removeNotifications();
     await _timerRepository.reset();
   }
 

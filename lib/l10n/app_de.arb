@@ -60,7 +60,7 @@
     "calendar_connected_2": "Sie erhalten Erinnerungen für Ihre Meetings",
 
     "notifications_calendar_title": "Das Meeting beginnt",
-    "notifications_calendar_body": "Öffnen um zu einer anderen Aufgabe zu wechseln",
+    "notifications_calendar_body": "Öffnen um den Timer zu starten",
 
     "notification_selection_list__title": "Aufgabenauswahl",
     "notification_selection_list__time_entries_header": "Heutige Arbeit",
