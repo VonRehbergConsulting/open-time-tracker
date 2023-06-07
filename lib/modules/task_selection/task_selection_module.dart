@@ -17,6 +17,7 @@ import 'package:open_project_time_tracker/modules/task_selection/ui/work_package
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
 import '../../app/api/api_client.dart';
+import '../calendar/domain/calendar_notifications_service.dart';
 
 @module
 abstract class TaskSelectionModule {
@@ -65,6 +66,7 @@ abstract class TaskSelectionModule {
     @Named('openProject') AuthService authService,
     @Named('graph') AuthService graphAuthService,
     TimerRepository timerRepository,
+    CalendarNotificationsService calendarNotificationsService,
   ) =>
       TimeEntriesListBloc(
         timeEntriesRepository,
@@ -73,6 +75,7 @@ abstract class TaskSelectionModule {
         authService,
         graphAuthService,
         timerRepository,
+        calendarNotificationsService,
       );
 
   @injectable

@@ -60,7 +60,7 @@
     "calendar_connected_2": "You will recieve reminders for your meetings",
 
     "notifications_calendar_title": "Meeting is starting",
-    "notifications_calendar_body": "Open to switch to another task",
+    "notifications_calendar_body": "Open to start a timer",
 
     "notification_selection_list__title": "Choose task",
     "notification_selection_list__time_entries_header": "Recent work",
