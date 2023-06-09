@@ -14,8 +14,8 @@ import 'package:open_project_time_tracker/app/services/local_notification_servic
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
 import 'package:open_project_time_tracker/app/auth/infrastructure/instance_configuration_repository_local.dart';
-import 'package:open_project_time_tracker/modules/calendar/infrastructure/local_calendar_notifications_service.dart';
 
+import '../modules/calendar/domain/calendar_notifications_service.dart';
 import 'api/api_client.dart';
 import 'auth/domain/auth_client_data.dart';
 
@@ -88,7 +88,7 @@ abstract class AppModule {
     @Named('openProject') AuthClient authClient,
     @Named('openProject') AuthService authService,
     @Named('graph') AuthService graphAuthService,
-    LocalCalendarNotificationsService localCalendarNotificationsService,
+    CalendarNotificationsService calendarNotificationsService,
   ) =>
       RestApiClient(
         instanceConfigurationRepository,
@@ -97,7 +97,7 @@ abstract class AppModule {
         () {
           graphAuthService.logout();
           authService.logout();
-          localCalendarNotificationsService.removeNotifications();
+          calendarNotificationsService.removeNotifications();
         },
       );
 
