@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
-import 'package:open_project_time_tracker/modules/authorization/domain/instance_configuration_repository.dart';
+import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
 
 part 'instance_configuration_bloc.freezed.dart';
 
@@ -24,7 +24,7 @@ class InstanceConfigurationBloc extends EffectCubit<InstanceConfigurationState,
 
   InstanceConfigurationBloc(
     this._instanceConfigurationRepository,
-  ) : super(InstanceConfigurationState.idle()) {
+  ) : super(const InstanceConfigurationState.idle()) {
     loadData();
   }
 
@@ -43,6 +43,6 @@ class InstanceConfigurationBloc extends EffectCubit<InstanceConfigurationState,
   ) async {
     await _instanceConfigurationRepository.setBaseUrl(baseUrl);
     await _instanceConfigurationRepository.setClientID(cliendID);
-    emitEffect(InstanceConfigurationEffect.complete());
+    emitEffect(const InstanceConfigurationEffect.complete());
   }
 }

@@ -1,5 +1,4 @@
 import 'package:injectable/injectable.dart';
-import 'package:open_project_time_tracker/app/api/rest_api_client.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
@@ -12,15 +11,19 @@ import 'package:open_project_time_tracker/modules/task_selection/infrastructure/
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/time_entries_api.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/work_packages_api.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/analytics_bloc.dart';
+import 'package:open_project_time_tracker/modules/task_selection/ui/notification_selection_list/notification_selection_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
+
+import '../../app/api/api_client.dart';
+import '../calendar/domain/calendar_notifications_service.dart';
 
 @module
 abstract class TaskSelectionModule {
   @lazySingleton
   TimeEntriesApi timeEntriesApi(
-    RestApiClient client,
+    @Named('openProject') ApiClient client,
   ) =>
       TimeEntriesApi(
         client.dio,
@@ -28,7 +31,7 @@ abstract class TaskSelectionModule {
 
   @lazySingleton
   WorkPackagesApi workPackagesApi(
-    RestApiClient client,
+    @Named('openProject') ApiClient client,
   ) =>
       WorkPackagesApi(
         client.dio,
@@ -60,15 +63,19 @@ abstract class TaskSelectionModule {
     TimeEntriesRepository timeEntriesRepository,
     UserDataRepository userDataRepository,
     SettingsRepository settingsRepository,
-    AuthService authService,
+    @Named('openProject') AuthService authService,
+    @Named('graph') AuthService graphAuthService,
     TimerRepository timerRepository,
+    CalendarNotificationsService calendarNotificationsService,
   ) =>
       TimeEntriesListBloc(
         timeEntriesRepository,
         userDataRepository,
         settingsRepository,
         authService,
+        graphAuthService,
         timerRepository,
+        calendarNotificationsService,
       );
 
   @injectable
@@ -91,5 +98,19 @@ abstract class TaskSelectionModule {
       AnalyticsBloc(
         timeEntriesRepository,
         userDataRepository,
+      );
+
+  @injectable
+  NotificationSelectionListBloc notificationSelectionListBloc(
+    WorkPackagesRepository workPackagesRepository,
+    UserDataRepository userDataRepository,
+    TimerRepository timerRepository,
+    TimeEntriesRepository timeEntriesRepository,
+  ) =>
+      NotificationSelectionListBloc(
+        workPackagesRepository,
+        userDataRepository,
+        timerRepository,
+        timeEntriesRepository,
       );
 }

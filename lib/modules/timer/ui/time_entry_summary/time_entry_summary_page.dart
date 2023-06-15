@@ -19,6 +19,8 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
 
   Duration? timeSpent;
 
+  TimeEntrySummaryPage({super.key});
+
   void _showTimePicker(BuildContext context) {
     if (timeSpent != null) {
       final hours = timeSpent!.inHours;
@@ -97,7 +99,7 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
     final buttonWidth = deviceSize.width * 0.7;
 
     final Widget body = state.when(
-      loading: () => Center(child: ActivityIndicator()),
+      loading: () => const Center(child: ActivityIndicator()),
       idle: (
         title,
         projectTitle,

@@ -25,15 +25,15 @@ class WorkPackagesListEffect with _$WorkPackagesListEffect {
 class WorkPackagesListBloc
     extends EffectCubit<WorkPackagesListState, WorkPackagesListEffect>
     with WidgetsBindingObserver {
-  WorkPackagesRepository _workPackagesRepository;
-  UserDataRepository _userDataRepository;
-  TimerRepository _timerRepository;
+  final WorkPackagesRepository _workPackagesRepository;
+  final UserDataRepository _userDataRepository;
+  final TimerRepository _timerRepository;
 
   WorkPackagesListBloc(
     this._workPackagesRepository,
     this._userDataRepository,
     this._timerRepository,
-  ) : super(WorkPackagesListState.loading()) {
+  ) : super(const WorkPackagesListState.loading()) {
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -56,7 +56,7 @@ class WorkPackagesListBloc
   }) async {
     try {
       if (showLoading) {
-        emit(WorkPackagesListState.loading());
+        emit(const WorkPackagesListState.loading());
       }
       final items = await _workPackagesRepository.list(
         userId: _userDataRepository.userID,
@@ -65,10 +65,10 @@ class WorkPackagesListBloc
         workPackages: items,
       ));
     } catch (e) {
-      emit(WorkPackagesListState.idle(
+      emit(const WorkPackagesListState.idle(
         workPackages: [],
       ));
-      emitEffect(WorkPackagesListEffect.error());
+      emitEffect(const WorkPackagesListEffect.error());
     }
   }
 
@@ -80,9 +80,9 @@ class WorkPackagesListBloc
       await _timerRepository.setTimeEntry(
         timeEntry: timeEntry,
       );
-      emitEffect(WorkPackagesListEffect.complete());
+      emitEffect(const WorkPackagesListEffect.complete());
     } catch (e) {
-      emitEffect(WorkPackagesListEffect.error());
+      emitEffect(const WorkPackagesListEffect.error());
     }
   }
 }

@@ -24,9 +24,10 @@ class TimerEffect with _$TimerEffect {
 class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   final TimerRepository _timerRepository;
 
-  TimerBloc(this._timerRepository)
-      : super(
-          TimerState.idle(
+  TimerBloc(
+    this._timerRepository,
+  ) : super(
+          const TimerState.idle(
             timeSpent: Duration(),
             title: '',
             subtitle: '',
@@ -78,7 +79,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   Future<void> finish() async {
     await _timerRepository.stopTimer(stopTime: DateTime.now());
     await updateState();
-    emitEffect(TimerEffect.finish());
+    emitEffect(const TimerEffect.finish());
   }
 
   Future<void> add(Duration duration) async {

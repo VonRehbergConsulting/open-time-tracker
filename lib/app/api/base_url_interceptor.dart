@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:open_project_time_tracker/modules/authorization/domain/instance_configuration_repository.dart';
+import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
 
 class BaseUrlInterceptor extends QueuedInterceptor {
-  InstanceConfigurationRepository _instanceConfigurationRepository;
+  final InstanceConfigurationReadRepository
+      _instanceConfigurationReadRepository;
 
   BaseUrlInterceptor(
-    this._instanceConfigurationRepository,
+    this._instanceConfigurationReadRepository,
   );
 
   @override
@@ -13,7 +14,7 @@ class BaseUrlInterceptor extends QueuedInterceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final baseUrl = await _instanceConfigurationRepository.baseUrl;
+    final baseUrl = await _instanceConfigurationReadRepository.baseUrl;
     if (baseUrl != null) {
       options.baseUrl = '$baseUrl/api/v3/';
     }

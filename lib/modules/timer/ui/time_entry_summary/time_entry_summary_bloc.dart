@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
-import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
+import 'package:open_project_time_tracker/modules/timer/domain/timer_service.dart';
 
 part 'time_entry_summary_bloc.freezed.dart';
 
@@ -28,18 +28,18 @@ class TimeEntrySummaryEffect with _$TimeEntrySummaryEffect {
 
 class TimeEntrySummaryBloc
     extends EffectCubit<TimeEntrySummaryState, TimeEntrySummaryEffect> {
-  TimeEntriesRepository _timeEntriesRepository;
-  UserDataRepository _userDataRepository;
-  TimerRepository _timerRepository;
+  final TimeEntriesRepository _timeEntriesRepository;
+  final TimerRepository _timerRepository;
+  final TimerService _timerService;
 
   late TimeEntry timeEntry;
   List<String> _commentSuggestions = [];
 
   TimeEntrySummaryBloc(
     this._timeEntriesRepository,
-    this._userDataRepository,
     this._timerRepository,
-  ) : super(TimeEntrySummaryState.loading()) {
+    this._timerService,
+  ) : super(const TimeEntrySummaryState.loading()) {
     _init();
   }
 
@@ -69,11 +69,13 @@ class TimeEntrySummaryBloc
         var comments = timeEntries.map((e) => e.comment ?? '').toSet().toList();
         comments.remove('');
         _commentSuggestions = comments;
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
 
       _emitIdleState();
     } else {
-      emitEffect(TimeEntrySummaryEffect.error());
+      emitEffect(const TimeEntrySummaryEffect.error());
     }
   }
 
@@ -87,27 +89,13 @@ class TimeEntrySummaryBloc
   }
 
   Future<void> submit() async {
-    emit(TimeEntrySummaryState.loading());
+    emit(const TimeEntrySummaryState.loading());
     try {
-      final userId = await _userDataRepository.userID;
-      if (userId == null) {
-        throw Exception('User ID is null');
-      }
-      if (timeEntry.id == null) {
-        await _timeEntriesRepository.create(
-          timeEntry: timeEntry,
-          userId: userId,
-        );
-      } else {
-        await _timeEntriesRepository.update(
-          timeEntry: timeEntry,
-        );
-      }
-      await _timerRepository.reset();
-      emitEffect(TimeEntrySummaryEffect.complete());
+      await _timerService.submit(timeEntry: timeEntry);
+      emitEffect(const TimeEntrySummaryEffect.complete());
     } catch (e) {
       _emitIdleState();
-      emitEffect(TimeEntrySummaryEffect.error());
+      emitEffect(const TimeEntrySummaryEffect.error());
     }
   }
 }

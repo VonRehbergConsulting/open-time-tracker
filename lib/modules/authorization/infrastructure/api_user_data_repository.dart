@@ -3,11 +3,12 @@ import 'package:open_project_time_tracker/modules/authorization/infrastructure/u
 
 class ApiUserDataRepository implements UserDataRepository {
   int? _userID;
+  @override
   int? get userID {
     return _userID;
   }
 
-  UserDataApi _restApi;
+  final UserDataApi _restApi;
 
   ApiUserDataRepository(this._restApi);
 

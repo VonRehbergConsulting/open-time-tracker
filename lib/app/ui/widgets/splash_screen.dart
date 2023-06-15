@@ -9,7 +9,7 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: LayoutBuilder(
-          builder: (context, constraints) => Container(
+          builder: (context, constraints) => SizedBox(
             width: constraints.maxWidth * 0.3,
             child: Image.asset(AssetImages.logo),
           ),

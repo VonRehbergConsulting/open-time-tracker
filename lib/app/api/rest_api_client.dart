@@ -5,22 +5,26 @@ import 'package:open_project_time_tracker/app/api/base_url_interceptor.dart';
 import 'package:open_project_time_tracker/app/api/logging_interceptor.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_client.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_token_storage.dart';
-import 'package:open_project_time_tracker/modules/authorization/domain/instance_configuration_repository.dart';
+import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
 
-class RestApiClient {
+import 'api_client.dart';
+
+class RestApiClient implements ApiClient {
   final void Function()? onAuthenticationFailed;
 
-  final InstanceConfigurationRepository _instanceConfigurationRepository;
+  final InstanceConfigurationReadRepository
+      _instanceConfigurationReadRepository;
   final AuthTokenStorage _authTokenStorage;
   final AuthClient _authClient;
 
   RestApiClient(
-    this._instanceConfigurationRepository,
+    this._instanceConfigurationReadRepository,
     this._authTokenStorage,
     this._authClient,
     this.onAuthenticationFailed,
   );
 
+  @override
   Dio get dio {
     final dio = Dio();
 
@@ -37,7 +41,7 @@ class RestApiClient {
           },
         ),
         BaseUrlInterceptor(
-          _instanceConfigurationRepository,
+          _instanceConfigurationReadRepository,
         ),
         AuthInterceptor(
           dio,
