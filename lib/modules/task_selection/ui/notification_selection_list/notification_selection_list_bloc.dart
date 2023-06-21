@@ -70,6 +70,7 @@ class NotificationSelectionListBloc extends EffectCubit<
         ),
         _workPackagesRepository.list(
           userId: _userDataRepository.userID,
+          pageSize: 100,
         ),
       ]);
       emit(NotificationSelectionListState.idle(

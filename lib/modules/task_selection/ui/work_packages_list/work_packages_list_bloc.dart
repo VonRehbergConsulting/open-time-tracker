@@ -60,6 +60,7 @@ class WorkPackagesListBloc
       }
       final items = await _workPackagesRepository.list(
         userId: _userDataRepository.userID,
+        pageSize: 100,
       );
       emit(WorkPackagesListState.idle(
         workPackages: items,
