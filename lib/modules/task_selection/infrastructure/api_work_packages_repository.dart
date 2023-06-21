@@ -7,7 +7,10 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
   ApiWorkPackagesRepository(this.restApi);
 
   @override
-  Future<List<WorkPackage>> list({int? userId}) async {
+  Future<List<WorkPackage>> list({
+    int? userId,
+    int? pageSize,
+  }) async {
     List<String> filters = [];
     if (userId != null) {
       filters.add('{"assignee":{"operator":"=","values":["$userId"]}}');
@@ -15,7 +18,10 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
     filters.add('{"status":{"operator":"!","values":["12", "14"]}}');
     filters.add('{"type":{"operator":"=","values":["1"]}}');
     final filtersString = '[${filters.join(', ')}]';
-    final response = await restApi.timeEntries(filters: filtersString);
+    final response = await restApi.workPackages(
+      filters: filtersString,
+      pageSize: pageSize,
+    );
     return response.workPackages
         .map(
           (e) => WorkPackage(
