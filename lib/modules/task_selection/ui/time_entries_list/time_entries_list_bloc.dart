@@ -1,15 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
-import 'package:open_project_time_tracker/main.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../calendar/domain/calendar_notifications_service.dart';
 
@@ -61,7 +57,6 @@ class TimeEntriesListBloc
     this._calendarNotificationsService,
   ) : super(const TimeEntriesListState.loading()) {
     WidgetsBinding.instance.addObserver(this);
-    _scheduleNotifications();
   }
 
   @override
@@ -148,19 +143,6 @@ class TimeEntriesListBloc
     } catch (e) {
       emitEffect(const TimeEntriesListEffect.error());
       return false;
-    }
-  }
-
-  Future<void> _scheduleNotifications() async {
-    try {
-      await _calendarNotificationsService.removeNotifications();
-      final context = navigatorKey.currentContext!;
-      await _calendarNotificationsService.scheduleNotifications(
-        AppLocalizations.of(context).notifications_calendar_title,
-        AppLocalizations.of(context).notifications_calendar_body,
-      );
-    } catch (e) {
-      print(e);
     }
   }
 }
