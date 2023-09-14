@@ -8,8 +8,9 @@ abstract class WorkPackagesApi {
   factory WorkPackagesApi(Dio dio) = _WorkPackagesApi;
 
   @GET('/work_packages')
-  Future<WorkPackagesListResponse> timeEntries({
+  Future<WorkPackagesListResponse> workPackages({
     @Query('filters') String? filters,
+    @Query('pageSize') int? pageSize,
   });
 }
 

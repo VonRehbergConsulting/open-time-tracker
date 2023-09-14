@@ -1,6 +1,7 @@
 abstract class WorkPackagesRepository {
   Future<List<WorkPackage>> list({
     int? userId,
+    int? pageSize,
   });
 }
 

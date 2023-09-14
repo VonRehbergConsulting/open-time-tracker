@@ -44,6 +44,7 @@ class LocalCalendarNotificationsService
             element.start.millisecondsSinceEpoch > now.millisecondsSinceEpoch,
       )
           .forEach((item) {
+        print('Set notification for ${item.start}');
         _localNotificationService.addNotification(
           title: title,
           body: body,
@@ -58,6 +59,7 @@ class LocalCalendarNotificationsService
 
   @override
   Future<void> removeNotifications() async {
-    _localNotificationService.cancellAllNotifications();
+    await _localNotificationService.cancellAllNotifications();
+    print('Notifications removed');
   }
 }

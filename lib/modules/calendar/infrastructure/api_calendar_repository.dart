@@ -31,19 +31,12 @@ class ApiCalendarRepository implements CalendarRepository {
         body: body,
       );
 
-      final startParsed =
-          DateTime.parse('${schedule.value[0].items[0].start.dateTime}Z')
-              .toLocal();
-      final endParsed =
-          DateTime.parse('${schedule.value[0].items[0].end.dateTime}Z')
-              .toLocal();
-
       return schedule.value[0].items
           .map((e) => CalendarEntry(
                 isRecurring: e.isRecurring,
                 isReminderSet: e.isReminderSet,
-                start: startParsed,
-                end: endParsed,
+                start: DateTime.parse('${e.start.dateTime}Z').toLocal(),
+                end: DateTime.parse('${e.start.dateTime}Z').toLocal(),
                 subject: e.subject,
               ))
           .toList();
