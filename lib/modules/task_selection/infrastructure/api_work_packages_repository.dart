@@ -16,7 +16,6 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
       filters.add('{"assignee":{"operator":"=","values":["$userId"]}}');
     }
     filters.add('{"status":{"operator":"!","values":["12", "14"]}}');
-    filters.add('{"type":{"operator":"=","values":["1"]}}');
     final filtersString = '[${filters.join(', ')}]';
     final response = await restApi.workPackages(
       filters: filtersString,
