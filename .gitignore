@@ -83,7 +83,6 @@ svc-keyfile.json
 # Lockfiles
 
 Podfile.lock
-pubspec.lock
 yarn.lock
 
 # Symbolication related
