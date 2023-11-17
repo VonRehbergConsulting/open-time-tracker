@@ -9,7 +9,7 @@ export 'package:flutter_bloc/flutter_bloc.dart';
 /// BlocPage
 ///
 abstract class BlocPage<B extends BlocBase<S>, S> extends StatelessWidget {
-  const BlocPage({Key? key}) : super(key: key);
+  const BlocPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ abstract class BlocPage<B extends BlocBase<S>, S> extends StatelessWidget {
 ///
 abstract class EffectBlocPage<B extends EffectBlocBase<S, E>, S, E>
     extends StatelessWidget {
-  const EffectBlocPage({Key? key}) : super(key: key);
+  const EffectBlocPage({super.key});
 
   @override
   Widget build(BuildContext context) {

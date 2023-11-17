@@ -16,7 +16,7 @@ abstract class EffectBlocBase<State, Effect> implements BlocBase<State> {
 
 abstract class EffectBloc<Event, State, Effect> extends bloc.Bloc<Event, State>
     implements EffectBlocBase<State, Effect> {
-  EffectBloc(State initialState) : super(initialState);
+  EffectBloc(super.initialState);
 
   StreamController<Effect>? __effectController;
 
@@ -52,7 +52,7 @@ abstract class EffectBloc<Event, State, Effect> extends bloc.Bloc<Event, State>
 
 abstract class EffectCubit<State, Effect> extends bloc.Cubit<State>
     implements EffectBlocBase<State, Effect> {
-  EffectCubit(State initialState) : super(initialState);
+  EffectCubit(super.initialState);
 
   StreamController<Effect>? __effectController;
 
@@ -105,8 +105,8 @@ class EffectBlocConsumer<B extends EffectBlocBase<S, E>, S, E>
     this.listener,
     this.bloc,
     this.buildWhen,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<EffectBlocConsumer<B, S, E>> createState() =>
@@ -191,8 +191,8 @@ class InjectableEffectBlocConsumer<B extends EffectBlocBase<S, E>, S, E>
     this.param1,
     this.param2,
     this.create,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
