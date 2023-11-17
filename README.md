@@ -5,7 +5,7 @@ You can also take a look at *[app's webpage](https://open-time-tracker.com)*
 
 ## How to run it locally
 
-- Install flutter SDK and fvm
+- Install flutter SDK
 - Clone the repository
 - Navigate to the cloned repository
 - Download and install all the required dependencies
@@ -14,7 +14,7 @@ fvm flutter pub get
 ```
 - Generate the required code for the app to run
 ```
-fvm flutter pub run build_runner build --delete-conflicting-outputs
+fvm dart run build_runner build --delete-conflicting-outputs
 ```
 - Connect your Android or iOS device to your computer, or launch an emulator
 - Launch the app on your device or emulator

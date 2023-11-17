@@ -10,11 +10,11 @@ export 'package:provider/provider.dart'
 export 'effect_bloc.dart';
 
 abstract class Bloc<Event, State> extends bloc.Bloc<Event, State> {
-  Bloc(State initialState) : super(initialState);
+  Bloc(super.initialState);
 }
 
 abstract class Cubit<State> extends bloc.Cubit<State> {
-  Cubit(State initialState) : super(initialState);
+  Cubit(super.initialState);
 }
 
 class InjectableBlocConsumer<B extends BlocBase<S>, S> extends StatelessWidget {
@@ -28,7 +28,7 @@ class InjectableBlocConsumer<B extends BlocBase<S>, S> extends StatelessWidget {
   final dynamic param2;
 
   const InjectableBlocConsumer({
-    Key? key,
+    super.key,
     required this.builder,
     this.listener,
     this.buildWhen,
@@ -36,7 +36,7 @@ class InjectableBlocConsumer<B extends BlocBase<S>, S> extends StatelessWidget {
     this.param1,
     this.param2,
     this.create,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
