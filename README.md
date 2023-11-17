@@ -14,7 +14,7 @@ flutter pub get
 ```
 - Generate the required code for the app to run
 ```
-flutter pub run build_runner build --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 ```
 - Connect your Android or iOS device to your computer, or launch an emulator
 - Launch the app on your device or emulator
