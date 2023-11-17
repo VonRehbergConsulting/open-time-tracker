@@ -67,7 +67,8 @@ platform :ios do
     )
 
     cocoapods(
-      clean_install: true
+      clean_install: true,
+      repo_update: true
     )
     
     gym(
