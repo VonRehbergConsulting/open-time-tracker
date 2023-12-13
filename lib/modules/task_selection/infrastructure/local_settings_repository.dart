@@ -1,18 +1,24 @@
+import 'dart:convert';
+
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 
 class LocalSettingsRepository implements SettingsRepository {
   final PreferencesStorage _storage;
 
+  LocalSettingsRepository(
+    this._storage,
+  );
+
   final String _workingHoursKey = 'workingHours';
+  final String _workPackagesStatusFilterKey = 'workPackagesStatusFilter';
+
+  // working hours
 
   static Duration get _defaultWorkingHours {
     return const Duration(hours: 8);
   }
 
-  LocalSettingsRepository(
-    this._storage,
-  );
   @override
   Future<Duration> get workingHours async {
     final string = await _storage.getString(_workingHoursKey);
@@ -29,6 +35,29 @@ class LocalSettingsRepository implements SettingsRepository {
   @override
   Future<void> setWorkingHours(Duration value) async {
     final valueString = value.inMinutes.toString();
-    _storage.setString(_workingHoursKey, valueString);
+    await _storage.setString(_workingHoursKey, valueString);
+  }
+
+  // work packages filter
+
+  static Set<int> get _defaultWorkPackagesStatusFilter {
+    return {2, 7, 9};
+  }
+
+  @override
+  Future<Set<int>> get workPackagesStatusFilter async {
+    try {
+      final string = await _storage.getString(_workPackagesStatusFilterKey);
+      final set = Set.from(json.decode(string!)).cast<int>();
+      return set;
+    } catch (e) {
+      return _defaultWorkPackagesStatusFilter;
+    }
+  }
+
+  @override
+  Future<void> setWorkPackagesStatusFilter(Set<int> value) async {
+    final string = value.toList().toString();
+    await _storage.setString(_workPackagesStatusFilterKey, string);
   }
 }
