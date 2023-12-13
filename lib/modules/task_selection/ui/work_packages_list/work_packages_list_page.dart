@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
@@ -68,6 +69,16 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).work_packages_list_title),
+        actions: [
+          IconButton(
+            onPressed: () => AppRouter.routeToWorkPackagesFilter(
+              comppletion: () {
+                context.read<WorkPackagesListBloc>().reload(showLoading: true);
+              },
+            ),
+            icon: const Icon(Icons.filter_alt_rounded),
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),

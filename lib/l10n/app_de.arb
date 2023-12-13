@@ -26,8 +26,10 @@
     "time_entries_list_change_working_hours": "Arbeitszeit ändern",
     "time_entries_list_empty": "Für heute existieren noch keine Aufzeichnungen",
 
-    "work_packages_list_title": "Aktive Aufgaben",
+    "work_packages_list_title": "Meine aktiven Aufgaben",
     "work_package_list_empty": "Ihnen keine Aufgaben zugewiesen sind",
+
+    "work_packages_filter__title": "Filter",
 
     "analytics_title": "Wochenübersicht",
     "analytics_empty": "Keine Zeit protokolliert für diese Woche",
