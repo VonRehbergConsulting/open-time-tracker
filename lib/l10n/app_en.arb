@@ -26,8 +26,10 @@
     "time_entries_list_change_working_hours": "Change working hours",
     "time_entries_list_empty": "No work logged today",
 
-    "work_packages_list_title": "Active tasks",
+    "work_packages_list_title": "My active tasks",
     "work_package_list_empty": "No tasks assigned to you",
+
+    "work_packages_filter__title": "Filters",
 
     "analytics_title": "Analytics",
     "analytics_empty": "No time logged this week",

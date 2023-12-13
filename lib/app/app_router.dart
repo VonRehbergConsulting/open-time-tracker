@@ -6,6 +6,7 @@ import 'package:open_project_time_tracker/modules/calendar/ui/calendar_page.dart
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/analytics_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/notification_selection_list/notification_selection_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
+import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_filter/work_packages_filter_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_page.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/comment_suggestions_page.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/time_entry_summary/time_entry_summary_page.dart';
@@ -114,6 +115,17 @@ class AppRouter {
   static void routeToNotificationSelectionList() {
     final route = CupertinoPageRoute(
       builder: ((context) => const NotificationSelectionListPage()),
+    );
+    navigatorKey.currentState?.push(route);
+  }
+
+  static void routeToWorkPackagesFilter({
+    Function()? comppletion,
+  }) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => WorkPackagesFilterPage(
+            completion: comppletion,
+          )),
     );
     navigatorKey.currentState?.push(route);
   }

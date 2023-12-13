@@ -10,12 +10,16 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
   Future<List<WorkPackage>> list({
     int? userId,
     int? pageSize,
+    Set<int>? statuses,
   }) async {
     List<String> filters = [];
     if (userId != null) {
       filters.add('{"assignee":{"operator":"=","values":["$userId"]}}');
     }
-    filters.add('{"status":{"operator":"!","values":["12", "14"]}}');
+    if (statuses != null && statuses.isNotEmpty) {
+      final statusesString = statuses.map((e) => '"$e"').join(', ');
+      filters.add('{"status":{"operator":"=","values":[$statusesString]}}');
+    }
     final filtersString = '[${filters.join(', ')}]';
     final response = await restApi.workPackages(
       filters: filtersString,
