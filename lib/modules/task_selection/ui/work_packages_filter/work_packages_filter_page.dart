@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:msh_checkbox/msh_checkbox.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_filter/work_packages_filter_bloc.dart';
@@ -72,15 +73,19 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
             ) =>
                 [
               SliverPadding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 16.0,
+                ),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final status = statuses[index];
                       return _item(
+                        context,
                         isSelected: selectedIds.contains(status.id),
                         text: status.name,
-                        onChanged: (newValue) => context
+                        onToggle: () => context
                             .read<WorkPackagesFilterBloc>()
                             .toggleSelection(status.id),
                       );
@@ -96,16 +101,35 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
     );
   }
 
-  Widget _item({
+  Widget _item(
+    BuildContext context, {
     required bool isSelected,
     required String text,
-    Function(bool?)? onChanged,
+    required void Function() onToggle,
   }) {
-    return CheckboxListTile(
-      title: Text(text),
-      value: isSelected,
-      onChanged: onChanged,
-      checkboxShape: const CircleBorder(),
+    return GestureDetector(
+      onTap: onToggle,
+      child: Container(
+        color: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            children: [
+              MSHCheckbox(
+                value: isSelected,
+                onChanged: (value) => onToggle(),
+                size: 24.0,
+                style: MSHCheckboxStyle.fillScaleCheck,
+                colorConfig: MSHColorConfig.fromCheckedUncheckedDisabled(
+                  checkedColor: Theme.of(context).primaryColor,
+                ),
+              ),
+              const SizedBox(width: 16.0),
+              Text(text),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
