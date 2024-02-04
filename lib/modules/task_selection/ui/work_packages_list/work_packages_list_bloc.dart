@@ -13,7 +13,7 @@ part 'work_packages_list_bloc.freezed.dart';
 class WorkPackagesListState with _$WorkPackagesListState {
   const factory WorkPackagesListState.loading() = _Loading;
   const factory WorkPackagesListState.idle({
-    required List<WorkPackage> workPackages,
+    required Map<String, List<WorkPackage>> workPackages,
   }) = _Idle;
 }
 
@@ -68,11 +68,11 @@ class WorkPackagesListBloc
         statuses: statuses,
       );
       emit(WorkPackagesListState.idle(
-        workPackages: items,
+        workPackages: _groupByProject(items),
       ));
     } catch (e) {
       emit(const WorkPackagesListState.idle(
-        workPackages: [],
+        workPackages: {},
       ));
       emitEffect(const WorkPackagesListEffect.error());
     }
@@ -90,5 +90,19 @@ class WorkPackagesListBloc
     } catch (e) {
       emitEffect(const WorkPackagesListEffect.error());
     }
+  }
+
+  Map<String, List<WorkPackage>> _groupByProject(
+      List<WorkPackage> workPackages) {
+    Map<String, List<WorkPackage>> result = {};
+    for (final workPackage in workPackages) {
+      final project = workPackage.projectTitle;
+      if (result[project] != null) {
+        result[project]!.add(workPackage);
+      } else {
+        result[project] = [workPackage];
+      }
+    }
+    return result;
   }
 }

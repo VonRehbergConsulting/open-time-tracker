@@ -40,7 +40,7 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
       loading: () => const Center(child: ActivityIndicator()),
       idle: (workPackages) => RefreshIndicator(
         onRefresh: () async {
-          context.read<WorkPackagesListBloc>().reload();
+          await context.read<WorkPackagesListBloc>().reload();
         },
         child: workPackages.isEmpty
             ? Center(
@@ -48,21 +48,37 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
                   AppLocalizations.of(context).work_package_list_empty,
                 ),
               )
-            : ListView.builder(
-                itemCount: workPackages.length,
-                itemBuilder: ((_, index) {
-                  final workPackage = workPackages[index];
-                  return WorkPackageListItem(
-                      subject: workPackage.subject,
-                      projectTitle: workPackage.projectTitle,
-                      status: workPackage.status,
-                      priority: workPackage.priority,
-                      action: () {
-                        context
-                            .read<WorkPackagesListBloc>()
-                            .setTimeEntry(workPackage);
-                      });
-                }),
+            : ListView(
+                children: [
+                  ...workPackages.entries.map(
+                    (projectWorkPackages) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            projectWorkPackages.key,
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                        ),
+                        ...projectWorkPackages.value.map(
+                          (workPackage) => WorkPackageListItem(
+                              subject: workPackage.subject,
+                              projectTitle: workPackage.projectTitle,
+                              status: workPackage.status,
+                              priority: workPackage.priority,
+                              action: () {
+                                context
+                                    .read<WorkPackagesListBloc>()
+                                    .setTimeEntry(workPackage);
+                              }),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
       ),
     );
