@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
@@ -34,95 +35,94 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
 
   @override
   Widget buildState(BuildContext context, TimeEntriesListState state) {
-    final Widget body = RefreshIndicator(
-      onRefresh: context.read<TimeEntriesListBloc>().reload,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-        child: CustomScrollView(
-          physics: state.whenOrNull(
-            loading: () => const NeverScrollableScrollPhysics(),
+    final Widget body = Padding(
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+      child: CustomScrollView(
+        physics: state.whenOrNull(
+          loading: () => const NeverScrollableScrollPhysics(),
+        ),
+        slivers: [
+          SliverAppBar(
+            title: Text(AppLocalizations.of(context).time_entries_list_title),
+            leading: IconButton(
+                onPressed: () {
+                  context.read<TimeEntriesListBloc>().unauthorize();
+                },
+                icon: const Icon(Icons.logout)),
+            actions: [
+              IconButton(
+                onPressed: () => AppRouter.routeToCalendar(context),
+                icon: const Icon(Icons.calendar_month_outlined),
+              ),
+              IconButton(
+                onPressed: () => AppRouter.routeToAnalytics(context),
+                icon: const Icon(Icons.bar_chart),
+              ),
+            ],
           ),
-          slivers: [
-            SliverAppBar(
-              title: Text(AppLocalizations.of(context).time_entries_list_title),
-              leading: IconButton(
-                  onPressed: () {
-                    context.read<TimeEntriesListBloc>().unauthorize();
+          CupertinoSliverRefreshControl(
+            onRefresh: context.read<TimeEntriesListBloc>().reload,
+          ),
+          ...state.when<List<Widget>>(
+            loading: () => [
+              const SliverFillRemaining(
+                child: Center(
+                  child: ActivityIndicator(),
+                ),
+              ),
+            ],
+            idle: (timeEntries, workingHours, totalDuration) => [
+              SliverToBoxAdapter(
+                child: TotalTimeListItem(
+                  workingHours,
+                  totalDuration,
+                  (value) {
+                    final duration = Duration(
+                      hours: value.hour,
+                      minutes: value.minute,
+                    );
+                    context
+                        .read<TimeEntriesListBloc>()
+                        .updateWorkingHours(duration);
                   },
-                  icon: const Icon(Icons.logout)),
-              actions: [
-                IconButton(
-                  onPressed: () => AppRouter.routeToCalendar(context),
-                  icon: const Icon(Icons.calendar_month_outlined),
                 ),
-                IconButton(
-                  onPressed: () => AppRouter.routeToAnalytics(context),
-                  icon: const Icon(Icons.bar_chart),
-                ),
-              ],
-            ),
-            ...state.when<List<Widget>>(
-              loading: () => [
-                const SliverFillRemaining(
-                  child: Center(
-                    child: ActivityIndicator(),
-                  ),
-                ),
-              ],
-              idle: (timeEntries, workingHours, totalDuration) => [
-                SliverToBoxAdapter(
-                  child: TotalTimeListItem(
-                    workingHours,
-                    totalDuration,
-                    (value) {
-                      final duration = Duration(
-                        hours: value.hour,
-                        minutes: value.minute,
-                      );
-                      context
-                          .read<TimeEntriesListBloc>()
-                          .updateWorkingHours(duration);
-                    },
-                  ),
-                ),
-                timeEntries.isEmpty
-                    ? SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Center(
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .time_entries_list_empty,
-                          ),
-                        ),
-                      )
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final timeEntry = timeEntries[index];
-                            return TimeEntryListItem(
-                              workPackageSubject: timeEntry.workPackageSubject,
-                              projectTitle: timeEntry.projectTitle,
-                              hours: timeEntry.hours,
-                              comment: timeEntry.comment,
-                              action: () {
-                                context
-                                    .read<TimeEntriesListBloc>()
-                                    .setTimeEntry(timeEntry);
-                              },
-                              dismissAction: () async {
-                                return await context
-                                    .read<TimeEntriesListBloc>()
-                                    .deleteTimeEntry(timeEntry.id!);
-                              },
-                            );
-                          },
-                          childCount: timeEntries.length,
+              ),
+              timeEntries.isEmpty
+                  ? SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text(
+                          AppLocalizations.of(context).time_entries_list_empty,
                         ),
                       ),
-              ],
-            ),
-          ],
-        ),
+                    )
+                  : SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final timeEntry = timeEntries[index];
+                          return TimeEntryListItem(
+                            workPackageSubject: timeEntry.workPackageSubject,
+                            projectTitle: timeEntry.projectTitle,
+                            hours: timeEntry.hours,
+                            comment: timeEntry.comment,
+                            action: () {
+                              context
+                                  .read<TimeEntriesListBloc>()
+                                  .setTimeEntry(timeEntry);
+                            },
+                            dismissAction: () async {
+                              return await context
+                                  .read<TimeEntriesListBloc>()
+                                  .deleteTimeEntry(timeEntry.id!);
+                            },
+                          );
+                        },
+                        childCount: timeEntries.length,
+                      ),
+                    ),
+            ],
+          ),
+        ],
       ),
     );
     return Scaffold(
