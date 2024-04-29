@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/segmented_control.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
 
 import 'widgets/work_package_list_item.dart';
@@ -58,15 +59,13 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: CupertinoSlidingSegmentedControl<WorkPackagesListDataSource>(
+            child: SegmentedControl(
               groupValue: state.dataSource,
               children: {
-                WorkPackagesListDataSource.user: Text(
-                  AppLocalizations.of(context).work_packages_list_tab_user,
-                ),
-                WorkPackagesListDataSource.groups: Text(
-                  AppLocalizations.of(context).work_packages_list_tab_groups,
-                ),
+                WorkPackagesListDataSource.user:
+                    AppLocalizations.of(context).work_packages_list_tab_user,
+                WorkPackagesListDataSource.groups:
+                    AppLocalizations.of(context).work_packages_list_tab_groups,
               },
               onValueChanged: (dataSource) async {
                 await context.read<WorkPackagesListBloc>().reload(
