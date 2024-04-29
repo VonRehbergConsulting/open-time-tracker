@@ -20,9 +20,12 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
     return SliverScreen(
       title: AppLocalizations.of(context).analytics_title,
       onRefresh: context.read<AnalyticsBloc>().reload,
-      isLoading: state.mapOrNull(loading: (state) => true),
+      scrollingEnabled:
+          state.maybeWhen(loading: () => false, orElse: () => true),
       body: state.when(
-          loading: () => [],
+          loading: () => [
+                const SliverScreenLoading(),
+              ],
           idle: (
             dailyHours,
             projectHours,

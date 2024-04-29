@@ -57,9 +57,12 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
         child: const Icon(Icons.add),
         onPressed: () => AppRouter.routeToWorkPackagesList(),
       ),
-      isLoading: state.mapOrNull(loading: (state) => true),
+      scrollingEnabled:
+          state.maybeWhen(loading: () => false, orElse: () => true),
       body: state.when<List<Widget>>(
-        loading: () => [],
+        loading: () => [
+          const SliverScreenLoading(),
+        ],
         idle: (timeEntries, workingHours, totalDuration) => [
           SliverToBoxAdapter(
             child: TotalTimeListItem(

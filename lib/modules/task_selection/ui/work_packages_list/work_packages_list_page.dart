@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
@@ -48,49 +49,83 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
           icon: const Icon(Icons.filter_alt_rounded),
         )
       ],
-      isLoading: state.whenOrNull(loading: () => true),
+      scrollingEnabled:
+          state.maybeWhen(loading: (_) => false, orElse: () => true),
       onRefresh: () async {
         await context.read<WorkPackagesListBloc>().reload();
       },
-      body: state.when(
-        loading: () => [],
-        idle: (workPackages) => [
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                ...workPackages.entries.map(
-                  (projectWorkPackages) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          projectWorkPackages.key,
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                      ...projectWorkPackages.value.map(
-                        (workPackage) => WorkPackageListItem(
-                            subject: workPackage.subject,
-                            projectTitle: workPackage.projectTitle,
-                            status: workPackage.status,
-                            priority: workPackage.priority,
-                            action: () {
-                              context
-                                  .read<WorkPackagesListBloc>()
-                                  .setTimeEntry(workPackage);
-                            }),
-                      ),
-                    ],
-                  ),
+      body: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: CupertinoSlidingSegmentedControl<WorkPackagesListDataSource>(
+              groupValue: state.dataSource,
+              children: {
+                WorkPackagesListDataSource.user: Text(
+                  AppLocalizations.of(context).work_packages_list_tab_user,
                 ),
-              ],
+                WorkPackagesListDataSource.groups: Text(
+                  AppLocalizations.of(context).work_packages_list_tab_groups,
+                ),
+              },
+              onValueChanged: (dataSource) async {
+                await context.read<WorkPackagesListBloc>().reload(
+                      showLoading: true,
+                      newDataSource: dataSource,
+                    );
+              },
             ),
           ),
-        ],
-      ),
+        ),
+        ...state.when(
+          loading: (_) => [
+            const SliverScreenLoading(),
+          ],
+          idle: (
+            workPackages,
+            dataSource,
+          ) =>
+              [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  ...workPackages.entries.map(
+                    (projectWorkPackages) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            projectWorkPackages.key,
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                        ),
+                        ...projectWorkPackages.value.map(
+                          (workPackage) => WorkPackageListItem(
+                              subject: workPackage.subject,
+                              projectTitle: workPackage.projectTitle,
+                              status: workPackage.status,
+                              priority: workPackage.priority,
+                              action: () {
+                                context
+                                    .read<WorkPackagesListBloc>()
+                                    .setTimeEntry(workPackage);
+                              }),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

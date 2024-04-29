@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/groups_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/work_packages_repository.dart';
@@ -9,11 +10,19 @@ import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.
 
 part 'work_packages_list_bloc.freezed.dart';
 
+enum WorkPackagesListDataSource {
+  user,
+  groups,
+}
+
 @freezed
 class WorkPackagesListState with _$WorkPackagesListState {
-  const factory WorkPackagesListState.loading() = _Loading;
+  const factory WorkPackagesListState.loading({
+    required WorkPackagesListDataSource dataSource,
+  }) = _Loading;
   const factory WorkPackagesListState.idle({
     required Map<String, List<WorkPackage>> workPackages,
+    required WorkPackagesListDataSource dataSource,
   }) = _Idle;
 }
 
@@ -30,13 +39,19 @@ class WorkPackagesListBloc
   final UserDataRepository _userDataRepository;
   final TimerRepository _timerRepository;
   final SettingsRepository _settingsRepository;
+  final GroupsRepository _groupsRepository;
+
+  WorkPackagesListDataSource _dataSource = WorkPackagesListDataSource.user;
 
   WorkPackagesListBloc(
     this._workPackagesRepository,
     this._userDataRepository,
     this._timerRepository,
     this._settingsRepository,
-  ) : super(const WorkPackagesListState.loading()) {
+    this._groupsRepository,
+  ) : super(const WorkPackagesListState.loading(
+          dataSource: WorkPackagesListDataSource.user,
+        )) {
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -56,23 +71,37 @@ class WorkPackagesListBloc
 
   Future<void> reload({
     bool showLoading = false,
+    WorkPackagesListDataSource? newDataSource,
   }) async {
     try {
-      if (showLoading) {
-        emit(const WorkPackagesListState.loading());
+      if (newDataSource != null) {
+        _dataSource = newDataSource;
       }
+      if (showLoading) {
+        emit(WorkPackagesListState.loading(
+          dataSource: _dataSource,
+        ));
+      }
+
       final statuses = await _settingsRepository.workPackagesStatusFilter;
-      final items = await _workPackagesRepository.list(
-        userId: _userDataRepository.userID,
-        pageSize: 100,
-        statuses: statuses,
-      );
+      final List<WorkPackage> items;
+      switch (_dataSource) {
+        case WorkPackagesListDataSource.user:
+          items = await _fetchUserWorkPackages(statuses);
+          break;
+        case WorkPackagesListDataSource.groups:
+          items = await _fetchGroupsWorkPackages(statuses);
+          break;
+      }
+
       emit(WorkPackagesListState.idle(
         workPackages: _groupByProject(items),
+        dataSource: _dataSource,
       ));
     } catch (e) {
-      emit(const WorkPackagesListState.idle(
+      emit(WorkPackagesListState.idle(
         workPackages: {},
+        dataSource: _dataSource,
       ));
       emitEffect(const WorkPackagesListEffect.error());
     }
@@ -90,6 +119,34 @@ class WorkPackagesListBloc
     } catch (e) {
       emitEffect(const WorkPackagesListEffect.error());
     }
+  }
+
+  Future<List<WorkPackage>> _fetchUserWorkPackages(Set<int> statuses) async {
+    return await _workPackagesRepository.list(
+      userId: _userDataRepository.userID,
+      pageSize: 100,
+      statuses: statuses,
+    );
+  }
+
+  Future<List<WorkPackage>> _fetchGroupsWorkPackages(Set<int> statuses) async {
+    final groups = await _groupsRepository.list(
+      pageSize: 100,
+    );
+    // endpoint doesn't support filtering, so it's being filtered here
+    final filteredGroups = groups.where(
+        (element) => element.memberIds.contains(_userDataRepository.userID));
+
+    List<WorkPackage> result = [];
+    for (var group in filteredGroups) {
+      final response = await _workPackagesRepository.list(
+        userId: group.id,
+        pageSize: 100,
+        statuses: statuses,
+      );
+      result.addAll(response);
+    }
+    return result;
   }
 
   Map<String, List<WorkPackage>> _groupByProject(

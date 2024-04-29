@@ -4,7 +4,7 @@ import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart
 
 class SliverScreen extends StatelessWidget {
   final Widget? floatingActionButton;
-  final bool? isLoading;
+  final bool scrollingEnabled;
   final String? title;
   final Widget? leading;
   final List<Widget>? actions;
@@ -15,7 +15,7 @@ class SliverScreen extends StatelessWidget {
   const SliverScreen({
     super.key,
     this.floatingActionButton,
-    this.isLoading,
+    this.scrollingEnabled = true,
     this.title,
     this.leading,
     this.actions,
@@ -27,7 +27,7 @@ class SliverScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scaffoldColor = this.backgroundColor ?? theme.scaffoldBackgroundColor;
+    final scaffoldColor = backgroundColor ?? theme.scaffoldBackgroundColor;
 
     return Scaffold(
       backgroundColor: scaffoldColor,
@@ -36,7 +36,7 @@ class SliverScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
         child: CustomScrollView(
           physics:
-              isLoading == true ? const NeverScrollableScrollPhysics() : null,
+              scrollingEnabled ? null : const NeverScrollableScrollPhysics(),
           scrollBehavior: const CupertinoScrollBehavior(),
           slivers: [
             if (title != null || leading != null || actions != null)
@@ -50,8 +50,7 @@ class SliverScreen extends StatelessWidget {
               CupertinoSliverRefreshControl(
                 onRefresh: onRefresh,
               ),
-            if (isLoading == true) const SliverScreenLoading(),
-            if (isLoading != true && body != null) ...body!,
+            if (body != null) ...body!,
           ],
         ),
       ),

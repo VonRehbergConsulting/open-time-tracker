@@ -51,9 +51,12 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
           icon: const Icon(Icons.done),
         ),
       ],
-      isLoading: state.mapOrNull(loading: (state) => true),
+      scrollingEnabled:
+          state.maybeWhen(loading: () => false, orElse: () => true),
       body: state.when(
-        loading: () => [],
+        loading: () => [
+          const SliverScreenLoading(),
+        ],
         selection: (statuses, selectedIds) => [
           SliverPadding(
             padding: const EdgeInsets.symmetric(
