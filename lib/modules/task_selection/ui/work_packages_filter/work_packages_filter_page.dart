@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:msh_checkbox/msh_checkbox.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
-import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_filter/work_packages_filter_bloc.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -42,59 +42,40 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
 
   @override
   Widget buildState(BuildContext context, WorkpackagesFilterState state) {
-    return Scaffold(
-      body: CustomScrollView(
-        physics: state.whenOrNull(
-          loading: () => const NeverScrollableScrollPhysics(),
+    return SliverScreen(
+      backgroundColor: Colors.white,
+      title: AppLocalizations.of(context).work_packages_filter__title,
+      actions: [
+        IconButton(
+          onPressed: context.read<WorkPackagesFilterBloc>().submit,
+          icon: const Icon(Icons.done),
         ),
-        slivers: [
-          SliverAppBar(
-            title:
-                Text(AppLocalizations.of(context).work_packages_filter__title),
-            actions: [
-              IconButton(
-                onPressed: context.read<WorkPackagesFilterBloc>().submit,
-                icon: const Icon(Icons.done),
+      ],
+      isLoading: state.mapOrNull(loading: (state) => true),
+      body: state.when(
+        loading: () => [],
+        selection: (statuses, selectedIds) => [
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10.0,
+              horizontal: 24.0,
+            ),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final status = statuses[index];
+                  return _item(
+                    context,
+                    isSelected: selectedIds.contains(status.id),
+                    text: status.name,
+                    onToggle: () => context
+                        .read<WorkPackagesFilterBloc>()
+                        .toggleSelection(status.id),
+                  );
+                },
+                childCount: statuses.length,
               ),
-            ],
-          ),
-          ...state.when<List<Widget>>(
-            loading: () => [
-              const SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(
-                  child: ActivityIndicator(),
-                ),
-              ),
-            ],
-            selection: (
-              statuses,
-              selectedIds,
-            ) =>
-                [
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 16.0,
-                ),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final status = statuses[index];
-                      return _item(
-                        context,
-                        isSelected: selectedIds.contains(status.id),
-                        text: status.name,
-                        onToggle: () => context
-                            .read<WorkPackagesFilterBloc>()
-                            .toggleSelection(status.id),
-                      );
-                    },
-                    childCount: statuses.length,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),

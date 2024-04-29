@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
-import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
 
 import 'widgets/work_package_list_item.dart';
@@ -36,69 +36,60 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
 
   @override
   Widget buildState(BuildContext context, WorkPackagesListState state) {
-    final Widget body = state.when(
-      loading: () => const Center(child: ActivityIndicator()),
-      idle: (workPackages) => RefreshIndicator(
-        onRefresh: () async {
-          await context.read<WorkPackagesListBloc>().reload();
-        },
-        child: workPackages.isEmpty
-            ? Center(
-                child: Text(
-                  AppLocalizations.of(context).work_package_list_empty,
-                ),
-              )
-            : ListView(
-                children: [
-                  ...workPackages.entries.map(
-                    (projectWorkPackages) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            projectWorkPackages.key,
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                            ),
+    return SliverScreen(
+      title: AppLocalizations.of(context).work_packages_list_title,
+      actions: [
+        IconButton(
+          onPressed: () => AppRouter.routeToWorkPackagesFilter(
+            comppletion: () {
+              context.read<WorkPackagesListBloc>().reload(showLoading: true);
+            },
+          ),
+          icon: const Icon(Icons.filter_alt_rounded),
+        )
+      ],
+      isLoading: state.whenOrNull(loading: () => true),
+      onRefresh: () async {
+        await context.read<WorkPackagesListBloc>().reload();
+      },
+      body: state.when(
+        loading: () => [],
+        idle: (workPackages) => [
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                ...workPackages.entries.map(
+                  (projectWorkPackages) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          projectWorkPackages.key,
+                          style: const TextStyle(
+                            fontSize: 18.0,
                           ),
                         ),
-                        ...projectWorkPackages.value.map(
-                          (workPackage) => WorkPackageListItem(
-                              subject: workPackage.subject,
-                              projectTitle: workPackage.projectTitle,
-                              status: workPackage.status,
-                              priority: workPackage.priority,
-                              action: () {
-                                context
-                                    .read<WorkPackagesListBloc>()
-                                    .setTimeEntry(workPackage);
-                              }),
-                        ),
-                      ],
-                    ),
+                      ),
+                      ...projectWorkPackages.value.map(
+                        (workPackage) => WorkPackageListItem(
+                            subject: workPackage.subject,
+                            projectTitle: workPackage.projectTitle,
+                            status: workPackage.status,
+                            priority: workPackage.priority,
+                            action: () {
+                              context
+                                  .read<WorkPackagesListBloc>()
+                                  .setTimeEntry(workPackage);
+                            }),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-      ),
-    );
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).work_packages_list_title),
-        actions: [
-          IconButton(
-            onPressed: () => AppRouter.routeToWorkPackagesFilter(
-              comppletion: () {
-                context.read<WorkPackagesListBloc>().reload(showLoading: true);
-              },
+                ),
+              ],
             ),
-            icon: const Icon(Icons.filter_alt_rounded),
-          )
+          ),
         ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: body,
       ),
     );
   }
