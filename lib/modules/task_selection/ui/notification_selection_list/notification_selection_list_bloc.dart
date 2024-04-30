@@ -69,7 +69,6 @@ class NotificationSelectionListBloc extends EffectCubit<
           endDate: DateTime.now(),
         ),
         _workPackagesRepository.list(
-          userId: _userDataRepository.userID,
           pageSize: 100,
         ),
       ]);

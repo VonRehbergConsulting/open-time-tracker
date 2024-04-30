@@ -2,16 +2,13 @@ import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
-import 'package:open_project_time_tracker/modules/task_selection/domain/groups_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/statuses_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/work_packages_repository.dart';
-import 'package:open_project_time_tracker/modules/task_selection/infrastructure/api_groups_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/api_statuses_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/api_time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/api_work_packages_repository.dart';
-import 'package:open_project_time_tracker/modules/task_selection/infrastructure/groups_api.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/local_settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/statuses_api.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/time_entries_api.dart';
@@ -53,14 +50,6 @@ abstract class TaskSelectionModule {
       );
 
   @lazySingleton
-  GroupsApi groupsApi(
-    @Named('openProject') ApiClient client,
-  ) =>
-      GroupsApi(
-        client.dio,
-      );
-
-  @lazySingleton
   TimeEntriesRepository timeEntriesRepository(
     TimeEntriesApi timeEntriesApi,
   ) =>
@@ -89,14 +78,6 @@ abstract class TaskSelectionModule {
         PreferencesStorage(),
       );
 
-  @lazySingleton
-  GroupsRepository groupsRepository(
-    GroupsApi groupsApi,
-  ) =>
-      ApiGroupsRepository(
-        groupsApi,
-      );
-
   @injectable
   TimeEntriesListBloc timeEntriesListBloc(
     TimeEntriesRepository timeEntriesRepository,
@@ -120,17 +101,13 @@ abstract class TaskSelectionModule {
   @injectable
   WorkPackagesListBloc workPackagesListBloc(
     WorkPackagesRepository workPackagesRepository,
-    UserDataRepository userDataRepository,
     TimerRepository timerRepository,
     SettingsRepository settingsRepository,
-    GroupsRepository groupsRepository,
   ) =>
       WorkPackagesListBloc(
         workPackagesRepository,
-        userDataRepository,
         timerRepository,
         settingsRepository,
-        groupsRepository,
       );
 
   @injectable
