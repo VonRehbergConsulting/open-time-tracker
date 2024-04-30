@@ -75,7 +75,7 @@ class AppRouterBloc extends Cubit<AppRouterState> {
   Future<void> _processAuthorized() async {
     try {
       emit(AppRouterState.loading());
-      await _getUserDataRepositiry().loadUserID();
+      await _getUserDataRepositiry().userId();
       emit(AppRouterState.authorized());
     } catch (e) {
       emit(AppRouterState.error());

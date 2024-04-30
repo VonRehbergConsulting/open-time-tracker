@@ -2,20 +2,14 @@ import 'package:open_project_time_tracker/modules/authorization/domain/user_data
 import 'package:open_project_time_tracker/modules/authorization/infrastructure/user_data_api.dart';
 
 class ApiUserDataRepository implements UserDataRepository {
-  int? _userID;
-  @override
-  int? get userID {
-    return _userID;
-  }
-
   final UserDataApi _restApi;
 
   ApiUserDataRepository(this._restApi);
 
   @override
-  Future<int?> loadUserID() async {
+  Future<int> userId() async {
+    // TODO: caching and clearing cache in case of unauthorization
     final response = await _restApi.getUserData();
-    _userID = response.id;
-    return _userID;
+    return response.id;
   }
 }

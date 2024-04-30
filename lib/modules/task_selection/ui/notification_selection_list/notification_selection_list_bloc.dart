@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 
-import '../../../authorization/domain/user_data_repository.dart';
 import '../../../timer/domain/timer_repository.dart';
 import '../../domain/time_entries_repository.dart';
 import '../../domain/work_packages_repository.dart';
@@ -28,13 +27,11 @@ class NotificationSelectionListBloc extends EffectCubit<
     NotificationSelectionListState,
     NotificationSelectionListEffect> with WidgetsBindingObserver {
   final WorkPackagesRepository _workPackagesRepository;
-  final UserDataRepository _userDataRepository;
   final TimerRepository _timerRepository;
   final TimeEntriesRepository _timeEntriesRepository;
 
   NotificationSelectionListBloc(
     this._workPackagesRepository,
-    this._userDataRepository,
     this._timerRepository,
     this._timeEntriesRepository,
   ) : super(const NotificationSelectionListState.loading()) {
@@ -64,7 +61,7 @@ class NotificationSelectionListBloc extends EffectCubit<
       }
       final data = await Future.wait([
         _timeEntriesRepository.list(
-          userId: _userDataRepository.userID,
+          userId: 'me',
           startDate: DateTime.now(),
           endDate: DateTime.now(),
         ),

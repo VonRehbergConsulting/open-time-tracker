@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
-import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
@@ -30,7 +29,6 @@ class TimeEntriesListBloc
     extends EffectCubit<TimeEntriesListState, TimeEntriesListEffect>
     with WidgetsBindingObserver {
   final TimeEntriesRepository _timeEntriesRepository;
-  final UserDataRepository _userDataRepository;
   final SettingsRepository _settingsRepository;
   final AuthService _authService;
   final AuthService _graphAuthService;
@@ -49,7 +47,6 @@ class TimeEntriesListBloc
 
   TimeEntriesListBloc(
     this._timeEntriesRepository,
-    this._userDataRepository,
     this._settingsRepository,
     this._authService,
     this._graphAuthService,
@@ -81,7 +78,7 @@ class TimeEntriesListBloc
         emit(const TimeEntriesListState.loading());
       }
       items = await _timeEntriesRepository.list(
-        userId: _userDataRepository.userID,
+        userId: 'me',
         startDate: DateTime.now(),
         endDate: DateTime.now(),
       );
