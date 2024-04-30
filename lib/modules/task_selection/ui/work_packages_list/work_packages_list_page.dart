@@ -53,55 +53,49 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
       onRefresh: () async {
         await context.read<WorkPackagesListBloc>().reload();
       },
-      body: [
-        ...state.when(
-          loading: () => [
-            const SliverScreenLoading(),
-          ],
-          idle: (
-            workPackages,
-          ) =>
-              [
+      body: state.when(
+        loading: () => const SliverScreenLoading(),
+        idle: (
+          workPackages,
+        ) =>
             SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  ...workPackages.entries.map(
-                    (projectWorkPackages) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            projectWorkPackages.key,
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                            ),
-                          ),
+          child: Column(
+            children: [
+              ...workPackages.entries.map(
+                (projectWorkPackages) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        projectWorkPackages.key,
+                        style: const TextStyle(
+                          fontSize: 18.0,
                         ),
-                        ...projectWorkPackages.value.map(
-                          (workPackage) => WorkPackageListItem(
-                              subject: workPackage.subject,
-                              projectTitle: workPackage.projectTitle,
-                              status: workPackage.status,
-                              priority: workPackage.priority,
-                              action: () {
-                                context
-                                    .read<WorkPackagesListBloc>()
-                                    .setTimeEntry(workPackage);
-                              }),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 16.0,
-                  ),
-                ],
+                    ...projectWorkPackages.value.map(
+                      (workPackage) => WorkPackageListItem(
+                          subject: workPackage.subject,
+                          projectTitle: workPackage.projectTitle,
+                          status: workPackage.status,
+                          priority: workPackage.priority,
+                          action: () {
+                            context
+                                .read<WorkPackagesListBloc>()
+                                .setTimeEntry(workPackage);
+                          }),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 16.0,
+              ),
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 }

@@ -9,7 +9,7 @@ class SliverScreen extends StatelessWidget {
   final Widget? leading;
   final List<Widget>? actions;
   final Future<void> Function()? onRefresh;
-  final List<Widget>? body;
+  final Widget? body;
   final Color? backgroundColor;
 
   const SliverScreen({
@@ -32,27 +32,27 @@ class SliverScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: scaffoldColor,
       floatingActionButton: floatingActionButton,
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-        child: CustomScrollView(
-          physics:
-              scrollingEnabled ? null : const NeverScrollableScrollPhysics(),
-          scrollBehavior: const CupertinoScrollBehavior(),
-          slivers: [
-            if (title != null || leading != null || actions != null)
-              SliverAppBar(
-                backgroundColor: scaffoldColor,
-                title: title != null ? Text(title!) : null,
-                leading: leading,
-                actions: actions,
-              ),
-            if (onRefresh != null)
-              CupertinoSliverRefreshControl(
-                onRefresh: onRefresh,
-              ),
-            if (body != null) ...body!,
-          ],
-        ),
+      body: CustomScrollView(
+        physics: scrollingEnabled ? null : const NeverScrollableScrollPhysics(),
+        scrollBehavior: const CupertinoScrollBehavior(),
+        slivers: [
+          if (title != null || leading != null || actions != null)
+            SliverAppBar(
+              backgroundColor: scaffoldColor,
+              title: title != null ? Text(title!) : null,
+              leading: leading,
+              actions: actions,
+            ),
+          if (onRefresh != null)
+            CupertinoSliverRefreshControl(
+              onRefresh: onRefresh,
+            ),
+          if (body != null)
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              sliver: body!,
+            ),
+        ],
       ),
     );
   }

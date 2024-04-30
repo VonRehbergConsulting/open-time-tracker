@@ -59,11 +59,10 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
       ),
       scrollingEnabled:
           state.maybeWhen(loading: () => false, orElse: () => true),
-      body: state.when<List<Widget>>(
-        loading: () => [
-          const SliverScreenLoading(),
-        ],
-        idle: (timeEntries, workingHours, totalDuration) => [
+      body: state.when(
+        loading: () => const SliverScreenLoading(),
+        idle: (timeEntries, workingHours, totalDuration) =>
+            SliverMainAxisGroup(slivers: [
           SliverToBoxAdapter(
             child: TotalTimeListItem(
               workingHours,
@@ -107,7 +106,7 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
                     childCount: timeEntries.length,
                   ),
                 ),
-        ],
+        ]),
       ),
     );
   }

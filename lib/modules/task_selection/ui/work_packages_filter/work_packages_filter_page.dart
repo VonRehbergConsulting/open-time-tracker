@@ -54,33 +54,29 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
       scrollingEnabled:
           state.maybeWhen(loading: () => false, orElse: () => true),
       body: state.when(
-        loading: () => [
-          const SliverScreenLoading(),
-        ],
-        selection: (statuses, selectedIds) => [
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 10.0,
-              horizontal: 24.0,
-            ),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final status = statuses[index];
-                  return _item(
-                    context,
-                    isSelected: selectedIds.contains(status.id),
-                    text: status.name,
-                    onToggle: () => context
-                        .read<WorkPackagesFilterBloc>()
-                        .toggleSelection(status.id),
-                  );
-                },
-                childCount: statuses.length,
-              ),
+        loading: () => const SliverScreenLoading(),
+        selection: (statuses, selectedIds) => SliverPadding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 10.0,
+            horizontal: 16.0,
+          ),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final status = statuses[index];
+                return _item(
+                  context,
+                  isSelected: selectedIds.contains(status.id),
+                  text: status.name,
+                  onToggle: () => context
+                      .read<WorkPackagesFilterBloc>()
+                      .toggleSelection(status.id),
+                );
+              },
+              childCount: statuses.length,
             ),
           ),
-        ],
+        ),
       ),
     );
   }
