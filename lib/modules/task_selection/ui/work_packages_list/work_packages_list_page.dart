@@ -61,16 +61,25 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
             SliverToBoxAdapter(
           child: Column(
             children: [
+              const SizedBox(
+                height: 8.0,
+              ),
               ...workPackages.entries.map(
                 (projectWorkPackages) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        projectWorkPackages.key,
-                        style: const TextStyle(
-                          fontSize: 18.0,
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4.0,
+                          horizontal: 8.0,
+                        ),
+                        child: Text(
+                          projectWorkPackages.key,
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                          ),
                         ),
                       ),
                     ),
@@ -86,11 +95,11 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
                                 .setTimeEntry(workPackage);
                           }),
                     ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
                   ],
                 ),
-              ),
-              const SizedBox(
-                height: 16.0,
               ),
             ],
           ),

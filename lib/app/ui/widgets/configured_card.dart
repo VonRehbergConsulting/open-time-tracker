@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ConfiguredCard extends StatelessWidget {
   final Widget child;
+
   const ConfiguredCard({
     super.key,
     required this.child,
