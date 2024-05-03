@@ -63,8 +63,7 @@ platform :ios do
       readonly: false,
       keychain_name: KEYCHAIN_NAME,
       keychain_password: KEYCHAIN_PASSWORD,
-      api_key: api_key,
-      generate_apple_certs: true
+      api_key: api_key
     )
 
     cocoapods(
