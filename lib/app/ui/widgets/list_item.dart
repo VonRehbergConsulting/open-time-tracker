@@ -9,6 +9,7 @@ class ListItem extends StatelessWidget {
   final String? comment;
   final String? trailing;
   final Function action;
+  final Widget? commentTrailing;
 
   // Init
   const ListItem({
@@ -18,6 +19,7 @@ class ListItem extends StatelessWidget {
     required this.comment,
     required this.trailing,
     required this.action,
+    this.commentTrailing,
   });
 
   // Lifecycle
@@ -54,11 +56,19 @@ class ListItem extends StatelessWidget {
               SizedBox(height: subtitle != null ? 4 : 0),
               if (subtitle != null) Text(subtitle!),
               SizedBox(height: comment != null ? 4 : 0),
-              if (comment != null)
-                Text(
-                  comment!,
-                  style: const TextStyle(color: Colors.black54),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (comment != null)
+                    Expanded(
+                      child: Text(
+                        comment!,
+                        style: const TextStyle(color: Colors.black54),
+                      ),
+                    ),
+                  if (commentTrailing != null) commentTrailing!,
+                ],
+              ),
             ],
           ),
         ),

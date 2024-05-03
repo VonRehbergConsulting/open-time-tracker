@@ -31,7 +31,16 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
               projectTitle: e.projectTitle,
               projectHref: e.projectHref,
               priority: e.priority,
-              status: e.status),
+              status: e.status,
+              assignee: WorkPackageAssignee(
+                type: switch (e.assignee.type) {
+                  WorkPackageAssigneeTypeResponse.user =>
+                    WorkPackageAssigneeType.user,
+                  WorkPackageAssigneeTypeResponse.group =>
+                    WorkPackageAssigneeType.group,
+                },
+                title: e.assignee.title,
+              )),
         )
         .toList();
   }

@@ -4,6 +4,7 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
 
+import '../../domain/work_packages_repository.dart';
 import 'widgets/work_package_list_item.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -89,6 +90,12 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
                           projectTitle: workPackage.projectTitle,
                           status: workPackage.status,
                           priority: workPackage.priority,
+                          commentTrailing: workPackage.assignee.type ==
+                                  WorkPackageAssigneeType.group
+                              ? _GroupName(
+                                  text: workPackage.assignee.title,
+                                )
+                              : null,
                           action: () {
                             context
                                 .read<WorkPackagesListBloc>()
@@ -105,6 +112,38 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
           ),
         ),
       ),
+    );
+  }
+}
+
+class _GroupName extends StatelessWidget {
+  final String text;
+
+  const _GroupName({
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Row(
+      children: [
+        Text(
+          text,
+          style: TextStyle(
+            color: theme.primaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          width: 6.0,
+        ),
+        Icon(
+          Icons.people,
+          color: theme.primaryColor,
+          size: 18,
+        ),
+      ],
     );
   }
 }
