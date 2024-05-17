@@ -1,5 +1,3 @@
 abstract class UserDataRepository {
-  int? get userID;
-
-  Future<int?> loadUserID();
+  Future<int> userId();
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
-import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/work_packages_repository.dart';
@@ -27,13 +26,11 @@ class WorkPackagesListBloc
     extends EffectCubit<WorkPackagesListState, WorkPackagesListEffect>
     with WidgetsBindingObserver {
   final WorkPackagesRepository _workPackagesRepository;
-  final UserDataRepository _userDataRepository;
   final TimerRepository _timerRepository;
   final SettingsRepository _settingsRepository;
 
   WorkPackagesListBloc(
     this._workPackagesRepository,
-    this._userDataRepository,
     this._timerRepository,
     this._settingsRepository,
   ) : super(const WorkPackagesListState.loading()) {
@@ -61,9 +58,9 @@ class WorkPackagesListBloc
       if (showLoading) {
         emit(const WorkPackagesListState.loading());
       }
+
       final statuses = await _settingsRepository.workPackagesStatusFilter;
-      final items = await _workPackagesRepository.list(
-        userId: _userDataRepository.userID,
+      final List<WorkPackage> items = await _workPackagesRepository.list(
         pageSize: 100,
         statuses: statuses,
       );

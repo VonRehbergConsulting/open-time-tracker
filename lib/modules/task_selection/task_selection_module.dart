@@ -1,7 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
-import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/statuses_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
@@ -81,7 +80,6 @@ abstract class TaskSelectionModule {
   @injectable
   TimeEntriesListBloc timeEntriesListBloc(
     TimeEntriesRepository timeEntriesRepository,
-    UserDataRepository userDataRepository,
     SettingsRepository settingsRepository,
     @Named('openProject') AuthService authService,
     @Named('graph') AuthService graphAuthService,
@@ -90,7 +88,6 @@ abstract class TaskSelectionModule {
   ) =>
       TimeEntriesListBloc(
         timeEntriesRepository,
-        userDataRepository,
         settingsRepository,
         authService,
         graphAuthService,
@@ -101,13 +98,11 @@ abstract class TaskSelectionModule {
   @injectable
   WorkPackagesListBloc workPackagesListBloc(
     WorkPackagesRepository workPackagesRepository,
-    UserDataRepository userDataRepository,
     TimerRepository timerRepository,
     SettingsRepository settingsRepository,
   ) =>
       WorkPackagesListBloc(
         workPackagesRepository,
-        userDataRepository,
         timerRepository,
         settingsRepository,
       );
@@ -115,23 +110,19 @@ abstract class TaskSelectionModule {
   @injectable
   AnalyticsBloc analyticsBloc(
     TimeEntriesRepository timeEntriesRepository,
-    UserDataRepository userDataRepository,
   ) =>
       AnalyticsBloc(
         timeEntriesRepository,
-        userDataRepository,
       );
 
   @injectable
   NotificationSelectionListBloc notificationSelectionListBloc(
     WorkPackagesRepository workPackagesRepository,
-    UserDataRepository userDataRepository,
     TimerRepository timerRepository,
     TimeEntriesRepository timeEntriesRepository,
   ) =>
       NotificationSelectionListBloc(
         workPackagesRepository,
-        userDataRepository,
         timerRepository,
         timeEntriesRepository,
       );

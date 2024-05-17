@@ -10,7 +10,7 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
 
   @override
   Future<List<TimeEntry>> list({
-    int? userId,
+    String? userId,
     DateTime? startDate,
     DateTime? endDate,
     int? workPackageId,

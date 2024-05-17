@@ -14,6 +14,23 @@ abstract class WorkPackagesApi {
   });
 }
 
+enum WorkPackageAssigneeTypeResponse {
+  user,
+  group,
+}
+
+class WorkPackageAssigneeResponse {
+  late WorkPackageAssigneeTypeResponse type;
+  late String title;
+
+  WorkPackageAssigneeResponse.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    type = (json['href'] as String).contains('users')
+        ? WorkPackageAssigneeTypeResponse.user
+        : WorkPackageAssigneeTypeResponse.group;
+  }
+}
+
 class WorkPackageResponse {
   late int id;
   late String subject;
@@ -22,6 +39,7 @@ class WorkPackageResponse {
   late String projectHref;
   late String priority;
   late String status;
+  late WorkPackageAssigneeResponse assignee;
 
   WorkPackageResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -41,6 +59,8 @@ class WorkPackageResponse {
 
     final statusJson = links["status"];
     status = statusJson['title'];
+
+    assignee = WorkPackageAssigneeResponse.fromJson(links['assignee']);
   }
 }
 

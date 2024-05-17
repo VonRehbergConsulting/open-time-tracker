@@ -9,6 +9,7 @@ class WorkPackageListItem extends StatelessWidget {
   final String priority;
   final String status;
   final Function action;
+  final Widget? commentTrailing;
 
   // Init
   const WorkPackageListItem({
@@ -18,6 +19,7 @@ class WorkPackageListItem extends StatelessWidget {
     required this.priority,
     required this.status,
     required this.action,
+    this.commentTrailing,
   });
 
   // Private methods
@@ -32,6 +34,7 @@ class WorkPackageListItem extends StatelessWidget {
       comment: priority,
       trailing: status,
       action: action,
+      commentTrailing: commentTrailing,
     );
   }
 }

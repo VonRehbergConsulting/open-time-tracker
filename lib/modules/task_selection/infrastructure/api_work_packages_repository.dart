@@ -8,14 +8,11 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
 
   @override
   Future<List<WorkPackage>> list({
-    int? userId,
     int? pageSize,
     Set<int>? statuses,
   }) async {
     List<String> filters = [];
-    if (userId != null) {
-      filters.add('{"assignee":{"operator":"=","values":["$userId"]}}');
-    }
+    filters.add('{"assigneeOrGroup":{"operator":"=","values":["me"]}}');
     if (statuses != null && statuses.isNotEmpty) {
       final statusesString = statuses.map((e) => '"$e"').join(', ');
       filters.add('{"status":{"operator":"=","values":[$statusesString]}}');
@@ -34,7 +31,16 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
               projectTitle: e.projectTitle,
               projectHref: e.projectHref,
               priority: e.priority,
-              status: e.status),
+              status: e.status,
+              assignee: WorkPackageAssignee(
+                type: switch (e.assignee.type) {
+                  WorkPackageAssigneeTypeResponse.user =>
+                    WorkPackageAssigneeType.user,
+                  WorkPackageAssigneeTypeResponse.group =>
+                    WorkPackageAssigneeType.group,
+                },
+                title: e.assignee.title,
+              )),
         )
         .toList();
   }
