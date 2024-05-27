@@ -60,12 +60,6 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
           isActive: isActive,
         ),
       );
-      _liveActivityManager.updateLiveActivity(
-        activityModel: LiveActivityModel(
-          elapsedSeconds: timeSpent.inSeconds,
-          title: state.title,
-        ).toMap(),
-      );
     } catch (e) {
       print('Cannot load timer data: $e');
     }
@@ -78,9 +72,12 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
 
   Future<void> start() async {
     await _timerRepository.startTimer(startTime: DateTime.now());
+    final timeSpent = await _timerRepository.timeSpent;
     _liveActivityManager.startLiveActivity(
       activityModel: LiveActivityModel(
-        elapsedSeconds: 0,
+        startTimestamp:
+            (DateTime.now().add(-timeSpent).millisecondsSinceEpoch / 1000)
+                .round(),
         title: state.title,
       ).toMap(),
     );
@@ -101,10 +98,19 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   }
 
   Future<void> add(Duration duration) async {
-    _timerRepository.add(duration);
+    await _timerRepository.add(duration);
+    final timeSpent = state.timeSpent + duration;
+    _liveActivityManager.updateLiveActivity(
+      activityModel: LiveActivityModel(
+        startTimestamp:
+            (DateTime.now().add(-timeSpent).millisecondsSinceEpoch / 1000)
+                .round(),
+        title: state.title,
+      ).toMap(),
+    );
     emit(
       state.copyWith(
-        timeSpent: state.timeSpent + duration,
+        timeSpent: timeSpent,
         hasStarted: true,
       ),
     );

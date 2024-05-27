@@ -11,9 +11,8 @@ struct StatusWidgetAttributes: ActivityAttributes {
     public typealias StatusWidgetStatus = ContentState
 
     public struct ContentState: Codable, Hashable {
-        var elapsedSeconds: Int
+        var startTimestamp: Double
     }
-    
     var title: String
 }
 
