@@ -63,7 +63,7 @@ struct PizzaDeliveryActivityWidget: Widget {
                 } compactTrailing: {
                 
                     Text(Date(timeIntervalSince1970: context.state.startTimestamp), style: .timer).monospacedDigit()
-                        .frame(width: 70)
+                        .frame(width: 70).multilineTextAlignment(.trailing)
                       
                     
                 } minimal: {
