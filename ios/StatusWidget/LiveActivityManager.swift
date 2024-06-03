@@ -1,34 +1,13 @@
 import UIKit
-import Flutter
 import ActivityKit
 
 @available(iOS 17.1, *)
 class LiveActivityManager {
     var activity: Activity<StatusWidgetAttributes>?
     
-    func handle(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        switch call.method {
-        case "startLiveActivity":
-            if let info = call.arguments as? [String: Any] {
-                let startTimestamp = info["startTimestamp"] as? Double ?? 0
-                let title = info["title"] as? String ?? ""
-                startLiveActivity(startTimestamp: startTimestamp, title: title)
-            }
-        case "updateLiveActivity":
-            if let info = call.arguments as? [String: Any] {
-                let startTimestamp = info["startTimestamp"] as? Double ?? 0
-                updateLiveActivity(startTimestamp: startTimestamp)
-            }
-        case "stopLiveActivity":
-            stopLiveActivity()
-        default:
-            result(FlutterMethodNotImplemented)
-        }
-    }
-    
-    func startLiveActivity(startTimestamp: Double, title: String) {
+    func startLiveActivity(startTimestamp: Double, title: String, subtitle: String, tag: String) {
         let state = StatusWidgetAttributes.ContentState(startTimestamp: startTimestamp)
-        let activityAttributes = StatusWidgetAttributes(title: title)
+        let activityAttributes = StatusWidgetAttributes(title: title, subtitle: subtitle, tag: tag)
         
         do {
             activity = try Activity.request(attributes: activityAttributes, contentState: state)

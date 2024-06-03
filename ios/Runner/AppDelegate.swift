@@ -27,7 +27,7 @@ import ActivityKit
             binaryMessenger: controller.binaryMessenger
           )
           if #available(iOS 17.1, *) {
-              channel.setMethodCallHandler(liveActivityManager.handle)
+              channel.setMethodCallHandler(handle)
           }
       }
       
@@ -35,4 +35,27 @@ import ActivityKit
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+    
+    @available(iOS 17.1, *)
+    func handle(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch call.method {
+        case "startLiveActivity":
+            if let info = call.arguments as? [String: Any] {
+                let startTimestamp = info["startTimestamp"] as? Double ?? 0
+                let title = info["title"] as? String ?? ""
+                let subtitle = info["subtitle"] as? String ?? ""
+                let tag = info["tag"] as? String ?? ""
+                liveActivityManager.startLiveActivity(startTimestamp: startTimestamp, title: title, subtitle: subtitle, tag: tag)
+            }
+        case "updateLiveActivity":
+            if let info = call.arguments as? [String: Any] {
+                let startTimestamp = info["startTimestamp"] as? Double ?? 0
+                liveActivityManager.updateLiveActivity(startTimestamp: startTimestamp)
+            }
+        case "stopLiveActivity":
+            liveActivityManager.stopLiveActivity()
+        default:
+            result(FlutterMethodNotImplemented)
+        }
+    }
 }

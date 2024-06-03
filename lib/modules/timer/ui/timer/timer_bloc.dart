@@ -79,6 +79,9 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
             (DateTime.now().add(-timeSpent).millisecondsSinceEpoch / 1000)
                 .round(),
         title: state.title,
+        subtitle: state.subtitle,
+        // TODO: Make localiaztions context independent and localize tag
+        tag: 'In progress',
       ).toMap(),
     );
     await updateState();
@@ -106,6 +109,9 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
             (DateTime.now().add(-timeSpent).millisecondsSinceEpoch / 1000)
                 .round(),
         title: state.title,
+        subtitle: state.subtitle,
+        // TODO: Make localiaztions context independent and localize tag
+        tag: 'In progress',
       ).toMap(),
     );
     emit(

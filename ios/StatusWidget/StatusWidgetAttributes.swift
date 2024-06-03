@@ -14,5 +14,7 @@ struct StatusWidgetAttributes: ActivityAttributes {
         var startTimestamp: Double
     }
     var title: String
+    var subtitle: String
+    var tag: String
 }
 
