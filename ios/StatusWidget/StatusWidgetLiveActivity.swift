@@ -10,15 +10,7 @@ import WidgetKit
 import ActivityKit
 
 struct PizzaDeliveryActivityWidget: Widget {
-    func getTimeString(_ seconds: Int) -> String {
-            let hours = seconds / 3600
-            let minutes = (seconds % 3600) / 60
-            let seconds = (seconds % 3600) % 60
-            
-            return hours == 0 ?
-                    String(format: "%02d:%02d", minutes, seconds)
-                    : String(format: "%02d:%02d:%02d", hours, minutes, seconds)
-        }
+    let primaryColor = Color(red: 0.149, green: 0.36, blue: 0.725)
         
         var body: some WidgetConfiguration {
             ActivityConfiguration(for: StatusWidgetAttributes.self) { context in
@@ -32,15 +24,16 @@ struct PizzaDeliveryActivityWidget: Widget {
                         .foregroundColor(.white)
                     Spacer().frame(width: 10)
                     Spacer()
-                    Text(Date(timeIntervalSince1970: context.state.startTimestamp), style: .timer).multilineTextAlignment(.trailing).frame(width: 90).foregroundStyle(.white)
+                    Text(Date(timeIntervalSince1970: context.state.startTimestamp), style: .timer)
+                        .multilineTextAlignment(.trailing).frame(width: 90)
+                        .foregroundStyle(.white)
+                        .bold()
                 }
                 .padding(.horizontal)
-                .activityBackgroundTint(Color.black.opacity(0.5))
+                .activityBackgroundTint(primaryColor)
 
             } dynamicIsland: { context in
                 DynamicIsland {
-                    // Expanded UI goes here.  Compose the expanded UI through
-                    // various regions, like leading/trailing/center/bottom
                     DynamicIslandExpandedRegion(.center) {
                         VStack(alignment: .center) {
                             Text("Time Tracker")
@@ -54,25 +47,28 @@ struct PizzaDeliveryActivityWidget: Widget {
                                     .foregroundColor(.white)
                                 Spacer().frame(width: 10)
                                 Spacer()
-                                Text(Date(timeIntervalSince1970: context.state.startTimestamp), style: .timer).multilineTextAlignment(.trailing).frame(width: 90)
+                                Text(Date(timeIntervalSince1970: context.state.startTimestamp), style: .timer)
+                                    .multilineTextAlignment(.trailing)
+                                    .frame(width: 90)
                             }.padding(.horizontal)
                         }
                     }
                 } compactLeading: {
-                    Image(systemName: "timer").padding(.leading, 4)
+                    Image(systemName: "timer").padding(.leading, 4).foregroundColor(.blue)
                 } compactTrailing: {
                 
-                    Text(Date(timeIntervalSince1970: context.state.startTimestamp), style: .timer).monospacedDigit()
-                        .frame(width: 70).multilineTextAlignment(.trailing)
+                    Text(Date(timeIntervalSince1970: context.state.startTimestamp), style: .timer)
+                        .monospacedDigit()
+                        .frame(width: 70)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.blue)
                       
                     
                 } minimal: {
                     Image(systemName: "timer")
-                        .foregroundColor(.yellow)
+                        .foregroundColor(.blue)
                         .padding(.all, 4)
                 }
-                .widgetURL(URL(string: "http://www.apple.com"))
-                .keylineTint(Color.red)
             }
         }
 }

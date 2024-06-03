@@ -22,6 +22,8 @@
 		B74CD2752BFCA9080012D8D3 /* StatusWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B74CD2642BFCA9070012D8D3 /* StatusWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B77C9F522BFCBDD6008AB66D /* StatusWidgetAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77C9F512BFCBDD6008AB66D /* StatusWidgetAttributes.swift */; };
 		B77C9F532BFCBDD6008AB66D /* StatusWidgetAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77C9F512BFCBDD6008AB66D /* StatusWidgetAttributes.swift */; };
+		B78D055A2C0DA92E00F2C347 /* LiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78D05592C0DA92E00F2C347 /* LiveActivityManager.swift */; };
+		B78D055B2C0DA92E00F2C347 /* LiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78D05592C0DA92E00F2C347 /* LiveActivityManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +86,7 @@
 		B74CD2702BFCA9080012D8D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B74CD2722BFCA9080012D8D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B77C9F512BFCBDD6008AB66D /* StatusWidgetAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWidgetAttributes.swift; sourceTree = "<group>"; };
+		B78D05592C0DA92E00F2C347 /* LiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityManager.swift; sourceTree = "<group>"; };
 		F4BB10B2FD804B04B9A44D1B /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -169,6 +172,7 @@
 		B74CD2692BFCA9070012D8D3 /* StatusWidget */ = {
 			isa = PBXGroup;
 			children = (
+				B78D05592C0DA92E00F2C347 /* LiveActivityManager.swift */,
 				B77C9F512BFCBDD6008AB66D /* StatusWidgetAttributes.swift */,
 				B74CD26C2BFCA9070012D8D3 /* StatusWidgetLiveActivity.swift */,
 				B74CD26E2BFCA9070012D8D3 /* StatusWidgets.swift */,
@@ -370,6 +374,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B78D055A2C0DA92E00F2C347 /* LiveActivityManager.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				B77C9F522BFCBDD6008AB66D /* StatusWidgetAttributes.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
@@ -380,6 +385,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B78D055B2C0DA92E00F2C347 /* LiveActivityManager.swift in Sources */,
 				B74CD26D2BFCA9070012D8D3 /* StatusWidgetLiveActivity.swift in Sources */,
 				B74CD26F2BFCA9070012D8D3 /* StatusWidgets.swift in Sources */,
 				B77C9F532BFCBDD6008AB66D /* StatusWidgetAttributes.swift in Sources */,
@@ -482,7 +488,7 @@
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Time Tracker";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -625,7 +631,7 @@
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Time Tracker";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -662,7 +668,7 @@
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Time Tracker";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
