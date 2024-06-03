@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
-import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/work_packages_repository.dart';
@@ -13,7 +12,7 @@ part 'work_packages_list_bloc.freezed.dart';
 class WorkPackagesListState with _$WorkPackagesListState {
   const factory WorkPackagesListState.loading() = _Loading;
   const factory WorkPackagesListState.idle({
-    required List<WorkPackage> workPackages,
+    required Map<String, List<WorkPackage>> workPackages,
   }) = _Idle;
 }
 
@@ -27,13 +26,11 @@ class WorkPackagesListBloc
     extends EffectCubit<WorkPackagesListState, WorkPackagesListEffect>
     with WidgetsBindingObserver {
   final WorkPackagesRepository _workPackagesRepository;
-  final UserDataRepository _userDataRepository;
   final TimerRepository _timerRepository;
   final SettingsRepository _settingsRepository;
 
   WorkPackagesListBloc(
     this._workPackagesRepository,
-    this._userDataRepository,
     this._timerRepository,
     this._settingsRepository,
   ) : super(const WorkPackagesListState.loading()) {
@@ -61,18 +58,18 @@ class WorkPackagesListBloc
       if (showLoading) {
         emit(const WorkPackagesListState.loading());
       }
+
       final statuses = await _settingsRepository.workPackagesStatusFilter;
-      final items = await _workPackagesRepository.list(
-        userId: _userDataRepository.userID,
+      final List<WorkPackage> items = await _workPackagesRepository.list(
         pageSize: 100,
         statuses: statuses,
       );
       emit(WorkPackagesListState.idle(
-        workPackages: items,
+        workPackages: _groupByProject(items),
       ));
     } catch (e) {
       emit(const WorkPackagesListState.idle(
-        workPackages: [],
+        workPackages: {},
       ));
       emitEffect(const WorkPackagesListEffect.error());
     }
@@ -90,5 +87,19 @@ class WorkPackagesListBloc
     } catch (e) {
       emitEffect(const WorkPackagesListEffect.error());
     }
+  }
+
+  Map<String, List<WorkPackage>> _groupByProject(
+      List<WorkPackage> workPackages) {
+    Map<String, List<WorkPackage>> result = {};
+    for (final workPackage in workPackages) {
+      final project = workPackage.projectTitle;
+      if (result[project] != null) {
+        result[project]!.add(workPackage);
+      } else {
+        result[project] = [workPackage];
+      }
+    }
+    return result;
   }
 }

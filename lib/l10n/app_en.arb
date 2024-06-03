@@ -28,6 +28,8 @@
 
     "work_packages_list_title": "My active tasks",
     "work_package_list_empty": "No tasks assigned to you",
+    "work_packages_list_tab_user": "Personal",
+    "work_packages_list_tab_groups": "Groups",
 
     "work_packages_filter__title": "Filters",
 

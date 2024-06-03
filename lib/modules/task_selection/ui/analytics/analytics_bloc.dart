@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/extensions/date_time.dart';
 
 import '../../../../app/ui/bloc/bloc.dart';
-import '../../../authorization/domain/user_data_repository.dart';
 import '../../domain/time_entries_repository.dart';
 
 part 'analytics_bloc.freezed.dart';
@@ -58,15 +57,15 @@ class AnaliticsState with _$AnaliticsState {
 
 class AnalyticsBloc extends Cubit<AnaliticsState> {
   final TimeEntriesRepository _timeEntriesRepository;
-  final UserDataRepository _userDataRepository;
 
-  AnalyticsBloc(this._timeEntriesRepository, this._userDataRepository)
-      : super(const AnaliticsState.loading());
+  AnalyticsBloc(
+    this._timeEntriesRepository,
+  ) : super(const AnaliticsState.loading());
 
   Future<void> reload() async {
     final date = DateTime.now();
     final items = await _timeEntriesRepository.list(
-      userId: _userDataRepository.userID,
+      userId: 'me',
       startDate: date.thisMonday,
       endDate: date.thisSunday,
       pageSize: 100,

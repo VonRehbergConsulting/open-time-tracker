@@ -3,7 +3,7 @@ import 'package:open_project_time_tracker/modules/task_selection/domain/work_pac
 
 abstract class TimeEntriesRepository {
   Future<List<TimeEntry>> list({
-    int? userId,
+    String? userId,
     DateTime? startDate,
     DateTime? endDate,
     int? workPackageId,

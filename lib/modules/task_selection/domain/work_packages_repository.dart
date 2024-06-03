@@ -1,8 +1,22 @@
 abstract class WorkPackagesRepository {
   Future<List<WorkPackage>> list({
-    int? userId,
     int? pageSize,
     Set<int>? statuses,
+  });
+}
+
+enum WorkPackageAssigneeType {
+  user,
+  group,
+}
+
+class WorkPackageAssignee {
+  final WorkPackageAssigneeType type;
+  final String title;
+
+  const WorkPackageAssignee({
+    required this.type,
+    required this.title,
   });
 }
 
@@ -14,6 +28,7 @@ class WorkPackage {
   String projectHref;
   String priority;
   String status;
+  WorkPackageAssignee assignee;
 
   WorkPackage({
     required this.id,
@@ -23,5 +38,6 @@ class WorkPackage {
     required this.projectHref,
     required this.priority,
     required this.status,
+    required this.assignee,
   });
 }
