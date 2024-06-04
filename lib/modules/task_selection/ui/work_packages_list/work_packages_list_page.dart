@@ -59,58 +59,63 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
         idle: (
           workPackages,
         ) =>
-            SliverToBoxAdapter(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 8.0,
-              ),
-              ...workPackages.entries.map(
-                (projectWorkPackages) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 4.0,
-                          horizontal: 8.0,
+            workPackages.isEmpty
+                ? SliverScreenEmpty(
+                    text: AppLocalizations.of(context).work_package_list_empty,
+                  )
+                : SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 8.0,
                         ),
-                        child: Text(
-                          projectWorkPackages.key,
-                          style: const TextStyle(
-                            fontSize: 18.0,
+                        ...workPackages.entries.map(
+                          (projectWorkPackages) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4.0,
+                                    horizontal: 8.0,
+                                  ),
+                                  child: Text(
+                                    projectWorkPackages.key,
+                                    style: const TextStyle(
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              ...projectWorkPackages.value.map(
+                                (workPackage) => WorkPackageListItem(
+                                    subject: workPackage.subject,
+                                    projectTitle: workPackage.projectTitle,
+                                    status: workPackage.status,
+                                    priority: workPackage.priority,
+                                    commentTrailing: workPackage
+                                                .assignee.type ==
+                                            WorkPackageAssigneeType.group
+                                        ? _GroupName(
+                                            text: workPackage.assignee.title,
+                                          )
+                                        : null,
+                                    action: () {
+                                      context
+                                          .read<WorkPackagesListBloc>()
+                                          .setTimeEntry(workPackage);
+                                    }),
+                              ),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                            ],
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                    ...projectWorkPackages.value.map(
-                      (workPackage) => WorkPackageListItem(
-                          subject: workPackage.subject,
-                          projectTitle: workPackage.projectTitle,
-                          status: workPackage.status,
-                          priority: workPackage.priority,
-                          commentTrailing: workPackage.assignee.type ==
-                                  WorkPackageAssigneeType.group
-                              ? _GroupName(
-                                  text: workPackage.assignee.title,
-                                )
-                              : null,
-                          action: () {
-                            context
-                                .read<WorkPackagesListBloc>()
-                                .setTimeEntry(workPackage);
-                          }),
-                    ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+                  ),
       ),
     );
   }
