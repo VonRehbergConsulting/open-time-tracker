@@ -10,6 +10,8 @@ import 'package:open_project_time_tracker/app/auth/infrastructure/oauth_auth_ser
 import 'package:open_project_time_tracker/app/auth/infrastructure/oauth_client.dart';
 import 'package:open_project_time_tracker/app/auth/infrastructure/open_project_auth_client_data.dart';
 import 'package:open_project_time_tracker/app/auth/infrastructure/secure_auth_token_storage.dart';
+import 'package:open_project_time_tracker/app/live_activity/domain/live_activity_manager.dart';
+import 'package:open_project_time_tracker/app/live_activity/infrastructure/default_live_activity_manager.dart';
 import 'package:open_project_time_tracker/app/services/local_notification_service.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
@@ -44,7 +46,7 @@ abstract class AppModule {
   @injectable
   AuthClientData authClientData(
     @Named('openProject')
-        InstanceConfigurationRepository instanceConfigurationRepository,
+    InstanceConfigurationRepository instanceConfigurationRepository,
   ) =>
       OpenProjectAuthClientData(
         instanceConfigurationRepository,
@@ -83,7 +85,7 @@ abstract class AppModule {
   @injectable
   ApiClient apiClient(
     @Named('openProject')
-        InstanceConfigurationReadRepository instanceConfigurationRepository,
+    InstanceConfigurationReadRepository instanceConfigurationRepository,
     @Named('openProject') AuthTokenStorage authTokenStorage,
     @Named('openProject') AuthClient authClient,
     @Named('openProject') AuthService authService,
@@ -111,4 +113,9 @@ abstract class AppModule {
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin() =>
       FlutterLocalNotificationsPlugin();
+
+  @lazySingleton
+  LiveActivityManager liveActivityManager() => DefaultLiveActivityManager(
+        channelKey: 'vonrehberg.timetracker.live-activity',
+      );
 }

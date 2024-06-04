@@ -14,6 +14,7 @@
     "generic_saturday_short": "Sat",
     "generic_sunday_short": "Sun",
     "generic_deletion_warning": "Your data will be deleted permanently",
+    "generic__in_progress": "In progress",
 
     "authorization_log_in": "Log in",
     "authorization_configure_instance": "Configure instance",
