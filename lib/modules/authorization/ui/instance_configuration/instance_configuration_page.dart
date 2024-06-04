@@ -36,6 +36,14 @@ class InstanceConfigurationPage extends EffectBlocPage<
         completion();
         Navigator.of(context).pop();
       },
+      invalidUrl: () {
+        final snackBar = SnackBar(
+          content: Text(
+              AppLocalizations.of(context).instance_configuration__invalid_url),
+          duration: const Duration(seconds: 2),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
     );
   }
 
