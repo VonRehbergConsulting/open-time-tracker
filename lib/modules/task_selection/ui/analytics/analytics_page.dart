@@ -28,40 +28,44 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
           dailyHours,
           projectHours,
         ) =>
-            SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(
-                height: 8.0,
-              ),
-              DailyWorkChart(
-                data: DailyWorkChartData(
-                  monday: dailyHours.monday,
-                  tuesday: dailyHours.tuesday,
-                  wednesday: dailyHours.wednesday,
-                  thursday: dailyHours.thursday,
-                  friday: dailyHours.friday,
-                  saturday: dailyHours.saturday,
-                  sunday: dailyHours.sunday,
-                ),
-              ),
-              const SizedBox(
-                height: 16.0,
-              ),
-              ProjectsChart(
-                items: projectHours
-                    .map(
-                      (item) => ProjectChartData(
-                        title: item.title,
-                        duration: item.duration,
-                      ),
-                    )
-                    .toList(),
-              ),
-            ],
-          ),
-        ),
+            projectHours.isEmpty
+                ? SliverScreenEmpty(
+                    text: AppLocalizations.of(context).analytics_empty,
+                  )
+                : SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        DailyWorkChart(
+                          data: DailyWorkChartData(
+                            monday: dailyHours.monday,
+                            tuesday: dailyHours.tuesday,
+                            wednesday: dailyHours.wednesday,
+                            thursday: dailyHours.thursday,
+                            friday: dailyHours.friday,
+                            saturday: dailyHours.saturday,
+                            sunday: dailyHours.sunday,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 16.0,
+                        ),
+                        ProjectsChart(
+                          items: projectHours
+                              .map(
+                                (item) => ProjectChartData(
+                                  title: item.title,
+                                  duration: item.duration,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
+                    ),
+                  ),
       ),
     );
   }
