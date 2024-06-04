@@ -40,10 +40,6 @@ class LocalSettingsRepository implements SettingsRepository {
 
   // work packages filter
 
-  static Set<int> get _defaultWorkPackagesStatusFilter {
-    return {2, 7, 9};
-  }
-
   @override
   Future<Set<int>> get workPackagesStatusFilter async {
     try {
@@ -51,7 +47,7 @@ class LocalSettingsRepository implements SettingsRepository {
       final set = Set.from(json.decode(string!)).cast<int>();
       return set;
     } catch (e) {
-      return _defaultWorkPackagesStatusFilter;
+      return {};
     }
   }
 

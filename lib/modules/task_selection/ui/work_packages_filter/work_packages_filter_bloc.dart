@@ -36,7 +36,10 @@ class WorkPackagesFilterBloc
       _settingsRepository.workPackagesStatusFilter,
     ]);
     final statuses = responces[0] as List<Status>;
-    final selectedIds = responces[1] as Set<int>;
+    var selectedIds = responces[1] as Set<int>;
+
+    // filter out non-existent statuses in case they were changed
+    selectedIds = await _checkStatusesExistance(statuses, selectedIds);
 
     emit(WorkpackagesFilterState.selection(
       statuses: statuses,
@@ -68,5 +71,24 @@ class WorkPackagesFilterBloc
       await _settingsRepository.setWorkPackagesStatusFilter(selectedIds);
       emitEffect(const WorkPackagesFilterEffect.complete());
     });
+  }
+
+  Future<Set<int>> _checkStatusesExistance(
+    List<Status> statuses,
+    Set<int> selectedIds,
+  ) async {
+    bool isChanged = false;
+    final statusIds = statuses.map((e) => e.id).toList();
+    for (var id in selectedIds.toList()) {
+      if (!statusIds.contains(id)) {
+        selectedIds.remove(id);
+        isChanged = true;
+      }
+    }
+    if (isChanged) {
+      await _settingsRepository.setWorkPackagesStatusFilter(selectedIds);
+      print('Non-existent statuses have been removed');
+    }
+    return selectedIds;
   }
 }

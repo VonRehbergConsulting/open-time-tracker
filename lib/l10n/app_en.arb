@@ -22,6 +22,7 @@
     "instance_configuration_title": "Instance Configuration",
     "instance_configuration_base_url": "Base URL",
     "instance_configuration_client_id": "Client ID",
+    "instance_configuration__invalid_url": "URL is invalid",
 
     "time_entries_list_title": "Recent work",
     "time_entries_list_change_working_hours": "Change working hours",

@@ -16,6 +16,7 @@ class InstanceConfigurationEffect with _$InstanceConfigurationEffect {
     required String baseUrl,
     required String clientID,
   }) = _Update;
+  const factory InstanceConfigurationEffect.invalidUrl() = _InvalidUrl;
 }
 
 class InstanceConfigurationBloc extends EffectCubit<InstanceConfigurationState,
@@ -41,8 +42,22 @@ class InstanceConfigurationBloc extends EffectCubit<InstanceConfigurationState,
     String baseUrl,
     String cliendID,
   ) async {
-    await _instanceConfigurationRepository.setBaseUrl(baseUrl);
-    await _instanceConfigurationRepository.setClientID(cliendID);
-    emitEffect(const InstanceConfigurationEffect.complete());
+    if (_validateUrl(baseUrl)) {
+      await _instanceConfigurationRepository.setBaseUrl(baseUrl);
+      await _instanceConfigurationRepository.setClientID(cliendID);
+      emitEffect(const InstanceConfigurationEffect.complete());
+    } else {
+      emitEffect(const InstanceConfigurationEffect.invalidUrl());
+    }
+  }
+
+  bool _validateUrl(String urlString) {
+    try {
+      final url = Uri.parse(urlString);
+      return url.host.isNotEmpty &&
+          (url.scheme == 'http' || url.scheme == 'https');
+    } catch (e) {
+      return false;
+    }
   }
 }
