@@ -25,7 +25,6 @@ class LiveActivityManager {
     }
     
     func stopLiveActivity() {
-        
         Task {
             await activity?.end(using: nil, dismissalPolicy: .immediate)
         }
