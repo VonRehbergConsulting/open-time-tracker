@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:open_project_time_tracker/app/live_activity/domain/live_activity_manager.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
@@ -23,9 +24,11 @@ class TimerEffect with _$TimerEffect {
 
 class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   final TimerRepository _timerRepository;
+  final LiveActivityManager _liveActivityManager;
 
   TimerBloc(
     this._timerRepository,
+    this._liveActivityManager,
   ) : super(
           const TimerState.idle(
             timeSpent: Duration(),
@@ -64,29 +67,56 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
 
   Future<void> reset() async {
     await _timerRepository.reset();
+    _liveActivityManager.stopLiveActivity();
   }
 
   Future<void> start() async {
     await _timerRepository.startTimer(startTime: DateTime.now());
+    final timeSpent = await _timerRepository.timeSpent;
+    _liveActivityManager.startLiveActivity(
+      activityModel: LiveActivityModel(
+        startTimestamp:
+            (DateTime.now().add(-timeSpent).millisecondsSinceEpoch / 1000)
+                .round(),
+        title: state.title,
+        subtitle: state.subtitle,
+        // TODO: Make localiaztions context independent and localize tag
+        tag: 'In progress',
+      ).toMap(),
+    );
     await updateState();
   }
 
   Future<void> stop() async {
     await _timerRepository.stopTimer(stopTime: DateTime.now());
+    _liveActivityManager.stopLiveActivity();
     await updateState();
   }
 
   Future<void> finish() async {
     await _timerRepository.stopTimer(stopTime: DateTime.now());
+    _liveActivityManager.stopLiveActivity();
     await updateState();
     emitEffect(const TimerEffect.finish());
   }
 
   Future<void> add(Duration duration) async {
-    _timerRepository.add(duration);
+    await _timerRepository.add(duration);
+    final timeSpent = state.timeSpent + duration;
+    _liveActivityManager.updateLiveActivity(
+      activityModel: LiveActivityModel(
+        startTimestamp:
+            (DateTime.now().add(-timeSpent).millisecondsSinceEpoch / 1000)
+                .round(),
+        title: state.title,
+        subtitle: state.subtitle,
+        // TODO: Make localiaztions context independent and localize tag
+        tag: 'In progress',
+      ).toMap(),
+    );
     emit(
       state.copyWith(
-        timeSpent: state.timeSpent + duration,
+        timeSpent: timeSpent,
         hasStarted: true,
       ),
     );

@@ -5,7 +5,7 @@ You can also take a look at *[app's webpage](https://open-time-tracker.com)*
 
 ## How to run it locally
 
-- Install flutter SDK
+- Install flutter SDK and fvm
 - Clone the repository
 - Navigate to the cloned repository
 - Download and install all the required dependencies

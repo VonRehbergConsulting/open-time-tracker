@@ -14,6 +14,7 @@
     "generic_saturday_short": "Sa",
     "generic_sunday_short": "So",
     "generic_deletion_warning": "Ihre Daten werden endgültig gelöscht",
+    "generic__in_progress": "In Bearbeitung",
 
     "authorization_log_in": "Anmelden",
     "authorization_configure_instance": "Instanz konfigurieren",

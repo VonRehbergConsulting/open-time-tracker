@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:open_project_time_tracker/app/live_activity/domain/live_activity_manager.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/app/storage/timer_storage.dart';
 import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
@@ -32,9 +33,11 @@ abstract class TimerModule {
   @injectable
   TimerBloc timerBloc(
     TimerRepository timerRepository,
+    LiveActivityManager liveActivityManager,
   ) =>
       TimerBloc(
         timerRepository,
+        liveActivityManager,
       );
 
   @injectable
