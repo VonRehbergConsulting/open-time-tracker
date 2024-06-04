@@ -16,6 +16,8 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
     if (statuses != null && statuses.isNotEmpty) {
       final statusesString = statuses.map((e) => '"$e"').join(', ');
       filters.add('{"status":{"operator":"=","values":[$statusesString]}}');
+    } else {
+      filters.add('{"status":{"operator":"o","values":[]}}');
     }
     final filtersString = '[${filters.join(', ')}]';
     final response = await restApi.workPackages(

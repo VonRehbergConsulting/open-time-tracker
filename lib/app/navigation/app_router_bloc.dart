@@ -33,7 +33,7 @@ class AppRouterBloc extends Cubit<AppRouterState> {
   Future<void> init() async {
     await _authStateSubscription?.cancel();
     if (!await _checkIsInstanceConfigured()) {
-      _getAuthService().logout();
+      await _getAuthService().logout();
     }
     _authStateSubscription = _getAuthService()
         .observeAuthState()
