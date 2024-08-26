@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:msh_checkbox/msh_checkbox.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/configured_shimmer.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_filter/work_packages_filter_bloc.dart';
 
@@ -54,7 +56,30 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
       scrollingEnabled:
           state.maybeWhen(loading: () => false, orElse: () => true),
       body: state.when(
-        loading: () => const SliverScreenLoading(),
+        loading: () => SliverToBoxAdapter(
+          child: ConfiguredShimmer(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 16.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _itemPlaceholder(),
+                  _itemPlaceholder(),
+                  _itemPlaceholder(),
+                  _itemPlaceholder(),
+                  _itemPlaceholder(),
+                  _itemPlaceholder(),
+                  _itemPlaceholder(),
+                  _itemPlaceholder(),
+                  _itemPlaceholder(),
+                ],
+              ),
+            ),
+          ),
+        ),
         selection: (statuses, selectedIds) => SliverPadding(
           padding: const EdgeInsets.symmetric(
             vertical: 10.0,
@@ -77,6 +102,27 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _itemPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          MSHCheckbox(
+            value: true,
+            onChanged: (bool selected) {},
+            style: MSHCheckboxStyle.fillScaleCheck,
+            size: 24.0,
+          ),
+          const SizedBox(width: 16.0),
+          const ConfiguredCard(
+            child: Text('Filter option placeholder'),
+          ),
+        ],
       ),
     );
   }

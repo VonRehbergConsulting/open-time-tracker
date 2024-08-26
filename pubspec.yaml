@@ -37,6 +37,7 @@ dependencies:
   flutter_local_notifications: 17.2.2
   timezone: 0.9.4
   msh_checkbox: 2.0.1
+  shimmer: 3.0.0
 
 dev_dependencies:
   flutter_test:
