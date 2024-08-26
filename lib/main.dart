@@ -104,10 +104,10 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.black,
           elevation: 0,
         ),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 243, 243, 243),
-        colorSchemeSeed: const Color.fromRGBO(38, 92, 185, 1),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 249, 249, 249),
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
+        primaryColor: const Color.fromRGBO(38, 92, 185, 1),
       ),
       home: const AppRouter(),
     );

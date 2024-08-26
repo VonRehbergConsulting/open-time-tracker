@@ -2,7 +2,7 @@ import UIKit
 import Flutter
 import ActivityKit
 
-@UIApplicationMain
+@main
 @objc class AppDelegate: FlutterAppDelegate {
     private var _liveActivityManager: Any? = nil
     @available(iOS 17.1, *)
