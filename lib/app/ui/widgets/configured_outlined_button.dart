@@ -27,6 +27,7 @@ class ConfiguredOutlinedButton extends StatelessWidget {
         shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
         foregroundColor:
             WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
+        padding: WidgetStateProperty.all(const EdgeInsets.all(0.0)),
       ),
       child: Text(
         text,

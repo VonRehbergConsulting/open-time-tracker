@@ -108,6 +108,7 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         primaryColor: const Color.fromRGBO(38, 92, 185, 1),
+        fontFamily: 'Cupertino',
       ),
       home: const AppRouter(),
     );
