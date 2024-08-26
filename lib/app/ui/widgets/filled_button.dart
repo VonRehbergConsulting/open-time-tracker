@@ -17,8 +17,9 @@ class FilledButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor:
-            WidgetStateProperty.all(Theme.of(context).primaryColor),
+        backgroundColor: onPressed != null
+            ? WidgetStateProperty.all(Theme.of(context).primaryColor)
+            : null,
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
