@@ -130,7 +130,7 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
 }
 
 class _TotalTimePlaceholder extends StatelessWidget {
-  const _TotalTimePlaceholder({super.key});
+  const _TotalTimePlaceholder();
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +143,7 @@ class _TotalTimePlaceholder extends StatelessWidget {
 }
 
 class _ItemPlaceholder extends StatelessWidget {
-  const _ItemPlaceholder({super.key});
+  const _ItemPlaceholder();
 
   @override
   Widget build(BuildContext context) {
