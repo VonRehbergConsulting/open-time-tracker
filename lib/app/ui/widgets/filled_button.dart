@@ -17,14 +17,18 @@ class FilledButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        backgroundColor: onPressed != null
+            ? WidgetStateProperty.all(Theme.of(context).primaryColor)
+            : null,
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
         ),
-        minimumSize: MaterialStateProperty.all<Size>(const Size(48.0, 48.0)),
+        minimumSize: WidgetStateProperty.all<Size>(const Size(48.0, 48.0)),
         splashFactory: NoSplash.splashFactory,
-        shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
+        foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
       ),
       child: text != null
           ? Text(

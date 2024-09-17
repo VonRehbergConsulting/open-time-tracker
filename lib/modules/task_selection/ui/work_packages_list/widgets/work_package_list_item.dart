@@ -8,7 +8,7 @@ class WorkPackageListItem extends StatelessWidget {
   final String projectTitle;
   final String priority;
   final String status;
-  final Function action;
+  final Function()? action;
   final Widget? commentTrailing;
 
   // Init
@@ -18,7 +18,7 @@ class WorkPackageListItem extends StatelessWidget {
     required this.projectTitle,
     required this.priority,
     required this.status,
-    required this.action,
+    this.action,
     this.commentTrailing,
   });
 

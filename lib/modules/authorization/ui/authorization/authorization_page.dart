@@ -73,6 +73,9 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
                     child: Text(
                       AppLocalizations.of(context)
                           .authorization_configure_instance,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                   ),
                 ],

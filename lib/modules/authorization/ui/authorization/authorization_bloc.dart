@@ -48,6 +48,7 @@ class AuthorizationBloc
         throw Error();
       }
     } catch (e) {
+      print(e);
       emitEffect(const AuthorizationEffect.error());
     }
   }

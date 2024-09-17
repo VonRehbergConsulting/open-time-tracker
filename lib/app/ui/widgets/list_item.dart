@@ -8,7 +8,7 @@ class ListItem extends StatelessWidget {
   final String? subtitle;
   final String? comment;
   final String? trailing;
-  final Function action;
+  final Function()? action;
   final Widget? commentTrailing;
 
   // Init
@@ -18,7 +18,7 @@ class ListItem extends StatelessWidget {
     required this.subtitle,
     required this.comment,
     required this.trailing,
-    required this.action,
+    this.action,
     this.commentTrailing,
   });
 
@@ -27,7 +27,7 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => action(),
+      onTap: action,
       child: ConfiguredCard(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
