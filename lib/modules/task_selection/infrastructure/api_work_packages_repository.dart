@@ -8,6 +8,7 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
 
   @override
   Future<List<WorkPackage>> list({
+    String? projectId,
     int? pageSize,
     Set<int>? statuses,
   }) async {
@@ -20,10 +21,21 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
       filters.add('{"status":{"operator":"o","values":[]}}');
     }
     final filtersString = '[${filters.join(', ')}]';
-    final response = await restApi.workPackages(
-      filters: filtersString,
-      pageSize: pageSize,
-    );
+
+    WorkPackagesListResponse response;
+    if (projectId != null) {
+      response = await restApi.workPackagesOfProject(
+        projectId: projectId,
+        filters: filtersString,
+        pageSize: pageSize,
+      );
+    } else {
+      response = await restApi.workPackages(
+        filters: filtersString,
+        pageSize: pageSize,
+      );
+    }
+
     return response.workPackages
         .map(
           (e) => WorkPackage(

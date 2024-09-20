@@ -28,6 +28,7 @@ class WorkPackagesListBloc
   final WorkPackagesRepository _workPackagesRepository;
   final TimerRepository _timerRepository;
   final SettingsRepository _settingsRepository;
+  late String _projectId;
 
   WorkPackagesListBloc(
     this._workPackagesRepository,
@@ -35,6 +36,10 @@ class WorkPackagesListBloc
     this._settingsRepository,
   ) : super(const WorkPackagesListState.loading()) {
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  setProject(String projectId) {
+    _projectId = projectId;
   }
 
   @override
@@ -61,6 +66,7 @@ class WorkPackagesListBloc
 
       final statuses = await _settingsRepository.workPackagesStatusFilter;
       final List<WorkPackage> items = await _workPackagesRepository.list(
+        projectId: _projectId,
         pageSize: 100,
         statuses: statuses,
       );

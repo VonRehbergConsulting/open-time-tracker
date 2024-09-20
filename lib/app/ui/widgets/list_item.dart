@@ -15,9 +15,9 @@ class ListItem extends StatelessWidget {
   const ListItem({
     super.key,
     required this.title,
-    required this.subtitle,
-    required this.comment,
-    required this.trailing,
+    this.subtitle,
+    this.comment,
+    this.trailing,
     this.action,
     this.commentTrailing,
   });

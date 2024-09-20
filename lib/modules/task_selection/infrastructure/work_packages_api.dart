@@ -12,6 +12,13 @@ abstract class WorkPackagesApi {
     @Query('filters') String? filters,
     @Query('pageSize') int? pageSize,
   });
+
+  @GET('/projects/{projectId}/work_packages')
+  Future<WorkPackagesListResponse> workPackagesOfProject({
+    @Path() required projectId,
+    @Query('filters') String? filters,
+    @Query('pageSize') int? pageSize,
+  });
 }
 
 enum WorkPackageAssigneeTypeResponse {
