@@ -4,6 +4,7 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_shimmer.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
 
 import '../../domain/work_packages_repository.dart';
@@ -13,11 +14,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
     WorkPackagesListState, WorkPackagesListEffect> {
-  const WorkPackagesListPage({super.key});
+  final Project _project;
+
+  const WorkPackagesListPage(
+    this._project, {
+    super.key,
+  });
 
   @override
   void onCreate(BuildContext context, WorkPackagesListBloc bloc) {
     super.onCreate(context, bloc);
+    bloc.setProject(_project.id);
     bloc.reload();
   }
 
@@ -40,7 +47,7 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
   @override
   Widget buildState(BuildContext context, WorkPackagesListState state) {
     return SliverScreen(
-      title: AppLocalizations.of(context).work_packages_list_title,
+      title: _project.title,
       actions: [
         IconButton(
           onPressed: () => AppRouter.routeToWorkPackagesFilter(

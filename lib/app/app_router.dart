@@ -3,8 +3,10 @@ import 'package:open_project_time_tracker/app/ui/widgets/splash_screen.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
 import 'package:open_project_time_tracker/modules/calendar/ui/calendar_page.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/analytics_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/notification_selection_list/notification_selection_list_page.dart';
+import 'package:open_project_time_tracker/modules/task_selection/ui/projects_list/projects_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_filter/work_packages_filter_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_page.dart';
@@ -25,9 +27,9 @@ class AppRouter {
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 
-  static void routeToWorkPackagesList() {
+  static void routeToWorkPackagesList({required Project project}) {
     final route = CupertinoPageRoute(
-      builder: ((context) => const WorkPackagesListPage()),
+      builder: ((context) => WorkPackagesListPage(project)),
     );
     navigatorKey.currentState?.push(route);
   }
@@ -126,6 +128,13 @@ class AppRouter {
       builder: ((context) => WorkPackagesFilterPage(
             completion: comppletion,
           )),
+    );
+    navigatorKey.currentState?.push(route);
+  }
+
+  static void routeToProjectsList() {
+    final route = CupertinoPageRoute(
+      builder: ((context) => const ProjectsListPage()),
     );
     navigatorKey.currentState?.push(route);
   }

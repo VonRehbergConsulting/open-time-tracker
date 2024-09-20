@@ -58,7 +58,7 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
         child: const Icon(Icons.add),
-        onPressed: () => AppRouter.routeToWorkPackagesList(),
+        onPressed: () => AppRouter.routeToProjectsList(),
       ),
       scrollingEnabled:
           state.maybeWhen(loading: () => false, orElse: () => true),
