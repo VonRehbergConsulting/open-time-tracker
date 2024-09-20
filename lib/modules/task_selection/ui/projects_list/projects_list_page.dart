@@ -51,6 +51,11 @@ class ProjectsListPage extends EffectBlocPage<ProjectsListBloc,
           ],
         ),
         idle: (projects) => SliverMainAxisGroup(slivers: [
+          const SliverToBoxAdapter(
+            child: const SizedBox(
+              height: 8.0,
+            ),
+          ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               childCount: projects.length,

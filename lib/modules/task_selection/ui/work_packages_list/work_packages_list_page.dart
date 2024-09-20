@@ -70,17 +70,6 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                    child: ConfiguredCard(
-                      child: Text(
-                        'Title placeholder',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    ),
-                  ),
                   WorkPackageListItem(
                     subject: 'Subject',
                     projectTitle: 'Project',
@@ -92,17 +81,6 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
                     projectTitle: 'Project',
                     priority: 'Priority',
                     status: 'Status',
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                    child: ConfiguredCard(
-                      child: Text(
-                        'Title placeholder',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                        ),
-                      ),
-                    ),
                   ),
                   WorkPackageListItem(
                     subject: 'Subject',
@@ -136,45 +114,26 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
                   )
                 : _Body(
                     children: [
-                      ...workPackages.entries.map(
-                        (projectWorkPackages) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 4.0,
-                                horizontal: 16.0,
-                              ),
-                              child: Text(
-                                projectWorkPackages.key,
-                                style: const TextStyle(
-                                  fontSize: 18.0,
-                                ),
-                              ),
-                            ),
-                            ...projectWorkPackages.value.map(
-                              (workPackage) => WorkPackageListItem(
-                                  subject: workPackage.subject,
-                                  projectTitle: workPackage.projectTitle,
-                                  status: workPackage.status,
-                                  priority: workPackage.priority,
-                                  commentTrailing: workPackage.assignee.type ==
-                                          WorkPackageAssigneeType.group
-                                      ? _GroupName(
-                                          text: workPackage.assignee.title,
-                                        )
-                                      : null,
-                                  action: () {
-                                    context
-                                        .read<WorkPackagesListBloc>()
-                                        .setTimeEntry(workPackage);
-                                  }),
-                            ),
-                            const SizedBox(
-                              height: 16.0,
-                            ),
-                          ],
-                        ),
+                      ...workPackages.map(
+                        (workPackage) => WorkPackageListItem(
+                            subject: workPackage.subject,
+                            projectTitle: workPackage.projectTitle,
+                            status: workPackage.status,
+                            priority: workPackage.priority,
+                            commentTrailing: workPackage.assignee.type ==
+                                    WorkPackageAssigneeType.group
+                                ? _GroupName(
+                                    text: workPackage.assignee.title,
+                                  )
+                                : null,
+                            action: () {
+                              context
+                                  .read<WorkPackagesListBloc>()
+                                  .setTimeEntry(workPackage);
+                            }),
+                      ),
+                      const SizedBox(
+                        height: 16.0,
                       ),
                     ],
                   ),
