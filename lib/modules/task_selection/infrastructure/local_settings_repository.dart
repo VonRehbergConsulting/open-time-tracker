@@ -12,6 +12,7 @@ class LocalSettingsRepository implements SettingsRepository {
 
   final String _workingHoursKey = 'workingHours';
   final String _workPackagesStatusFilterKey = 'workPackagesStatusFilter';
+  final String _assigneeFilterKey = 'assigneeFilter';
 
   // working hours
 
@@ -55,5 +56,20 @@ class LocalSettingsRepository implements SettingsRepository {
   Future<void> setWorkPackagesStatusFilter(Set<int> value) async {
     final string = value.toList().toString();
     await _storage.setString(_workPackagesStatusFilterKey, string);
+  }
+
+  @override
+  Future<int> get assigneeFilter async {
+    const defaultValue = 0;
+    try {
+      return await _storage.getInt(_assigneeFilterKey) ?? defaultValue;
+    } catch (e) {
+      return defaultValue;
+    }
+  }
+
+  @override
+  Future<void> setAssigneeFilter(int value) async {
+    await _storage.setInt(_assigneeFilterKey, value);
   }
 }

@@ -11,6 +11,7 @@ class WorkpackagesFilterState with _$WorkpackagesFilterState {
   const factory WorkpackagesFilterState.selection({
     required List<Status> statuses,
     required Set<int> selectedIds,
+    required int assigneeFilter,
   }) = _Selection;
 }
 
@@ -34,9 +35,11 @@ class WorkPackagesFilterBloc
     final responces = await Future.wait([
       _statusesRepository.list(),
       _settingsRepository.workPackagesStatusFilter,
+      _settingsRepository.assigneeFilter,
     ]);
     final statuses = responces[0] as List<Status>;
     var selectedIds = responces[1] as Set<int>;
+    final assigneeFilter = responces[2] as int;
 
     // filter out non-existent statuses in case they were changed
     selectedIds = await _checkStatusesExistance(statuses, selectedIds);
@@ -44,12 +47,17 @@ class WorkPackagesFilterBloc
     emit(WorkpackagesFilterState.selection(
       statuses: statuses,
       selectedIds: selectedIds,
+      assigneeFilter: assigneeFilter,
     ));
   }
 
-  Future<void> toggleSelection(int id) async {
+  Future<void> toggleStatusSelection(int id) async {
     state.whenOrNull(
-      selection: (statuses, selectedIds) async {
+      selection: (
+        statuses,
+        selectedIds,
+        assigneeFilter,
+      ) async {
         final newSelectedIds = Set<int>.from(selectedIds);
         if (newSelectedIds.contains(id)) {
           newSelectedIds.remove(id);
@@ -60,6 +68,25 @@ class WorkPackagesFilterBloc
           WorkpackagesFilterState.selection(
             statuses: statuses,
             selectedIds: newSelectedIds,
+            assigneeFilter: assigneeFilter,
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> setAssigneeFilter(int value) async {
+    state.whenOrNull(
+      selection: (
+        statuses,
+        selectedIds,
+        assigneeFilter,
+      ) async {
+        emit(
+          WorkpackagesFilterState.selection(
+            statuses: statuses,
+            selectedIds: selectedIds,
+            assigneeFilter: value,
           ),
         );
       },
@@ -67,10 +94,23 @@ class WorkPackagesFilterBloc
   }
 
   Future<void> submit() async {
-    state.whenOrNull(selection: (statuses, selectedIds) async {
-      await _settingsRepository.setWorkPackagesStatusFilter(selectedIds);
+    try {
+      state.whenOrNull(
+        selection: (
+          statuses,
+          selectedIds,
+          assigneeFilter,
+        ) async {
+          await Future.wait([
+            _settingsRepository.setWorkPackagesStatusFilter(selectedIds),
+            _settingsRepository.setAssigneeFilter(assigneeFilter),
+          ]);
+        },
+      );
       emitEffect(const WorkPackagesFilterEffect.complete());
-    });
+    } catch (e) {
+      emitEffect(const WorkPackagesFilterEffect.error());
+    }
   }
 
   Future<Set<int>> _checkStatusesExistance(

@@ -66,8 +66,11 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  _headerPlaceholder(),
                   _itemPlaceholder(),
                   _itemPlaceholder(),
+                  const SizedBox(height: 16.0),
+                  _headerPlaceholder(),
                   _itemPlaceholder(),
                   _itemPlaceholder(),
                   _itemPlaceholder(),
@@ -80,26 +83,75 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
             ),
           ),
         ),
-        selection: (statuses, selectedIds) => SliverPadding(
+        selection: (
+          statuses,
+          selectedIds,
+          assigneeFilter,
+        ) =>
+            SliverPadding(
           padding: const EdgeInsets.symmetric(
             vertical: 10.0,
             horizontal: 16.0,
           ),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final status = statuses[index];
-                return _item(
+          sliver: SliverMainAxisGroup(
+            slivers: [
+              _header('Assignee'),
+              SliverToBoxAdapter(
+                child: _item(
                   context,
-                  isSelected: selectedIds.contains(status.id),
-                  text: status.name,
+                  isSelected: assigneeFilter == 0,
+                  text: 'Me',
                   onToggle: () => context
                       .read<WorkPackagesFilterBloc>()
-                      .toggleSelection(status.id),
-                );
-              },
-              childCount: statuses.length,
-            ),
+                      .setAssigneeFilter(0),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _item(
+                  context,
+                  isSelected: assigneeFilter == 1,
+                  text: 'Everyone',
+                  onToggle: () => context
+                      .read<WorkPackagesFilterBloc>()
+                      .setAssigneeFilter(1),
+                ),
+              ),
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 16.0),
+              ),
+              _header('Status'),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final status = statuses[index];
+                    return _item(
+                      context,
+                      isSelected: selectedIds.contains(status.id),
+                      text: status.name,
+                      onToggle: () => context
+                          .read<WorkPackagesFilterBloc>()
+                          .toggleStatusSelection(status.id),
+                    );
+                  },
+                  childCount: statuses.length,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _headerPlaceholder() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      child: Card(
+        margin: EdgeInsets.all(0),
+        child: Text(
+          'Filter title placeholder',
+          style: TextStyle(
+            fontSize: 16.0,
           ),
         ),
       ),
@@ -123,6 +175,20 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
             child: Text('Filter option placeholder'),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _header(String title) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18.0,
+          ),
+        ),
       ),
     );
   }

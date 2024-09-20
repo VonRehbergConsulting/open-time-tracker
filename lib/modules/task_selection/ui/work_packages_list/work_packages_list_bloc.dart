@@ -65,10 +65,13 @@ class WorkPackagesListBloc
       }
 
       final statuses = await _settingsRepository.workPackagesStatusFilter;
+      final assigneeFilter = await _settingsRepository.assigneeFilter;
+
       final List<WorkPackage> items = await _workPackagesRepository.list(
         projectId: _projectId,
-        pageSize: 100,
+        pageSize: 200,
         statuses: statuses,
+        user: assigneeFilter == 0 ? 'me' : null,
       );
       emit(WorkPackagesListState.idle(
         workPackages: items,

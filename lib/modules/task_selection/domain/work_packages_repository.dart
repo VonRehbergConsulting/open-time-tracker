@@ -3,6 +3,7 @@ abstract class WorkPackagesRepository {
     String? projectId,
     int? pageSize,
     Set<int>? statuses,
+    String? user,
   });
 }
 

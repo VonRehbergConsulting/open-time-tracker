@@ -11,9 +11,13 @@ class ApiWorkPackagesRepository implements WorkPackagesRepository {
     String? projectId,
     int? pageSize,
     Set<int>? statuses,
+    String? user,
   }) async {
     List<String> filters = [];
-    filters.add('{"assigneeOrGroup":{"operator":"=","values":["me"]}}');
+
+    if (user != null) {
+      filters.add('{"assigneeOrGroup":{"operator":"=","values":["$user"]}}');
+    }
     if (statuses != null && statuses.isNotEmpty) {
       final statusesString = statuses.map((e) => '"$e"').join(', ');
       filters.add('{"status":{"operator":"=","values":[$statusesString]}}');
