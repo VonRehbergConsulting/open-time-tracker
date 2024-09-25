@@ -52,7 +52,7 @@ class ProjectsListPage extends EffectBlocPage<ProjectsListBloc,
         ),
         idle: (projects) => SliverMainAxisGroup(slivers: [
           const SliverToBoxAdapter(
-            child: const SizedBox(
+            child: SizedBox(
               height: 8.0,
             ),
           ),
@@ -61,8 +61,8 @@ class ProjectsListPage extends EffectBlocPage<ProjectsListBloc,
               childCount: projects.length,
               (context, index) => ListItem(
                 title: projects[index].title,
-                comment: projects[index].createdAt != null
-                    ? '${AppLocalizations.of(context).projects_list__created_at} ${DateFormat('dd.MM.yyyy').format(projects[index].createdAt!)}'
+                comment: projects[index].updatedAt != null
+                    ? '${AppLocalizations.of(context).projects_list__updated_at} ${DateFormat('dd.MM.yyyy').format(projects[index].updatedAt!)}'
                     : null,
                 action: () =>
                     AppRouter.routeToWorkPackagesList(project: projects[index]),

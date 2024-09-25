@@ -29,6 +29,7 @@ class ProjectsListBloc
     final projects = await _projectsRepository.list(
       active: true,
       pageSize: 200,
+      sortByName: true,
     );
     emit(
       ProjectsListState.idle(

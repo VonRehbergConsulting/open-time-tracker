@@ -70,5 +70,5 @@
     "notification_selection_list__work_packages_header": "Active tasks",
 
     "projects_list__title": "Projects",
-    "projects_list__created_at": "Created"
+    "projects_list__updated_at": "Updated"
 }

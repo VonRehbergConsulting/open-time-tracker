@@ -11,6 +11,7 @@ class ApiProjectsRepository implements ProjectsRepository {
     String? userId,
     bool? active,
     int? pageSize,
+    bool sortByName = false,
   }) async {
     List<String> filters = [];
     if (userId != null) {
@@ -22,15 +23,22 @@ class ApiProjectsRepository implements ProjectsRepository {
     }
     final filtersString = '[${filters.join(', ')}]';
 
+    List<String> sorters = [];
+    if (sortByName) {
+      sorters.add('["name", "asc"]');
+    }
+    final sortString = '[${sorters.join(', ')}]';
+
     final response = await restApi.projects(
       filters: filtersString,
       pageSize: pageSize,
+      sortBy: sortString,
     );
     return response.projects
         .map((element) => Project(
               id: element.id,
               title: element.title,
-              createdAt: element.createdAt,
+              updatedAt: element.updatedAt,
             ))
         .toList();
   }

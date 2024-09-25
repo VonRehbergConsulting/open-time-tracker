@@ -11,18 +11,19 @@ abstract class ProjectsApi {
   Future<ProjectListResponse> projects({
     @Query('filters') String? filters,
     @Query('pageSize') int? pageSize,
+    @Query('sortBy') String? sortBy,
   });
 }
 
 class ProjectResponse {
   late String id;
   late String title;
-  late DateTime? createdAt;
+  late DateTime? updatedAt;
 
   ProjectResponse.fromJson(Map<String, dynamic> json) {
     id = json['identifier'];
     title = json['name'];
-    createdAt = DateTime.tryParse(json['createdAt']);
+    updatedAt = DateTime.tryParse(json['updatedAt']);
   }
 }
 
