@@ -12,8 +12,8 @@ class TimeEntryListItem extends StatelessWidget {
   final String projectTitle;
   final Duration hours;
   final String? comment;
-  final Function action;
-  final Future<bool> Function() dismissAction;
+  final Function()? action;
+  final Future<bool> Function()? dismissAction;
 
   // Init
   const TimeEntryListItem({
@@ -22,8 +22,8 @@ class TimeEntryListItem extends StatelessWidget {
     required this.projectTitle,
     required this.hours,
     required this.comment,
-    required this.action,
-    required this.dismissAction,
+    this.action,
+    this.dismissAction,
   });
 
   Future<bool> _showCloseDialog(BuildContext context) async {
@@ -49,7 +49,7 @@ class TimeEntryListItem extends StatelessWidget {
         ],
       ),
     );
-    return consent ? await dismissAction() : false;
+    return consent && dismissAction != null ? await dismissAction!() : false;
   }
 
   // Lifecycle
@@ -71,7 +71,7 @@ class TimeEntryListItem extends StatelessWidget {
         ),
       ),
       child: GestureDetector(
-        onTap: () => action(),
+        onTap: action,
         child: ConfiguredCard(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),

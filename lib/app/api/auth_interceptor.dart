@@ -43,7 +43,7 @@ class AuthInterceptor extends QueuedInterceptor {
       try {
         final token = await _tokenStorage.getToken();
         if (token == null) {
-          print("Trying to get existing token but not token found");
+          print("Trying to get existing token but none token found");
           onAuthetnicationFailed?.call();
           handler.next(err);
           return;

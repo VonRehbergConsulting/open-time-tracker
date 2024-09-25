@@ -15,6 +15,7 @@ class ConfiguredCard extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(18.0)),
       ),
+      color: Colors.white,
       child: child,
     );
   }

@@ -1,7 +1,9 @@
 abstract class WorkPackagesRepository {
   Future<List<WorkPackage>> list({
+    String? projectId,
     int? pageSize,
     Set<int>? statuses,
+    String? user,
   });
 }
 

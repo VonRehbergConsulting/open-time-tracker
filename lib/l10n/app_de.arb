@@ -28,10 +28,7 @@
     "time_entries_list_change_working_hours": "Arbeitszeit ändern",
     "time_entries_list_empty": "Für heute existieren noch keine Aufzeichnungen",
 
-    "work_packages_list_title": "Meine aktiven Aufgaben",
-    "work_package_list_empty": "Ihnen keine Aufgaben zugewiesen sind",
-    "work_packages_tab_user": "Persönlich",
-    "work_packages_tab_groups": "Gruppen",
+    "work_package_list_empty": "Keine Aufgaben",
 
     "work_packages_filter__title": "Filter",
 
@@ -70,5 +67,8 @@
 
     "notification_selection_list__title": "Aufgabenauswahl",
     "notification_selection_list__time_entries_header": "Heutige Arbeit",
-    "notification_selection_list__work_packages_header": "Aktive Aufgaben"
+    "notification_selection_list__work_packages_header": "Aktive Aufgaben",
+
+    "projects_list__title": "Projekte",
+    "projects_list__updated_at": "Aktualisiert am"
 }

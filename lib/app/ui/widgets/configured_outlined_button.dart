@@ -17,14 +17,17 @@ class ConfiguredOutlinedButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
         ),
-        minimumSize: MaterialStateProperty.all<Size>(const Size(48.0, 48.0)),
+        minimumSize: WidgetStateProperty.all<Size>(const Size(48.0, 48.0)),
         splashFactory: NoSplash.splashFactory,
-        shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
+        foregroundColor:
+            WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
+        padding: WidgetStateProperty.all(const EdgeInsets.all(0.0)),
       ),
       child: Text(
         text,
@@ -32,6 +35,7 @@ class ConfiguredOutlinedButton extends StatelessWidget {
             const TextStyle(
               fontSize: 16,
             ),
+        textAlign: TextAlign.center,
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 
 import 'package:open_project_time_tracker/app/app_router.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/configured_shimmer.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/widgets/total_time_list_item.dart';
@@ -53,14 +54,30 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
         ),
       ],
       floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
         backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Colors.white,
         child: const Icon(Icons.add),
-        onPressed: () => AppRouter.routeToWorkPackagesList(),
+        onPressed: () => AppRouter.routeToProjectsList(),
       ),
       scrollingEnabled:
           state.maybeWhen(loading: () => false, orElse: () => true),
       body: state.when(
-        loading: () => const SliverScreenLoading(),
+        loading: () => const SliverMainAxisGroup(slivers: [
+          SliverToBoxAdapter(
+            child: ConfiguredShimmer(
+              child: Column(
+                children: [
+                  _TotalTimePlaceholder(),
+                  _ItemPlaceholder(),
+                  _ItemPlaceholder(),
+                  _ItemPlaceholder(),
+                  _ItemPlaceholder(),
+                ],
+              ),
+            ),
+          ),
+        ]),
         idle: (timeEntries, workingHours, totalDuration) =>
             SliverMainAxisGroup(slivers: [
           SliverToBoxAdapter(
@@ -108,6 +125,33 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
                 ),
         ]),
       ),
+    );
+  }
+}
+
+class _TotalTimePlaceholder extends StatelessWidget {
+  const _TotalTimePlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return TotalTimeListItem(
+      const Duration(),
+      const Duration(),
+      (_) {},
+    );
+  }
+}
+
+class _ItemPlaceholder extends StatelessWidget {
+  const _ItemPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return const TimeEntryListItem(
+      workPackageSubject: '',
+      projectTitle: 'timeEntry.projectTitle',
+      hours: Duration(),
+      comment: '',
     );
   }
 }

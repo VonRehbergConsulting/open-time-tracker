@@ -12,7 +12,7 @@ part 'work_packages_list_bloc.freezed.dart';
 class WorkPackagesListState with _$WorkPackagesListState {
   const factory WorkPackagesListState.loading() = _Loading;
   const factory WorkPackagesListState.idle({
-    required Map<String, List<WorkPackage>> workPackages,
+    required List<WorkPackage> workPackages,
   }) = _Idle;
 }
 
@@ -28,6 +28,7 @@ class WorkPackagesListBloc
   final WorkPackagesRepository _workPackagesRepository;
   final TimerRepository _timerRepository;
   final SettingsRepository _settingsRepository;
+  late String _projectId;
 
   WorkPackagesListBloc(
     this._workPackagesRepository,
@@ -35,6 +36,10 @@ class WorkPackagesListBloc
     this._settingsRepository,
   ) : super(const WorkPackagesListState.loading()) {
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  setProject(String projectId) {
+    _projectId = projectId;
   }
 
   @override
@@ -60,16 +65,20 @@ class WorkPackagesListBloc
       }
 
       final statuses = await _settingsRepository.workPackagesStatusFilter;
+      final assigneeFilter = await _settingsRepository.assigneeFilter;
+
       final List<WorkPackage> items = await _workPackagesRepository.list(
-        pageSize: 100,
+        projectId: _projectId,
+        pageSize: 200,
         statuses: statuses,
+        user: assigneeFilter == 0 ? 'me' : null,
       );
       emit(WorkPackagesListState.idle(
-        workPackages: _groupByProject(items),
+        workPackages: items,
       ));
     } catch (e) {
       emit(const WorkPackagesListState.idle(
-        workPackages: {},
+        workPackages: [],
       ));
       emitEffect(const WorkPackagesListEffect.error());
     }
@@ -87,19 +96,5 @@ class WorkPackagesListBloc
     } catch (e) {
       emitEffect(const WorkPackagesListEffect.error());
     }
-  }
-
-  Map<String, List<WorkPackage>> _groupByProject(
-      List<WorkPackage> workPackages) {
-    Map<String, List<WorkPackage>> result = {};
-    for (final workPackage in workPackages) {
-      final project = workPackage.projectTitle;
-      if (result[project] != null) {
-        result[project]!.add(workPackage);
-      } else {
-        result[project] = [workPackage];
-      }
-    }
-    return result;
   }
 }

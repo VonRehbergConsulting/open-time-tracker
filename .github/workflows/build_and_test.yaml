@@ -16,7 +16,7 @@ jobs:
     - name: Install flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.13.9'
+        flutter-version: '3.24.1'
         channel: "stable"
 
     - name: Setup project
@@ -44,7 +44,7 @@ jobs:
     - name: Install flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.13.9'
+        flutter-version: '3.24.1'
         channel: "stable"
 
     - name: Setup project
