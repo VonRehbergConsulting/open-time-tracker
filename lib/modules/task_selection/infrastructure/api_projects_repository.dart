@@ -12,6 +12,7 @@ class ApiProjectsRepository implements ProjectsRepository {
     bool? active,
     int? pageSize,
     bool sortByName = false,
+    bool assignedToUser = false,
   }) async {
     List<String> filters = [];
     if (userId != null) {
@@ -20,6 +21,9 @@ class ApiProjectsRepository implements ProjectsRepository {
     if (active != null) {
       filters.add(
           '{"active":{"operator":"=","values":["${active ? 't' : 'f'}"]}}');
+    }
+    if (assignedToUser) {
+      filters.add('{"member_of":{"operator":"=","values":["t"]}}');
     }
     final filtersString = '[${filters.join(', ')}]';
 

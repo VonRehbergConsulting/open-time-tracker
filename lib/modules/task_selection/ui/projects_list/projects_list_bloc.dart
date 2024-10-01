@@ -30,6 +30,7 @@ class ProjectsListBloc
       active: true,
       pageSize: 200,
       sortByName: true,
+      assignedToUser: true,
     );
     emit(
       ProjectsListState.idle(
