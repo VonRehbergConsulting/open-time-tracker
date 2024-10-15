@@ -56,60 +56,68 @@ class TimeEntryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trailing = hours.withLetters();
-    return Dismissible(
-      key: UniqueKey(),
-      confirmDismiss: (direction) => _showCloseDialog(context),
-      direction: DismissDirection.endToStart,
-      background: const Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Icon(
-            Icons.delete,
+    final body = _body(context);
+    if (dismissAction == null) {
+      return body;
+    } else {
+      return Dismissible(
+        key: UniqueKey(),
+        confirmDismiss: (direction) => _showCloseDialog(context),
+        direction: DismissDirection.endToStart,
+        background: const Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Icon(
+              Icons.delete,
+            ),
           ),
         ),
-      ),
-      child: GestureDetector(
-        onTap: action,
-        child: ConfiguredCard(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        workPackageSubject,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                        ),
+        child: body,
+      );
+    }
+  }
+
+  Widget _body(BuildContext context) {
+    final trailing = hours.withLetters();
+    return GestureDetector(
+      onTap: action,
+      child: ConfiguredCard(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      workPackageSubject,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
                       ),
                     ),
-                    Text(
-                      trailing,
-                      style: const TextStyle(color: Colors.black54),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  projectTitle,
-                  style: const TextStyle(
-                    color: Colors.grey,
                   ),
+                  Text(
+                    trailing,
+                    style: const TextStyle(color: Colors.black54),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                projectTitle,
+                style: const TextStyle(
+                  color: Colors.grey,
                 ),
-                SizedBox(
-                    height: comment != null && comment!.isNotEmpty ? 6 : 0),
-                if (comment != null && comment!.isNotEmpty) Text(comment!),
-              ],
-            ),
+              ),
+              SizedBox(height: comment != null && comment!.isNotEmpty ? 6 : 0),
+              if (comment != null && comment!.isNotEmpty) Text(comment!),
+            ],
           ),
         ),
       ),
