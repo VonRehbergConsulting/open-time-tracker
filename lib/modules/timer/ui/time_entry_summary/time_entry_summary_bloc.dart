@@ -16,7 +16,7 @@ class TimeEntrySummaryState with _$TimeEntrySummaryState {
     required String projectTitle,
     required Duration timeSpent,
     required String? comment,
-    required List<String> commentSuggestions,
+    required List<String>? commentSuggestions,
   }) = _Idle;
 }
 
@@ -33,7 +33,7 @@ class TimeEntrySummaryBloc
   final TimerService _timerService;
 
   late TimeEntry timeEntry;
-  List<String> _commentSuggestions = [];
+  List<String>? _commentSuggestions;
 
   TimeEntrySummaryBloc(
     this._timeEntriesRepository,
@@ -61,19 +61,27 @@ class TimeEntrySummaryBloc
       final minutes = max(timeEntry.hours.inMinutes, 1);
       timeEntry.hours = Duration(minutes: minutes);
       this.timeEntry = timeEntry;
+
+      await _emitIdleState();
+
       try {
+        final stopwatch = new Stopwatch()..start();
         final workPackageIdString = timeEntry.workPackageHref.split('/').last;
         final workPackageId = int.tryParse(workPackageIdString);
         final timeEntries =
             await _timeEntriesRepository.list(workPackageId: workPackageId);
         var comments = timeEntries.map((e) => e.comment ?? '').toSet().toList();
         comments.remove('');
+        print(
+            'ASD: comment loading executed in ${stopwatch.elapsedMilliseconds} milliseconds');
+        print('ASD: number of time entries: ${timeEntries.length}');
         _commentSuggestions = comments;
+        await _emitIdleState();
       } catch (e) {
         print(e);
+        _commentSuggestions = [];
+        await _emitIdleState();
       }
-
-      _emitIdleState();
     } else {
       emitEffect(const TimeEntrySummaryEffect.error());
     }
