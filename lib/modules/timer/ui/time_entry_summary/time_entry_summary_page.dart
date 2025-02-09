@@ -178,9 +178,9 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
 
 class _CommentSuggestions extends StatelessWidget {
   final List<String>? commentSuggestions;
-  Function(String) commentSelectionHandler;
+  final Function(String) commentSelectionHandler;
 
-  _CommentSuggestions({
+  const _CommentSuggestions({
     required this.commentSuggestions,
     required this.commentSelectionHandler,
   });
