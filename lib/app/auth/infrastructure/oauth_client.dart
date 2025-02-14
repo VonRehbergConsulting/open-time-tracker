@@ -38,6 +38,7 @@ class OAuthClient implements AuthClient {
           serviceConfiguration: serviceConfiguration,
           scopes: scopes,
           // preferEphemeralSession: true,
+          allowInsecureConnections: true,
         ),
       );
       return _parseToken(response);

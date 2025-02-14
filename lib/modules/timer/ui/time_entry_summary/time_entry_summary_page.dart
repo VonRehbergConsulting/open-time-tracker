@@ -42,20 +42,6 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
     }
   }
 
-  void _showCommentSuggestions(
-    BuildContext context,
-    List<String> commentSuggestions,
-  ) {
-    AppRouter.routeToCommentSuggestions(
-      context: context,
-      comments: commentSuggestions,
-      handler: (comment) {
-        context.read<TimeEntrySummaryBloc>().updateComment(comment);
-        _commentFieldController.text = comment;
-      },
-    );
-  }
-
   Future<void> _submit(BuildContext context) async {
     _form.currentState?.save();
     context.read<TimeEntrySummaryBloc>().submit();
@@ -146,14 +132,15 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)
                             .time_entry_summary_comment,
-                        suffixIcon: commentSuggestions.isEmpty
-                            ? null
-                            : IconButton(
-                                onPressed: () => _showCommentSuggestions(
-                                      context,
-                                      commentSuggestions,
-                                    ),
-                                icon: const Icon(Icons.more_horiz)),
+                        suffixIcon: _CommentSuggestions(
+                          commentSuggestions: commentSuggestions,
+                          commentSelectionHandler: (comment) {
+                            context
+                                .read<TimeEntrySummaryBloc>()
+                                .updateComment(comment);
+                            _commentFieldController.text = comment;
+                          },
+                        ),
                       ),
                       readOnly: false,
                       onChanged: (_) => context
@@ -186,5 +173,49 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
       ),
       body: body,
     );
+  }
+}
+
+class _CommentSuggestions extends StatelessWidget {
+  final List<String>? commentSuggestions;
+  final Function(String) commentSelectionHandler;
+
+  const _CommentSuggestions({
+    required this.commentSuggestions,
+    required this.commentSelectionHandler,
+  });
+
+  void _showCommentSuggestions(
+    BuildContext context,
+    List<String> commentSuggestions,
+  ) {
+    AppRouter.routeToCommentSuggestions(
+      context: context,
+      comments: commentSuggestions,
+      handler: commentSelectionHandler,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (commentSuggestions == null) {
+      final size = IconTheme.of(context).size;
+      return SizedBox(
+        width: size,
+        height: size,
+        child: const ActivityIndicator(),
+      );
+    } else {
+      if (commentSuggestions!.isEmpty) {
+        return Container();
+      }
+      return IconButton(
+        onPressed: () => _showCommentSuggestions(
+          context,
+          commentSuggestions!,
+        ),
+        icon: const Icon(Icons.more_horiz),
+      );
+    }
   }
 }
