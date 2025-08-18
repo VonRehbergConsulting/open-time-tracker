@@ -47,6 +47,20 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
     context.read<TimeEntrySummaryBloc>().submit();
   }
 
+  void _showCommentSuggestions(
+    BuildContext context,
+    List<String> commentSuggestions,
+  ) {
+    AppRouter.routeToCommentSuggestions(
+      context: context,
+      comments: commentSuggestions,
+      handler: (comment) {
+        context.read<TimeEntrySummaryBloc>().updateComment(comment);
+        _commentFieldController.text = comment;
+      },
+    );
+  }
+
   @override
   void onEffect(BuildContext context, TimeEntrySummaryEffect effect) {
     effect.when(
@@ -130,18 +144,23 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
                       textCapitalization: TextCapitalization.sentences,
                       controller: _commentFieldController,
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)
-                            .time_entry_summary_comment,
-                        suffixIcon: _CommentSuggestions(
-                          commentSuggestions: commentSuggestions,
-                          commentSelectionHandler: (comment) {
-                            context
-                                .read<TimeEntrySummaryBloc>()
-                                .updateComment(comment);
-                            _commentFieldController.text = comment;
-                          },
-                        ),
-                      ),
+                          labelText: AppLocalizations.of(context)
+                              .time_entry_summary_comment,
+                          suffixIcon: commentSuggestions == null
+                              ? SizedBox(
+                                  width: IconTheme.of(context).size,
+                                  height: IconTheme.of(context).size,
+                                  child: const ActivityIndicator(),
+                                )
+                              : commentSuggestions.isEmpty
+                                  ? null
+                                  : IconButton(
+                                      onPressed: () => _showCommentSuggestions(
+                                        context,
+                                        commentSuggestions,
+                                      ),
+                                      icon: const Icon(Icons.more_horiz),
+                                    )),
                       readOnly: false,
                       onChanged: (_) => context
                           .read<TimeEntrySummaryBloc>()
@@ -173,49 +192,5 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
       ),
       body: body,
     );
-  }
-}
-
-class _CommentSuggestions extends StatelessWidget {
-  final List<String>? commentSuggestions;
-  final Function(String) commentSelectionHandler;
-
-  const _CommentSuggestions({
-    required this.commentSuggestions,
-    required this.commentSelectionHandler,
-  });
-
-  void _showCommentSuggestions(
-    BuildContext context,
-    List<String> commentSuggestions,
-  ) {
-    AppRouter.routeToCommentSuggestions(
-      context: context,
-      comments: commentSuggestions,
-      handler: commentSelectionHandler,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (commentSuggestions == null) {
-      final size = IconTheme.of(context).size;
-      return SizedBox(
-        width: size,
-        height: size,
-        child: const ActivityIndicator(),
-      );
-    } else {
-      if (commentSuggestions!.isEmpty) {
-        return Container();
-      }
-      return IconButton(
-        onPressed: () => _showCommentSuggestions(
-          context,
-          commentSuggestions!,
-        ),
-        icon: const Icon(Icons.more_horiz),
-      );
-    }
   }
 }
