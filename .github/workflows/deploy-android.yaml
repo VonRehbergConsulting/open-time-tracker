@@ -4,44 +4,44 @@ on: workflow_dispatch
 
 jobs:
   deploy-android:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Generate api_key.json file
-      run: echo ${{ secrets.GOOGLE_API_JSON_BASE64 }} | base64 -d > android/fastlane/api_key.json
+      - name: Generate api_key.json file
+        run: echo ${{ secrets.GOOGLE_API_JSON_BASE64 }} | base64 -d > android/fastlane/api_key.json
 
-    - name: Generate keystore.jks file
-      run: | 
-        cd android/app
-        mkdir keystore
-        cd keystore
-        echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > upload-keystore.jks
+      - name: Generate keystore.jks file
+        run: |
+          cd android/app
+          mkdir keystore
+          cd keystore
+          echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > upload-keystore.jks
 
-    - name: Generate key.properties file
-      run: |
-        cd android
-        touch key.properties
-        echo -e "storePassword=${{ secrets.STORE_PASSWORD }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nstoreFile=${{ secrets.KEYSTORE_FILE }}" >> key.properties
+      - name: Generate key.properties file
+        run: |
+          cd android
+          touch key.properties
+          echo -e "storePassword=${{ secrets.STORE_PASSWORD }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nstoreFile=${{ secrets.KEYSTORE_FILE }}" >> key.properties
 
-    - name: Install flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.24.1'
-        channel: "stable"
+      - name: Install flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.32.8"
+          channel: "stable"
 
-    - name: Setup project
-      run: |
-        flutter pub get
-        flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Setup project
+        run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
 
-    - name: Create env file
-      run: |
-        touch .env
-        echo "GRAPH_API_CLIENT_ID=${{ secrets.GRAPH_API_CLIENT_ID }}" > .env
+      - name: Create env file
+        run: |
+          touch .env
+          echo "GRAPH_API_CLIENT_ID=${{ secrets.GRAPH_API_CLIENT_ID }}" > .env
 
-    - name: Build, sign and deploy
-      run: |
-        cd android
-        fastlane deploy
+      - name: Build, sign and deploy
+        run: |
+          cd android
+          fastlane deploy
