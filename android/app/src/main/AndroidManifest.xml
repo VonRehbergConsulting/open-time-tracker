@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.open_project_time_tracker">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
    <application
         android:label="Time Tracker"
         android:name="${applicationName}"

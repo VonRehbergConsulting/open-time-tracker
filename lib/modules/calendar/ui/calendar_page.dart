@@ -4,8 +4,7 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/promo_text_style.dart';
 import 'package:open_project_time_tracker/modules/calendar/ui/calendar_bloc.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
 import '../../../app/ui/widgets/filled_button.dart';
 
@@ -21,9 +20,7 @@ class CalendarPage extends BlocPage<CalendarBloc, CalendarBlocState> {
   @override
   Widget buildState(BuildContext context, CalendarBlocState state) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).calendar_title),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).calendar_title)),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -31,11 +28,7 @@ class CalendarPage extends BlocPage<CalendarBloc, CalendarBlocState> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ...state.when<List<Widget>>(
-              loading: () => [
-                const Center(
-                  child: ActivityIndicator(),
-                ),
-              ],
+              loading: () => [const Center(child: ActivityIndicator())],
               landing: () => _body(context, false),
               calendar: () => _body(context, true),
             ),

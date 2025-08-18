@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_shimmer.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
@@ -21,17 +21,17 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
     return SliverScreen(
       title: AppLocalizations.of(context).analytics_title,
       onRefresh: context.read<AnalyticsBloc>().reload,
-      scrollingEnabled:
-          state.maybeWhen(loading: () => false, orElse: () => true),
+      scrollingEnabled: state.maybeWhen(
+        loading: () => false,
+        orElse: () => true,
+      ),
       body: state.when(
         loading: () => SliverToBoxAdapter(
           child: ConfiguredShimmer(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(
-                  height: 8.0,
-                ),
+                const SizedBox(height: 8.0),
                 DailyWorkChart(
                   data: DailyWorkChartData(
                     monday: const Duration(hours: 8),
@@ -43,63 +43,53 @@ class AnalyticsPage extends BlocPage<AnalyticsBloc, AnaliticsState> {
                     sunday: const Duration(hours: 8),
                   ),
                 ),
-                const SizedBox(
-                  height: 16.0,
-                ),
+                const SizedBox(height: 16.0),
                 ProjectsChart(
                   items: [
                     ProjectChartData(
                       title: 'Title',
                       duration: const Duration(hours: 8),
-                    )
+                    ),
                   ],
                 ),
               ],
             ),
           ),
         ),
-        idle: (
-          dailyHours,
-          projectHours,
-        ) =>
-            projectHours.isEmpty
-                ? SliverScreenEmpty(
-                    text: AppLocalizations.of(context).analytics_empty,
-                  )
-                : SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(
-                          height: 8.0,
-                        ),
-                        DailyWorkChart(
-                          data: DailyWorkChartData(
-                            monday: dailyHours.monday,
-                            tuesday: dailyHours.tuesday,
-                            wednesday: dailyHours.wednesday,
-                            thursday: dailyHours.thursday,
-                            friday: dailyHours.friday,
-                            saturday: dailyHours.saturday,
-                            sunday: dailyHours.sunday,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16.0,
-                        ),
-                        ProjectsChart(
-                          items: projectHours
-                              .map(
-                                (item) => ProjectChartData(
-                                  title: item.title,
-                                  duration: item.duration,
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ],
+        idle: (dailyHours, projectHours) => projectHours.isEmpty
+            ? SliverScreenEmpty(
+                text: AppLocalizations.of(context).analytics_empty,
+              )
+            : SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 8.0),
+                    DailyWorkChart(
+                      data: DailyWorkChartData(
+                        monday: dailyHours.monday,
+                        tuesday: dailyHours.tuesday,
+                        wednesday: dailyHours.wednesday,
+                        thursday: dailyHours.thursday,
+                        friday: dailyHours.friday,
+                        saturday: dailyHours.saturday,
+                        sunday: dailyHours.sunday,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 16.0),
+                    ProjectsChart(
+                      items: projectHours
+                          .map(
+                            (item) => ProjectChartData(
+                              title: item.title,
+                              duration: item.duration,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }

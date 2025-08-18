@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
 
@@ -28,21 +28,19 @@ class DailyWorkChartData {
 
 class DailyWorkChart extends StatelessWidget {
   final DailyWorkChartData data;
-  const DailyWorkChart({
-    super.key,
-    required this.data,
-  });
+  const DailyWorkChart({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-    final totalTime = (data.monday +
-            data.tuesday +
-            data.wednesday +
-            data.thursday +
-            data.friday +
-            data.saturday +
-            data.sunday)
-        .withLetters();
+    final totalTime =
+        (data.monday +
+                data.tuesday +
+                data.wednesday +
+                data.thursday +
+                data.friday +
+                data.saturday +
+                data.sunday)
+            .withLetters();
     return ConfiguredCard(
       child: Padding(
         padding: const EdgeInsets.all(16.0),

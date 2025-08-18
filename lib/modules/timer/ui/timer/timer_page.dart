@@ -9,7 +9,7 @@ import 'package:open_project_time_tracker/app/ui/widgets/filled_button.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_bloc.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
 import '../../../../app/ui/widgets/configured_outlined_button.dart';
 
@@ -23,24 +23,24 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
     showDialog(
       context: context,
       builder: ((_) => CupertinoAlertDialog(
-            title: Text(AppLocalizations.of(context).generic_warning),
-            content: Text(AppLocalizations.of(context).timer_warning),
-            actions: [
-              CupertinoDialogAction(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(AppLocalizations.of(context).generic_no),
-              ),
-              CupertinoDialogAction(
-                isDestructiveAction: true,
-                onPressed: () async {
-                  await context.read<TimerBloc>().reset();
-                  // ignore: use_build_context_synchronously
-                  Navigator.of(context).pop();
-                },
-                child: Text(AppLocalizations.of(context).generic_yes),
-              ),
-            ],
-          )),
+        title: Text(AppLocalizations.of(context).generic_warning),
+        content: Text(AppLocalizations.of(context).timer_warning),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(AppLocalizations.of(context).generic_no),
+          ),
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () async {
+              await context.read<TimerBloc>().reset();
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).pop();
+            },
+            child: Text(AppLocalizations.of(context).generic_yes),
+          ),
+        ],
+      )),
     );
   }
 
@@ -69,16 +69,13 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
     final addButtonWidth = deviceSize.width * 0.23;
 
     if (state.isActive) {
-      timer ??= Timer.periodic(
-        const Duration(milliseconds: 500),
-        (timer) {
-          try {
-            context.read<TimerBloc>().updateState();
-          } catch (e) {
-            print(e);
-          }
-        },
-      );
+      timer ??= Timer.periodic(const Duration(milliseconds: 500), (timer) {
+        try {
+          context.read<TimerBloc>().updateState();
+        } catch (e) {
+          print(e);
+        }
+      });
     } else {
       timer?.cancel();
       timer = null;
@@ -99,11 +96,10 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
             Text(
               state.timeSpent.longWatch(),
               style: const TextStyle(
-                  fontSize: 60,
-                  fontWeight: FontWeight.w300,
-                  fontFeatures: [
-                    FontFeature.tabularFigures(),
-                  ]),
+                fontSize: 60,
+                fontWeight: FontWeight.w300,
+                fontFeatures: [FontFeature.tabularFigures()],
+              ),
             ),
             const Spacer(flex: 2),
             Padding(
@@ -128,9 +124,9 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
                   child: ConfiguredOutlinedButton(
                     text: AppLocalizations.of(context).timer_add_5_min,
                     textStyle: const TextStyle(fontSize: 14),
-                    onPressed: () => context
-                        .read<TimerBloc>()
-                        .add(const Duration(minutes: 5)),
+                    onPressed: () => context.read<TimerBloc>().add(
+                      const Duration(minutes: 5),
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -138,9 +134,9 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
                   child: ConfiguredOutlinedButton(
                     text: AppLocalizations.of(context).timer_add_15_min,
                     textStyle: const TextStyle(fontSize: 14),
-                    onPressed: () => context
-                        .read<TimerBloc>()
-                        .add(const Duration(minutes: 15)),
+                    onPressed: () => context.read<TimerBloc>().add(
+                      const Duration(minutes: 15),
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -148,9 +144,9 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
                   child: ConfiguredOutlinedButton(
                     text: AppLocalizations.of(context).timer_add_30_min,
                     textStyle: const TextStyle(fontSize: 14),
-                    onPressed: () => context
-                        .read<TimerBloc>()
-                        .add(const Duration(minutes: 30)),
+                    onPressed: () => context.read<TimerBloc>().add(
+                      const Duration(minutes: 30),
+                    ),
                   ),
                 ),
               ],

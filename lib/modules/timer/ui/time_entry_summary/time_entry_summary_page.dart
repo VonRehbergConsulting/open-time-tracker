@@ -8,11 +8,16 @@ import 'package:open_project_time_tracker/app/ui/widgets/time_picker.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/time_entry_summary/time_entry_summary_bloc.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
-class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
-    TimeEntrySummaryState, TimeEntrySummaryEffect> {
+class TimeEntrySummaryPage
+    extends
+        EffectBlocPage<
+          TimeEntrySummaryBloc,
+          TimeEntrySummaryState,
+          TimeEntrySummaryEffect
+        > {
   final _form = GlobalKey<FormState>();
   final _timeFieldController = TextEditingController();
   final _commentFieldController = TextEditingController();
@@ -28,16 +33,13 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
       showCupertinoModalPopup(
         context: context,
         builder: ((_) => TimePicker(
-              hours: hours,
-              minutes: minutes,
-              onTimeChanged: (value) {
-                final duration = Duration(
-                  hours: value.hour,
-                  minutes: value.minute,
-                );
-                context.read<TimeEntrySummaryBloc>().updateTimeSpent(duration);
-              },
-            )),
+          hours: hours,
+          minutes: minutes,
+          onTimeChanged: (value) {
+            final duration = Duration(hours: value.hour, minutes: value.minute);
+            context.read<TimeEntrySummaryBloc>().updateTimeSpent(duration);
+          },
+        )),
       );
     }
   }
@@ -79,13 +81,7 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
   void onStateChange(BuildContext context, TimeEntrySummaryState state) {
     super.onStateChange(context, state);
     state.whenOrNull(
-      idle: (
-        title,
-        projectTitle,
-        timeSpent,
-        comment,
-        commentSuggestions,
-      ) {
+      idle: (title, projectTitle, timeSpent, comment, commentSuggestions) {
         this.timeSpent = timeSpent;
         // TODO: fix comment lose after hot reload
         _commentFieldController.text = comment ?? '';
@@ -100,13 +96,7 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
 
     final Widget body = state.when(
       loading: () => const Center(child: ActivityIndicator()),
-      idle: (
-        title,
-        projectTitle,
-        timeSpent,
-        comment,
-        commentSuggestions,
-      ) {
+      idle: (title, projectTitle, timeSpent, comment, commentSuggestions) {
         this.timeSpent = timeSpent;
         _timeFieldController.text = timeSpent.shortWatch();
         return Padding(
@@ -121,22 +111,28 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
                     TextFormField(
                       initialValue: title,
                       decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)
-                              .time_entry_summary_task),
+                        labelText: AppLocalizations.of(
+                          context,
+                        ).time_entry_summary_task,
+                      ),
                       enabled: false,
                     ),
                     TextFormField(
                       initialValue: projectTitle,
                       decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)
-                              .time_entry_summary_project),
+                        labelText: AppLocalizations.of(
+                          context,
+                        ).time_entry_summary_project,
+                      ),
                       enabled: false,
                     ),
                     TextFormField(
                       controller: _timeFieldController,
                       decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)
-                              .time_entry_summary_time_spent),
+                        labelText: AppLocalizations.of(
+                          context,
+                        ).time_entry_summary_time_spent,
+                      ),
                       readOnly: true,
                       onTap: () => _showTimePicker(context),
                     ),
@@ -144,23 +140,25 @@ class TimeEntrySummaryPage extends EffectBlocPage<TimeEntrySummaryBloc,
                       textCapitalization: TextCapitalization.sentences,
                       controller: _commentFieldController,
                       decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)
-                              .time_entry_summary_comment,
-                          suffixIcon: commentSuggestions == null
-                              ? SizedBox(
-                                  width: IconTheme.of(context).size,
-                                  height: IconTheme.of(context).size,
-                                  child: const ActivityIndicator(),
-                                )
-                              : commentSuggestions.isEmpty
-                                  ? null
-                                  : IconButton(
-                                      onPressed: () => _showCommentSuggestions(
-                                        context,
-                                        commentSuggestions,
-                                      ),
-                                      icon: const Icon(Icons.more_horiz),
-                                    )),
+                        labelText: AppLocalizations.of(
+                          context,
+                        ).time_entry_summary_comment,
+                        suffixIcon: commentSuggestions == null
+                            ? SizedBox(
+                                width: IconTheme.of(context).size,
+                                height: IconTheme.of(context).size,
+                                child: const ActivityIndicator(),
+                              )
+                            : commentSuggestions.isEmpty
+                            ? null
+                            : IconButton(
+                                onPressed: () => _showCommentSuggestions(
+                                  context,
+                                  commentSuggestions,
+                                ),
+                                icon: const Icon(Icons.more_horiz),
+                              ),
+                      ),
                       readOnly: false,
                       onChanged: (_) => context
                           .read<TimeEntrySummaryBloc>()

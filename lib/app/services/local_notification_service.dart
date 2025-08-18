@@ -15,24 +15,21 @@ part 'local_notification_service.g.dart';
 class LocalNotificationService {
   final FlutterLocalNotificationsPlugin _localNotificationsPlugin;
 
-  LocalNotificationService(
-    this._localNotificationsPlugin,
-  );
+  LocalNotificationService(this._localNotificationsPlugin);
 
   static callback(NotificationResponse response) async {
     try {
       if (response.payload == null) {
         throw ErrorDescription('Notification payload is null');
       }
-      final payload =
-          NotificationPayload.fromJson(jsonDecode(response.payload!));
+      final payload = NotificationPayload.fromJson(
+        jsonDecode(response.payload!),
+      );
       switch (payload.type) {
         case NotificationType.meeting:
-          await AppRouter.showLoading(
-            () async {
-              await inject<TimerService>().submit();
-            },
-          );
+          await AppRouter.showLoading(() async {
+            await inject<TimerService>().submit();
+          });
           AppRouter.routeToNotificationSelectionList();
           break;
         default:
@@ -70,15 +67,9 @@ class LocalNotificationService {
     NotificationType? type,
   }) async {
     tz_data.initializeTimeZones();
-    final scheduleTime = tz.TZDateTime.from(
-      time,
-      tz.local,
-    );
+    final scheduleTime = tz.TZDateTime.from(time, tz.local);
 
-    const androidDetail = AndroidNotificationDetails(
-      'channel',
-      'channel',
-    );
+    const androidDetail = AndroidNotificationDetails('channel', 'channel');
     const iosDetail = DarwinNotificationDetails();
     const noticeDetail = NotificationDetails(
       iOS: iosDetail,
@@ -86,11 +77,7 @@ class LocalNotificationService {
     );
 
     final id = Random().nextInt(214748364);
-    final payload = jsonEncode(
-      NotificationPayload(
-        type: type,
-      ).toJson(),
-    );
+    final payload = jsonEncode(NotificationPayload(type: type).toJson());
 
     await _localNotificationsPlugin.zonedSchedule(
       id,
@@ -98,8 +85,6 @@ class LocalNotificationService {
       body,
       scheduleTime,
       noticeDetail,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       payload: payload,
     );
@@ -115,15 +100,11 @@ class NotificationPayload {
   @JsonKey(name: 'type')
   final NotificationType? type;
 
-  NotificationPayload({
-    this.type,
-  });
+  NotificationPayload({this.type});
 
   factory NotificationPayload.fromJson(Map<String, dynamic> json) =>
       _$NotificationPayloadFromJson(json);
   Map<String, dynamic> toJson() => _$NotificationPayloadToJson(this);
 }
 
-enum NotificationType {
-  meeting,
-}
+enum NotificationType { meeting }

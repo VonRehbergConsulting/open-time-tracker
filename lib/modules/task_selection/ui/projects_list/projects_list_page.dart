@@ -6,11 +6,15 @@ import 'package:open_project_time_tracker/app/ui/widgets/configured_shimmer.dart
 import 'package:open_project_time_tracker/app/ui/widgets/list_item.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/projects_list/projects_list_bloc.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-class ProjectsListPage extends EffectBlocPage<ProjectsListBloc,
-    ProjectsListState, ProjectsListEffect> {
+class ProjectsListPage
+    extends
+        EffectBlocPage<
+          ProjectsListBloc,
+          ProjectsListState,
+          ProjectsListEffect
+        > {
   const ProjectsListPage({super.key});
 
   @override
@@ -42,39 +46,31 @@ class ProjectsListPage extends EffectBlocPage<ProjectsListBloc,
           slivers: [
             SliverToBoxAdapter(
               child: ConfiguredShimmer(
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                ),
+                child: SizedBox(width: 100, height: 100),
               ),
             ),
           ],
         ),
-        idle: (projects) => SliverMainAxisGroup(slivers: [
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 8.0,
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              childCount: projects.length,
-              (context, index) => ListItem(
-                title: projects[index].title,
-                comment: projects[index].updatedAt != null
-                    ? '${AppLocalizations.of(context).projects_list__updated_at} ${DateFormat('dd.MM.yyyy').format(projects[index].updatedAt!)}'
-                    : null,
-                action: () =>
-                    AppRouter.routeToWorkPackagesList(project: projects[index]),
+        idle: (projects) => SliverMainAxisGroup(
+          slivers: [
+            const SliverToBoxAdapter(child: SizedBox(height: 8.0)),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                childCount: projects.length,
+                (context, index) => ListItem(
+                  title: projects[index].title,
+                  comment: projects[index].updatedAt != null
+                      ? '${AppLocalizations.of(context).projects_list__updated_at} ${DateFormat('dd.MM.yyyy').format(projects[index].updatedAt!)}'
+                      : null,
+                  action: () => AppRouter.routeToWorkPackagesList(
+                    project: projects[index],
+                  ),
+                ),
               ),
             ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 16.0,
-            ),
-          )
-        ]),
+            const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+          ],
+        ),
       ),
     );
   }

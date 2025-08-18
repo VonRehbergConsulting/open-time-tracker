@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 
 import 'package:open_project_time_tracker/app/app_router.dart';
@@ -10,8 +10,13 @@ import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries
 
 import 'widgets/time_entry_list_item.dart';
 
-class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
-    TimeEntriesListState, TimeEntriesListEffect> {
+class TimeEntriesListPage
+    extends
+        EffectBlocPage<
+          TimeEntriesListBloc,
+          TimeEntriesListState,
+          TimeEntriesListEffect
+        > {
   const TimeEntriesListPage({super.key});
 
   @override
@@ -39,10 +44,11 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
       title: AppLocalizations.of(context).time_entries_list_title,
       onRefresh: context.read<TimeEntriesListBloc>().reload,
       leading: IconButton(
-          onPressed: () {
-            context.read<TimeEntriesListBloc>().unauthorize();
-          },
-          icon: const Icon(Icons.logout)),
+        onPressed: () {
+          context.read<TimeEntriesListBloc>().unauthorize();
+        },
+        icon: const Icon(Icons.logout),
+      ),
       actions: [
         IconButton(
           onPressed: () => AppRouter.routeToCalendar(context),
@@ -60,48 +66,47 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
         child: const Icon(Icons.add),
         onPressed: () => AppRouter.routeToProjectsList(),
       ),
-      scrollingEnabled:
-          state.maybeWhen(loading: () => false, orElse: () => true),
+      scrollingEnabled: state.maybeWhen(
+        loading: () => false,
+        orElse: () => true,
+      ),
       body: state.when(
-        loading: () => const SliverMainAxisGroup(slivers: [
-          SliverToBoxAdapter(
-            child: ConfiguredShimmer(
-              child: Column(
-                children: [
-                  _TotalTimePlaceholder(),
-                  _ItemPlaceholder(),
-                  _ItemPlaceholder(),
-                  _ItemPlaceholder(),
-                  _ItemPlaceholder(),
-                ],
+        loading: () => const SliverMainAxisGroup(
+          slivers: [
+            SliverToBoxAdapter(
+              child: ConfiguredShimmer(
+                child: Column(
+                  children: [
+                    _TotalTimePlaceholder(),
+                    _ItemPlaceholder(),
+                    _ItemPlaceholder(),
+                    _ItemPlaceholder(),
+                    _ItemPlaceholder(),
+                  ],
+                ),
               ),
             ),
-          ),
-        ]),
-        idle: (timeEntries, workingHours, totalDuration) =>
-            SliverMainAxisGroup(slivers: [
-          SliverToBoxAdapter(
-            child: TotalTimeListItem(
-              workingHours,
-              totalDuration,
-              (value) {
+          ],
+        ),
+        idle: (timeEntries, workingHours, totalDuration) => SliverMainAxisGroup(
+          slivers: [
+            SliverToBoxAdapter(
+              child: TotalTimeListItem(workingHours, totalDuration, (value) {
                 final duration = Duration(
                   hours: value.hour,
                   minutes: value.minute,
                 );
-                context
-                    .read<TimeEntriesListBloc>()
-                    .updateWorkingHours(duration);
-              },
+                context.read<TimeEntriesListBloc>().updateWorkingHours(
+                  duration,
+                );
+              }),
             ),
-          ),
-          timeEntries.isEmpty
-              ? SliverScreenEmpty(
-                  text: AppLocalizations.of(context).time_entries_list_empty,
-                )
-              : SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+            timeEntries.isEmpty
+                ? SliverScreenEmpty(
+                    text: AppLocalizations.of(context).time_entries_list_empty,
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
                       final timeEntry = timeEntries[index];
                       return TimeEntryListItem(
                         workPackageSubject: timeEntry.workPackageSubject,
@@ -109,9 +114,9 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
                         hours: timeEntry.hours,
                         comment: timeEntry.comment,
                         action: () {
-                          context
-                              .read<TimeEntriesListBloc>()
-                              .setTimeEntry(timeEntry);
+                          context.read<TimeEntriesListBloc>().setTimeEntry(
+                            timeEntry,
+                          );
                         },
                         dismissAction: () async {
                           return await context
@@ -119,11 +124,10 @@ class TimeEntriesListPage extends EffectBlocPage<TimeEntriesListBloc,
                               .deleteTimeEntry(timeEntry.id!);
                         },
                       );
-                    },
-                    childCount: timeEntries.length,
+                    }, childCount: timeEntries.length),
                   ),
-                ),
-        ]),
+          ],
+        ),
       ),
     );
   }
@@ -134,11 +138,7 @@ class _TotalTimePlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TotalTimeListItem(
-      const Duration(),
-      const Duration(),
-      (_) {},
-    );
+    return TotalTimeListItem(const Duration(), const Duration(), (_) {});
   }
 }
 
