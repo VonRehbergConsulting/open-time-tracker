@@ -59,9 +59,6 @@ android {
         manifestPlaceholders += [
             'appAuthRedirectScheme': 'openprojecttimetracker'
         ]
-    }
-
-     defaultConfig {
         multiDexEnabled true
     }
 
