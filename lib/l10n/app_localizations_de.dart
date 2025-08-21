@@ -81,8 +81,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get time_entries_list_change_working_hours => 'Arbeitszeit ändern';
 
   @override
-  String get time_entries_list_empty =>
-      'Für heute existieren noch keine Aufzeichnungen';
+  String get time_entries_list_empty => 'Nichts anzuzeigen';
 
   @override
   String get work_package_list_empty => 'Keine Aufgaben';

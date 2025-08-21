@@ -82,7 +82,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get time_entries_list_change_working_hours => 'Change working hours';
 
   @override
-  String get time_entries_list_empty => 'No work logged today';
+  String get time_entries_list_empty => 'Nothing to display';
 
   @override
   String get work_package_list_empty => 'No tasks';

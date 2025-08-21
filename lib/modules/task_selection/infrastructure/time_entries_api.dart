@@ -11,30 +11,23 @@ abstract class TimeEntriesApi {
   @GET('/time_entries')
   Future<TimeEntriesResponse> timeEntries({
     @Query('filters') String? filters,
+    @Query('sortBy') String? sortBy,
     @Query('pageSize') int? pageSize,
   });
 
   @POST('/time_entries')
-  @Headers(<String, dynamic>{
-    "Content-Type": "application/json",
-  })
-  Future<void> createTimeEntry({
-    @Body() required Map<String, dynamic> body,
-  });
+  @Headers(<String, dynamic>{"Content-Type": "application/json"})
+  Future<void> createTimeEntry({@Body() required Map<String, dynamic> body});
 
   @PATCH('/time_entries/{id}')
-  @Headers(<String, dynamic>{
-    "Content-Type": "application/json",
-  })
+  @Headers(<String, dynamic>{"Content-Type": "application/json"})
   Future<void> updateTimeEntry({
     @Path() required id,
     @Body() required Map<String, dynamic> body,
   });
 
   @DELETE('/time_entries/{id}')
-  Future<void> deleteTimeEntry({
-    @Path() required id,
-  });
+  Future<void> deleteTimeEntry({@Path() required id});
 }
 
 class TimeEntryResponse {
@@ -63,8 +56,9 @@ class TimeEntryResponse {
     workPackageHref = workPackage["href"];
 
     final hoursString = json["hours"];
-    hours =
-        Duration(seconds: IsoDuration.parse(hoursString).toSeconds().round());
+    hours = Duration(
+      seconds: IsoDuration.parse(hoursString).toSeconds().round(),
+    );
     if (hours.inSeconds.remainder(60) == 59) {
       hours += const Duration(seconds: 1);
     }

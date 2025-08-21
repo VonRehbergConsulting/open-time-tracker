@@ -245,7 +245,7 @@ abstract class AppLocalizations {
   /// No description provided for @time_entries_list_empty.
   ///
   /// In en, this message translates to:
-  /// **'No work logged today'**
+  /// **'Nothing to display'**
   String get time_entries_list_empty;
 
   /// No description provided for @work_package_list_empty.

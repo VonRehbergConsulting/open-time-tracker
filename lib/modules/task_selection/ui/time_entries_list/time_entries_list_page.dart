@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 
@@ -40,6 +41,10 @@ class TimeEntriesListPage
 
   @override
   Widget buildState(BuildContext context, TimeEntriesListState state) {
+    final dateFormat = DateFormat(
+      'dd MMMM yyyy',
+      AppLocalizations.of(context).localeName,
+    );
     return SliverScreen(
       title: AppLocalizations.of(context).time_entries_list_title,
       onRefresh: context.read<TimeEntriesListBloc>().reload,
@@ -101,31 +106,41 @@ class TimeEntriesListPage
                 );
               }),
             ),
-            timeEntries.isEmpty
-                ? SliverScreenEmpty(
-                    text: AppLocalizations.of(context).time_entries_list_empty,
-                  )
-                : SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      final timeEntry = timeEntries[index];
-                      return TimeEntryListItem(
-                        workPackageSubject: timeEntry.workPackageSubject,
-                        projectTitle: timeEntry.projectTitle,
-                        hours: timeEntry.hours,
-                        comment: timeEntry.comment,
-                        action: () {
-                          context.read<TimeEntriesListBloc>().setTimeEntry(
-                            timeEntry,
-                          );
-                        },
-                        dismissAction: () async {
-                          return await context
-                              .read<TimeEntriesListBloc>()
-                              .deleteTimeEntry(timeEntry.id!);
-                        },
-                      );
-                    }, childCount: timeEntries.length),
+            if (timeEntries.isEmpty)
+              SliverScreenEmpty(
+                text: AppLocalizations.of(context).time_entries_list_empty,
+              ),
+            if (timeEntries.isNotEmpty)
+              for (var element in timeEntries.entries) ...[
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 0.0),
+                    child: Text(dateFormat.format(element.key)),
                   ),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final timeEntry = element.value[index];
+                    return TimeEntryListItem(
+                      workPackageSubject: timeEntry.workPackageSubject,
+                      projectTitle: timeEntry.projectTitle,
+                      hours: timeEntry.hours,
+                      comment: timeEntry.comment,
+                      action: () {
+                        context.read<TimeEntriesListBloc>().setTimeEntry(
+                          timeEntry,
+                        );
+                      },
+                      dismissAction: () async {
+                        return await context
+                            .read<TimeEntriesListBloc>()
+                            .deleteTimeEntry(timeEntry.id!);
+                      },
+                    );
+                  }, childCount: element.value.length),
+                ),
+              ],
+            const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
           ],
         ),
       ),
