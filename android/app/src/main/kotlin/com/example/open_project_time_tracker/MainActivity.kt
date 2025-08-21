@@ -1,4 +1,4 @@
-package com.example.open_project_time_tracker
+package vonrehberg.timetracker
 
 import io.flutter.embedding.android.FlutterActivity
 

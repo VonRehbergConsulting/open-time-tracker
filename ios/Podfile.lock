@@ -49,12 +49,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 182c5b88630569df5acb672720534756c29b3358
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_appauth: 1ce438877bc111c5d8f42da47729909290624886
-  flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
-  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  flutter_appauth: b951036a3b715d9e38fe5c0e2eb9aded58383984
+  flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
+  flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
 
 PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

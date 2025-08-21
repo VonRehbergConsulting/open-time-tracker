@@ -5,20 +5,21 @@ import 'package:open_project_time_tracker/app/ui/widgets/configured_shimmer.dart
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_bloc.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
 import '../../domain/work_packages_repository.dart';
 import 'widgets/work_package_list_item.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
-    WorkPackagesListState, WorkPackagesListEffect> {
+class WorkPackagesListPage
+    extends
+        EffectBlocPage<
+          WorkPackagesListBloc,
+          WorkPackagesListState,
+          WorkPackagesListEffect
+        > {
   final Project _project;
 
-  const WorkPackagesListPage(
-    this._project, {
-    super.key,
-  });
+  const WorkPackagesListPage(this._project, {super.key});
 
   @override
   void onCreate(BuildContext context, WorkPackagesListBloc bloc) {
@@ -55,10 +56,12 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
             },
           ),
           icon: const Icon(Icons.filter_alt_rounded),
-        )
+        ),
       ],
-      scrollingEnabled:
-          state.maybeWhen(loading: () => false, orElse: () => true),
+      scrollingEnabled: state.maybeWhen(
+        loading: () => false,
+        orElse: () => true,
+      ),
       onRefresh: () async {
         await context.read<WorkPackagesListBloc>().reload();
       },
@@ -104,38 +107,33 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
             ),
           ],
         ),
-        idle: (
-          workPackages,
-        ) =>
-            workPackages.isEmpty
-                ? SliverScreenEmpty(
-                    text: AppLocalizations.of(context).work_package_list_empty,
-                  )
-                : _Body(
-                    children: [
-                      ...workPackages.map(
-                        (workPackage) => WorkPackageListItem(
-                            subject: workPackage.subject,
-                            projectTitle: workPackage.projectTitle,
-                            status: workPackage.status,
-                            priority: workPackage.priority,
-                            commentTrailing: workPackage.assignee.type ==
-                                    WorkPackageAssigneeType.group
-                                ? _GroupName(
-                                    text: workPackage.assignee.title,
-                                  )
-                                : null,
-                            action: () {
-                              context
-                                  .read<WorkPackagesListBloc>()
-                                  .setTimeEntry(workPackage);
-                            }),
-                      ),
-                      const SizedBox(
-                        height: 16.0,
-                      ),
-                    ],
+        idle: (workPackages) => workPackages.isEmpty
+            ? SliverScreenEmpty(
+                text: AppLocalizations.of(context).work_package_list_empty,
+              )
+            : _Body(
+                children: [
+                  ...workPackages.map(
+                    (workPackage) => WorkPackageListItem(
+                      subject: workPackage.subject,
+                      projectTitle: workPackage.projectTitle,
+                      status: workPackage.status,
+                      priority: workPackage.priority,
+                      commentTrailing:
+                          workPackage.assignee.type ==
+                              WorkPackageAssigneeType.group
+                          ? _GroupName(text: workPackage.assignee.title)
+                          : null,
+                      action: () {
+                        context.read<WorkPackagesListBloc>().setTimeEntry(
+                          workPackage,
+                        );
+                      },
+                    ),
                   ),
+                  const SizedBox(height: 16.0),
+                ],
+              ),
       ),
     );
   }
@@ -144,21 +142,12 @@ class WorkPackagesListPage extends EffectBlocPage<WorkPackagesListBloc,
 class _Body extends StatelessWidget {
   final List<Widget> children;
 
-  const _Body({
-    required this.children,
-  });
+  const _Body({required this.children});
 
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 8.0,
-          ),
-          ...children,
-        ],
-      ),
+      child: Column(children: [const SizedBox(height: 8.0), ...children]),
     );
   }
 }
@@ -166,9 +155,7 @@ class _Body extends StatelessWidget {
 class _GroupName extends StatelessWidget {
   final String text;
 
-  const _GroupName({
-    required this.text,
-  });
+  const _GroupName({required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -182,14 +169,8 @@ class _GroupName extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(
-          width: 6.0,
-        ),
-        Icon(
-          Icons.people,
-          color: theme.primaryColor,
-          size: 18,
-        ),
+        const SizedBox(width: 6.0),
+        Icon(Icons.people, color: theme.primaryColor, size: 18),
       ],
     );
   }

@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import '../../../../../app/ui/widgets/chart_text_style.dart';
 import '../../../../../app/ui/widgets/configured_card.dart';
 import '../../../../../app/ui/widgets/configured_pie_chart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
 class ProjectChartData {
   final String title;
   final Duration duration;
 
-  ProjectChartData({
-    required this.title,
-    required this.duration,
-  });
+  ProjectChartData({required this.title, required this.duration});
 }
 
 class ProjectsChart extends StatelessWidget {
@@ -50,7 +47,8 @@ class ProjectsChart extends StatelessWidget {
                   title: entry.value.title,
                   value: hours / 60,
                   text: hours.toStringAsFixed(
-                      hours.truncateToDouble() == hours ? 0 : 1),
+                    hours.truncateToDouble() == hours ? 0 : 1,
+                  ),
                   color: colors[entry.key % colors.length],
                 );
               }).toList(),

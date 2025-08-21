@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SegmentedControl<T> extends StatelessWidget {
+class SegmentedControl<T extends Object> extends StatelessWidget {
   final T groupValue;
   final Map<T, String> children;
   final Function(T?) onValueChanged;

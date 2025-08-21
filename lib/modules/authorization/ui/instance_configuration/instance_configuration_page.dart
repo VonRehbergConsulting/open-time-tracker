@@ -2,13 +2,16 @@ import 'package:flutter/material.dart' hide FilledButton;
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/filled_button.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
-class InstanceConfigurationPage extends EffectBlocPage<
-    InstanceConfigurationBloc,
-    InstanceConfigurationState,
-    InstanceConfigurationEffect> {
+class InstanceConfigurationPage
+    extends
+        EffectBlocPage<
+          InstanceConfigurationBloc,
+          InstanceConfigurationState,
+          InstanceConfigurationEffect
+        > {
   final _form = GlobalKey<FormState>();
   final _baseUrlController = TextEditingController();
   final _clientIdController = TextEditingController();
@@ -39,7 +42,8 @@ class InstanceConfigurationPage extends EffectBlocPage<
       invalidUrl: () {
         final snackBar = SnackBar(
           content: Text(
-              AppLocalizations.of(context).instance_configuration__invalid_url),
+            AppLocalizations.of(context).instance_configuration__invalid_url,
+          ),
           duration: const Duration(seconds: 2),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -70,15 +74,19 @@ class InstanceConfigurationPage extends EffectBlocPage<
                   TextFormField(
                     controller: _baseUrlController,
                     decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)
-                            .instance_configuration_base_url),
+                      labelText: AppLocalizations.of(
+                        context,
+                      ).instance_configuration_base_url,
+                    ),
                     onSaved: (newValue) => _baseUrl = newValue ?? '',
                   ),
                   TextFormField(
                     controller: _clientIdController,
                     decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)
-                            .instance_configuration_client_id),
+                      labelText: AppLocalizations.of(
+                        context,
+                      ).instance_configuration_client_id,
+                    ),
                     onSaved: (newValue) => _clientID = newValue ?? '',
                   ),
                 ],
