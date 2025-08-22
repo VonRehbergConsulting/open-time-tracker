@@ -147,7 +147,17 @@ class TimeEntriesListBloc
   }
 
   Duration _totalDuration(Map<DateTime, List<TimeEntry>> items) {
-    final todaysItems = items.entries.firstOrNull?.value ?? [];
+    final latestActivity = items.entries.firstOrNull;
+    if (latestActivity == null) {
+      return Duration.zero;
+    }
+    final today = DateTime.now();
+    if (latestActivity.key.year != today.year ||
+        latestActivity.key.month != today.month ||
+        latestActivity.key.day != today.day) {
+      return Duration.zero;
+    }
+    final todaysItems = latestActivity.value;
     var result = const Duration();
     for (var element in todaysItems) {
       result += element.hours;
