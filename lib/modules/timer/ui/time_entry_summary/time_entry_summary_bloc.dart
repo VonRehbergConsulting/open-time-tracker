@@ -14,6 +14,7 @@ class TimeEntrySummaryState with _$TimeEntrySummaryState {
   const factory TimeEntrySummaryState.idle({
     required String title,
     required String projectTitle,
+    required DateTime spentOn,
     required Duration timeSpent,
     required String? comment,
     required List<String>? commentSuggestions,
@@ -48,6 +49,7 @@ class TimeEntrySummaryBloc
       TimeEntrySummaryState.idle(
         title: timeEntry.workPackageSubject,
         projectTitle: timeEntry.projectTitle,
+        spentOn: timeEntry.spentOn,
         timeSpent: timeEntry.hours,
         comment: timeEntry.comment,
         commentSuggestions: _commentSuggestions,

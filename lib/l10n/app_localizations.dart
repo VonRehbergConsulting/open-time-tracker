@@ -302,6 +302,12 @@ abstract class AppLocalizations {
   /// **'Project'**
   String get time_entry_summary_project;
 
+  /// No description provided for @time_entry_summary_spent_on.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent on'**
+  String get time_entry_summary_spent_on;
+
   /// No description provided for @time_entry_summary_time_spent.
   ///
   /// In en, this message translates to:

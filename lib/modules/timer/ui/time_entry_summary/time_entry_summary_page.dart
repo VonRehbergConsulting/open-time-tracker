@@ -26,7 +26,11 @@ class TimeEntrySummaryPage
 
   TimeEntrySummaryPage({super.key});
 
-  void _showTimePicker(BuildContext context) {
+  void _showSpentOnDatePicker(BuildContext context) {
+    //
+  }
+
+  void _showTimeSpentTimePicker(BuildContext context) {
     if (timeSpent != null) {
       final hours = timeSpent!.inHours;
       final minutes = timeSpent!.inMinutes.remainder(60);
@@ -81,11 +85,19 @@ class TimeEntrySummaryPage
   void onStateChange(BuildContext context, TimeEntrySummaryState state) {
     super.onStateChange(context, state);
     state.whenOrNull(
-      idle: (title, projectTitle, timeSpent, comment, commentSuggestions) {
-        this.timeSpent = timeSpent;
-        // TODO: fix comment lose after hot reload
-        _commentFieldController.text = comment ?? '';
-      },
+      idle:
+          (
+            title,
+            projectTitle,
+            spentOn,
+            timeSpent,
+            comment,
+            commentSuggestions,
+          ) {
+            this.timeSpent = timeSpent;
+            // TODO: fix comment lose after hot reload
+            _commentFieldController.text = comment ?? '';
+          },
     );
   }
 
@@ -96,91 +108,109 @@ class TimeEntrySummaryPage
 
     final Widget body = state.when(
       loading: () => const Center(child: ActivityIndicator()),
-      idle: (title, projectTitle, timeSpent, comment, commentSuggestions) {
-        this.timeSpent = timeSpent;
-        _timeFieldController.text = timeSpent.shortWatch();
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Form(
-                key: _form,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      initialValue: title,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(
-                          context,
-                        ).time_entry_summary_task,
-                      ),
-                      enabled: false,
+      idle:
+          (
+            title,
+            projectTitle,
+            spentOn,
+            timeSpent,
+            comment,
+            commentSuggestions,
+          ) {
+            this.timeSpent = timeSpent;
+            _timeFieldController.text = timeSpent.shortWatch();
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Form(
+                    key: _form,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          initialValue: title,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(
+                              context,
+                            ).time_entry_summary_task,
+                          ),
+                          enabled: false,
+                        ),
+                        TextFormField(
+                          initialValue: projectTitle,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(
+                              context,
+                            ).time_entry_summary_project,
+                          ),
+                          enabled: false,
+                        ),
+                        TextFormField(
+                          initialValue: spentOn.toString(),
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(
+                              context,
+                            ).time_entry_summary_spent_on,
+                          ),
+                          readOnly: true,
+                          onTap: () => _showSpentOnDatePicker(context),
+                        ),
+                        TextFormField(
+                          controller: _timeFieldController,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(
+                              context,
+                            ).time_entry_summary_time_spent,
+                          ),
+                          readOnly: true,
+                          onTap: () => _showTimeSpentTimePicker(context),
+                        ),
+                        TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
+                          controller: _commentFieldController,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(
+                              context,
+                            ).time_entry_summary_comment,
+                            suffixIcon: commentSuggestions == null
+                                ? SizedBox(
+                                    width: IconTheme.of(context).size,
+                                    height: IconTheme.of(context).size,
+                                    child: const ActivityIndicator(),
+                                  )
+                                : commentSuggestions.isEmpty
+                                ? null
+                                : IconButton(
+                                    onPressed: () => _showCommentSuggestions(
+                                      context,
+                                      commentSuggestions,
+                                    ),
+                                    icon: const Icon(Icons.more_horiz),
+                                  ),
+                          ),
+                          readOnly: false,
+                          onChanged: (_) => context
+                              .read<TimeEntrySummaryBloc>()
+                              .updateComment(_commentFieldController.text),
+                        ),
+                      ],
                     ),
-                    TextFormField(
-                      initialValue: projectTitle,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(
-                          context,
-                        ).time_entry_summary_project,
-                      ),
-                      enabled: false,
-                    ),
-                    TextFormField(
-                      controller: _timeFieldController,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(
-                          context,
-                        ).time_entry_summary_time_spent,
-                      ),
-                      readOnly: true,
-                      onTap: () => _showTimePicker(context),
-                    ),
-                    TextFormField(
-                      textCapitalization: TextCapitalization.sentences,
-                      controller: _commentFieldController,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(
-                          context,
-                        ).time_entry_summary_comment,
-                        suffixIcon: commentSuggestions == null
-                            ? SizedBox(
-                                width: IconTheme.of(context).size,
-                                height: IconTheme.of(context).size,
-                                child: const ActivityIndicator(),
-                              )
-                            : commentSuggestions.isEmpty
-                            ? null
-                            : IconButton(
-                                onPressed: () => _showCommentSuggestions(
-                                  context,
-                                  commentSuggestions,
-                                ),
-                                icon: const Icon(Icons.more_horiz),
-                              ),
-                      ),
-                      readOnly: false,
-                      onChanged: (_) => context
-                          .read<TimeEntrySummaryBloc>()
-                          .updateComment(_commentFieldController.text),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 32.0),
-                child: SizedBox(
-                  width: buttonWidth,
-                  child: FilledButton(
-                    onPressed: () => _submit(context),
-                    text: AppLocalizations.of(context).generic_save,
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 32.0),
+                    child: SizedBox(
+                      width: buttonWidth,
+                      child: FilledButton(
+                        onPressed: () => _submit(context),
+                        text: AppLocalizations.of(context).generic_save,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
-      },
+            );
+          },
     );
     return Scaffold(
       backgroundColor: Colors.white,

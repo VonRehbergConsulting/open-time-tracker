@@ -40,6 +40,7 @@
     "time_entry_summary_title": "Summary",
     "time_entry_summary_task": "Task",
     "time_entry_summary_project": "Project",
+    "time_entry_summary_spent_on": "Spent on",
     "time_entry_summary_time_spent": "Time spent",
     "time_entry_summary_comment": "Comment",
 

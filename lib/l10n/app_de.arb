@@ -40,6 +40,7 @@
     "time_entry_summary_title": "Zusammenfassung",
     "time_entry_summary_task": "Aufgabe",
     "time_entry_summary_project": "Projekt",
+    "time_entry_summary_spent_on": "Zeitaufwand für",
     "time_entry_summary_time_spent": "Zeitaufwand",
     "time_entry_summary_comment": "Kommentar",
 

@@ -111,6 +111,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get time_entry_summary_project => 'Projekt';
 
   @override
+  String get time_entry_summary_spent_on => 'Zeitaufwand für';
+
+  @override
   String get time_entry_summary_time_spent => 'Zeitaufwand';
 
   @override

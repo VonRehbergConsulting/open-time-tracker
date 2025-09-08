@@ -112,6 +112,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get time_entry_summary_project => 'Project';
 
   @override
+  String get time_entry_summary_spent_on => 'Spent on';
+
+  @override
   String get time_entry_summary_time_spent => 'Time spent';
 
   @override
