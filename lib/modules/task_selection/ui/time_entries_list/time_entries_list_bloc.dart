@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
+import 'package:open_project_time_tracker/app/services/analytics_service.dart';
+import 'package:open_project_time_tracker/app/storage/env_vars.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
 import '../../../calendar/domain/calendar_notifications_service.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 
 part 'time_entries_list_bloc.freezed.dart';
 
@@ -23,6 +27,10 @@ class TimeEntriesListState with _$TimeEntriesListState {
 @freezed
 class TimeEntriesListEffect with _$TimeEntriesListEffect {
   const factory TimeEntriesListEffect.error() = _Error;
+  const factory TimeEntriesListEffect.requestAnalyticsConsent({
+    required Future<void> Function(bool) setConsentHandler,
+    required Future<void> Function() openPrivacyPolicyHandler,
+  }) = _RequestAnalyticsConsent;
 }
 
 class TimeEntriesListBloc
@@ -34,6 +42,7 @@ class TimeEntriesListBloc
   final AuthService _graphAuthService;
   final TimerRepository _timerRepository;
   final CalendarNotificationsService _calendarNotificationsService;
+  final AnalyticsService _analyticsService;
 
   List<TimeEntry> items = [];
   Duration workingHours = const Duration(hours: 0);
@@ -52,6 +61,7 @@ class TimeEntriesListBloc
     this._graphAuthService,
     this._timerRepository,
     this._calendarNotificationsService,
+    this._analyticsService,
   ) : super(const TimeEntriesListState.loading()) {
     WidgetsBinding.instance.addObserver(this);
   }
@@ -70,9 +80,7 @@ class TimeEntriesListBloc
     super.didChangeAppLifecycleState(state);
   }
 
-  Future<void> reload({
-    bool showLoading = false,
-  }) async {
+  Future<void> reload({bool showLoading = false}) async {
     try {
       if (showLoading) {
         emit(const TimeEntriesListState.loading());
@@ -83,17 +91,21 @@ class TimeEntriesListBloc
         endDate: DateTime.now(),
       );
       workingHours = await _settingsRepository.workingHours;
-      emit(TimeEntriesListState.idle(
-        workingHours: workingHours,
-        timeEntries: items,
-        totalDuration: totalDuration,
-      ));
+      emit(
+        TimeEntriesListState.idle(
+          workingHours: workingHours,
+          timeEntries: items,
+          totalDuration: totalDuration,
+        ),
+      );
     } catch (e) {
-      emit(TimeEntriesListState.idle(
-        workingHours: workingHours,
-        timeEntries: [],
-        totalDuration: const Duration(),
-      ));
+      emit(
+        TimeEntriesListState.idle(
+          workingHours: workingHours,
+          timeEntries: [],
+          totalDuration: const Duration(),
+        ),
+      );
       emitEffect(const TimeEntriesListEffect.error());
     }
   }
@@ -101,11 +113,13 @@ class TimeEntriesListBloc
   Future<void> updateWorkingHours(Duration value) async {
     await _settingsRepository.setWorkingHours(value);
     workingHours = value;
-    emit(TimeEntriesListState.idle(
-      workingHours: workingHours,
-      timeEntries: items,
-      totalDuration: totalDuration,
-    ));
+    emit(
+      TimeEntriesListState.idle(
+        workingHours: workingHours,
+        timeEntries: items,
+        totalDuration: totalDuration,
+      ),
+    );
   }
 
   Future<void> unauthorize() async {
@@ -116,12 +130,8 @@ class TimeEntriesListBloc
     await _authService.logout();
   }
 
-  Future<void> setTimeEntry(
-    TimeEntry timeEntry,
-  ) async {
-    await _timerRepository.setTimeEntry(
-      timeEntry: timeEntry,
-    );
+  Future<void> setTimeEntry(TimeEntry timeEntry) async {
+    await _timerRepository.setTimeEntry(timeEntry: timeEntry);
   }
 
   Future<bool> deleteTimeEntry(int id) async {
@@ -130,16 +140,40 @@ class TimeEntriesListBloc
       items.removeWhere((element) => element.id == id);
 
       Future.delayed(const Duration(milliseconds: 250)).then((value) {
-        emit(TimeEntriesListState.idle(
-          workingHours: workingHours,
-          timeEntries: items,
-          totalDuration: totalDuration,
-        ));
+        emit(
+          TimeEntriesListState.idle(
+            workingHours: workingHours,
+            timeEntries: items,
+            totalDuration: totalDuration,
+          ),
+        );
       });
       return true;
     } catch (e) {
       emitEffect(const TimeEntriesListEffect.error());
       return false;
+    }
+  }
+
+  Future<void> checkAnalyticsConsent() async {
+    final consentGiven = await _settingsRepository.analyticsConsent;
+    if (consentGiven == null) {
+      emitEffect(
+        TimeEntriesListEffect.requestAnalyticsConsent(
+          setConsentHandler: (value) async {
+            await _settingsRepository.setAnalyticsConsent(value);
+            if (value) {
+              await _analyticsService.giveConsent();
+            }
+          },
+          openPrivacyPolicyHandler: () async {
+            final url = Uri.parse(EnvVars.get('PRIVACY_POLICY_URL') ?? '');
+            if (!await launchUrl(url)) {
+              emitEffect(const TimeEntriesListEffect.error());
+            }
+          },
+        ),
+      );
     }
   }
 }

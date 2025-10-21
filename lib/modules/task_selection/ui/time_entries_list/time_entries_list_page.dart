@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
@@ -22,7 +24,9 @@ class TimeEntriesListPage
   @override
   void onCreate(BuildContext context, TimeEntriesListBloc bloc) {
     super.onCreate(context, bloc);
-    bloc.reload();
+    bloc.reload().then((_) {
+      bloc.checkAnalyticsConsent();
+    });
   }
 
   @override
@@ -34,6 +38,60 @@ class TimeEntriesListPage
           duration: const Duration(seconds: 2),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
+      requestAnalyticsConsent: (setConsentHandler, openPrivacyPolicyHandler) {
+        Future.delayed(const Duration(milliseconds: 2000)).then((_) {
+          showCupertinoDialog<void>(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                title: Text(
+                  AppLocalizations.of(context).analytics_consent_request__title,
+                ),
+                content: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: AppLocalizations.of(
+                      context,
+                    ).analytics_consent_request__text,
+                    style: const TextStyle(fontSize: 14.0, color: Colors.black),
+                    children: [
+                      TextSpan(
+                        text:
+                            '\n${AppLocalizations.of(context).analytics_consent_request__privacy_policy}',
+                        style: const TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = openPrivacyPolicyHandler,
+                      ),
+                      const TextSpan(text: '.'),
+                    ],
+                  ),
+                ),
+
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      setConsentHandler(false);
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text(AppLocalizations.of(context).generic_decline),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setConsentHandler(true);
+                      Navigator.of(context).pop(true);
+                    },
+                    child: Text(AppLocalizations.of(context).generic_accept),
+                  ),
+                ],
+              );
+            },
+          );
+        });
       },
     );
   }

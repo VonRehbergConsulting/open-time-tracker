@@ -57,6 +57,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get generic__in_progress => 'In Bearbeitung';
 
   @override
+  String get generic_accept => 'Zustimmen';
+
+  @override
+  String get generic_decline => 'Ablehnen';
+
+  @override
   String get authorization_log_in => 'Anmelden';
 
   @override
@@ -191,4 +197,15 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get projects_list__updated_at => 'Aktualisiert am';
+
+  @override
+  String get analytics_consent_request__title => 'Technische Daten teilen';
+
+  @override
+  String get analytics_consent_request__text =>
+      'Hilf uns, die Stabilität und Leistung der App zu verbessern, indem du anonyme Absturzberichte und Sitzungsdaten teilst. Es werden keine personenbezogenen Daten erfasst.';
+
+  @override
+  String get analytics_consent_request__privacy_policy =>
+      'Datenschutzerklärung';
 }

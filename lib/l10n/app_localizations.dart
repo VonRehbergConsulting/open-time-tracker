@@ -194,6 +194,18 @@ abstract class AppLocalizations {
   /// **'In progress'**
   String get generic__in_progress;
 
+  /// No description provided for @generic_accept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get generic_accept;
+
+  /// No description provided for @generic_decline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get generic_decline;
+
   /// No description provided for @authorization_log_in.
   ///
   /// In en, this message translates to:
@@ -451,6 +463,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Updated'**
   String get projects_list__updated_at;
+
+  /// No description provided for @analytics_consent_request__title.
+  ///
+  /// In en, this message translates to:
+  /// **'Share technical data'**
+  String get analytics_consent_request__title;
+
+  /// No description provided for @analytics_consent_request__text.
+  ///
+  /// In en, this message translates to:
+  /// **'Help us improve app stability and performance by sharing anonymous crash reports and session data. No personal information is collected.'**
+  String get analytics_consent_request__text;
+
+  /// No description provided for @analytics_consent_request__privacy_policy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get analytics_consent_request__privacy_policy;
 }
 
 class _AppLocalizationsDelegate

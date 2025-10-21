@@ -27,6 +27,19 @@ class PreferencesStorage {
     return storage.getInt(key);
   }
 
+  Future<void> setBool(String key, bool value) async {
+    final prefs = SharedPreferences.getInstance();
+    await prefs.then((prefs) {
+      prefs.setBool(key, value);
+    });
+  }
+
+  Future<bool?> getBool(String key) async {
+    final prefs = SharedPreferences.getInstance();
+    final storage = await prefs;
+    return storage.getBool(key);
+  }
+
   void remove(String key) async {
     final prefs = SharedPreferences.getInstance();
     return prefs.then((prefs) => prefs.remove(key));

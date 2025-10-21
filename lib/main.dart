@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:open_project_time_tracker/app/services/analytics_service.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/navigation/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/asset_images.dart';
@@ -13,6 +14,7 @@ import 'modules/calendar/domain/calendar_notifications_service.dart';
 void main() async {
   configureDependencies();
   await dotenv.load();
+  await inject<AnalyticsService>().initialize(consentGiven: true);
   inject<LocalNotificationService>().setup();
   runApp(
     CalendarNotificationsScheduler(inject<CalendarNotificationsService>()),
@@ -83,6 +85,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     precacheImage(AssetImage(AssetImages.logo), context);
+    const themeColor = Color.fromRGBO(38, 92, 185, 1);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
@@ -103,8 +106,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 249, 249, 249),
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        primaryColor: const Color.fromRGBO(38, 92, 185, 1),
+        primaryColor: themeColor,
         fontFamily: 'Cupertino',
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(foregroundColor: themeColor),
+        ),
       ),
       home: const AppRouter(),
     );
