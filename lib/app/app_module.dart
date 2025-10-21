@@ -12,6 +12,7 @@ import 'package:open_project_time_tracker/app/auth/infrastructure/open_project_a
 import 'package:open_project_time_tracker/app/auth/infrastructure/secure_auth_token_storage.dart';
 import 'package:open_project_time_tracker/app/live_activity/domain/live_activity_manager.dart';
 import 'package:open_project_time_tracker/app/live_activity/infrastructure/default_live_activity_manager.dart';
+import 'package:open_project_time_tracker/app/services/analytics_service.dart';
 import 'package:open_project_time_tracker/app/services/local_notification_service.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
@@ -26,42 +27,31 @@ abstract class AppModule {
   @Named('openProject')
   @lazySingleton
   AuthTokenStorage authTokenStorage() => SecureAuthTokenStorage(
-        const FlutterSecureStorage(),
-        accessTokenKey: 'accessToken',
-        refreshTokenKey: 'refreshToken',
-      );
+    const FlutterSecureStorage(),
+    accessTokenKey: 'accessToken',
+    refreshTokenKey: 'refreshToken',
+  );
 
   @Named('openProject')
   @lazySingleton
   AuthService authService(
     @Named('openProject') AuthClient authClient,
     @Named('openProject') AuthTokenStorage authTokenStorage,
-  ) =>
-      OAuthAuthService(
-        authClient,
-        authTokenStorage,
-      );
+  ) => OAuthAuthService(authClient, authTokenStorage);
 
   @Named('openProject')
   @injectable
   AuthClientData authClientData(
     @Named('openProject')
     InstanceConfigurationRepository instanceConfigurationRepository,
-  ) =>
-      OpenProjectAuthClientData(
-        instanceConfigurationRepository,
-      );
+  ) => OpenProjectAuthClientData(instanceConfigurationRepository);
 
   @Named('openProject')
   @injectable
   AuthClient authClient(
     @Named('openProject') AuthTokenStorage authTokenStorage,
     @Named('openProject') AuthClientData authClientData,
-  ) =>
-      OAuthClient(
-        const FlutterAppAuth(),
-        authClientData,
-      );
+  ) => OAuthClient(const FlutterAppAuth(), authClientData);
 
   @Named('openProject')
   @injectable
@@ -91,31 +81,30 @@ abstract class AppModule {
     @Named('openProject') AuthService authService,
     @Named('graph') AuthService graphAuthService,
     CalendarNotificationsService calendarNotificationsService,
-  ) =>
-      RestApiClient(
-        instanceConfigurationRepository,
-        authTokenStorage,
-        authClient,
-        () {
-          graphAuthService.logout();
-          authService.logout();
-          calendarNotificationsService.removeNotifications();
-        },
-      );
+  ) => RestApiClient(
+    instanceConfigurationRepository,
+    authTokenStorage,
+    authClient,
+    () {
+      graphAuthService.logout();
+      authService.logout();
+      calendarNotificationsService.removeNotifications();
+    },
+  );
 
   @lazySingleton
   LocalNotificationService localNotificationService(
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
-  ) =>
-      LocalNotificationService(
-        flutterLocalNotificationsPlugin,
-      );
+  ) => LocalNotificationService(flutterLocalNotificationsPlugin);
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin() =>
       FlutterLocalNotificationsPlugin();
 
   @lazySingleton
   LiveActivityManager liveActivityManager() => DefaultLiveActivityManager(
-        channelKey: 'vonrehberg.timetracker.live-activity',
-      );
+    channelKey: 'vonrehberg.timetracker.live-activity',
+  );
+
+  @lazySingleton
+  AnalyticsService analyticsService() => AnalyticsService();
 }
