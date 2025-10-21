@@ -28,6 +28,9 @@ jobs:
         run: |
           touch .env
           echo "GRAPH_API_CLIENT_ID=${{ secrets.GRAPH_API_CLIENT_ID }}" > .env
+          echo "COUNTLY_APP_KEY=${{ secrets.COUNTLY_APP_KEY }}" > .env
+          echo "COUNTLY_URL=${{ secrets.COUNTLY_URL }}" > .env
+          echo "PRIVACY_POLICY_URL=${{ secrets.PRIVACY_POLICY_URL }}" > .env
 
       # - name: Build for Android
       #   run: flutter build apk
@@ -56,6 +59,9 @@ jobs:
         run: |
           touch .env
           echo "GRAPH_API_CLIENT_ID=${{ secrets.GRAPH_API_CLIENT_ID }}" > .env
+          echo "COUNTLY_APP_KEY=${{ secrets.COUNTLY_APP_KEY }}" > .env
+          echo "COUNTLY_URL=${{ secrets.COUNTLY_URL }}" > .env
+          echo "PRIVACY_POLICY_URL=${{ secrets.PRIVACY_POLICY_URL }}" > .env
 
       - name: Build for iOS
         env:

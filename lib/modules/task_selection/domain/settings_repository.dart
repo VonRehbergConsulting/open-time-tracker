@@ -9,4 +9,7 @@ abstract class SettingsRepository {
   // 1 - all tasks
   Future<int> get assigneeFilter;
   Future<void> setAssigneeFilter(int value);
+
+  Future<bool?> get analyticsConsent;
+  Future<void> setAnalyticsConsent(bool value);
 }

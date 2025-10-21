@@ -6,13 +6,12 @@ import 'package:open_project_time_tracker/modules/task_selection/domain/settings
 class LocalSettingsRepository implements SettingsRepository {
   final PreferencesStorage _storage;
 
-  LocalSettingsRepository(
-    this._storage,
-  );
+  LocalSettingsRepository(this._storage);
 
   final String _workingHoursKey = 'workingHours';
   final String _workPackagesStatusFilterKey = 'workPackagesStatusFilter';
   final String _assigneeFilterKey = 'assigneeFilter';
+  final String _analyticsConsent = 'analyticsConsent';
 
   // working hours
 
@@ -71,5 +70,15 @@ class LocalSettingsRepository implements SettingsRepository {
   @override
   Future<void> setAssigneeFilter(int value) async {
     await _storage.setInt(_assigneeFilterKey, value);
+  }
+
+  @override
+  Future<bool?> get analyticsConsent async {
+    return await _storage.getBool(_analyticsConsent);
+  }
+
+  @override
+  Future<void> setAnalyticsConsent(bool value) async {
+    await _storage.setBool(_analyticsConsent, value);
   }
 }
