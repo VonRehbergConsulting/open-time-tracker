@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
@@ -22,17 +23,35 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
     }
     if (startDate != null && endDate != null) {
       filters.add(
-          '{"spent_on":{"operator":"<>d","values":["$startDate", "$endDate"]}}');
+        '{"spent_on":{"operator":"<>d","values":["$startDate", "$endDate"]}}',
+      );
     }
+    // keep work package filter last to replace it further for compartability with old API versions
     if (workPackageId != null) {
-      filters
-          .add('{"workPackage":{"operator":"=","values":["$workPackageId"]}}');
+      filters.add('{"entity":{"operator":"=","values":["$workPackageId"]}}');
     }
     final filtersString = '[${filters.join(', ')}]';
-    final result = await _restApi.timeEntries(
-      filters: filtersString,
-      pageSize: pageSize,
-    );
+
+    TimeEntriesResponse result;
+    try {
+      result = await _restApi.timeEntries(
+        filters: filtersString,
+        pageSize: pageSize,
+      );
+    } on DioException catch (e) {
+      // retry with deprecated old filter for older instances
+      if (e.response?.statusCode == 400 && workPackageId != null) {
+        filters.removeLast();
+        filters.add(
+          '{"workPackage":{"operator":"=","values":["$workPackageId"]}}',
+        );
+      }
+      result = await _restApi.timeEntries(
+        filters: filtersString,
+        pageSize: pageSize,
+      );
+    }
+
     result.timeEntries.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     final items = result.timeEntries
         .map(
@@ -52,18 +71,17 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
   }
 
   @override
-  Future<void> create(
-      {required TimeEntry timeEntry, required int userId}) async {
+  Future<void> create({
+    required TimeEntry timeEntry,
+    required int userId,
+  }) async {
     final body = {
       'user': {'id': userId},
       'workPackage': {'href': timeEntry.workPackageHref},
       'project': {'href': timeEntry.projectHref},
       'spentOn': DateFormat('yyyy-MM-dd').format(DateTime.now()),
       'hours': timeEntry.hours.toISO8601(),
-      'comment': {
-        'format': 'plain',
-        'raw': timeEntry.comment,
-      }
+      'comment': {'format': 'plain', 'raw': timeEntry.comment},
     };
     await _restApi.createTimeEntry(body: body);
   }
@@ -75,15 +93,9 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
     }
     final body = {
       'hours': timeEntry.hours.toISO8601(),
-      'comment': {
-        'format': 'plain',
-        'raw': timeEntry.comment,
-      },
+      'comment': {'format': 'plain', 'raw': timeEntry.comment},
     };
-    await _restApi.updateTimeEntry(
-      id: timeEntry.id,
-      body: body,
-    );
+    await _restApi.updateTimeEntry(id: timeEntry.id, body: body);
   }
 
   @override

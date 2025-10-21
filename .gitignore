@@ -6,9 +6,11 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
 migrate_working_dir/
 
 # IntelliJ related
@@ -107,3 +109,6 @@ android/fastlane/report.xml
 android/fastlane/pc-api.json
 android/fastlane/api_key.json
 android/fastlane/metadata/
+
+# FVM Version Cache
+.fvm/

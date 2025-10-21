@@ -7,7 +7,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../../../app/ui/widgets/configured_card.dart';
 import '/extensions/duration.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
 class TotalTimeListItem extends StatelessWidget {
   final Duration workingHours;
@@ -24,46 +24,39 @@ class TotalTimeListItem extends StatelessWidget {
   Widget _createIconText(IconData icon, String text) {
     return Row(
       children: [
-        Icon(
-          icon,
-          size: 20,
-          color: Colors.white,
-        ),
+        Icon(icon, size: 20, color: Colors.white),
         const SizedBox(width: 8),
         Text(
           text,
           style: const TextStyle(
-              fontSize: 18,
-              fontFeatures: [
-                FontFeature.tabularFigures(),
-              ],
-              color: Colors.white),
+            fontSize: 18,
+            fontFeatures: [FontFeature.tabularFigures()],
+            color: Colors.white,
+          ),
         ),
       ],
     );
   }
 
-  void _showTimePicker(
-    BuildContext passedContext,
-    Duration initialValue,
-  ) {
+  void _showTimePicker(BuildContext passedContext, Duration initialValue) {
     final hours = initialValue.inHours;
     final minutes = initialValue.inMinutes.remainder(60);
     showCupertinoModalPopup(
       context: passedContext,
       builder: ((context) => TimePicker(
-            hours: hours,
-            minutes: minutes,
-            onTimeChanged: onWorkingHoursChange,
-          )),
+        hours: hours,
+        minutes: minutes,
+        onTimeChanged: onWorkingHoursChange,
+      )),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final percent = timeSpent.inMinutes / workingHours.inMinutes;
-    final percentText =
-        percent > 1 ? '>100%' : '${(percent * 100).toStringAsFixed(0)}%';
+    final percentText = percent > 1
+        ? '>100%'
+        : '${(percent * 100).toStringAsFixed(0)}%';
     var timeLeft = workingHours - timeSpent;
     if (timeLeft.inSeconds < 0) {
       timeLeft = const Duration();
@@ -82,10 +75,7 @@ class TotalTimeListItem extends StatelessWidget {
               ],
             ),
           ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12.0,
-            vertical: 16.0,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
           child: SizedBox(
             height: 100,
             child: Row(
@@ -127,8 +117,9 @@ class TotalTimeListItem extends StatelessWidget {
                         _showTimePicker(context, workingHours);
                       },
                       child: Text(
-                        AppLocalizations.of(context)
-                            .time_entries_list_change_working_hours,
+                        AppLocalizations.of(
+                          context,
+                        ).time_entries_list_change_working_hours,
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),

@@ -5,17 +5,18 @@ import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_shimmer.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_filter/work_packages_filter_bloc.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
-    WorkpackagesFilterState, WorkPackagesFilterEffect> {
+class WorkPackagesFilterPage
+    extends
+        EffectBlocPage<
+          WorkPackagesFilterBloc,
+          WorkpackagesFilterState,
+          WorkPackagesFilterEffect
+        > {
   final Function()? completion;
 
-  const WorkPackagesFilterPage({
-    super.key,
-    this.completion,
-  });
+  const WorkPackagesFilterPage({super.key, this.completion});
 
   @override
   void onEffect(BuildContext context, WorkPackagesFilterEffect effect) {
@@ -53,8 +54,10 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
           icon: const Icon(Icons.done),
         ),
       ],
-      scrollingEnabled:
-          state.maybeWhen(loading: () => false, orElse: () => true),
+      scrollingEnabled: state.maybeWhen(
+        loading: () => false,
+        orElse: () => true,
+      ),
       body: state.when(
         loading: () => SliverToBoxAdapter(
           child: ConfiguredShimmer(
@@ -83,16 +86,8 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
             ),
           ),
         ),
-        selection: (
-          statuses,
-          selectedIds,
-          assigneeFilter,
-        ) =>
-            SliverPadding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 10.0,
-            horizontal: 16.0,
-          ),
+        selection: (statuses, selectedIds, assigneeFilter) => SliverPadding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           sliver: SliverMainAxisGroup(
             slivers: [
               _header('Assignee'),
@@ -116,25 +111,20 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
                       .setAssigneeFilter(1),
                 ),
               ),
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 16.0),
-              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
               _header('Status'),
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final status = statuses[index];
-                    return _item(
-                      context,
-                      isSelected: selectedIds.contains(status.id),
-                      text: status.name,
-                      onToggle: () => context
-                          .read<WorkPackagesFilterBloc>()
-                          .toggleStatusSelection(status.id),
-                    );
-                  },
-                  childCount: statuses.length,
-                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final status = statuses[index];
+                  return _item(
+                    context,
+                    isSelected: selectedIds.contains(status.id),
+                    text: status.name,
+                    onToggle: () => context
+                        .read<WorkPackagesFilterBloc>()
+                        .toggleStatusSelection(status.id),
+                  );
+                }, childCount: statuses.length),
               ),
             ],
           ),
@@ -150,9 +140,7 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
         margin: EdgeInsets.all(0),
         child: Text(
           'Filter title placeholder',
-          style: TextStyle(
-            fontSize: 16.0,
-          ),
+          style: TextStyle(fontSize: 16.0),
         ),
       ),
     );
@@ -171,9 +159,7 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
             size: 24.0,
           ),
           const SizedBox(width: 16.0),
-          const ConfiguredCard(
-            child: Text('Filter option placeholder'),
-          ),
+          const ConfiguredCard(child: Text('Filter option placeholder')),
         ],
       ),
     );
@@ -183,12 +169,7 @@ class WorkPackagesFilterPage extends EffectBlocPage<WorkPackagesFilterBloc,
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18.0,
-          ),
-        ),
+        child: Text(title, style: const TextStyle(fontSize: 18.0)),
       ),
     );
   }

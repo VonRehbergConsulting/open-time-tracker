@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/navigation/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/asset_images.dart';
 import 'app/di/inject.dart';
@@ -15,9 +15,7 @@ void main() async {
   await dotenv.load();
   inject<LocalNotificationService>().setup();
   runApp(
-    CalendarNotificationsScheduler(
-      inject<CalendarNotificationsService>(),
-    ),
+    CalendarNotificationsScheduler(inject<CalendarNotificationsService>()),
   );
 }
 
@@ -37,7 +35,8 @@ class CalendarNotificationsScheduler extends StatefulWidget {
 }
 
 class _CalendarNotificationsSchedulerState
-    extends State<CalendarNotificationsScheduler> with WidgetsBindingObserver {
+    extends State<CalendarNotificationsScheduler>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -93,10 +92,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en'),
-        Locale('de'),
-      ],
+      supportedLocales: const [Locale('en'), Locale('de')],
       title: 'Open Project Time Tracker',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(

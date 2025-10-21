@@ -5,11 +5,15 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/filled_button.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_bloc.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
-    AuthorizationState, AuthorizationEffect> {
+class AuthorizationPage
+    extends
+        EffectBlocPage<
+          AuthorizationBloc,
+          AuthorizationState,
+          AuthorizationEffect
+        > {
   const AuthorizationPage({super.key});
 
   @override
@@ -32,16 +36,10 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
   }
 
   @override
-  Widget buildState(
-    BuildContext context,
-    AuthorizationState state,
-  ) {
+  Widget buildState(BuildContext context, AuthorizationState state) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 8.0,
-          horizontal: 64.0,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 64.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -71,11 +69,10 @@ class AuthorizationPage extends EffectBlocPage<AuthorizationBloc,
                           .checkInstanceConfiguration,
                     ),
                     child: Text(
-                      AppLocalizations.of(context)
-                          .authorization_configure_instance,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                      ),
+                      AppLocalizations.of(
+                        context,
+                      ).authorization_configure_instance,
+                      style: TextStyle(color: Theme.of(context).primaryColor),
                     ),
                   ),
                 ],

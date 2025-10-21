@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../app/ui/widgets/configured_card.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import '/extensions/duration.dart';
 
 class TimeEntryListItem extends StatelessWidget {
@@ -68,9 +68,7 @@ class TimeEntryListItem extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Icon(
-              Icons.delete,
-            ),
+            child: Icon(Icons.delete),
           ),
         ),
         child: body,
@@ -102,19 +100,11 @@ class TimeEntryListItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(
-                    trailing,
-                    style: const TextStyle(color: Colors.black54),
-                  ),
+                  Text(trailing, style: const TextStyle(color: Colors.black54)),
                 ],
               ),
               const SizedBox(height: 4),
-              Text(
-                projectTitle,
-                style: const TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
+              Text(projectTitle, style: const TextStyle(color: Colors.grey)),
               SizedBox(height: comment != null && comment!.isNotEmpty ? 6 : 0),
               if (comment != null && comment!.isNotEmpty) Text(comment!),
             ],

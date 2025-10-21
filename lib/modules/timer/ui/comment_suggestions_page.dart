@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/list_item.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
 
 class CommentSuggestionsPage extends StatelessWidget {
