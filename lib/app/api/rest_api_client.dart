@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:open_project_time_tracker/app/api/auth_interceptor.dart';
 import 'package:open_project_time_tracker/app/api/base_url_interceptor.dart';
@@ -14,7 +15,7 @@ class RestApiClient implements ApiClient {
   final void Function()? onAuthenticationFailed;
 
   final InstanceConfigurationReadRepository
-      _instanceConfigurationReadRepository;
+  _instanceConfigurationReadRepository;
   final AuthTokenStorage _authTokenStorage;
   final AuthClient _authClient;
 
@@ -29,44 +30,36 @@ class RestApiClient implements ApiClient {
   Dio get dio {
     final dio = Dio();
 
-    // Configure HTTP client to use system certificate store
-    (dio.httpClientAdapter as HttpClientAdapter).httpClientFactory = () {
-      final httpClient = HttpClient();
-      // Use system certificate store by creating a new SecurityContext
-      // This ensures the client uses certificates installed on the device
-      final context = SecurityContext.defaultContext;
-      return HttpClient(context: context);
-    };
+    if (dio.httpClientAdapter is IOHttpClientAdapter) {
+      (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+        final context = SecurityContext.defaultContext;
+        return HttpClient(context: context);
+      };
+    }
 
-    dio.interceptors.addAll(
-      [
-        InterceptorsWrapper(
-          onRequest: (
-            RequestOptions options,
-            RequestInterceptorHandler handler,
-          ) async {
-            options.connectTimeout = const Duration(seconds: 5);
-            options.receiveTimeout = const Duration(seconds: 3);
-            return handler.next(options);
-          },
+    dio.interceptors.addAll([
+      InterceptorsWrapper(
+        onRequest:
+            (RequestOptions options, RequestInterceptorHandler handler) async {
+              options.connectTimeout = const Duration(seconds: 5);
+              options.receiveTimeout = const Duration(seconds: 3);
+              return handler.next(options);
+            },
+      ),
+      BaseUrlInterceptor(_instanceConfigurationReadRepository),
+      AuthInterceptor(
+        dio,
+        _authTokenStorage,
+        _authClient,
+        onAuthenticationFailed,
+      ),
+      if (!kReleaseMode) // if debug
+        LoggingInterceptor(
+          requestBody: true,
+          responseBody: true,
+          logPrint: (obj) => print("[HTTP], ${obj.toString()}"),
         ),
-        BaseUrlInterceptor(
-          _instanceConfigurationReadRepository,
-        ),
-        AuthInterceptor(
-          dio,
-          _authTokenStorage,
-          _authClient,
-          onAuthenticationFailed,
-        ),
-        if (!kReleaseMode) // if debug
-          LoggingInterceptor(
-            requestBody: true,
-            responseBody: true,
-            logPrint: (obj) => print("[HTTP], ${obj.toString()}"),
-          ),
-      ],
-    );
+    ]);
     return dio;
   }
 }
