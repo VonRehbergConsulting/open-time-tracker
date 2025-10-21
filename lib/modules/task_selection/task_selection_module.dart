@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
+import 'package:open_project_time_tracker/app/services/analytics_service.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
@@ -29,73 +30,41 @@ import '../calendar/domain/calendar_notifications_service.dart';
 @module
 abstract class TaskSelectionModule {
   @lazySingleton
-  TimeEntriesApi timeEntriesApi(
-    @Named('openProject') ApiClient client,
-  ) =>
-      TimeEntriesApi(
-        client.dio,
-      );
+  TimeEntriesApi timeEntriesApi(@Named('openProject') ApiClient client) =>
+      TimeEntriesApi(client.dio);
 
   @lazySingleton
-  WorkPackagesApi workPackagesApi(
-    @Named('openProject') ApiClient client,
-  ) =>
-      WorkPackagesApi(
-        client.dio,
-      );
+  WorkPackagesApi workPackagesApi(@Named('openProject') ApiClient client) =>
+      WorkPackagesApi(client.dio);
 
   @lazySingleton
-  StatusesApi statusesApi(
-    @Named('openProject') ApiClient client,
-  ) =>
-      StatusesApi(
-        client.dio,
-      );
+  StatusesApi statusesApi(@Named('openProject') ApiClient client) =>
+      StatusesApi(client.dio);
 
   @lazySingleton
-  ProjectsApi projectsApi(
-    @Named('openProject') ApiClient client,
-  ) =>
-      ProjectsApi(
-        client.dio,
-      );
+  ProjectsApi projectsApi(@Named('openProject') ApiClient client) =>
+      ProjectsApi(client.dio);
 
   @lazySingleton
-  TimeEntriesRepository timeEntriesRepository(
-    TimeEntriesApi timeEntriesApi,
-  ) =>
-      ApiTimeEntriesRepository(
-        timeEntriesApi,
-      );
+  TimeEntriesRepository timeEntriesRepository(TimeEntriesApi timeEntriesApi) =>
+      ApiTimeEntriesRepository(timeEntriesApi);
 
   @lazySingleton
   WorkPackagesRepository workPackagesRepository(
     WorkPackagesApi workPackagesApi,
-  ) =>
-      ApiWorkPackagesRepository(
-        workPackagesApi,
-      );
+  ) => ApiWorkPackagesRepository(workPackagesApi);
 
   @lazySingleton
-  StatusesRepository statusesRepository(
-    StatusesApi statusesApi,
-  ) =>
-      ApiStatusesRepository(
-        statusesApi,
-      );
+  StatusesRepository statusesRepository(StatusesApi statusesApi) =>
+      ApiStatusesRepository(statusesApi);
 
   @lazySingleton
-  SettingsRepository settingsRepository() => LocalSettingsRepository(
-        PreferencesStorage(),
-      );
+  SettingsRepository settingsRepository() =>
+      LocalSettingsRepository(PreferencesStorage());
 
   @lazySingleton
-  ProjectsRepository projectsRepository(
-    ProjectsApi projectsApi,
-  ) =>
-      ApiProjectsRepository(
-        projectsApi,
-      );
+  ProjectsRepository projectsRepository(ProjectsApi projectsApi) =>
+      ApiProjectsRepository(projectsApi);
 
   @injectable
   TimeEntriesListBloc timeEntriesListBloc(
@@ -105,63 +74,50 @@ abstract class TaskSelectionModule {
     @Named('graph') AuthService graphAuthService,
     TimerRepository timerRepository,
     CalendarNotificationsService calendarNotificationsService,
-  ) =>
-      TimeEntriesListBloc(
-        timeEntriesRepository,
-        settingsRepository,
-        authService,
-        graphAuthService,
-        timerRepository,
-        calendarNotificationsService,
-      );
+    AnalyticsService analyticsService,
+  ) => TimeEntriesListBloc(
+    timeEntriesRepository,
+    settingsRepository,
+    authService,
+    graphAuthService,
+    timerRepository,
+    calendarNotificationsService,
+    analyticsService,
+  );
 
   @injectable
   WorkPackagesListBloc workPackagesListBloc(
     WorkPackagesRepository workPackagesRepository,
     TimerRepository timerRepository,
     SettingsRepository settingsRepository,
-  ) =>
-      WorkPackagesListBloc(
-        workPackagesRepository,
-        timerRepository,
-        settingsRepository,
-      );
+  ) => WorkPackagesListBloc(
+    workPackagesRepository,
+    timerRepository,
+    settingsRepository,
+  );
 
   @injectable
-  AnalyticsBloc analyticsBloc(
-    TimeEntriesRepository timeEntriesRepository,
-  ) =>
-      AnalyticsBloc(
-        timeEntriesRepository,
-      );
+  AnalyticsBloc analyticsBloc(TimeEntriesRepository timeEntriesRepository) =>
+      AnalyticsBloc(timeEntriesRepository);
 
   @injectable
   NotificationSelectionListBloc notificationSelectionListBloc(
     WorkPackagesRepository workPackagesRepository,
     TimerRepository timerRepository,
     TimeEntriesRepository timeEntriesRepository,
-  ) =>
-      NotificationSelectionListBloc(
-        workPackagesRepository,
-        timerRepository,
-        timeEntriesRepository,
-      );
+  ) => NotificationSelectionListBloc(
+    workPackagesRepository,
+    timerRepository,
+    timeEntriesRepository,
+  );
 
   @injectable
   WorkPackagesFilterBloc workPackagesFilterBloc(
     StatusesRepository statusesRepository,
     SettingsRepository settingsRepository,
-  ) =>
-      WorkPackagesFilterBloc(
-        statusesRepository,
-        settingsRepository,
-      );
+  ) => WorkPackagesFilterBloc(statusesRepository, settingsRepository);
 
   @injectable
-  ProjectsListBloc projectsListBloc(
-    ProjectsRepository projectsRepository,
-  ) =>
-      ProjectsListBloc(
-        projectsRepository,
-      );
+  ProjectsListBloc projectsListBloc(ProjectsRepository projectsRepository) =>
+      ProjectsListBloc(projectsRepository);
 }
