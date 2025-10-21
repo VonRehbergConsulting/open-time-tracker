@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:open_project_time_tracker/app/api/auth_interceptor.dart';
@@ -27,6 +28,15 @@ class RestApiClient implements ApiClient {
   @override
   Dio get dio {
     final dio = Dio();
+
+    // Configure HTTP client to use system certificate store
+    (dio.httpClientAdapter as HttpClientAdapter).httpClientFactory = () {
+      final httpClient = HttpClient();
+      // Use system certificate store by creating a new SecurityContext
+      // This ensures the client uses certificates installed on the device
+      final context = SecurityContext.defaultContext;
+      return HttpClient(context: context);
+    };
 
     dio.interceptors.addAll(
       [
