@@ -30,13 +30,6 @@ class RestApiClient implements ApiClient {
   Dio get dio {
     final dio = Dio();
 
-    if (dio.httpClientAdapter is IOHttpClientAdapter) {
-      (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
-        final context = SecurityContext.defaultContext;
-        return HttpClient(context: context);
-      };
-    }
-
     dio.interceptors.addAll([
       InterceptorsWrapper(
         onRequest:
