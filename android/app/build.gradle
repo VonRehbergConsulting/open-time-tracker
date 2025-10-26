@@ -31,7 +31,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "vonrehberg.timetracker"
     compileSdkVersion flutter.compileSdkVersion
-    ndkVersion "26.1.10909125"
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         coreLibraryDesugaringEnabled true
