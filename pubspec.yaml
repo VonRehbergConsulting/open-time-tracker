@@ -16,11 +16,11 @@ dependencies:
   cupertino_icons: 1.0.8
   countly_flutter: 25.4.1
   provider: 6.1.2
-  flutter_appauth: 7.0.0
   bloc: 8.1.4
   flutter_bloc: 8.1.6
   freezed_annotation: 2.4.4
   http: 1.2.2
+  uni_links: 0.5.1
   intl: 0.20.2
   injectable: 2.4.4
   iso_duration_parser: 1.1.1

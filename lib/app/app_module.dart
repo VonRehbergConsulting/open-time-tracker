@@ -1,4 +1,4 @@
-import 'package:flutter_appauth/flutter_appauth.dart';
+// removed flutter_appauth dependency; using manual OAuth flow instead
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
@@ -51,7 +51,7 @@ abstract class AppModule {
   AuthClient authClient(
     @Named('openProject') AuthTokenStorage authTokenStorage,
     @Named('openProject') AuthClientData authClientData,
-  ) => OAuthClient(const FlutterAppAuth(), authClientData);
+  ) => OAuthClient(authClientData);
 
   @Named('openProject')
   @injectable
