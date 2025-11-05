@@ -30,6 +30,18 @@ class RestApiClient implements ApiClient {
   Dio get dio {
     final dio = Dio();
 
+    // Ensure we use platform default root certificates and do not bypass TLS validation.
+    // On non-web platforms, configure the IO adapter explicitly to use the default
+    // SecurityContext and avoid setting any badCertificateCallback.
+    if (!kIsWeb) {
+      final ioAdapter = IOHttpClientAdapter();
+      ioAdapter.createHttpClient = () {
+        // Create default HttpClient which uses platform root certificates.
+        return HttpClient();
+      };
+      dio.httpClientAdapter = ioAdapter;
+    }
+
     dio.interceptors.addAll([
       InterceptorsWrapper(
         onRequest:

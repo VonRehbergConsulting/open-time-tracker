@@ -1,4 +1,4 @@
-import 'package:flutter_appauth/flutter_appauth.dart';
+// removed flutter_appauth dependency; using manual OAuth flow instead
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/api/graph_api_client.dart';
@@ -18,10 +18,10 @@ abstract class GraphApiModule {
   @Named('graph')
   @lazySingleton
   AuthTokenStorage authTokenStorage() => SecureAuthTokenStorage(
-        const FlutterSecureStorage(),
-        accessTokenKey: 'graphAccessToken',
-        refreshTokenKey: 'graphRefreshToken',
-      );
+    const FlutterSecureStorage(),
+    accessTokenKey: 'graphAccessToken',
+    refreshTokenKey: 'graphRefreshToken',
+  );
 
   @Named('graph')
   @injectable
@@ -29,24 +29,15 @@ abstract class GraphApiModule {
 
   @Named('graph')
   @injectable
-  AuthClient authClient(
-    @Named('graph') AuthClientData authClientData,
-  ) =>
-      OAuthClient(
-        const FlutterAppAuth(),
-        authClientData,
-      );
+  AuthClient authClient(@Named('graph') AuthClientData authClientData) =>
+      OAuthClient(authClientData);
 
   @Named('graph')
   @lazySingleton
   AuthService authService(
     @Named('graph') AuthClient authClient,
     @Named('graph') AuthTokenStorage authTokenStorage,
-  ) =>
-      OAuthAuthService(
-        authClient,
-        authTokenStorage,
-      );
+  ) => OAuthAuthService(authClient, authTokenStorage);
 
   @Named('graph')
   @injectable
@@ -54,12 +45,7 @@ abstract class GraphApiModule {
     @Named('graph') AuthTokenStorage authTokenStorage,
     @Named('graph') AuthClient authClient,
     @Named('graph') AuthService authService,
-  ) =>
-      GraphApiClient(
-        authTokenStorage,
-        authClient,
-        () {
-          authService.logout();
-        },
-      );
+  ) => GraphApiClient(authTokenStorage, authClient, () {
+    authService.logout();
+  });
 }
