@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,12 +18,12 @@ late final DeepLinkService deepLinkSvc;
 void main() async {
   configureDependencies();
   await dotenv.load();
-  await inject<AnalyticsService>().initialize(consentGiven: true);
   inject<LocalNotificationService>().setup();
   runApp(
     CalendarNotificationsScheduler(inject<CalendarNotificationsService>()),
   );
   deepLinkSvc = await DeepLinkService.start();
+  await inject<AnalyticsService>().initialize();
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -117,6 +118,9 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Cupertino',
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(foregroundColor: themeColor),
+        ),
+        cupertinoOverrideTheme: const CupertinoThemeData(
+          primaryColor: themeColor,
         ),
       ),
       home: const AppRouter(),
