@@ -3,10 +3,14 @@ description: A new Flutter project.
 publish_to: "none"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: 1.8.1+56
 =======
 version: 1.7.1+59
 >>>>>>> 0fae7a0 (Update version)
+=======
+version: 1.7.1+60
+>>>>>>> 6ac778a (Update version)
 
 environment:
   sdk: 3.8.1
