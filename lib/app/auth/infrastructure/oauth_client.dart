@@ -1,10 +1,8 @@
 import 'dart:convert';
-// no local servers used; using uni_links for deep-link capture
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
-import '../../../main.dart' show deepLinkSvc;
 import 'package:open_project_time_tracker/app/auth/domain/auth_client_data.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_token_storage.dart';
 
@@ -38,27 +36,19 @@ class OAuthClient implements AuthClient {
         )
         .toString();
 
-    // Open system browser to start authorization
-    if (!await launchUrl(
-      Uri.parse(authUrl),
-      mode: LaunchMode.externalApplication,
-    )) {
-      throw ErrorDescription('could_not_launch_browser');
-    }
+    // Use flutter_web_auth_2 to handle the OAuth flow
+    // This handles the browser launch and callback automatically
+    // preferEphemeral: false ensures the session is shared with the browser
+    final result = await FlutterWebAuth2.authenticate(
+      url: authUrl,
+      callbackUrlScheme: Uri.parse(redirectUrl).scheme,
+      options: const FlutterWebAuth2Options(
+        intentFlags: ephemeralIntentFlags,
+      ),
+    );
 
-    // Wait for the redirect containing the authorization code.
-    // We only support custom-scheme deep-links captured with `uni_links`.
-    final uri = Uri.tryParse(redirectUrl);
-    if (uri == null) throw ErrorDescription('invalid_redirect');
-    if (uri.scheme == 'http' || uri.scheme == 'https') {
-      throw ErrorDescription('http_loopback_redirects_not_supported');
-    }
-
-    // await next deep link using the app's DeepLinkService, which handles cold-start and runtime links
-    final incoming = await deepLinkSvc.awaitLink();
-    if (incoming == null) throw ErrorDescription('deep_link_timeout_or_error');
-    final incomingUri = Uri.parse(incoming);
-    final code = incomingUri.queryParameters['code'];
+    final resultUri = Uri.parse(result);
+    final code = resultUri.queryParameters['code'];
 
     if (code == null) throw ErrorDescription('authorization_code_null');
 

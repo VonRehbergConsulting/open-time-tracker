@@ -45,7 +45,7 @@ class ProfileBloc extends EffectCubit<ProfileState, ProfileEffect> {
     _connectionSubscription = _calendarConnectionService
         .observeConnectionState()
         .listen(_onConnectionStateChanged, onError: addError);
-    
+
     // Fetch user name
     try {
       final name = await _userDataRepository.userName();

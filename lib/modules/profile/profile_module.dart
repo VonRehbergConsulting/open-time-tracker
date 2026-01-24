@@ -13,11 +13,10 @@ abstract class ProfileModule {
     CalendarNotificationsService calendarNotificationsService,
     UserDataRepository userDataRepository,
     CalendarConnectionService calendarConnectionService,
-  ) =>
-      ProfileBloc(
-        authService,
-        calendarNotificationsService,
-        userDataRepository,
-        calendarConnectionService,
-      );
+  ) => ProfileBloc(
+    authService,
+    calendarNotificationsService,
+    userDataRepository,
+    calendarConnectionService,
+  );
 }

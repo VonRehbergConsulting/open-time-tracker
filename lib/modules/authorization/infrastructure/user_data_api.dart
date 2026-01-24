@@ -17,10 +17,7 @@ class UserData {
   int id;
   String name;
 
-  UserData({
-    required this.id,
-    required this.name,
-  });
+  UserData({required this.id, required this.name});
 
   factory UserData.fromJson(Map<String, dynamic> json) =>
       _$UserDataFromJson(json);
