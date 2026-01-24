@@ -28,7 +28,7 @@
     "instance_configuration_client_id": "Client ID",
     "instance_configuration__invalid_url": "Die URL ist ungültig",
 
-    "time_entries_list_title": "Heutige Arbeit",
+    "time_entries_list_title": "Zeiterfassungen",
     "time_entries_list_change_working_hours": "Arbeitszeit ändern",
     "time_entries_list_empty": "Für heute existieren noch keine Aufzeichnungen",
 
@@ -58,13 +58,17 @@
     
     "comment_suggestions_title": "Einen Kommentar wählen",
 
+    "profile_title": "Profil",
+    "profile_subtitle": "Verwalten Sie Ihr Konto",
+    "profile_calendar_connected": "Verbunden",
+    "profile_calendar_disconnected": "Nicht verbunden",
+    "profile_logout_title": "Abmelden",
+    "profile_logout_description": "Von Ihrem Konto abmelden",
+    "profile_logout_button": "Abmelden",
+
     "calendar_title": "Kalenderbenachrichtigungen",
     "calendar_connect": "Kalender verbinden",
     "calendar_disconnect": "Kalender trennen",
-    "calendar_promo_1": "Verbinden Sie Ihren Microsoft-Kalender, um keine Meetings mehr zu verpassen",
-    "calendar_promo_2": "Erhalten Sie rechtzeitige Benachrichtigungen, indem Sie Ihren Microsoft-Kalender verbinden und stellen Sie sicher, dass Sie stets die richtige Aufgabe im Blick haben",
-    "calendar_connected_1": "Ihr Microsoft-Kalender ist verbunden",
-    "calendar_connected_2": "Sie erhalten Erinnerungen für Ihre Meetings",
 
     "notifications_calendar_title": "Das Meeting beginnt",
     "notifications_calendar_body": "Öffnen um den Timer zu starten",
