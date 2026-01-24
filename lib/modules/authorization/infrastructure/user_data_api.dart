@@ -15,9 +15,11 @@ abstract class UserDataApi {
 @JsonSerializable()
 class UserData {
   int id;
+  String name;
 
   UserData({
     required this.id,
+    required this.name,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) =>

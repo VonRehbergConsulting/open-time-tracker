@@ -28,7 +28,7 @@
     "instance_configuration_client_id": "Client ID",
     "instance_configuration__invalid_url": "URL is invalid",
 
-    "time_entries_list_title": "Recent work",
+    "time_entries_list_title": "Time Recordings",
     "time_entries_list_change_working_hours": "Change working hours",
     "time_entries_list_empty": "No work logged today",
 
@@ -58,13 +58,17 @@
     
     "comment_suggestions_title": "Choose a comment",
 
+    "profile_title": "Profile",
+    "profile_subtitle": "Manage your account",
+    "profile_calendar_connected": "Connected",
+    "profile_calendar_disconnected": "Not connected",
+    "profile_logout_title": "Sign out",
+    "profile_logout_description": "Sign out of your account",
+    "profile_logout_button": "Sign out",
+
     "calendar_title": "Calendar notifications",
     "calendar_connect": "Connect calendar",
     "calendar_disconnect": "Disconnect calendar",
-    "calendar_promo_1": "Connect your Microsoft calendar to never miss a meeting again",
-    "calendar_promo_2": "Receive timely notifications by connecting your Microsoft calendar, ensuring you always track the right task",
-    "calendar_connected_1": "Your Microsoft calendar is connected",
-    "calendar_connected_2": "You will recieve reminders for your meetings",
 
     "notifications_calendar_title": "Meeting is starting",
     "notifications_calendar_body": "Open to start a timer",
