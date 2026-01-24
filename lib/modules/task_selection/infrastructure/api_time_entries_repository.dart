@@ -71,7 +71,7 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
   }
 
   @override
-  Future<void> create({
+  Future<TimeEntry> create({
     required TimeEntry timeEntry,
     required int userId,
   }) async {
@@ -79,15 +79,19 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
       'user': {'id': userId},
       'workPackage': {'href': timeEntry.workPackageHref},
       'project': {'href': timeEntry.projectHref},
-      'spentOn': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      'spentOn': DateFormat('yyyy-MM-dd').format(timeEntry.spentOn),
       'hours': timeEntry.hours.toISO8601(),
       'comment': {'format': 'plain', 'raw': timeEntry.comment},
     };
-    await _restApi.createTimeEntry(body: body);
+    final response = await _restApi.createTimeEntry(body: body);
+    // Parse the response to get the ID and update the timeEntry
+    final data = response.data;
+    timeEntry.id = data['id'];
+    return timeEntry;
   }
 
   @override
-  Future<void> update({required TimeEntry timeEntry}) async {
+  Future<TimeEntry> update({required TimeEntry timeEntry}) async {
     if (timeEntry.id == null) {
       throw Exception('Updating time entry without id');
     }
@@ -96,6 +100,7 @@ class ApiTimeEntriesRepository implements TimeEntriesRepository {
       'comment': {'format': 'plain', 'raw': timeEntry.comment},
     };
     await _restApi.updateTimeEntry(id: timeEntry.id, body: body);
+    return timeEntry;
   }
 
   @override

@@ -66,7 +66,10 @@ class TimeEntrySummaryPage
   @override
   void onEffect(BuildContext context, TimeEntrySummaryEffect effect) {
     effect.when(
-      complete: () => Navigator.of(context).popUntil((route) => route.isFirst),
+      complete: (timeEntry) {
+        // Just pop back with the created entry - let it bubble up the navigation stack
+        Navigator.of(context).pop(timeEntry);
+      },
       error: () {
         final snackBar = SnackBar(
           content: Text(AppLocalizations.of(context).generic_error),

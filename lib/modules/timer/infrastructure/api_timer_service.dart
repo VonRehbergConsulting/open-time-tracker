@@ -16,7 +16,7 @@ class ApiTimerService implements TimerService {
     this._timerRepository,
   );
   @override
-  Future<void> submit({TimeEntry? timeEntry}) async {
+  Future<TimeEntry> submit({TimeEntry? timeEntry}) async {
     if (timeEntry == null) {
       final entry = await _timerRepository.timeEntry;
       final timeSpent = await _timerRepository.timeSpent;
@@ -28,15 +28,14 @@ class ApiTimerService implements TimerService {
     }
     final userId = await _userDataRepository.userId();
     if (timeEntry.id == null) {
-      await _timeEntriesRepository.create(
+      timeEntry = await _timeEntriesRepository.create(
         timeEntry: timeEntry,
         userId: userId,
       );
     } else {
-      await _timeEntriesRepository.update(
-        timeEntry: timeEntry,
-      );
+      timeEntry = await _timeEntriesRepository.update(timeEntry: timeEntry);
     }
     await _timerRepository.reset();
+    return timeEntry;
   }
 }

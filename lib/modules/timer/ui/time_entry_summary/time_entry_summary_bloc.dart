@@ -22,7 +22,9 @@ class TimeEntrySummaryState with _$TimeEntrySummaryState {
 
 @freezed
 class TimeEntrySummaryEffect with _$TimeEntrySummaryEffect {
-  const factory TimeEntrySummaryEffect.complete() = _Complete;
+  const factory TimeEntrySummaryEffect.complete({
+    required TimeEntry timeEntry,
+  }) = _Complete;
   const factory TimeEntrySummaryEffect.error() = _Error;
 }
 
@@ -97,8 +99,8 @@ class TimeEntrySummaryBloc
   Future<void> submit() async {
     emit(const TimeEntrySummaryState.loading());
     try {
-      await _timerService.submit(timeEntry: timeEntry);
-      emitEffect(const TimeEntrySummaryEffect.complete());
+      final submittedEntry = await _timerService.submit(timeEntry: timeEntry);
+      emitEffect(TimeEntrySummaryEffect.complete(timeEntry: submittedEntry));
     } catch (e) {
       _emitIdleState();
       emitEffect(const TimeEntrySummaryEffect.error());

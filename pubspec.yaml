@@ -5,7 +5,7 @@ publish_to: "none"
 version: 1.7.1+60
 
 environment:
-  sdk: 3.8.1
+  sdk: '>=3.8.1 <4.0.0'
 
 dependencies:
   flutter:
@@ -46,7 +46,7 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: 0.13.1
   retrofit_generator: 8.1.0
-  freezed: 2.5.7
+  freezed: 2.5.2
   injectable_generator: 2.6.2
   build_runner: 2.4.12
   flutter_lints: 6.0.0

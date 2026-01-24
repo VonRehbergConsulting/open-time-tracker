@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
+import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
@@ -71,6 +72,7 @@ abstract class TaskSelectionModule {
     SettingsRepository settingsRepository,
     @Named('openProject') AuthService authService,
     @Named('graph') AuthService graphAuthService,
+    AppStateRepository appStateRepository,
     TimerRepository timerRepository,
     CalendarNotificationsService calendarNotificationsService,
   ) => TimeEntriesListBloc(
@@ -78,6 +80,7 @@ abstract class TaskSelectionModule {
     settingsRepository,
     authService,
     graphAuthService,
+    appStateRepository,
     timerRepository,
     calendarNotificationsService,
   );
@@ -85,10 +88,12 @@ abstract class TaskSelectionModule {
   @injectable
   WorkPackagesListBloc workPackagesListBloc(
     WorkPackagesRepository workPackagesRepository,
+    AppStateRepository appStateRepository,
     TimerRepository timerRepository,
     SettingsRepository settingsRepository,
   ) => WorkPackagesListBloc(
     workPackagesRepository,
+    appStateRepository,
     timerRepository,
     settingsRepository,
   );
