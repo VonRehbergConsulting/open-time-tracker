@@ -62,9 +62,15 @@ class ProjectsListPage
                   comment: projects[index].updatedAt != null
                       ? '${AppLocalizations.of(context).projects_list__updated_at} ${DateFormat('dd.MM.yyyy').format(projects[index].updatedAt!)}'
                       : null,
-                  action: () => AppRouter.routeToWorkPackagesList(
-                    project: projects[index],
-                  ),
+                  action: () async {
+                    final createdEntry =
+                        await AppRouter.routeToWorkPackagesList(
+                          project: projects[index],
+                        );
+                    if (createdEntry != null && context.mounted) {
+                      Navigator.of(context).pop(createdEntry);
+                    }
+                  },
                 ),
               ),
             ),

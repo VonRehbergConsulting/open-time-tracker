@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
@@ -18,7 +19,9 @@ class WorkPackagesListState with _$WorkPackagesListState {
 
 @freezed
 class WorkPackagesListEffect with _$WorkPackagesListEffect {
-  const factory WorkPackagesListEffect.complete() = _Complete;
+  const factory WorkPackagesListEffect.complete({
+    required bool isViewingToday,
+  }) = _Complete;
   const factory WorkPackagesListEffect.error() = _Error;
 }
 
@@ -26,12 +29,14 @@ class WorkPackagesListBloc
     extends EffectCubit<WorkPackagesListState, WorkPackagesListEffect>
     with WidgetsBindingObserver {
   final WorkPackagesRepository _workPackagesRepository;
+  final AppStateRepository _appStateRepository;
   final TimerRepository _timerRepository;
   final SettingsRepository _settingsRepository;
   late String _projectId;
 
   WorkPackagesListBloc(
     this._workPackagesRepository,
+    this._appStateRepository,
     this._timerRepository,
     this._settingsRepository,
   ) : super(const WorkPackagesListState.loading()) {
@@ -56,9 +61,7 @@ class WorkPackagesListBloc
     super.didChangeAppLifecycleState(state);
   }
 
-  Future<void> reload({
-    bool showLoading = false,
-  }) async {
+  Future<void> reload({bool showLoading = false}) async {
     try {
       if (showLoading) {
         emit(const WorkPackagesListState.loading());
@@ -73,26 +76,33 @@ class WorkPackagesListBloc
         statuses: statuses,
         user: assigneeFilter == 0 ? 'me' : null,
       );
-      emit(WorkPackagesListState.idle(
-        workPackages: items,
-      ));
+      emit(WorkPackagesListState.idle(workPackages: items));
     } catch (e) {
-      emit(const WorkPackagesListState.idle(
-        workPackages: [],
-      ));
+      emit(const WorkPackagesListState.idle(workPackages: []));
       emitEffect(const WorkPackagesListEffect.error());
     }
   }
 
-  Future<void> setTimeEntry(
-    WorkPackage workPackage,
-  ) async {
+  Future<void> setTimeEntry(WorkPackage workPackage) async {
     try {
-      final timeEntry = TimeEntry.fromWorkPackage(workPackage);
-      await _timerRepository.setTimeEntry(
-        timeEntry: timeEntry,
+      final selectedDate = await _appStateRepository.selectedDate;
+      final timeEntry = TimeEntry.fromWorkPackage(
+        workPackage,
+        selectedDate: selectedDate,
       );
-      emitEffect(const WorkPackagesListEffect.complete());
+      await _timerRepository.setTimeEntry(timeEntry: timeEntry);
+
+      // Determine if we're viewing today
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final isViewingToday =
+          selectedDate == null ||
+          DateTime(selectedDate.year, selectedDate.month, selectedDate.day) ==
+              today;
+
+      emitEffect(
+        WorkPackagesListEffect.complete(isViewingToday: isViewingToday),
+      );
     } catch (e) {
       emitEffect(const WorkPackagesListEffect.error());
     }

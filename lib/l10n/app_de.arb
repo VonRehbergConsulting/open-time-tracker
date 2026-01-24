@@ -17,6 +17,8 @@
     "generic__in_progress": "In Bearbeitung",
     "generic_accept": "Zustimmen",
     "generic_decline": "Ablehnen",
+    "generic_today": "Heute",
+    "generic_yesterday": "Gestern",
 
     "authorization_log_in": "Anmelden",
     "authorization_configure_instance": "Instanz konfigurieren",

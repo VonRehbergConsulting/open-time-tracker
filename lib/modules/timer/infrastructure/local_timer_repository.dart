@@ -8,16 +8,12 @@ class LocalTimerRepository implements TimerRepository {
 
   final _state = BehaviorSubject<bool>();
 
-  LocalTimerRepository(
-    this._timerStorage,
-  );
+  LocalTimerRepository(this._timerStorage);
 
   @override
-  Stream<bool> observeIsSet() => _state.doOnListen(
-        () async {
-          await _init();
-        },
-      );
+  Stream<bool> observeIsSet() => _state.doOnListen(() async {
+    await _init();
+  });
 
   Future<void> _init() async {
     _state.add(await isSet);
@@ -59,9 +55,7 @@ class LocalTimerRepository implements TimerRepository {
   }
 
   @override
-  Future<void> setTimeEntry({
-    required TimeEntry timeEntry,
-  }) async {
+  Future<void> setTimeEntry({required TimeEntry timeEntry}) async {
     DateTime? startTime;
     DateTime? stopTime;
     if (timeEntry.hours.inSeconds > 0) {
@@ -77,9 +71,7 @@ class LocalTimerRepository implements TimerRepository {
   }
 
   @override
-  Future<void> startTimer({
-    required DateTime startTime,
-  }) async {
+  Future<void> startTimer({required DateTime startTime}) async {
     DateTime? startTime = await _timerStorage.getStartTime();
     DateTime? stopTime = await _timerStorage.getStopTime();
 
@@ -93,14 +85,12 @@ class LocalTimerRepository implements TimerRepository {
     }
     await Future.wait([
       _timerStorage.setStartTime(startTime),
-      _timerStorage.setStopTime(stopTime)
+      _timerStorage.setStopTime(stopTime),
     ]);
   }
 
   @override
-  Future<void> stopTimer({
-    required DateTime stopTime,
-  }) async {
+  Future<void> stopTimer({required DateTime stopTime}) async {
     final startTime = await _timerStorage.getStartTime();
     DateTime? stopTime = await _timerStorage.getStopTime();
     final timeEntry = await _timerStorage.getTimeEntry();

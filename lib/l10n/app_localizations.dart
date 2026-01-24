@@ -206,6 +206,18 @@ abstract class AppLocalizations {
   /// **'Decline'**
   String get generic_decline;
 
+  /// No description provided for @generic_today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get generic_today;
+
+  /// No description provided for @generic_yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get generic_yesterday;
+
   /// No description provided for @authorization_log_in.
   ///
   /// In en, this message translates to:
