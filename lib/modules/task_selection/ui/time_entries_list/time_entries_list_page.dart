@@ -44,20 +44,14 @@ class TimeEntriesListPage
     return SliverScreen(
       title: AppLocalizations.of(context).time_entries_list_title,
       onRefresh: context.read<TimeEntriesListBloc>().reload,
-      leading: IconButton(
-        onPressed: () {
-          context.read<TimeEntriesListBloc>().unauthorize();
-        },
-        icon: const Icon(Icons.logout),
-      ),
       actions: [
         IconButton(
-          onPressed: () => AppRouter.routeToCalendar(context),
-          icon: const Icon(Icons.calendar_month_outlined),
+          onPressed: () => AppRouter.routeToAnalytics(context),
+          icon: const Icon(Icons.analytics_outlined),
         ),
         IconButton(
-          onPressed: () => AppRouter.routeToAnalytics(context),
-          icon: const Icon(Icons.bar_chart),
+          onPressed: () => AppRouter.routeToProfile(context),
+          icon: const Icon(Icons.person_outline),
         ),
       ],
       floatingActionButton: FloatingActionButton(

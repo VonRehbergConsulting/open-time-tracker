@@ -87,7 +87,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get instance_configuration__invalid_url => 'Die URL ist ungültig';
 
   @override
-  String get time_entries_list_title => 'Heutige Arbeit';
+  String get time_entries_list_title => 'Zeiterfassungen';
 
   @override
   String get time_entries_list_change_working_hours => 'Arbeitszeit ändern';
@@ -158,6 +158,27 @@ class AppLocalizationsDe extends AppLocalizations {
   String get comment_suggestions_title => 'Einen Kommentar wählen';
 
   @override
+  String get profile_title => 'Profil';
+
+  @override
+  String get profile_subtitle => 'Verwalten Sie Ihr Konto';
+
+  @override
+  String get profile_calendar_connected => 'Verbunden';
+
+  @override
+  String get profile_calendar_disconnected => 'Nicht verbunden';
+
+  @override
+  String get profile_logout_title => 'Abmelden';
+
+  @override
+  String get profile_logout_description => 'Von Ihrem Konto abmelden';
+
+  @override
+  String get profile_logout_button => 'Abmelden';
+
+  @override
   String get calendar_title => 'Kalenderbenachrichtigungen';
 
   @override
@@ -165,21 +186,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get calendar_disconnect => 'Kalender trennen';
-
-  @override
-  String get calendar_promo_1 =>
-      'Verbinden Sie Ihren Microsoft-Kalender, um keine Meetings mehr zu verpassen';
-
-  @override
-  String get calendar_promo_2 =>
-      'Erhalten Sie rechtzeitige Benachrichtigungen, indem Sie Ihren Microsoft-Kalender verbinden und stellen Sie sicher, dass Sie stets die richtige Aufgabe im Blick haben';
-
-  @override
-  String get calendar_connected_1 => 'Ihr Microsoft-Kalender ist verbunden';
-
-  @override
-  String get calendar_connected_2 =>
-      'Sie erhalten Erinnerungen für Ihre Meetings';
 
   @override
   String get notifications_calendar_title => 'Das Meeting beginnt';

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/splash_screen.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
-import 'package:open_project_time_tracker/modules/calendar/ui/calendar_page.dart';
+import 'package:open_project_time_tracker/modules/profile/ui/profile_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/analytics_page.dart';
@@ -85,9 +85,9 @@ class AppRouter {
     Navigator.of(context).push(route);
   }
 
-  static void routeToCalendar(BuildContext context) {
+  static void routeToProfile(BuildContext context) {
     final route = CupertinoPageRoute(
-      builder: ((context) => const CalendarPage()),
+      builder: ((context) => const ProfilePage()),
     );
     Navigator.of(context).push(route);
   }
