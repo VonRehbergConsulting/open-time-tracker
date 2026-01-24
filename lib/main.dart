@@ -9,11 +9,8 @@ import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/navigation/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/asset_images.dart';
 import 'app/di/inject.dart';
-import 'app/auth/infrastructure/deep_link_service.dart';
 import 'app/services/local_notification_service.dart';
 import 'modules/calendar/domain/calendar_notifications_service.dart';
-
-late final DeepLinkService deepLinkSvc;
 
 void main() async {
   configureDependencies();
@@ -22,7 +19,6 @@ void main() async {
   runApp(
     CalendarNotificationsScheduler(inject<CalendarNotificationsService>()),
   );
-  deepLinkSvc = await DeepLinkService.start();
   await inject<AnalyticsService>().initialize();
 }
 
@@ -61,9 +57,6 @@ class _CalendarNotificationsSchedulerState
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _scheduleNotifications();
-      try {
-        deepLinkSvc.notifyAppResumed();
-      } catch (_) {}
     }
     super.didChangeAppLifecycleState(state);
   }

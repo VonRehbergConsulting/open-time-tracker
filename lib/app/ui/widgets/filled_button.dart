@@ -20,12 +20,12 @@ class FilledButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: onPressed != null
-            ? WidgetStateProperty.all(backgroundColor ?? Theme.of(context).primaryColor)
+            ? WidgetStateProperty.all(
+                backgroundColor ?? Theme.of(context).primaryColor,
+              )
             : null,
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         ),
         minimumSize: WidgetStateProperty.all<Size>(const Size(48.0, 48.0)),
         splashFactory: NoSplash.splashFactory,
@@ -33,13 +33,7 @@ class FilledButton extends StatelessWidget {
         foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
       ),
       child: text != null
-          ? Text(
-              text!,
-              style: textStyle ??
-                  const TextStyle(
-                    fontSize: 16,
-                  ),
-            )
+          ? Text(text!, style: textStyle ?? const TextStyle(fontSize: 16))
           : null,
     );
   }
