@@ -12,6 +12,7 @@ class TimerStorage {
   final String _timeEntryKey = 'timeEntry';
   final String _startTimeKey = 'statTime';
   final String _stopTimeKey = 'stopTime';
+  final String _selectedDateKey = 'selectedDate';
 
   // Init
 
@@ -55,9 +56,7 @@ class TimerStorage {
       storage.remove(_timeEntryKey);
       return;
     }
-    final string = jsonEncode(
-      _TimeEntrySerialization.toMap(timeEntry),
-    );
+    final string = jsonEncode(_TimeEntrySerialization.toMap(timeEntry));
     await storage.setString(_timeEntryKey, string);
     print('Time entry saved');
   }
@@ -76,6 +75,14 @@ class TimerStorage {
 
   Future<void> setStopTime(DateTime? dateTime) async {
     return _saveDateTime(_stopTimeKey, dateTime);
+  }
+
+  Future<DateTime?> getSelectedDate() async {
+    return _loadDateTime(_selectedDateKey);
+  }
+
+  Future<void> setSelectedDate(DateTime? dateTime) async {
+    return _saveDateTime(_selectedDateKey, dateTime);
   }
 }
 

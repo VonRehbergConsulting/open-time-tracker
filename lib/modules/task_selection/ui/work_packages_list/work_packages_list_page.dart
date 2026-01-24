@@ -31,8 +31,22 @@ class WorkPackagesListPage
   @override
   void onEffect(BuildContext context, WorkPackagesListEffect effect) {
     effect.when(
-      complete: () {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+      complete: (isViewingToday) {
+        // For past dates, navigate to edit screen and get the result
+        if (!isViewingToday) {
+          AppRouter.routeToTimeEntrySummary(context).then((createdEntry) {
+            if (createdEntry != null && context.mounted) {
+              // Pop back to ProjectsListPage with the result
+              Navigator.of(context).pop(createdEntry);
+            } else if (context.mounted) {
+              // User cancelled, just go back to TimeEntriesListPage
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            }
+          });
+        } else {
+          // For today, go back to TimeEntriesListPage and let router show timer
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        }
       },
       error: () {
         final snackBar = SnackBar(

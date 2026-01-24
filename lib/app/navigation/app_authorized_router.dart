@@ -16,16 +16,20 @@ class AppAuthorizedRouter extends StatefulWidget {
 class _AppAuthorizedRouterState extends State<AppAuthorizedRouter> {
   @override
   Widget build(BuildContext context) {
-    return InjectableBlocConsumer<AppAuthorizedRouterBloc,
-        AppAuthorizedRouterState>(
-      create: (context) => AppAuthorizedRouterBloc(
-        () => inject(),
-      )..init(),
+    return InjectableBlocConsumer<
+      AppAuthorizedRouterBloc,
+      AppAuthorizedRouterState
+    >(
+      create: (context) =>
+          AppAuthorizedRouterBloc(() => inject(), () => inject())..init(),
       builder: (context, state) {
         return state.when(
           initializing: () => const SplashScreen(),
-          idle: (isTimerSet) {
-            return isTimerSet ? TimerPage() : const TimeEntriesListPage();
+          idle: (isTimerSet, isViewingToday) {
+            // Only show timer page if a timer is set AND we're viewing today
+            return (isTimerSet && isViewingToday)
+                ? TimerPage()
+                : const TimeEntriesListPage();
           },
         );
       },
