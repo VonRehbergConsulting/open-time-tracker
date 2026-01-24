@@ -5,7 +5,8 @@ import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/modules/profile/ui/profile_bloc.dart';
 
-class ProfilePage extends EffectBlocPage<ProfileBloc, ProfileState, ProfileEffect> {
+class ProfilePage
+    extends EffectBlocPage<ProfileBloc, ProfileState, ProfileEffect> {
   const ProfilePage({super.key});
 
   @override
@@ -42,11 +43,7 @@ class ProfilePage extends EffectBlocPage<ProfileBloc, ProfileState, ProfileEffec
                   shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.all(16),
-                child: const Icon(
-                  Icons.person,
-                  size: 48,
-                  color: Colors.white,
-                ),
+                child: const Icon(Icons.person, size: 48, color: Colors.white),
               ),
               const SizedBox(width: 20),
               Expanded(
@@ -94,21 +91,27 @@ class ProfilePage extends EffectBlocPage<ProfileBloc, ProfileState, ProfileEffec
           children: [
             // User Header Card with Gradient
             _buildGradientUserCard(context, state.userName),
-            
+
             const SizedBox(height: 24),
-            
+
             // Calendar Integration Section
-            _buildSectionTitle(context, AppLocalizations.of(context).calendar_title),
+            _buildSectionTitle(
+              context,
+              AppLocalizations.of(context).calendar_title,
+            ),
             const SizedBox(height: 8),
             _buildCalendarTile(context, state),
-            
+
             const SizedBox(height: 24),
-            
+
             // Logout Section
-            _buildSectionTitle(context, AppLocalizations.of(context).profile_logout_title),
+            _buildSectionTitle(
+              context,
+              AppLocalizations.of(context).profile_logout_title,
+            ),
             const SizedBox(height: 8),
             _buildLogoutTile(context),
-            
+
             const Spacer(),
           ],
         ),
@@ -149,7 +152,9 @@ class ProfilePage extends EffectBlocPage<ProfileBloc, ProfileState, ProfileEffec
           ),
         ),
         trailing: Icon(
-          state.isCalendarConnected ? Icons.check_circle : Icons.circle_outlined,
+          state.isCalendarConnected
+              ? Icons.check_circle
+              : Icons.circle_outlined,
           color: state.isCalendarConnected ? Colors.green : Colors.grey,
         ),
         onTap: state.isCalendarConnected
@@ -162,11 +167,7 @@ class ProfilePage extends EffectBlocPage<ProfileBloc, ProfileState, ProfileEffec
   Widget _buildLogoutTile(BuildContext context) {
     return ConfiguredCard(
       child: ListTile(
-        leading: const Icon(
-          Icons.logout,
-          size: 40,
-          color: Colors.red,
-        ),
+        leading: const Icon(Icons.logout, size: 40, color: Colors.red),
         title: Text(AppLocalizations.of(context).profile_logout_description),
         trailing: const Icon(Icons.chevron_right),
         onTap: context.read<ProfileBloc>().logout,

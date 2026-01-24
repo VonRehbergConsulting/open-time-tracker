@@ -14,47 +14,30 @@ import 'infrastructure/graph_user_api.dart';
 @module
 abstract class CalendarModule {
   @lazySingleton
-  GraphCalendarApi calendarApi(
-    @Named('graph') ApiClient client,
-  ) =>
-      GraphCalendarApi(
-        client.dio,
-      );
+  GraphCalendarApi calendarApi(@Named('graph') ApiClient client) =>
+      GraphCalendarApi(client.dio);
   @lazySingleton
-  GraphUserApi userApi(
-    @Named('graph') ApiClient client,
-  ) =>
-      GraphUserApi(
-        client.dio,
-      );
+  GraphUserApi userApi(@Named('graph') ApiClient client) =>
+      GraphUserApi(client.dio);
 
   @lazySingleton
   CalendarRepository calendarRepository(
     GraphCalendarApi timeEntriesApi,
     GraphUserApi graphUserApi,
-  ) =>
-      ApiCalendarRepository(
-        timeEntriesApi,
-        graphUserApi,
-      );
+  ) => ApiCalendarRepository(timeEntriesApi, graphUserApi);
 
   @lazySingleton
   CalendarConnectionService calendarConnectionService(
     @Named('graph') AuthService graphAuthService,
     LocalNotificationService localNotificationService,
-  ) =>
-      CalendarConnectionService(
-        graphAuthService,
-        localNotificationService,
-      );
+  ) => CalendarConnectionService(graphAuthService, localNotificationService);
 
   @lazySingleton
   CalendarNotificationsService calendarNotificationsService(
     LocalNotificationService localNotificationService,
     CalendarRepository calendarRepository,
-  ) =>
-      LocalCalendarNotificationsService(
-        localNotificationService,
-        calendarRepository,
-      );
+  ) => LocalCalendarNotificationsService(
+    localNotificationService,
+    calendarRepository,
+  );
 }
