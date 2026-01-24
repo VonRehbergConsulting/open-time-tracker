@@ -1,11 +1,11 @@
 import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/services/local_notification_service.dart';
+import 'package:open_project_time_tracker/modules/calendar/domain/calendar_connection_service.dart';
 import 'package:open_project_time_tracker/modules/calendar/domain/calendar_notifications_service.dart';
 import 'package:open_project_time_tracker/modules/calendar/domain/calendar_repository.dart';
 import 'package:open_project_time_tracker/modules/calendar/infrastructure/api_calendar_repository.dart';
 import 'package:open_project_time_tracker/modules/calendar/infrastructure/graph_calendar_api.dart';
 import 'package:open_project_time_tracker/modules/calendar/infrastructure/local_calendar_notifications_service.dart';
-import 'package:open_project_time_tracker/modules/calendar/ui/calendar_bloc.dart';
 
 import '../../app/api/api_client.dart';
 import '../../app/auth/domain/auth_service.dart';
@@ -38,12 +38,12 @@ abstract class CalendarModule {
         graphUserApi,
       );
 
-  @injectable
-  CalendarBloc calendarBloc(
+  @lazySingleton
+  CalendarConnectionService calendarConnectionService(
     @Named('graph') AuthService graphAuthService,
     LocalNotificationService localNotificationService,
   ) =>
-      CalendarBloc(
+      CalendarConnectionService(
         graphAuthService,
         localNotificationService,
       );

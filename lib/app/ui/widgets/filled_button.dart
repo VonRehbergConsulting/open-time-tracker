@@ -4,12 +4,14 @@ class FilledButton extends StatelessWidget {
   final String? text;
   final TextStyle? textStyle;
   final VoidCallback? onPressed;
+  final Color? backgroundColor;
 
   const FilledButton({
     super.key,
     this.text,
     this.textStyle,
     this.onPressed,
+    this.backgroundColor,
   });
 
   @override
@@ -18,7 +20,7 @@ class FilledButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: onPressed != null
-            ? WidgetStateProperty.all(Theme.of(context).primaryColor)
+            ? WidgetStateProperty.all(backgroundColor ?? Theme.of(context).primaryColor)
             : null,
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(

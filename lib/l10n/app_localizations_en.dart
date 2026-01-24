@@ -88,7 +88,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get instance_configuration__invalid_url => 'URL is invalid';
 
   @override
-  String get time_entries_list_title => 'Recent work';
+  String get time_entries_list_title => 'Time Recordings';
 
   @override
   String get time_entries_list_change_working_hours => 'Change working hours';
@@ -158,6 +158,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get comment_suggestions_title => 'Choose a comment';
 
   @override
+  String get profile_title => 'Profile';
+
+  @override
+  String get profile_subtitle => 'Manage your account';
+
+  @override
+  String get profile_calendar_connected => 'Connected';
+
+  @override
+  String get profile_calendar_disconnected => 'Not connected';
+
+  @override
+  String get profile_logout_title => 'Sign out';
+
+  @override
+  String get profile_logout_description => 'Sign out of your account';
+
+  @override
+  String get profile_logout_button => 'Sign out';
+
+  @override
   String get calendar_title => 'Calendar notifications';
 
   @override
@@ -165,21 +186,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendar_disconnect => 'Disconnect calendar';
-
-  @override
-  String get calendar_promo_1 =>
-      'Connect your Microsoft calendar to never miss a meeting again';
-
-  @override
-  String get calendar_promo_2 =>
-      'Receive timely notifications by connecting your Microsoft calendar, ensuring you always track the right task';
-
-  @override
-  String get calendar_connected_1 => 'Your Microsoft calendar is connected';
-
-  @override
-  String get calendar_connected_2 =>
-      'You will recieve reminders for your meetings';
 
   @override
   String get notifications_calendar_title => 'Meeting is starting';

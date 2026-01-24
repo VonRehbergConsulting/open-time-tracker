@@ -257,7 +257,7 @@ abstract class AppLocalizations {
   /// No description provided for @time_entries_list_title.
   ///
   /// In en, this message translates to:
-  /// **'Recent work'**
+  /// **'Time Recordings'**
   String get time_entries_list_title;
 
   /// No description provided for @time_entries_list_change_working_hours.
@@ -392,6 +392,48 @@ abstract class AppLocalizations {
   /// **'Choose a comment'**
   String get comment_suggestions_title;
 
+  /// No description provided for @profile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile_title;
+
+  /// No description provided for @profile_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your account'**
+  String get profile_subtitle;
+
+  /// No description provided for @profile_calendar_connected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get profile_calendar_connected;
+
+  /// No description provided for @profile_calendar_disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected'**
+  String get profile_calendar_disconnected;
+
+  /// No description provided for @profile_logout_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get profile_logout_title;
+
+  /// No description provided for @profile_logout_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of your account'**
+  String get profile_logout_description;
+
+  /// No description provided for @profile_logout_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get profile_logout_button;
+
   /// No description provided for @calendar_title.
   ///
   /// In en, this message translates to:
@@ -409,30 +451,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disconnect calendar'**
   String get calendar_disconnect;
-
-  /// No description provided for @calendar_promo_1.
-  ///
-  /// In en, this message translates to:
-  /// **'Connect your Microsoft calendar to never miss a meeting again'**
-  String get calendar_promo_1;
-
-  /// No description provided for @calendar_promo_2.
-  ///
-  /// In en, this message translates to:
-  /// **'Receive timely notifications by connecting your Microsoft calendar, ensuring you always track the right task'**
-  String get calendar_promo_2;
-
-  /// No description provided for @calendar_connected_1.
-  ///
-  /// In en, this message translates to:
-  /// **'Your Microsoft calendar is connected'**
-  String get calendar_connected_1;
-
-  /// No description provided for @calendar_connected_2.
-  ///
-  /// In en, this message translates to:
-  /// **'You will recieve reminders for your meetings'**
-  String get calendar_connected_2;
 
   /// No description provided for @notifications_calendar_title.
   ///
