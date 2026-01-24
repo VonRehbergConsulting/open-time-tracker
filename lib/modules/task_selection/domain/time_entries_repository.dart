@@ -10,18 +10,11 @@ abstract class TimeEntriesRepository {
     int? pageSize,
   });
 
-  Future<void> create({
-    required TimeEntry timeEntry,
-    required int userId,
-  });
+  Future<TimeEntry> create({required TimeEntry timeEntry, required int userId});
 
-  Future<void> update({
-    required TimeEntry timeEntry,
-  });
+  Future<TimeEntry> update({required TimeEntry timeEntry});
 
-  Future<void> delete({
-    required int id,
-  });
+  Future<void> delete({required int id});
 }
 
 class TimeEntry {
@@ -61,20 +54,21 @@ class TimeEntry {
     spentOn = DateTime.parse(json['spentOn']);
 
     final hoursString = json["hours"];
-    hours =
-        Duration(seconds: IsoDuration.parse(hoursString).toSeconds().round());
+    hours = Duration(
+      seconds: IsoDuration.parse(hoursString).toSeconds().round(),
+    );
     if (hours.inSeconds.remainder(60) == 59) {
       hours += const Duration(seconds: 1);
     }
   }
 
-  TimeEntry.fromWorkPackage(WorkPackage workPackage)
-      : id = null,
-        workPackageSubject = workPackage.subject,
-        workPackageHref = workPackage.href,
-        projectTitle = workPackage.projectTitle,
-        projectHref = workPackage.projectHref,
-        hours = const Duration(),
-        spentOn = DateTime.now(),
-        comment = null;
+  TimeEntry.fromWorkPackage(WorkPackage workPackage, {DateTime? selectedDate})
+    : id = null,
+      workPackageSubject = workPackage.subject,
+      workPackageHref = workPackage.href,
+      projectTitle = workPackage.projectTitle,
+      projectHref = workPackage.projectHref,
+      hours = const Duration(),
+      spentOn = selectedDate ?? DateTime.now(),
+      comment = null;
 }

@@ -63,6 +63,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get generic_decline => 'Ablehnen';
 
   @override
+  String get generic_today => 'Heute';
+
+  @override
+  String get generic_yesterday => 'Gestern';
+
+  @override
   String get authorization_log_in => 'Anmelden';
 
   @override

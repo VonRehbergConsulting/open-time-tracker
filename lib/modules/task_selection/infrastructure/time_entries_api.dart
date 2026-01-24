@@ -15,26 +15,20 @@ abstract class TimeEntriesApi {
   });
 
   @POST('/time_entries')
-  @Headers(<String, dynamic>{
-    "Content-Type": "application/json",
-  })
-  Future<void> createTimeEntry({
+  @Headers(<String, dynamic>{"Content-Type": "application/json"})
+  Future<HttpResponse<dynamic>> createTimeEntry({
     @Body() required Map<String, dynamic> body,
   });
 
   @PATCH('/time_entries/{id}')
-  @Headers(<String, dynamic>{
-    "Content-Type": "application/json",
-  })
+  @Headers(<String, dynamic>{"Content-Type": "application/json"})
   Future<void> updateTimeEntry({
     @Path() required id,
     @Body() required Map<String, dynamic> body,
   });
 
   @DELETE('/time_entries/{id}')
-  Future<void> deleteTimeEntry({
-    @Path() required id,
-  });
+  Future<void> deleteTimeEntry({@Path() required id});
 }
 
 class TimeEntryResponse {
@@ -63,8 +57,9 @@ class TimeEntryResponse {
     workPackageHref = workPackage["href"];
 
     final hoursString = json["hours"];
-    hours =
-        Duration(seconds: IsoDuration.parse(hoursString).toSeconds().round());
+    hours = Duration(
+      seconds: IsoDuration.parse(hoursString).toSeconds().round(),
+    );
     if (hours.inSeconds.remainder(60) == 59) {
       hours += const Duration(seconds: 1);
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
+import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
@@ -17,6 +18,8 @@ class TimeEntriesListState with _$TimeEntriesListState {
     required List<TimeEntry> timeEntries,
     required Duration workingHours,
     required Duration totalDuration,
+    required DateTime selectedDate,
+    required bool isViewingToday,
   }) = _Idle;
 }
 
@@ -32,11 +35,26 @@ class TimeEntriesListBloc
   final SettingsRepository _settingsRepository;
   final AuthService _authService;
   final AuthService _graphAuthService;
+  final AppStateRepository _appStateRepository;
   final TimerRepository _timerRepository;
   final CalendarNotificationsService _calendarNotificationsService;
 
   List<TimeEntry> items = [];
   Duration workingHours = const Duration(hours: 0);
+  late DateTime selectedDate;
+  bool _isInitialized = false;
+
+  bool get isViewingToday {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final selected = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+    );
+    return selected == today;
+  }
+
   Duration get totalDuration {
     var result = const Duration();
     for (var element in items) {
@@ -50,10 +68,26 @@ class TimeEntriesListBloc
     this._settingsRepository,
     this._authService,
     this._graphAuthService,
+    this._appStateRepository,
     this._timerRepository,
     this._calendarNotificationsService,
   ) : super(const TimeEntriesListState.loading()) {
     WidgetsBinding.instance.addObserver(this);
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    // Load the selected date from storage, or use today if not set
+    final storedDate = await _appStateRepository.selectedDate;
+    if (storedDate != null) {
+      selectedDate = storedDate;
+    } else {
+      // First time - set to today
+      final now = DateTime.now();
+      selectedDate = DateTime(now.year, now.month, now.day);
+      await _appStateRepository.setSelectedDate(selectedDate);
+    }
+    _isInitialized = true;
   }
 
   @override
@@ -72,13 +106,23 @@ class TimeEntriesListBloc
 
   Future<void> reload({bool showLoading = false}) async {
     try {
+      // Wait for initialization to complete before reloading
+      if (!_isInitialized) {
+        await _initialize();
+      }
+
       if (showLoading) {
         emit(const TimeEntriesListState.loading());
       }
+      final dateOnly = DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+      );
       items = await _timeEntriesRepository.list(
         userId: 'me',
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
+        startDate: dateOnly,
+        endDate: dateOnly,
       );
       workingHours = await _settingsRepository.workingHours;
       emit(
@@ -86,6 +130,8 @@ class TimeEntriesListBloc
           workingHours: workingHours,
           timeEntries: items,
           totalDuration: totalDuration,
+          selectedDate: selectedDate,
+          isViewingToday: isViewingToday,
         ),
       );
     } catch (e) {
@@ -94,6 +140,8 @@ class TimeEntriesListBloc
           workingHours: workingHours,
           timeEntries: [],
           totalDuration: const Duration(),
+          selectedDate: selectedDate,
+          isViewingToday: isViewingToday,
         ),
       );
       emitEffect(const TimeEntriesListEffect.error());
@@ -108,8 +156,28 @@ class TimeEntriesListBloc
         workingHours: workingHours,
         timeEntries: items,
         totalDuration: totalDuration,
+        selectedDate: selectedDate,
+        isViewingToday: isViewingToday,
       ),
     );
+  }
+
+  Future<void> changeDate(DateTime newDate) async {
+    selectedDate = DateTime(newDate.year, newDate.month, newDate.day);
+    await _appStateRepository.setSelectedDate(selectedDate);
+    await reload(showLoading: true);
+  }
+
+  Future<void> goToPreviousDay() async {
+    selectedDate = selectedDate.subtract(const Duration(days: 1));
+    await _appStateRepository.setSelectedDate(selectedDate);
+    await reload(showLoading: true);
+  }
+
+  Future<void> goToNextDay() async {
+    selectedDate = selectedDate.add(const Duration(days: 1));
+    await _appStateRepository.setSelectedDate(selectedDate);
+    await reload(showLoading: true);
   }
 
   Future<void> unauthorize() async {
@@ -121,6 +189,10 @@ class TimeEntriesListBloc
   }
 
   Future<void> setTimeEntry(TimeEntry timeEntry) async {
+    // Update the spentOn date to match the currently selected date
+    // This ensures that when tracking time for a past or future date,
+    // the time entry is recorded for that specific date
+    timeEntry.spentOn = selectedDate;
     await _timerRepository.setTimeEntry(timeEntry: timeEntry);
   }
 
@@ -135,6 +207,8 @@ class TimeEntriesListBloc
             workingHours: workingHours,
             timeEntries: items,
             totalDuration: totalDuration,
+            selectedDate: selectedDate,
+            isViewingToday: isViewingToday,
           ),
         );
       });
@@ -142,6 +216,37 @@ class TimeEntriesListBloc
     } catch (e) {
       emitEffect(const TimeEntriesListEffect.error());
       return false;
+    }
+  }
+
+  void addTimeEntry(TimeEntry timeEntry) {
+    // Add the newly created entry to the local list (optimistic update)
+    items.add(timeEntry);
+    emit(
+      TimeEntriesListState.idle(
+        workingHours: workingHours,
+        timeEntries: items,
+        totalDuration: totalDuration,
+        selectedDate: selectedDate,
+        isViewingToday: isViewingToday,
+      ),
+    );
+  }
+
+  void updateTimeEntry(TimeEntry updatedEntry) {
+    // Update the entry in the local list (optimistic update)
+    final index = items.indexWhere((e) => e.id == updatedEntry.id);
+    if (index != -1) {
+      items[index] = updatedEntry;
+      emit(
+        TimeEntriesListState.idle(
+          workingHours: workingHours,
+          timeEntries: items,
+          totalDuration: totalDuration,
+          selectedDate: selectedDate,
+          isViewingToday: isViewingToday,
+        ),
+      );
     }
   }
 }

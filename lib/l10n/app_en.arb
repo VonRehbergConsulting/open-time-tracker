@@ -17,6 +17,8 @@
     "generic__in_progress": "In progress",
     "generic_accept": "Accept",
     "generic_decline": "Decline",
+    "generic_today": "Today",
+    "generic_yesterday": "Yesterday",
 
     "authorization_log_in": "Log in",
     "authorization_configure_instance": "Configure instance",
