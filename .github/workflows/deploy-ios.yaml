@@ -35,6 +35,11 @@ jobs:
           echo "COUNTLY_URL=${{ secrets.COUNTLY_URL }}" > .env
           echo "PRIVACY_POLICY_URL=${{ secrets.PRIVACY_POLICY_URL }}" > .env
 
+      - name: Install Ruby dependencies
+        run: |
+          cd ios
+          bundle install
+
       - name: Build, sign and deploy
         env:
           API_KEY_ID: ${{ secrets.API_KEY_ID }}
