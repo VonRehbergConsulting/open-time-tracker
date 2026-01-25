@@ -20,8 +20,11 @@ def create_temp_keychain(name, password)
   create_keychain(
     name: name,
     password: password,
-    unlock: false,
-    timeout: 0
+    unlock: true,
+    timeout: 0,
+    lock_when_sleeps: false,
+    add_to_search_list: true,
+    set_default: true
   )
 end
 
