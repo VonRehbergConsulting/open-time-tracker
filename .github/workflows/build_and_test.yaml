@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,7 +39,7 @@ jobs:
         run: flutter test
 
   build-for-ios:
-    runs-on: self-hosted
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -62,6 +62,11 @@ jobs:
           echo "COUNTLY_APP_KEY=${{ secrets.COUNTLY_APP_KEY }}" > .env
           echo "COUNTLY_URL=${{ secrets.COUNTLY_URL }}" > .env
           echo "PRIVACY_POLICY_URL=${{ secrets.PRIVACY_POLICY_URL }}" > .env
+
+      - name: Install Ruby dependencies
+        run: |
+          cd ios
+          bundle install
 
       - name: Build for iOS
         env:
