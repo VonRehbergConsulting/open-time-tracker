@@ -26,6 +26,13 @@ def create_temp_keychain(name, password)
     add_to_search_list: true,
     default_keychain: true
   )
+  
+  # Ensure keychain is unlocked and set as default even if it already existed
+  unlock_keychain(
+    path: name,
+    password: password,
+    set_default: true
+  )
 end
 
 def ensure_temp_keychain(name, password)
