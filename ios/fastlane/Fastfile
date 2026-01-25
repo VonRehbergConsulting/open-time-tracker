@@ -24,7 +24,7 @@ def create_temp_keychain(name, password)
     timeout: 0,
     lock_when_sleeps: false,
     add_to_search_list: true,
-    set_default: true
+    default_keychain: true
   )
 end
 
