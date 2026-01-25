@@ -74,7 +74,15 @@ platform :ios do
   desc "Push a new release build to the App Store"
   
   lane :build_and_deploy do |options|
-    ensure_temp_keychain(KEYCHAIN_NAME, KEYCHAIN_PASSWORD)
+    # Create temporary keychain for CI (similar to working Fastfile)
+    create_keychain(
+      name: KEYCHAIN_NAME,
+      password: KEYCHAIN_PASSWORD,
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
 
     api_key = app_store_connect_api_key(
       key_id: API_KEY_ID,
@@ -93,41 +101,16 @@ platform :ios do
       team_id: APPLE_TEAM_ID
     )
 
-    # Try to use existing certificates, fall back to renewal if they're expired
-    begin
-      match(
-        type: 'appstore',
-        app_identifier: DEVELOPER_APP_IDENTIFIER,
-        git_basic_authorization: Base64.strict_encode64(MATCH_GIT_BASIC_AUTHORIZATION),
-        readonly: true,
-        keychain_name: KEYCHAIN_NAME,
-        keychain_password: KEYCHAIN_PASSWORD,
-        api_key: api_key
-      )
-    rescue => ex
-      UI.error("Certificate validation failed: #{ex.message}")
-      UI.important("Attempting to renew certificates...")
-      
-      # Nuke and recreate certificates for this specific app only
-      match_nuke(
-        type: 'appstore',
-        app_identifier: DEVELOPER_APP_IDENTIFIER,
-        api_key: api_key,
-        skip_confirmation: true,
-        git_basic_authorization: Base64.strict_encode64(MATCH_GIT_BASIC_AUTHORIZATION)
-      )
-      
-      # Create new certificates
-      match(
-        type: 'appstore',
-        app_identifier: DEVELOPER_APP_IDENTIFIER,
-        git_basic_authorization: Base64.strict_encode64(MATCH_GIT_BASIC_AUTHORIZATION),
-        readonly: false,
-        keychain_name: KEYCHAIN_NAME,
-        keychain_password: KEYCHAIN_PASSWORD,
-        api_key: api_key
-      )
-    end
+    # Sync code signing with match (similar to working Fastfile)
+    match(
+      type: 'appstore',
+      app_identifier: DEVELOPER_APP_IDENTIFIER,
+      git_basic_authorization: Base64.strict_encode64(MATCH_GIT_BASIC_AUTHORIZATION),
+      readonly: true,
+      keychain_name: KEYCHAIN_NAME,
+      keychain_password: KEYCHAIN_PASSWORD,
+      api_key: api_key
+    )
 
     cocoapods(
       clean_install: true,
