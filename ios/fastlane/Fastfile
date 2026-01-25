@@ -17,6 +17,9 @@ def delete_temp_keychain(name)
 end
 
 def create_temp_keychain(name, password)
+  # Always delete first to ensure clean state and avoid partition list issues
+  delete_temp_keychain(name)
+  
   create_keychain(
     name: name,
     password: password,
@@ -27,7 +30,7 @@ def create_temp_keychain(name, password)
     default_keychain: true
   )
   
-  # Ensure keychain is unlocked and set as default even if it already existed
+  # Ensure keychain is unlocked and set as default
   unlock_keychain(
     path: name,
     password: password,
