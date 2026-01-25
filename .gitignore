@@ -112,3 +112,7 @@ android/fastlane/metadata/
 
 # FVM Version Cache
 .fvm/
+
+# Semantic release / Node.js
+node_modules/
+package-lock.json
