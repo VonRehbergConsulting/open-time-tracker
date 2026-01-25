@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.8.0...v1.8.1) (2026-01-25)
+
+
+### Bug Fixes
+
+* update Gradle to 8.7 and disable Jetifier for Java 17 compatibility ([bc76a0f](https://github.com/VonRehbergConsulting/open-time-tracker/commit/bc76a0ffb08fc613c8b8f00afe70442a285caba2))
+
 # [1.8.0](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.7.1...v1.8.0) (2026-01-25)
 
 

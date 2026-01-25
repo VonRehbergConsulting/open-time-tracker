@@ -54,8 +54,8 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 55
-        versionName "1.8.0"
+        versionCode 56
+        versionName "1.8.1"
         manifestPlaceholders += [
             'appAuthRedirectScheme': 'openprojecttimetracker'
         ]
