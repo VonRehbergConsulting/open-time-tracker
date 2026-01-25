@@ -115,4 +115,3 @@ android/fastlane/metadata/
 
 # Semantic release / Node.js
 node_modules/
-package-lock.json
