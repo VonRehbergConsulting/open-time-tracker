@@ -8,7 +8,7 @@ API_KEY_BASE64 = ENV["API_KEY_BASE64"]
 MATCH_GIT_BASIC_AUTHORIZATION = ENV["MATCH_GIT_BASIC_AUTHORIZATION"]
 DEVELOPER_APP_IDENTIFIER = ENV["DEVELOPER_APP_IDENTIFIER"]
 DEVELOPER_APP_ID = ENV["DEVELOPER_APP_ID"]
-APPLE_TEAM_ID = ENV["DEVELAPPLE_TEAM_IDOPER_APP_ID"]
+APPLE_TEAM_ID = ENV["APPLE_TEAM_ID"]
 
 def delete_temp_keychain(name)
   delete_keychain(
@@ -95,8 +95,18 @@ platform :ios do
 
     update_code_signing_settings(
       use_automatic_signing: false,
+      targets: "Runner",
       profile_name: "match AppStore #{DEVELOPER_APP_IDENTIFIER}",
       bundle_identifier: DEVELOPER_APP_IDENTIFIER,
+      code_sign_identity: "iPhone Distribution",
+      team_id: APPLE_TEAM_ID
+    )
+
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      targets: "StatusWidgetExtension",
+      profile_name: "match AppStore #{DEVELOPER_APP_IDENTIFIER}.StatusWidget",
+      bundle_identifier: "#{DEVELOPER_APP_IDENTIFIER}.StatusWidget",
       code_sign_identity: "iPhone Distribution",
       team_id: APPLE_TEAM_ID
     )
@@ -104,7 +114,7 @@ platform :ios do
     # Sync code signing with match (similar to working Fastfile)
     match(
       type: 'appstore',
-      app_identifier: DEVELOPER_APP_IDENTIFIER,
+      app_identifier: [DEVELOPER_APP_IDENTIFIER, "#{DEVELOPER_APP_IDENTIFIER}.StatusWidget"],
       git_basic_authorization: Base64.strict_encode64(MATCH_GIT_BASIC_AUTHORIZATION),
       readonly: true,
       keychain_name: KEYCHAIN_NAME,
@@ -125,7 +135,8 @@ platform :ios do
       clean: true,
       export_options: {
         provisioningProfiles: { 
-            DEVELOPER_APP_ID => DEVELOPER_APP_IDENTIFIER
+            DEVELOPER_APP_IDENTIFIER => "match AppStore #{DEVELOPER_APP_IDENTIFIER}",
+            "#{DEVELOPER_APP_IDENTIFIER}.StatusWidget" => "match AppStore #{DEVELOPER_APP_IDENTIFIER}.StatusWidget"
         }
       }
     )
