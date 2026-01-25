@@ -42,9 +42,7 @@ class OAuthClient implements AuthClient {
     final result = await FlutterWebAuth2.authenticate(
       url: authUrl,
       callbackUrlScheme: Uri.parse(redirectUrl).scheme,
-      options: const FlutterWebAuth2Options(
-        intentFlags: ephemeralIntentFlags,
-      ),
+      options: const FlutterWebAuth2Options(intentFlags: ephemeralIntentFlags),
     );
 
     final resultUri = Uri.parse(result);
