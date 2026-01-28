@@ -89,6 +89,8 @@ class NotificationSelectionListBloc extends EffectCubit<
     await _timerRepository.setTimeEntry(
       timeEntry: timeEntry,
     );
+    // Wait for timer state to propagate before completing
+    await _waitForTimerStateConfirmation();
     emitEffect(const NotificationSelectionListEffect.complete());
   }
 
@@ -100,9 +102,23 @@ class NotificationSelectionListBloc extends EffectCubit<
       await _timerRepository.setTimeEntry(
         timeEntry: timeEntry,
       );
+      // Wait for timer state to propagate before completing
+      await _waitForTimerStateConfirmation();
       emitEffect(const NotificationSelectionListEffect.complete());
     } catch (e) {
       emitEffect(const NotificationSelectionListEffect.error());
     }
+  }
+
+  Future<void> _waitForTimerStateConfirmation() async {
+    await _timerRepository.observeIsSet()
+        .firstWhere((isSet) => isSet == true)
+        .timeout(
+          const Duration(seconds: 2),
+          onTimeout: () {
+            print('Warning: Timer state confirmation timed out');
+            return true;
+          },
+        );
   }
 }

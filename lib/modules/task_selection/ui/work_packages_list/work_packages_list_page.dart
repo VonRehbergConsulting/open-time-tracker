@@ -44,7 +44,8 @@ class WorkPackagesListPage
             }
           });
         } else {
-          // For today, go back to TimeEntriesListPage and let router show timer
+          // For today, go back to root and let AppAuthorizedRouter show timer
+          // The bloc has already waited for timer state confirmation
           Navigator.of(context).popUntil((route) => route.isFirst);
         }
       },
