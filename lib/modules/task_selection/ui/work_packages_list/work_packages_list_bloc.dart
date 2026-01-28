@@ -92,6 +92,18 @@ class WorkPackagesListBloc
       );
       await _timerRepository.setTimeEntry(timeEntry: timeEntry);
 
+      // Wait for timer state to propagate through the stream
+      // This ensures the AppAuthorizedRouter receives the update before navigation
+      await _timerRepository.observeIsSet()
+          .firstWhere((isSet) => isSet == true)
+          .timeout(
+            const Duration(seconds: 2),
+            onTimeout: () {
+              print('Warning: Timer state confirmation timed out');
+              return true;
+            },
+          );
+
       // Determine if we're viewing today
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);

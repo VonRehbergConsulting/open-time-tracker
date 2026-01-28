@@ -44,9 +44,13 @@ class AnalyticsService {
 
       Countly.initWithConfig(config);
 
-      // If consent hasn't been asked yet, ask after 2s without blocking init.
+      // If consent hasn't been asked yet, schedule it after first frame is rendered
+      // This ensures the widget tree is fully built and context is available
       if (consentGiven == null) {
-        Future.delayed(const Duration(seconds: 2), () => _askForConsent());
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          // Add small delay to ensure user sees the app first
+          Future.delayed(const Duration(seconds: 2), () => _askForConsent());
+        });
       }
     } else {
       print('Countly app key or server URL is missing');
@@ -59,7 +63,13 @@ class AnalyticsService {
 
   Future<void> _askForConsent() async {
     try {
-      final context = navigatorKey.currentState!.context;
+      final navigatorState = navigatorKey.currentState;
+      if (navigatorState == null || !navigatorState.mounted) {
+        print('Analytics consent dialog skipped: Navigator not available');
+        return;
+      }
+
+      final context = navigatorState.context;
 
       await showCupertinoDialog<void>(
         context: context,

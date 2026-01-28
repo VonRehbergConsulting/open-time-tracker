@@ -26,6 +26,7 @@ class NotificationSelectionListPage
   void onEffect(BuildContext context, NotificationSelectionListEffect effect) {
     effect.when(
       complete: () {
+        // The bloc has already waited for timer state confirmation
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
       error: () {
