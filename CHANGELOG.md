@@ -1,3 +1,11 @@
+## [1.9.1](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.0...v1.9.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* fixed missing countly consent and potential navigation issue ([5ab370b](https://github.com/VonRehbergConsulting/open-time-tracker/commit/5ab370bdac31a0e179f7bc3e17eb2b9358ab7faf))
+* fixing ios deployment [skip-ci] ([04d421d](https://github.com/VonRehbergConsulting/open-time-tracker/commit/04d421d4596cb3d053607d80d41ad9be6711f01c))
+
 # [1.9.0](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.8.1...v1.9.0) (2026-01-25)
 
 
