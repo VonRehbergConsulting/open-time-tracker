@@ -23,9 +23,13 @@ class NotificationSelectionListEffect with _$NotificationSelectionListEffect {
   const factory NotificationSelectionListEffect.complete() = _Complete;
 }
 
-class NotificationSelectionListBloc extends EffectCubit<
-    NotificationSelectionListState,
-    NotificationSelectionListEffect> with WidgetsBindingObserver {
+class NotificationSelectionListBloc
+    extends
+        EffectCubit<
+          NotificationSelectionListState,
+          NotificationSelectionListEffect
+        >
+    with WidgetsBindingObserver {
   final WorkPackagesRepository _workPackagesRepository;
   final TimerRepository _timerRepository;
   final TimeEntriesRepository _timeEntriesRepository;
@@ -52,9 +56,7 @@ class NotificationSelectionListBloc extends EffectCubit<
     super.didChangeAppLifecycleState(state);
   }
 
-  Future<void> reload({
-    bool showLoading = false,
-  }) async {
+  Future<void> reload({bool showLoading = false}) async {
     try {
       if (showLoading) {
         emit(const NotificationSelectionListState.loading());
@@ -65,43 +67,36 @@ class NotificationSelectionListBloc extends EffectCubit<
           startDate: DateTime.now(),
           endDate: DateTime.now(),
         ),
-        _workPackagesRepository.list(
-          pageSize: 100,
-          user: 'me',
-        ),
+        _workPackagesRepository.list(pageSize: 100, user: 'me'),
       ]);
-      emit(NotificationSelectionListState.idle(
-        timeEntries: data[0] as List<TimeEntry>,
-        workPackages: data[1] as List<WorkPackage>,
-      ));
+      emit(
+        NotificationSelectionListState.idle(
+          timeEntries: data[0] as List<TimeEntry>,
+          workPackages: data[1] as List<WorkPackage>,
+        ),
+      );
     } catch (e) {
-      emit(const NotificationSelectionListState.idle(
-        timeEntries: [],
-        workPackages: [],
-      ));
+      emit(
+        const NotificationSelectionListState.idle(
+          timeEntries: [],
+          workPackages: [],
+        ),
+      );
       emitEffect(const NotificationSelectionListEffect.error());
     }
   }
 
-  Future<void> setTimeEntry(
-    TimeEntry timeEntry,
-  ) async {
-    await _timerRepository.setTimeEntry(
-      timeEntry: timeEntry,
-    );
+  Future<void> setTimeEntry(TimeEntry timeEntry) async {
+    await _timerRepository.setTimeEntry(timeEntry: timeEntry);
     // Wait for timer state to propagate before completing
     await _waitForTimerStateConfirmation();
     emitEffect(const NotificationSelectionListEffect.complete());
   }
 
-  Future<void> setTimeEntryFromWorkPackage(
-    WorkPackage workPackage,
-  ) async {
+  Future<void> setTimeEntryFromWorkPackage(WorkPackage workPackage) async {
     try {
       final timeEntry = TimeEntry.fromWorkPackage(workPackage);
-      await _timerRepository.setTimeEntry(
-        timeEntry: timeEntry,
-      );
+      await _timerRepository.setTimeEntry(timeEntry: timeEntry);
       // Wait for timer state to propagate before completing
       await _waitForTimerStateConfirmation();
       emitEffect(const NotificationSelectionListEffect.complete());
@@ -111,7 +106,8 @@ class NotificationSelectionListBloc extends EffectCubit<
   }
 
   Future<void> _waitForTimerStateConfirmation() async {
-    await _timerRepository.observeIsSet()
+    await _timerRepository
+        .observeIsSet()
         .firstWhere((isSet) => isSet == true)
         .timeout(
           const Duration(seconds: 2),
