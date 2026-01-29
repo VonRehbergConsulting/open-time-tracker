@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: 1.0.8
-  countly_flutter: 25.4.1
+  countly_flutter: 25.4.4
   provider: 6.1.2
   bloc: 8.1.4
   flutter_bloc: 8.1.6
