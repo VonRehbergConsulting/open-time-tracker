@@ -181,10 +181,10 @@ packages:
     dependency: "direct main"
     description:
       name: countly_flutter
-      sha256: "69a470d1d8bc6c6a867ac9edbf8687f617c89e73ec15e5f11f104ba3af41a132"
+      sha256: "6ddb5e4edc7e120cc410b47cd6eef1d1eeda551b2b7823b9c0bed97b2d59c5ac"
       url: "https://pub.dev"
     source: hosted
-    version: "25.4.1"
+    version: "25.4.4"
   crypto:
     dependency: transitive
     description:

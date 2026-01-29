@@ -1,5 +1,5 @@
 PODS:
-  - countly_flutter (25.4.1):
+  - countly_flutter (25.4.4):
     - Flutter
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
@@ -46,7 +46,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  countly_flutter: de5fea7dc2e53c098c234fa33a827bfe9d9e6e09
+  countly_flutter: 0c9d8092e7a351729894922c59d2aa02749d784c
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
