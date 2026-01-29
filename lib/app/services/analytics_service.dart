@@ -42,10 +42,11 @@ class AnalyticsService {
         config.setConsentEnabled(requiredConsents);
       }
 
-      Countly.initWithConfig(config);
+      await Countly.initWithConfig(config);
 
       // If consent hasn't been asked yet, schedule it after first frame is rendered
-      // This ensures the widget tree is fully built and context is available
+      // This ensures the widget tree is fully built, context is available,
+      // and Countly is fully initialized
       if (consentGiven == null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           // Add small delay to ensure user sees the app first
@@ -58,7 +59,7 @@ class AnalyticsService {
   }
 
   Future<void> giveConsent() async {
-    Countly.giveConsent(requiredConsents);
+    await Countly.giveConsent(requiredConsents);
   }
 
   Future<void> _askForConsent() async {
