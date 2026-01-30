@@ -1,3 +1,10 @@
+## [1.9.4](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.3...v1.9.4) (2026-01-30)
+
+
+### Bug Fixes
+
+* removing invalid rebase option from release back merge step ([6eace44](https://github.com/VonRehbergConsulting/open-time-tracker/commit/6eace4437e045ce658878ab95f645eb3d8dcbc2d))
+
 ## [1.9.3](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.2...v1.9.3) (2026-01-30)
 
 
