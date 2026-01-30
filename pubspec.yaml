@@ -2,7 +2,7 @@ name: open_project_time_tracker
 description: A new Flutter project.
 publish_to: "none"
 
-version: 1.9.2+61
+version: 1.9.3+62
 
 environment:
   sdk: '>=3.8.1 <4.0.0'
