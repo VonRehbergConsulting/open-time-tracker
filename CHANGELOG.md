@@ -1,3 +1,12 @@
+## [1.9.2](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.1...v1.9.2) (2026-01-30)
+
+
+### Bug Fixes
+
+* added missing await for countly initialization ([42d7d14](https://github.com/VonRehbergConsulting/open-time-tracker/commit/42d7d14aa59d246e3e9d4fac66b527971edc8a79))
+* fixed missing countly consent and potential navigation issue ([f6e80be](https://github.com/VonRehbergConsulting/open-time-tracker/commit/f6e80bec97a838e2c174dec759cb4b92369f00b5))
+* safeguarding countly initialization to prevent app crashes ([642078c](https://github.com/VonRehbergConsulting/open-time-tracker/commit/642078c8a0303db1470e8349c91cb77969242362))
+
 ## [1.9.1](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.0...v1.9.1) (2026-01-28)
 
 
