@@ -66,6 +66,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: npx semantic-release
 
+      - name: Merge back to develop
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin develop
+          git checkout develop
+          git merge --no-ff main -m "chore: merge release changes back to develop [skip ci]"
+          git push origin develop
+
   build-android:
     needs: release
     if: needs.release.result == 'success'
