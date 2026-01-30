@@ -72,7 +72,8 @@ android {
    }
    buildTypes {
        release {
-           signingConfig signingConfigs.release
+           // Only sign if key.properties exists and is configured
+           signingConfig keystoreProperties['storeFile'] ? signingConfigs.release : signingConfigs.debug
        }
    }
 }
