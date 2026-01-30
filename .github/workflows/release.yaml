@@ -75,7 +75,7 @@ jobs:
           git config merge.ff false
           git fetch origin develop
           git checkout develop
-          git merge --no-ff --no-rebase main -m "chore: merge release changes back to develop [skip ci]"
+          git merge --no-ff main -m "chore: merge release changes back to develop [skip ci]"
           git push origin develop
 
   build-android:
