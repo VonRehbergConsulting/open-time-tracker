@@ -16,11 +16,11 @@ void main() async {
   configureDependencies();
   await dotenv.load();
   inject<LocalNotificationService>().setup();
-  
+
   // Initialize analytics in background - don't block app startup
   // ignore: unawaited_futures
   inject<AnalyticsService>().initialize();
-  
+
   runApp(
     CalendarNotificationsScheduler(inject<CalendarNotificationsService>()),
   );

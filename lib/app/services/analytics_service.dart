@@ -21,7 +21,7 @@ class AnalyticsService {
   ];
 
   final SettingsRepository _settingsRepository = inject();
-  
+
   // Track initialization state to prevent showing consent dialog if init failed
   bool _isInitialized = false;
 
@@ -46,7 +46,7 @@ class AnalyticsService {
         ..setLoggingEnabled(true)
         ..enableCrashReporting()
         ..setRequiresConsent(true);
-      
+
       if (consentGiven == true) {
         config.setConsentEnabled(requiredConsents);
       }
@@ -55,11 +55,13 @@ class AnalyticsService {
       final result = await Countly.initWithConfig(config).timeout(
         const Duration(seconds: 10),
         onTimeout: () {
-          print('Countly initialization timed out - continuing without analytics');
+          print(
+            'Countly initialization timed out - continuing without analytics',
+          );
           return null; // Indicates timeout
         },
       );
-      
+
       // Only mark as initialized if it actually succeeded (didn't timeout)
       if (result != null) {
         _isInitialized = true;
@@ -81,10 +83,12 @@ class AnalyticsService {
             }
           });
         });
-      }    if (!_isInitialized) {
-      print('Cannot give consent - Countly not initialized');
-      return;
-    }    } catch (e, stackTrace) {
+      }
+      if (!_isInitialized) {
+        print('Cannot give consent - Countly not initialized');
+        return;
+      }
+    } catch (e, stackTrace) {
       // Never let analytics crash the app
       print('Analytics initialization failed: $e');
       print('Stack trace: $stackTrace');
