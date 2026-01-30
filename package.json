@@ -14,5 +14,10 @@
     "@semantic-release/github": "^10.0.0",
     "@semantic-release/release-notes-generator": "^14.0.0",
     "semantic-release": "^24.0.0"
+  },
+  "overrides": {
+    "tar": "^7.5.7",
+    "glob": "^10.4.6",
+    "diff": "^5.2.2"
   }
 }
