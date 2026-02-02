@@ -1,3 +1,10 @@
+## [1.9.5](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.4...v1.9.5) (2026-02-02)
+
+
+### Bug Fixes
+
+* fixing navigation and startup crash issues ([436e909](https://github.com/VonRehbergConsulting/open-time-tracker/commit/436e9096dcf78c352a02d75ae73e64539e7a44c7))
+
 ## [1.9.4](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.3...v1.9.4) (2026-01-30)
 
 
