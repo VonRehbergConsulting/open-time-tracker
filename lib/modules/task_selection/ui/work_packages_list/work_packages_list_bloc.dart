@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
@@ -33,6 +34,7 @@ class WorkPackagesListBloc
   final TimerRepository _timerRepository;
   final SettingsRepository _settingsRepository;
   late String _projectId;
+  CancelToken? _cancelToken;
 
   WorkPackagesListBloc(
     this._workPackagesRepository,
@@ -50,6 +52,7 @@ class WorkPackagesListBloc
   @override
   Future<void> close() {
     WidgetsBinding.instance.removeObserver(this);
+    _cancelToken?.cancel('Bloc closed');
     return super.close();
   }
 
@@ -62,6 +65,10 @@ class WorkPackagesListBloc
   }
 
   Future<void> reload({bool showLoading = false}) async {
+    // Cancel any previous reload operation
+    _cancelToken?.cancel('New reload started');
+    _cancelToken = CancelToken();
+
     try {
       if (showLoading) {
         emit(const WorkPackagesListState.loading());
@@ -76,7 +83,19 @@ class WorkPackagesListBloc
         statuses: statuses,
         user: assigneeFilter == 0 ? 'me' : null,
       );
-      emit(WorkPackagesListState.idle(workPackages: items));
+
+      // Only emit if not cancelled
+      if (!_cancelToken!.isCancelled) {
+        emit(WorkPackagesListState.idle(workPackages: items));
+      }
+    } on DioException catch (e) {
+      // Ignore cancellation errors
+      if (CancelToken.isCancel(e)) {
+        print('Reload cancelled');
+        return;
+      }
+      emit(const WorkPackagesListState.idle(workPackages: []));
+      emitEffect(const WorkPackagesListEffect.error());
     } catch (e) {
       emit(const WorkPackagesListState.idle(workPackages: []));
       emitEffect(const WorkPackagesListEffect.error());

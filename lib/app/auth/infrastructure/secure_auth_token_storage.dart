@@ -25,14 +25,23 @@ class SecureAuthTokenStorage implements AuthTokenStorage {
 
   @override
   Future<AuthToken?> getToken() async {
-    final accessToken = await _storage.read(key: accessTokenKey);
-    final refreshToken = await _storage.read(key: refreshTokenKey);
-    return accessToken == null || refreshToken == null
-        ? null
-        : AuthToken(
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-          );
+    try {
+      final accessToken = await _storage.read(key: accessTokenKey);
+      final refreshToken = await _storage.read(key: refreshTokenKey);
+      return accessToken == null || refreshToken == null
+          ? null
+          : AuthToken(accessToken: accessToken, refreshToken: refreshToken);
+    } catch (e) {
+      // Handle decryption errors (e.g., BadPaddingException after OS/app updates)
+      // Clear corrupted data and return null to trigger re-authentication
+      print('Secure storage read failed (likely corrupted): $e');
+      try {
+        await clear();
+      } catch (clearError) {
+        print('Failed to clear corrupted secure storage: $clearError');
+      }
+      return null;
+    }
   }
 
   @override

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude flutter_secure_storage files from backup -->
+    <!-- These contain encrypted data that cannot be decrypted after restore -->
+    <exclude domain="sharedpref" path="FlutterSecureStorage"/>
+    <exclude domain="sharedpref" path="FlutterSecureStoragePlugin"/>
+</full-backup-content>
