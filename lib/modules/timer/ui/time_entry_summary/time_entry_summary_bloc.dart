@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -36,6 +37,7 @@ class TimeEntrySummaryBloc
 
   late TimeEntry timeEntry;
   List<String>? _commentSuggestions;
+  bool _disposed = false;
 
   TimeEntrySummaryBloc(
     this._timeEntriesRepository,
@@ -46,24 +48,28 @@ class TimeEntrySummaryBloc
   }
 
   Future<void> _emitIdleState() async {
-    emit(
-      TimeEntrySummaryState.idle(
-        title: timeEntry.workPackageSubject,
-        projectTitle: timeEntry.projectTitle,
-        timeSpent: timeEntry.hours,
-        comment: timeEntry.comment,
-        commentSuggestions: _commentSuggestions,
-      ),
-    );
+    if (!_disposed) {
+      emit(
+        TimeEntrySummaryState.idle(
+          title: timeEntry.workPackageSubject,
+          projectTitle: timeEntry.projectTitle,
+          timeSpent: timeEntry.hours,
+          comment: timeEntry.comment,
+          commentSuggestions: _commentSuggestions,
+        ),
+      );
+    }
   }
 
   Future<void> _init() async {
     final timeEntry = await _timerRepository.timeEntry;
+    
     if (timeEntry != null) {
       final minutes = max(timeEntry.hours.inMinutes, 1);
       timeEntry.hours = Duration(minutes: minutes);
       this.timeEntry = timeEntry;
 
+      if (_disposed) return; // Check after setup, before emit
       await _emitIdleState();
 
       try {
@@ -73,17 +79,20 @@ class TimeEntrySummaryBloc
           workPackageId: workPackageId,
           pageSize: 100,
         );
+        if (_disposed) return; // Exit after network call if disposed
+        
         var comments = timeEntries.map((e) => e.comment ?? '').toSet().toList();
         comments.remove('');
         _commentSuggestions = comments;
         await _emitIdleState();
       } catch (e) {
+        if (_disposed) return;
         print(e);
         _commentSuggestions = [];
         await _emitIdleState();
       }
     } else {
-      emitEffect(const TimeEntrySummaryEffect.error());
+      if (!_disposed) emitEffect(const TimeEntrySummaryEffect.error());
     }
   }
 
@@ -97,13 +106,22 @@ class TimeEntrySummaryBloc
   }
 
   Future<void> submit() async {
+    if (_disposed) return;
     emit(const TimeEntrySummaryState.loading());
     try {
       final submittedEntry = await _timerService.submit(timeEntry: timeEntry);
-      emitEffect(TimeEntrySummaryEffect.complete(timeEntry: submittedEntry));
+      if (!_disposed)
+        emitEffect(TimeEntrySummaryEffect.complete(timeEntry: submittedEntry));
     } catch (e) {
+      if (_disposed) return;
       _emitIdleState();
       emitEffect(const TimeEntrySummaryEffect.error());
     }
+  }
+
+  @override
+  Future<void> close() {
+    _disposed = true;
+    return super.close();
   }
 }

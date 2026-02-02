@@ -11,22 +11,25 @@ class OAuthAuthService implements AuthService {
 
   final _state = BehaviorSubject<AuthState>();
 
-  OAuthAuthService(
-    this._authClient,
-    this._authTokenStorage,
-  );
+  OAuthAuthService(this._authClient, this._authTokenStorage);
 
   @override
   Stream<AuthState> observeAuthState() => _state.doOnListen(() async {
-        await _init();
-      });
+    await _init();
+  });
 
   Future<void> _init() async {
-    final token = await _authTokenStorage.getToken();
-    if (token == null) {
+    try {
+      final token = await _authTokenStorage.getToken();
+      if (token == null) {
+        _state.add(AuthState.notAuthenticated());
+      } else {
+        _state.add(AuthState.authenticated());
+      }
+    } catch (e) {
+      // If token retrieval fails, treat as not authenticated
+      print('Auth initialization failed: $e');
       _state.add(AuthState.notAuthenticated());
-    } else {
-      _state.add(AuthState.authenticated());
     }
   }
 
