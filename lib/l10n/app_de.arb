@@ -66,6 +66,10 @@
     "profile_logout_description": "Von Ihrem Konto abmelden",
     "profile_logout_button": "Abmelden",
 
+    "profile_project_filters_title": "Projektfilter",
+    "profile_project_filters_only_with_tasks": "Nur Projekte mit Aufgaben anzeigen",
+    "profile_project_filters_lazy_load": "Projektliste nicht automatisch laden",
+
     "calendar_title": "Kalenderbenachrichtigungen",
     "calendar_connect": "Kalender verbinden",
     "calendar_disconnect": "Kalender trennen",
@@ -79,6 +83,10 @@
 
     "projects_list__title": "Projekte",
     "projects_list__updated_at": "Aktualisiert am",
+
+    "projects_list__search_hint": "Projekte filtern...",
+    "projects_list__not_loaded_hint": "Das Laden der Projektliste ist in Ihren Profileinstellungen deaktiviert.",
+    "projects_list__load_button": "Projekte laden",
 
     "analytics_consent_request__title": "Technische Daten teilen",
     "analytics_consent_request__text": "Hilf uns, die Stabilität und Leistung der App zu verbessern, indem du anonyme Absturzberichte und Sitzungsdaten teilst. Es werden keine personenbezogenen Daten erfasst.",

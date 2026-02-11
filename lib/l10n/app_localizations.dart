@@ -434,6 +434,24 @@ abstract class AppLocalizations {
   /// **'Sign out'**
   String get profile_logout_button;
 
+  /// No description provided for @profile_project_filters_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Project filters'**
+  String get profile_project_filters_title;
+
+  /// No description provided for @profile_project_filters_only_with_tasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Show only projects with tasks'**
+  String get profile_project_filters_only_with_tasks;
+
+  /// No description provided for @profile_project_filters_lazy_load.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not load project list automatically'**
+  String get profile_project_filters_lazy_load;
+
   /// No description provided for @calendar_title.
   ///
   /// In en, this message translates to:
@@ -493,6 +511,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Updated'**
   String get projects_list__updated_at;
+
+  /// No description provided for @projects_list__search_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter projects...'**
+  String get projects_list__search_hint;
+
+  /// No description provided for @projects_list__not_loaded_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Project list loading is disabled in your profile settings.'**
+  String get projects_list__not_loaded_hint;
+
+  /// No description provided for @projects_list__load_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Load projects'**
+  String get projects_list__load_button;
 
   /// No description provided for @analytics_consent_request__title.
   ///

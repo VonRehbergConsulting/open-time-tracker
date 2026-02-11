@@ -179,6 +179,17 @@ class AppLocalizationsDe extends AppLocalizations {
   String get profile_logout_button => 'Abmelden';
 
   @override
+  String get profile_project_filters_title => 'Projektfilter';
+
+  @override
+  String get profile_project_filters_only_with_tasks =>
+      'Nur Projekte mit Aufgaben anzeigen';
+
+  @override
+  String get profile_project_filters_lazy_load =>
+      'Projektliste nicht automatisch laden';
+
+  @override
   String get calendar_title => 'Kalenderbenachrichtigungen';
 
   @override
@@ -209,6 +220,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get projects_list__updated_at => 'Aktualisiert am';
+
+  @override
+  String get projects_list__search_hint => 'Projekte filtern...';
+
+  @override
+  String get projects_list__not_loaded_hint =>
+      'Das Laden der Projektliste ist in Ihren Profileinstellungen deaktiviert.';
+
+  @override
+  String get projects_list__load_button => 'Projekte laden';
 
   @override
   String get analytics_consent_request__title => 'Technische Daten teilen';
