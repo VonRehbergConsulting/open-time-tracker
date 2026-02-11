@@ -106,6 +106,12 @@ class ProjectsListBloc
     );
   }
 
+  /// In "Do not load project list" mode, projects are loaded only after the
+  /// user explicitly submits the search (which may be empty).
+  Future<void> submitSearch({bool showLoading = true}) async {
+    await reload(showLoading: showLoading);
+  }
+
   List<Project> _applyQuery(List<Project> allProjects, String query) {
     final q = query.trim().toLowerCase();
     if (q.isEmpty) return allProjects;

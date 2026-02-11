@@ -68,14 +68,27 @@ class ProjectsListPage
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: ElevatedButton.icon(
-                  onPressed: () => context
-                      .read<ProjectsListBloc>()
-                      .reload(showLoading: true),
-                  icon: const Icon(Icons.download_rounded),
-                  label: Text(
-                    AppLocalizations.of(context).projects_list__load_button,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)
+                        .projects_list__search_hint,
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      tooltip: AppLocalizations.of(context)
+                          .projects_list__load_button,
+                      onPressed: () => context
+                          .read<ProjectsListBloc>()
+                          .submitSearch(showLoading: true),
+                      icon: const Icon(Icons.search_rounded),
+                    ),
+                    border: const OutlineInputBorder(),
                   ),
+                  initialValue: query,
+                  textInputAction: TextInputAction.search,
+                  onChanged: context.read<ProjectsListBloc>().setQuery,
+                  onFieldSubmitted: (_) => context
+                      .read<ProjectsListBloc>()
+                      .submitSearch(showLoading: true),
                 ),
               ),
             ),

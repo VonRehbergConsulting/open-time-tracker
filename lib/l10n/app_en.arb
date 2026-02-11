@@ -85,7 +85,7 @@
     "projects_list__updated_at": "Updated",
 
     "projects_list__search_hint": "Filter projects...",
-    "projects_list__not_loaded_hint": "Project list loading is disabled in your profile settings.",
+    "projects_list__not_loaded_hint": "Project list loading is disabled in your profile settings. Enter a search (can be empty) and submit to load projects.",
     "projects_list__load_button": "Load projects",
 
     "analytics_consent_request__title": "Share technical data",

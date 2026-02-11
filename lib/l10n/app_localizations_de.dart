@@ -226,7 +226,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get projects_list__not_loaded_hint =>
-      'Das Laden der Projektliste ist in Ihren Profileinstellungen deaktiviert.';
+      'Das Laden der Projektliste ist in Ihren Profileinstellungen deaktiviert. Geben Sie eine Suche ein (auch leer möglich) und bestätigen Sie, um Projekte zu laden.';
 
   @override
   String get projects_list__load_button => 'Projekte laden';

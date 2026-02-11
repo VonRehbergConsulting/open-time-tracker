@@ -85,7 +85,7 @@
     "projects_list__updated_at": "Aktualisiert am",
 
     "projects_list__search_hint": "Projekte filtern...",
-    "projects_list__not_loaded_hint": "Das Laden der Projektliste ist in Ihren Profileinstellungen deaktiviert.",
+    "projects_list__not_loaded_hint": "Das Laden der Projektliste ist in Ihren Profileinstellungen deaktiviert. Geben Sie eine Suche ein (auch leer möglich) und bestätigen Sie, um Projekte zu laden.",
     "projects_list__load_button": "Projekte laden",
 
     "analytics_consent_request__title": "Technische Daten teilen",

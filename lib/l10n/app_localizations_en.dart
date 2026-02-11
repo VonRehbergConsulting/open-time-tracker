@@ -225,7 +225,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get projects_list__not_loaded_hint =>
-      'Project list loading is disabled in your profile settings.';
+      'Project list loading is disabled in your profile settings. Enter a search (can be empty) and submit to load projects.';
 
   @override
   String get projects_list__load_button => 'Load projects';

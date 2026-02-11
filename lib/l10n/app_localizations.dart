@@ -521,7 +521,7 @@ abstract class AppLocalizations {
   /// No description provided for @projects_list__not_loaded_hint.
   ///
   /// In en, this message translates to:
-  /// **'Project list loading is disabled in your profile settings.'**
+  /// **'Project list loading is disabled in your profile settings. Enter a search (can be empty) and submit to load projects.'**
   String get projects_list__not_loaded_hint;
 
   /// No description provided for @projects_list__load_button.
