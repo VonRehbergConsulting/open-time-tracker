@@ -5,6 +5,7 @@ abstract class ProjectsRepository {
     int? pageSize,
     bool sortByName = false,
     bool assignedToUser = false,
+    bool favoritesOnly = false,
   });
 }
 

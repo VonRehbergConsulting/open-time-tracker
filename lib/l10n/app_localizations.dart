@@ -529,6 +529,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Load projects'**
   String get projects_list__load_button;
+  String get projects_list__favorites_only;
 
   /// No description provided for @analytics_consent_request__title.
   ///

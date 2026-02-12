@@ -12,6 +12,7 @@ class ProjectsListState with _$ProjectsListState {
   const factory ProjectsListState.notLoaded({
     required bool showOnlyProjectsWithTasks,
     required bool doNotLoadProjectList,
+    required bool favoritesOnly,
     required String query,
   }) = _NotLoaded;
   const factory ProjectsListState.idle({
@@ -20,6 +21,7 @@ class ProjectsListState with _$ProjectsListState {
     required String query,
     required bool showOnlyProjectsWithTasks,
     required bool doNotLoadProjectList,
+    required bool favoritesOnly,
   }) = _Idle;
 }
 
@@ -37,6 +39,9 @@ class ProjectsListBloc
   String _query = '';
   bool _showOnlyProjectsWithTasks = false;
   bool _doNotLoadProjectList = false;
+  bool _favoritesOnly = false;
+
+  bool _hasLoadedProjectsOnce = false;
 
   ProjectsListBloc(
     this._projectsRepository,
@@ -54,6 +59,7 @@ class ProjectsListBloc
         ProjectsListState.notLoaded(
           showOnlyProjectsWithTasks: _showOnlyProjectsWithTasks,
           doNotLoadProjectList: _doNotLoadProjectList,
+          favoritesOnly: _favoritesOnly,
           query: _query,
         ),
       );
@@ -81,7 +87,7 @@ class ProjectsListBloc
   void setQuery(String value) {
     _query = value;
     state.maybeWhen(
-      idle: (allProjects, projects, query, showOnly, doNotLoad) {
+      idle: (allProjects, projects, query, showOnly, doNotLoad, favoritesOnly) {
         final filtered = _applyQuery(allProjects, _query);
         emit(
           ProjectsListState.idle(
@@ -90,14 +96,44 @@ class ProjectsListBloc
             query: _query,
             showOnlyProjectsWithTasks: showOnly,
             doNotLoadProjectList: doNotLoad,
+            favoritesOnly: favoritesOnly,
           ),
         );
       },
-      notLoaded: (showOnly, doNotLoad, query) {
+      notLoaded: (showOnly, doNotLoad, favoritesOnly, query) {
         emit(
           ProjectsListState.notLoaded(
             showOnlyProjectsWithTasks: showOnly,
             doNotLoadProjectList: doNotLoad,
+            favoritesOnly: favoritesOnly,
+            query: _query,
+          ),
+        );
+      },
+      orElse: () {},
+    );
+  }
+
+
+  void setFavoritesOnly(bool value) {
+    _favoritesOnly = value;
+
+    // If projects were already loaded at least once, reload so we fetch the
+    // correct server-side filtered set (favorited projects).
+    if (_hasLoadedProjectsOnce) {
+      reload(showLoading: true);
+      return;
+    }
+
+    // Otherwise, only update the notLoaded state. In lazy-load mode, projects
+    // will still be loaded on explicit search submit.
+    state.maybeWhen(
+      notLoaded: (showOnly, doNotLoad, favoritesOnly, query) {
+        emit(
+          ProjectsListState.notLoaded(
+            showOnlyProjectsWithTasks: showOnly,
+            doNotLoadProjectList: doNotLoad,
+            favoritesOnly: _favoritesOnly,
             query: _query,
           ),
         );
@@ -143,6 +179,7 @@ class ProjectsListBloc
         pageSize: 200,
         sortByName: true,
         assignedToUser: true,
+        favoritesOnly: _favoritesOnly,
       );
     } catch (e) {
       emit(
@@ -152,11 +189,14 @@ class ProjectsListBloc
           query: _query,
           showOnlyProjectsWithTasks: _showOnlyProjectsWithTasks,
           doNotLoadProjectList: _doNotLoadProjectList,
+          favoritesOnly: _favoritesOnly,
         ),
       );
       emitEffect(const ProjectsListEffect.error());
       return;
     }
+
+    _hasLoadedProjectsOnce = true;
 
     var filteredProjects = projects;
 
@@ -227,6 +267,7 @@ class ProjectsListBloc
         query: _query,
         showOnlyProjectsWithTasks: _showOnlyProjectsWithTasks,
         doNotLoadProjectList: _doNotLoadProjectList,
+        favoritesOnly: _favoritesOnly,
       ),
     );
   }

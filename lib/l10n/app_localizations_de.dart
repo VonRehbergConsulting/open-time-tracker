@@ -232,6 +232,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get projects_list__load_button => 'Projekte laden';
 
   @override
+  String get projects_list__favorites_only => 'Nur Favoriten';
+
+  @override
   String get analytics_consent_request__title => 'Technische Daten teilen';
 
   @override

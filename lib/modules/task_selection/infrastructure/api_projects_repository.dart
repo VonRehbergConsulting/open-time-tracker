@@ -13,6 +13,7 @@ class ApiProjectsRepository implements ProjectsRepository {
     int? pageSize,
     bool sortByName = false,
     bool assignedToUser = false,
+    bool favoritesOnly = false,
   }) async {
     List<String> filters = [];
     if (userId != null) {
@@ -24,6 +25,9 @@ class ApiProjectsRepository implements ProjectsRepository {
     }
     if (assignedToUser) {
       filters.add('{"member_of":{"operator":"=","values":["t"]}}');
+    }
+    if (favoritesOnly) {
+      filters.add('{"favorited":{"operator":"=","values":["t"]}}');
     }
     final filtersString = '[${filters.join(', ')}]';
 

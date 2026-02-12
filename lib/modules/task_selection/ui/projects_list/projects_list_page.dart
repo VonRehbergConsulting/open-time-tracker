@@ -51,7 +51,7 @@ class ProjectsListPage
             ),
           ],
         ),
-        notLoaded: (showOnlyProjectsWithTasks, doNotLoadProjectList, query) =>
+        notLoaded: (showOnlyProjectsWithTasks, doNotLoadProjectList, favoritesOnly, query) =>
             SliverMainAxisGroup(
           slivers: [
             const SliverToBoxAdapter(child: SizedBox(height: 12.0)),
@@ -92,6 +92,25 @@ class ProjectsListPage
                 ),
               ),
             ),
+
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  dense: true,
+                  title: Text(
+                    AppLocalizations.of(context).projects_list__favorites_only,
+                  ),
+                  value: favoritesOnly,
+                  onChanged: (v) => context
+                      .read<ProjectsListBloc>()
+                      .setFavoritesOnly(v ?? false),
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 8.0)),
             const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
           ],
         ),
@@ -102,6 +121,7 @@ class ProjectsListPage
           query,
           showOnlyProjectsWithTasks,
           doNotLoadProjectList,
+          favoritesOnly,
         ) => SliverMainAxisGroup(
           slivers: [
             const SliverToBoxAdapter(child: SizedBox(height: 8.0)),
@@ -117,6 +137,24 @@ class ProjectsListPage
                   ),
                   initialValue: query,
                   onChanged: context.read<ProjectsListBloc>().setQuery,
+                ),
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  dense: true,
+                  title: Text(
+                    AppLocalizations.of(context).projects_list__favorites_only,
+                  ),
+                  value: favoritesOnly,
+                  onChanged: (v) => context
+                      .read<ProjectsListBloc>()
+                      .setFavoritesOnly(v ?? false),
+                  controlAffinity: ListTileControlAffinity.leading,
                 ),
               ),
             ),
