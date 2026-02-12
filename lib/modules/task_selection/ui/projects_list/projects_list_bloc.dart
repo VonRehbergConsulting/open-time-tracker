@@ -120,12 +120,13 @@ class ProjectsListBloc
         .toList();
   }
 
-  String _projectKeyFromHref(String href) {
+  int? _projectNumericIdFromHref(String href) {
     try {
       final clean = href.split('?').first;
-      return clean.split('/').where((e) => e.isNotEmpty).last;
+      final last = clean.split('/').where((e) => e.isNotEmpty).last;
+      return int.tryParse(last);
     } catch (_) {
-      return href;
+      return null;
     }
   }
 
@@ -164,26 +165,53 @@ class ProjectsListBloc
         final statuses = await _settingsRepository.workPackagesStatusFilter;
         final assigneeFilter = await _settingsRepository.assigneeFilter;
 
-        // NOTE: OpenProject API is paginated. We request a large page size to
-        // keep this feature simple and avoid multiple requests. If the instance
-        // has more work packages than this limit, the filter may be incomplete.
-        final workPackages = await _workPackagesRepository.list(
-          projectId: null,
-          pageSize: 1000,
-          statuses: statuses,
-          user: assigneeFilter == 0 ? 'me' : null,
-        );
+        // OpenProject collections are paginated. We iterate pages (offset based)
+        // to reliably build the set of projects that have matching work packages,
+        // while keeping the number of requests bounded.
+        //
+        // Docs: https://www.openproject.org/docs/api/collections/
+        const pageSize = 200;
+        const maxPages = 20; // safety cap to avoid excessively long requests
 
-        final projectKeys = workPackages
-            .map((wp) => _projectKeyFromHref(wp.projectHref))
-            .toSet();
-        final projectTitles = workPackages.map((wp) => wp.projectTitle).toSet();
+        final projectNumericIdsWithTasks = <int>{};
+        final projectTitlesWithTasks = <String>{};
 
-        filteredProjects = projects
-            .where(
-              (p) => projectKeys.contains(p.id) || projectTitles.contains(p.title),
-            )
-            .toList();
+        int? offset = 1;
+        var pagesFetched = 0;
+        while (offset != null && pagesFetched < maxPages) {
+          pagesFetched += 1;
+
+          final page = await _workPackagesRepository.listPaged(
+            projectId: null,
+            pageSize: pageSize,
+            offset: offset,
+            statuses: statuses,
+            user: assigneeFilter == 0 ? 'me' : null,
+          );
+
+          for (final wp in page.items) {
+            final pid = _projectNumericIdFromHref(wp.projectHref);
+            if (pid != null) {
+              projectNumericIdsWithTasks.add(pid);
+            }
+            // Keep title as a last-resort fallback for instances where projects
+            // are listed by identifier but the numeric id is not available.
+            projectTitlesWithTasks.add(wp.projectTitle);
+          }
+
+          offset = page.nextOffset;
+          if (page.count <= 0 || page.items.isEmpty) {
+            break;
+          }
+        }
+
+        filteredProjects = projects.where((p) {
+          final nid = p.numericId;
+          if (nid != null) {
+            return projectNumericIdsWithTasks.contains(nid);
+          }
+          return projectTitlesWithTasks.contains(p.title);
+        }).toList();
       } catch (e) {
         // If filtering fails, fall back to the unfiltered list.
         filteredProjects = projects;

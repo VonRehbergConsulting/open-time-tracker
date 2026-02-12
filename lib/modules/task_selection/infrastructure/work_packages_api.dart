@@ -11,6 +11,7 @@ abstract class WorkPackagesApi {
   Future<WorkPackagesListResponse> workPackages({
     @Query('filters') String? filters,
     @Query('pageSize') int? pageSize,
+    @Query('offset') int? offset,
   });
 
   @GET('/projects/{projectId}/work_packages')
@@ -18,6 +19,7 @@ abstract class WorkPackagesApi {
     @Path() required projectId,
     @Query('filters') String? filters,
     @Query('pageSize') int? pageSize,
+    @Query('offset') int? offset,
   });
 }
 
@@ -74,7 +76,18 @@ class WorkPackageResponse {
 class WorkPackagesListResponse {
   late List<WorkPackageResponse> workPackages;
 
+  // Pagination metadata from OpenProject collection responses
+  late int total;
+  late int count;
+  int? pageSize;
+  int? offset;
+
   WorkPackagesListResponse.fromJson(Map<String, dynamic> json) {
+    total = (json['total'] as num?)?.toInt() ?? 0;
+    count = (json['count'] as num?)?.toInt() ?? 0;
+    pageSize = (json['pageSize'] as num?)?.toInt();
+    offset = (json['offset'] as num?)?.toInt();
+
     List<WorkPackageResponse> items = [];
     final embedded = json['_embedded'];
     final elements = embedded['elements'] as List<dynamic>;
@@ -82,5 +95,13 @@ class WorkPackagesListResponse {
       items.add(WorkPackageResponse.fromJson(element));
     }
     workPackages = items;
+
+    // Fallbacks in case the server omits meta fields.
+    if (count == 0) {
+      count = workPackages.length;
+    }
+    if (pageSize == null) {
+      pageSize = count;
+    }
   }
 }

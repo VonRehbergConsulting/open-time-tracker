@@ -41,6 +41,7 @@ class ApiProjectsRepository implements ProjectsRepository {
     return response.projects
         .map((element) => Project(
               id: element.id,
+              numericId: element.numericId,
               title: element.title,
               updatedAt: element.updatedAt,
             ))
