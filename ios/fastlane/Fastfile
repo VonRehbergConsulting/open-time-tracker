@@ -1,14 +1,15 @@
 default_platform(:ios)
 
-KEYCHAIN_NAME = ENV["KEYCHAIN_NAME"]
-KEYCHAIN_PASSWORD = ENV["KEYCHAIN_PASSWORD"]
-API_KEY_ID = ENV["API_KEY_ID"]
-API_KEY_ISSUER_ID = ENV["API_KEY_ISSUER_ID"]
-API_KEY_BASE64 = ENV["API_KEY_BASE64"]
-MATCH_GIT_BASIC_AUTHORIZATION = ENV["MATCH_GIT_BASIC_AUTHORIZATION"]
-DEVELOPER_APP_IDENTIFIER = ENV["DEVELOPER_APP_IDENTIFIER"]
-DEVELOPER_APP_ID = ENV["DEVELOPER_APP_ID"]
-APPLE_TEAM_ID = ENV["APPLE_TEAM_ID"]
+KEYCHAIN_NAME = ENV["KEYCHAIN_NAME"] || "fastlane_keychain"
+KEYCHAIN_PASSWORD = ENV["KEYCHAIN_PASSWORD"] || "temp_keychain_password"
+
+APP_STORE_CONNECT_KEY_ID = ENV["APP_STORE_CONNECT_KEY_ID"]
+APP_STORE_CONNECT_ISSUER_ID = ENV["APP_STORE_CONNECT_ISSUER_ID"]
+APP_STORE_CONNECT_KEY_CONTENT = ENV["APP_STORE_CONNECT_KEY_CONTENT"]
+
+IOS_APP_IDENTIFIER = ENV["IOS_APP_IDENTIFIER"] || "vonrehberg.timetracker"
+IOS_WIDGET_IDENTIFIER = ENV["IOS_WIDGET_IDENTIFIER"] || "#{IOS_APP_IDENTIFIER}.StatusWidget"
+TEAM_ID = ENV["TEAM_ID"] || ENV["APPLE_TEAM_ID"] || "383J7R89WY"
 
 def delete_temp_keychain(name)
   delete_keychain(
@@ -43,13 +44,29 @@ def ensure_temp_keychain(name, password)
   create_temp_keychain(name, password)
 end
 
+before_all do
+  # Load environment variables from .env.secret if it exists
+  env_file = File.join(__dir__, '.env.secret')
+  if File.exist?(env_file)
+    Dotenv.overload(env_file)
+  end
+end
+
 platform :ios do
   desc "Renew expired certificates"
   lane :renew_certs do
+    required_vars = ["APP_STORE_CONNECT_KEY_ID", "APP_STORE_CONNECT_ISSUER_ID", "APP_STORE_CONNECT_KEY_CONTENT"]
+    missing_vars = required_vars.select { |var| ENV[var].nil? || ENV[var].empty? }
+
+    unless missing_vars.empty?
+      UI.user_error!("Missing required environment variables: #{missing_vars.join(', ')}\n" +
+                     "Please create fastlane/.env.secret from .env.default and fill in your values.")
+    end
+
     api_key = app_store_connect_api_key(
-      key_id: API_KEY_ID,
-      issuer_id: API_KEY_ISSUER_ID,
-      key_content: API_KEY_BASE64,  
+      key_id: APP_STORE_CONNECT_KEY_ID,
+      issuer_id: APP_STORE_CONNECT_ISSUER_ID,
+      key_content: APP_STORE_CONNECT_KEY_CONTENT,
       is_key_content_base64: true,          
       duration: 1200,            
       in_house: false
@@ -58,14 +75,12 @@ platform :ios do
     match_nuke(
       type: 'appstore',
       api_key: api_key,
-      skip_confirmation: true,
-      git_basic_authorization: Base64.strict_encode64(MATCH_GIT_BASIC_AUTHORIZATION)
+      skip_confirmation: true
     )
 
     match(
       type: 'appstore',
-      app_identifier: [DEVELOPER_APP_IDENTIFIER, "#{DEVELOPER_APP_IDENTIFIER}.StatusWidget"],
-      git_basic_authorization: Base64.strict_encode64(MATCH_GIT_BASIC_AUTHORIZATION),
+      app_identifier: [IOS_APP_IDENTIFIER, IOS_WIDGET_IDENTIFIER],
       readonly: false,
       api_key: api_key
     )
@@ -74,20 +89,30 @@ platform :ios do
   desc "Push a new release build to the App Store"
   
   lane :build_and_deploy do |options|
+    required_vars = ["APP_STORE_CONNECT_KEY_ID", "APP_STORE_CONNECT_ISSUER_ID", "APP_STORE_CONNECT_KEY_CONTENT"]
+    missing_vars = required_vars.select { |var| ENV[var].nil? || ENV[var].empty? }
+
+    unless missing_vars.empty?
+      UI.user_error!("Missing required environment variables: #{missing_vars.join(', ')}\n" +
+                     "Please create fastlane/.env.secret from .env.default and fill in your values.")
+    end
+
     # Create temporary keychain for CI (similar to working Fastfile)
-    create_keychain(
-      name: KEYCHAIN_NAME,
-      password: KEYCHAIN_PASSWORD,
-      default_keychain: true,
-      unlock: true,
-      timeout: 3600,
-      lock_when_sleeps: false
-    )
+    if ENV['CI']
+      create_keychain(
+        name: KEYCHAIN_NAME,
+        password: KEYCHAIN_PASSWORD,
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+      )
+    end
 
     api_key = app_store_connect_api_key(
-      key_id: API_KEY_ID,
-      issuer_id: API_KEY_ISSUER_ID,
-      key_content: API_KEY_BASE64,  
+      key_id: APP_STORE_CONNECT_KEY_ID,
+      issuer_id: APP_STORE_CONNECT_ISSUER_ID,
+      key_content: APP_STORE_CONNECT_KEY_CONTENT,
       is_key_content_base64: true,          
       duration: 1200,            
       in_house: false
@@ -96,29 +121,29 @@ platform :ios do
     update_code_signing_settings(
       use_automatic_signing: false,
       targets: "Runner",
-      profile_name: "match AppStore #{DEVELOPER_APP_IDENTIFIER}",
-      bundle_identifier: DEVELOPER_APP_IDENTIFIER,
+      profile_name: "match AppStore #{IOS_APP_IDENTIFIER}",
+      bundle_identifier: IOS_APP_IDENTIFIER,
       code_sign_identity: "iPhone Distribution",
-      team_id: APPLE_TEAM_ID
+      team_id: TEAM_ID
     )
 
     update_code_signing_settings(
       use_automatic_signing: false,
       targets: "StatusWidgetExtension",
-      profile_name: "match AppStore #{DEVELOPER_APP_IDENTIFIER}.StatusWidget",
-      bundle_identifier: "#{DEVELOPER_APP_IDENTIFIER}.StatusWidget",
+      profile_name: "match AppStore #{IOS_WIDGET_IDENTIFIER}",
+      bundle_identifier: IOS_WIDGET_IDENTIFIER,
       code_sign_identity: "iPhone Distribution",
-      team_id: APPLE_TEAM_ID
+      team_id: TEAM_ID
     )
 
     # Sync code signing with match (similar to working Fastfile)
+    match_readonly = ENV.key?("MATCH_READONLY") ? ENV["MATCH_READONLY"].to_s.downcase != "false" : true
     match(
       type: 'appstore',
-      app_identifier: [DEVELOPER_APP_IDENTIFIER, "#{DEVELOPER_APP_IDENTIFIER}.StatusWidget"],
-      git_basic_authorization: Base64.strict_encode64(MATCH_GIT_BASIC_AUTHORIZATION),
-      readonly: true,
-      keychain_name: KEYCHAIN_NAME,
-      keychain_password: KEYCHAIN_PASSWORD,
+      app_identifier: [IOS_APP_IDENTIFIER, IOS_WIDGET_IDENTIFIER],
+      readonly: match_readonly,
+      keychain_name: ENV['CI'] ? KEYCHAIN_NAME : "login.keychain",
+      keychain_password: ENV['CI'] ? KEYCHAIN_PASSWORD : nil,
       api_key: api_key
     )
 
@@ -135,8 +160,8 @@ platform :ios do
       clean: true,
       export_options: {
         provisioningProfiles: { 
-            DEVELOPER_APP_IDENTIFIER => "match AppStore #{DEVELOPER_APP_IDENTIFIER}",
-            "#{DEVELOPER_APP_IDENTIFIER}.StatusWidget" => "match AppStore #{DEVELOPER_APP_IDENTIFIER}.StatusWidget"
+            IOS_APP_IDENTIFIER => "match AppStore #{IOS_APP_IDENTIFIER}",
+            IOS_WIDGET_IDENTIFIER => "match AppStore #{IOS_WIDGET_IDENTIFIER}"
         }
       }
     )

@@ -77,16 +77,10 @@ class TimeEntriesListBloc
   }
 
   Future<void> _initialize() async {
-    // Load the selected date from storage, or use today if not set
-    final storedDate = await _appStateRepository.selectedDate;
-    if (storedDate != null) {
-      selectedDate = storedDate;
-    } else {
-      // First time - set to today
-      final now = DateTime.now();
-      selectedDate = DateTime(now.year, now.month, now.day);
-      await _appStateRepository.setSelectedDate(selectedDate);
-    }
+    // Always default to today when the app starts
+    final now = DateTime.now();
+    selectedDate = DateTime(now.year, now.month, now.day);
+    await _appStateRepository.setSelectedDate(selectedDate);
     _isInitialized = true;
   }
 

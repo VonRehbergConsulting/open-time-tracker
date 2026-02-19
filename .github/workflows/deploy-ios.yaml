@@ -40,18 +40,37 @@ jobs:
           cd ios
           bundle install
 
+      - name: Prepare match credentials
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+        run: |
+          if [ -n "$PAT_TOKEN" ]; then
+            echo "::add-mask::$PAT_TOKEN"
+            echo "MATCH_GIT_BASIC_AUTHORIZATION=$(printf "x-access-token:%s" "$PAT_TOKEN" | base64)" >> $GITHUB_ENV
+          fi
+          if [ -n "$MATCH_GIT_URL" ]; then
+            echo "MATCH_GIT_URL=$MATCH_GIT_URL" >> $GITHUB_ENV
+          else
+            echo "MATCH_GIT_URL=https://github.com/VonRehberg/ios-certificates.git" >> $GITHUB_ENV
+          fi
+
       - name: Build, sign and deploy
         env:
-          API_KEY_ID: ${{ secrets.API_KEY_ID }}
-          API_KEY_ISSUER_ID: ${{ secrets.API_KEY_ISSUER_ID }}
-          API_KEY_BASE64: ${{ secrets.API_KEY_BASE64 }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_KEY_CONTENT }}
           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          DEVELOPER_APP_IDENTIFIER: ${{ secrets.DEVELOPER_APP_IDENTIFIER }}
-          DEVELOPER_APP_ID: ${{ secrets.DEVELOPER_APP_ID }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          MATCH_GIT_URL: ${{ env.MATCH_GIT_URL }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ env.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_READONLY: ${{ vars.MATCH_READONLY }}
+          IOS_APP_IDENTIFIER: ${{ secrets.IOS_APP_IDENTIFIER }}
+          IOS_WIDGET_IDENTIFIER: ${{ secrets.IOS_WIDGET_IDENTIFIER }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          ITC_TEAM_ID: ${{ secrets.ITC_TEAM_ID }}
         run: |
           cd ios
           bundle exec fastlane build_and_deploy
