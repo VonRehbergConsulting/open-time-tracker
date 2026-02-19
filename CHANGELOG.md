@@ -1,3 +1,11 @@
+## [1.9.6](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.5...v1.9.6) (2026-02-19)
+
+
+### Bug Fixes
+
+* Ensuring selected date when starting the app is today ([9066480](https://github.com/VonRehbergConsulting/open-time-tracker/commit/9066480bffbceac1e27b4e3bd9209a9eebd7a1f5))
+* pinning dependency ([3f4d028](https://github.com/VonRehbergConsulting/open-time-tracker/commit/3f4d028e08201fbf93a25166f35aa09f1f2ad2be))
+
 ## [1.9.5](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.4...v1.9.5) (2026-02-02)
 
 
