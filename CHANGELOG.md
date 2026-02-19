@@ -1,3 +1,10 @@
+## [1.9.8](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.7...v1.9.8) (2026-02-19)
+
+
+### Bug Fixes
+
+* removed unnecessary flutter installation from semantic release ([acebfbd](https://github.com/VonRehbergConsulting/open-time-tracker/commit/acebfbdd951907b280e298c11a1e1e2bf625cbac))
+
 ## [1.9.7](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.6...v1.9.7) (2026-02-19)
 
 
