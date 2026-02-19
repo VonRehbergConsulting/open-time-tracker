@@ -80,7 +80,7 @@ jobs:
           if [ -n "$MATCH_GIT_URL" ]; then
             echo "MATCH_GIT_URL=$MATCH_GIT_URL" >> $GITHUB_ENV
           else
-            echo "MATCH_GIT_URL=https://github.com/VonRehberg/ios-certificates.git" >> $GITHUB_ENV
+            echo "MATCH_GIT_URL=https://github.com/VonRehbergConsulting/ios-certificates.git" >> $GITHUB_ENV
           fi
 
       - name: Build for iOS
