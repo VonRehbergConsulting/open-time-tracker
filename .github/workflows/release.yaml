@@ -1,0 +1,118 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: npx semantic-release
+
+      - name: Merge back to develop
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config pull.rebase false
+          git config merge.ff false
+          git fetch origin develop
+          git checkout develop
+          git merge --no-ff main -m "chore: merge release changes back to develop [skip ci]"
+          git push origin develop
+
+  build-android:
+    needs: release
+    if: needs.release.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Pull latest changes (including release commit)
+        run: git pull origin main
+
+      - name: Get latest tag
+        id: get_tag
+        run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+
+      - name: Generate keystore.jks file
+        run: |
+          cd android/app
+          mkdir -p keystore
+          cd keystore
+          echo ${{ secrets.ANDROID_SIGNING_KEY }} | base64 -d > upload-keystore.jks
+
+      - name: Generate key.properties file
+        run: |
+          cd android
+          touch key.properties
+          echo -e "storePassword=${{ secrets.STORE_PASSWORD }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nstoreFile=${{ secrets.KEYSTORE_FILE }}" >> key.properties
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.32.8"
+          channel: "stable"
+
+      - name: Setup project
+        run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Create env file
+        run: |
+          touch .env
+          echo "GRAPH_API_CLIENT_ID=${{ secrets.GRAPH_API_CLIENT_ID }}" >> .env
+          echo "COUNTLY_APP_KEY=${{ secrets.COUNTLY_APP_KEY }}" >> .env
+          echo "COUNTLY_URL=${{ secrets.COUNTLY_URL }}" >> .env
+          echo "PRIVACY_POLICY_URL=${{ secrets.PRIVACY_POLICY_URL }}" >> .env
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Build App Bundle
+        run: flutter build appbundle --release
+
+      - name: Upload APK to release
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          gh release upload ${{ steps.get_tag.outputs.tag }} \
+            build/app/outputs/flutter-apk/app-release.apk \
+            build/app/outputs/bundle/release/app-release.aab \
+            --clobber
