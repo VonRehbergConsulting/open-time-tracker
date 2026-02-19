@@ -1,3 +1,10 @@
+## [1.9.7](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.6...v1.9.7) (2026-02-19)
+
+
+### Bug Fixes
+
+* updated ci build ([db5ae7c](https://github.com/VonRehbergConsulting/open-time-tracker/commit/db5ae7cb4d49aeaf789ee99bb5f5d2d181505aea))
+
 ## [1.9.6](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.5...v1.9.6) (2026-02-19)
 
 
