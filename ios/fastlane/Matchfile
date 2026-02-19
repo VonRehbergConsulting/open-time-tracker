@@ -1,5 +1,9 @@
-git_url("https://github.com/VonRehbergConsulting/time-tracker-certificates")
+git_url(ENV["MATCH_GIT_URL"] || "https://github.com/VonRehberg/ios-certificates.git")
 
 storage_mode("git")
 
 type("appstore")
+
+app_identifier(ENV["IOS_APP_IDENTIFIER"] || "vonrehberg.timetracker")
+username(ENV["APPLE_ID"] || "dshtangey@vonrehberg.consulting")
+team_id(ENV["TEAM_ID"] || "383J7R89WY")
