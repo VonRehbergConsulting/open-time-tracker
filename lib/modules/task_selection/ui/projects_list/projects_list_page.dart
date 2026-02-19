@@ -20,7 +20,7 @@ class ProjectsListPage
   @override
   void onCreate(BuildContext context, ProjectsListBloc bloc) {
     super.onCreate(context, bloc);
-    bloc.reload();
+    bloc.onPageOpened();
   }
 
   @override
@@ -40,7 +40,7 @@ class ProjectsListPage
   Widget buildState(BuildContext context, ProjectsListState state) {
     return SliverScreen(
       title: AppLocalizations.of(context).projects_list__title,
-      onRefresh: context.read<ProjectsListBloc>().reload,
+      onRefresh: () => context.read<ProjectsListBloc>().reload(showLoading: true),
       body: state.when(
         loading: () => const SliverMainAxisGroup(
           slivers: [
@@ -51,8 +51,113 @@ class ProjectsListPage
             ),
           ],
         ),
-        idle: (projects) => SliverMainAxisGroup(
+        notLoaded: (showOnlyProjectsWithTasks, doNotLoadProjectList, favoritesOnly, query) =>
+            SliverMainAxisGroup(
           slivers: [
+            const SliverToBoxAdapter(child: SizedBox(height: 12.0)),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Text(
+                  AppLocalizations.of(context).projects_list__not_loaded_hint,
+                  style: const TextStyle(color: Colors.black54),
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 12.0)),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)
+                        .projects_list__search_hint,
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      tooltip: AppLocalizations.of(context)
+                          .projects_list__load_button,
+                      onPressed: () => context
+                          .read<ProjectsListBloc>()
+                          .submitSearch(showLoading: true),
+                      icon: const Icon(Icons.search_rounded),
+                    ),
+                    border: const OutlineInputBorder(),
+                  ),
+                  initialValue: query,
+                  textInputAction: TextInputAction.search,
+                  onChanged: context.read<ProjectsListBloc>().setQuery,
+                  onFieldSubmitted: (_) => context
+                      .read<ProjectsListBloc>()
+                      .submitSearch(showLoading: true),
+                ),
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  dense: true,
+                  title: Text(
+                    AppLocalizations.of(context).projects_list__favorites_only,
+                  ),
+                  value: favoritesOnly,
+                  onChanged: (v) => context
+                      .read<ProjectsListBloc>()
+                      .setFavoritesOnly(v ?? false),
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 8.0)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+          ],
+        ),
+        idle:
+            (
+          allProjects,
+          projects,
+          query,
+          showOnlyProjectsWithTasks,
+          doNotLoadProjectList,
+          favoritesOnly,
+        ) => SliverMainAxisGroup(
+          slivers: [
+            const SliverToBoxAdapter(child: SizedBox(height: 8.0)),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)
+                        .projects_list__search_hint,
+                    prefixIcon: const Icon(Icons.search),
+                    border: const OutlineInputBorder(),
+                  ),
+                  initialValue: query,
+                  onChanged: context.read<ProjectsListBloc>().setQuery,
+                ),
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  dense: true,
+                  title: Text(
+                    AppLocalizations.of(context).projects_list__favorites_only,
+                  ),
+                  value: favoritesOnly,
+                  onChanged: (v) => context
+                      .read<ProjectsListBloc>()
+                      .setFavoritesOnly(v ?? false),
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+              ),
+            ),
             const SliverToBoxAdapter(child: SizedBox(height: 8.0)),
             SliverList(
               delegate: SliverChildBuilderDelegate(

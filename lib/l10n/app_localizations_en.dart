@@ -179,6 +179,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile_logout_button => 'Sign out';
 
   @override
+  String get profile_project_filters_title => 'Project filters';
+
+  @override
+  String get profile_project_filters_only_with_tasks =>
+      'Show only projects with tasks';
+
+  @override
+  String get profile_project_filters_lazy_load =>
+      'Do not load project list automatically';
+
+  @override
   String get calendar_title => 'Calendar notifications';
 
   @override
@@ -208,6 +219,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get projects_list__updated_at => 'Updated';
+
+  @override
+  String get projects_list__search_hint => 'Filter projects...';
+
+  @override
+  String get projects_list__not_loaded_hint =>
+      'Project list loading is disabled in your profile settings. Enter a search (can be empty) and submit to load projects.';
+
+  @override
+  String get projects_list__load_button => 'Load projects';
+
+  @override
+  String get projects_list__favorites_only => 'Favorites only';
 
   @override
   String get analytics_consent_request__title => 'Share technical data';

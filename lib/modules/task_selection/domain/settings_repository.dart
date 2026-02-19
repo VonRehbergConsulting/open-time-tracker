@@ -12,4 +12,17 @@ abstract class SettingsRepository {
 
   Future<bool?> get analyticsConsent;
   Future<void> setAnalyticsConsent(bool value);
+
+  /// Filter projects to only those that have tasks.
+  ///
+  /// This is used in the project selection list.
+  Future<bool> get showOnlyProjectsWithTasks;
+  Future<void> setShowOnlyProjectsWithTasks(bool value);
+
+  /// Do not load the project list automatically.
+  ///
+  /// When enabled, the project selection list will require a manual refresh/
+  /// load trigger by the user.
+  Future<bool> get doNotLoadProjectList;
+  Future<void> setDoNotLoadProjectList(bool value);
 }
