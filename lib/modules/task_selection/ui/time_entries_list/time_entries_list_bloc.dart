@@ -64,6 +64,15 @@ class TimeEntriesListBloc
     this._analyticsService,
   ) : super(const TimeEntriesListState.loading()) {
     WidgetsBinding.instance.addObserver(this);
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    // Always default to today when the app starts
+    final now = DateTime.now();
+    selectedDate = DateTime(now.year, now.month, now.day);
+    await _appStateRepository.setSelectedDate(selectedDate);
+    _isInitialized = true;
   }
 
   @override
