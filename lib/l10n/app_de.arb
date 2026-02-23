@@ -82,5 +82,33 @@
 
     "analytics_consent_request__title": "Technische Daten teilen",
     "analytics_consent_request__text": "Hilf uns, die Stabilität und Leistung der App zu verbessern, indem du anonyme Absturzberichte und Sitzungsdaten teilst. Es werden keine personenbezogenen Daten erfasst.",
-    "analytics_consent_request__privacy_policy": "Datenschutzerklärung"
+    "analytics_consent_request__privacy_policy": "Datenschutzerklärung",
+
+    "monthly_overview_title": "Monatsübersicht",
+    "monthly_overview_week": "Woche",
+    "monthly_overview_weekly": "Wöchentlich",
+    "monthly_overview_monthly": "Monatlich",
+    "monthly_overview_total": "Gesamt",
+    "weekday_monday": "Mo",
+    "weekday_tuesday": "Di",
+    "weekday_wednesday": "Mi",
+    "weekday_thursday": "Do",
+    "weekday_friday": "Fr",
+    "weekday_saturday": "Sa",
+    "weekday_sunday": "So",
+
+    "export_report_title": "Bericht exportieren",
+    "export_report_date_range": "Zeitraum",
+    "export_report_start_date": "Startdatum",
+    "export_report_end_date": "Enddatum",
+    "export_report_project_filter": "Projektfilter (Optional)",
+    "export_report_all_projects": "Alle Projekte",
+    "export_report_select_projects": "Projekte auswählen",
+    "export_report_add_more_projects": "Weitere Projekte hinzufügen",
+    "export_report_search_projects": "Projekte suchen...",
+    "export_report_clear_selection": "Auswahl löschen",
+    "export_report_no_projects": "Keine Projekte verfügbar",
+    "export_report_format": "Exportformat",
+    "export_report_xlsx": "Als Excel exportieren (XLSX)",
+    "export_report_pdf": "Als PDF exportieren"
 }

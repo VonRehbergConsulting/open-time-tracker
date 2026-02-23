@@ -218,4 +218,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get analytics_consent_request__privacy_policy => 'Privacy policy';
+
+  @override
+  String get monthly_overview_title => 'Monthly Overview';
+
+  @override
+  String get monthly_overview_week => 'Week';
+
+  @override
+  String get monthly_overview_weekly => 'Weekly';
+
+  @override
+  String get monthly_overview_monthly => 'Monthly';
+
+  @override
+  String get monthly_overview_total => 'Total';
+
+  @override
+  String get weekday_monday => 'Mon';
+
+  @override
+  String get weekday_tuesday => 'Tue';
+
+  @override
+  String get weekday_wednesday => 'Wed';
+
+  @override
+  String get weekday_thursday => 'Thu';
+
+  @override
+  String get weekday_friday => 'Fri';
+
+  @override
+  String get weekday_saturday => 'Sat';
+
+  @override
+  String get weekday_sunday => 'Sun';
+
+  @override
+  String get export_report_title => 'Export Report';
+
+  @override
+  String get export_report_date_range => 'Date Range';
+
+  @override
+  String get export_report_start_date => 'Start Date';
+
+  @override
+  String get export_report_end_date => 'End Date';
+
+  @override
+  String get export_report_project_filter => 'Project Filter (Optional)';
+
+  @override
+  String get export_report_all_projects => 'All Projects';
+
+  @override
+  String get export_report_select_projects => 'Select Projects';
+
+  @override
+  String get export_report_add_more_projects => 'Add More Projects';
+
+  @override
+  String get export_report_search_projects => 'Search projects...';
+
+  @override
+  String get export_report_clear_selection => 'Clear Selection';
+
+  @override
+  String get export_report_no_projects => 'No projects available';
+
+  @override
+  String get export_report_format => 'Export Format';
+
+  @override
+  String get export_report_xlsx => 'Export as Excel (XLSX)';
+
+  @override
+  String get export_report_pdf => 'Export as PDF';
 }

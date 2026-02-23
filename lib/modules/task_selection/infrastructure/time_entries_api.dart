@@ -12,6 +12,7 @@ abstract class TimeEntriesApi {
   Future<TimeEntriesResponse> timeEntries({
     @Query('filters') String? filters,
     @Query('pageSize') int? pageSize,
+    @Query('offset') int? offset,
   });
 
   @POST('/time_entries')
@@ -71,8 +72,13 @@ class TimeEntryResponse {
 
 class TimeEntriesResponse {
   late List<TimeEntryResponse> timeEntries;
+  late int total;
+  late int count;
 
   TimeEntriesResponse.fromJson(Map<String, dynamic> json) {
+    total = json['total'] ?? 0;
+    count = json['count'] ?? 0;
+    
     List<TimeEntryResponse> items = [];
     final embedded = json['_embedded'];
     final elements = embedded['elements'] as List<dynamic>;

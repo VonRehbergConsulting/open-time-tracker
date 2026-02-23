@@ -82,5 +82,33 @@
 
     "analytics_consent_request__title": "Share technical data",
     "analytics_consent_request__text": "Help us improve app stability and performance by sharing anonymous crash reports and session data. No personal information is collected.",
-    "analytics_consent_request__privacy_policy": "Privacy policy"
+    "analytics_consent_request__privacy_policy": "Privacy policy",
+
+    "monthly_overview_title": "Monthly Overview",
+    "monthly_overview_week": "Week",
+    "monthly_overview_weekly": "Weekly",
+    "monthly_overview_monthly": "Monthly",
+    "monthly_overview_total": "Total",
+    "weekday_monday": "Mon",
+    "weekday_tuesday": "Tue",
+    "weekday_wednesday": "Wed",
+    "weekday_thursday": "Thu",
+    "weekday_friday": "Fri",
+    "weekday_saturday": "Sat",
+    "weekday_sunday": "Sun",
+
+    "export_report_title": "Export Report",
+    "export_report_date_range": "Date Range",
+    "export_report_start_date": "Start Date",
+    "export_report_end_date": "End Date",
+    "export_report_project_filter": "Project Filter (Optional)",
+    "export_report_all_projects": "All Projects",
+    "export_report_select_projects": "Select Projects",
+    "export_report_add_more_projects": "Add More Projects",
+    "export_report_search_projects": "Search projects...",
+    "export_report_clear_selection": "Clear Selection",
+    "export_report_no_projects": "No projects available",
+    "export_report_format": "Export Format",
+    "export_report_xlsx": "Export as Excel (XLSX)",
+    "export_report_pdf": "Export as PDF"
 }
