@@ -12,6 +12,15 @@ part 'monthly_overview_bloc.freezed.dart';
 
 enum ViewMode { weekly, monthly }
 
+DateTime _startOfWeek(DateTime date) {
+  final dateOnly = DateTime(date.year, date.month, date.day);
+  return DateTime(
+    dateOnly.year,
+    dateOnly.month,
+    dateOnly.day - (dateOnly.weekday - 1),
+  );
+}
+
 @freezed
 class MonthlyOverviewState with _$MonthlyOverviewState {
   factory MonthlyOverviewState.loading({@Default(ViewMode.monthly) ViewMode viewMode}) = _Loading;
@@ -34,28 +43,27 @@ class MonthlyOverviewBloc extends Cubit<MonthlyOverviewState> {
   int _currentYear = DateTime.now().year;
   int _currentMonth = DateTime.now().month;
   ViewMode _viewMode = ViewMode.monthly;
+  DateTime _selectedWeekStart = _startOfWeek(DateTime.now());
+
+  DateTime get selectedWeekStart => _selectedWeekStart;
+  DateTime get selectedWeekEnd => _selectedWeekStart.add(const Duration(days: 6));
+  bool get canGoToNextWeek {
+    final currentWeekStart = _startOfWeek(DateTime.now());
+    return _selectedWeekStart.isBefore(currentWeekStart);
+  }
 
   MonthlyOverviewBloc(
     this._timeEntriesRepository,
     this._userDataRepository,
   ) : super(MonthlyOverviewState.loading());
 
-  void toggleViewMode(ViewMode mode) {
+  Future<void> toggleViewMode(ViewMode mode) async {
+    if (_viewMode == mode) {
+      return;
+    }
+
     _viewMode = mode;
-    state.maybeWhen(
-      loaded: (year, month, dailyHours, weeklyHours, weekdayHours, projectHours, _) {
-        emit(MonthlyOverviewState.loaded(
-          year: year,
-          month: month,
-          dailyHours: dailyHours,
-          weeklyHours: weeklyHours,
-          weekdayHours: weekdayHours,
-          projectHours: projectHours,
-          viewMode: mode,
-        ));
-      },
-      orElse: () {},
-    );
+    await _loadMonth(_currentYear, _currentMonth);
   }
 
   Future<void> reload() async {
@@ -68,23 +76,59 @@ class MonthlyOverviewBloc extends Cubit<MonthlyOverviewState> {
     await _loadMonth(year, month);
   }
 
+  Future<void> goToPreviousWeek() async {
+    _selectedWeekStart = _selectedWeekStart.subtract(const Duration(days: 7));
+    await _loadMonth(_currentYear, _currentMonth);
+  }
+
+  Future<void> goToNextWeek() async {
+    if (!canGoToNextWeek) {
+      return;
+    }
+
+    _selectedWeekStart = _selectedWeekStart.add(const Duration(days: 7));
+    await _loadMonth(_currentYear, _currentMonth);
+  }
+
+  Future<void> jumpToCurrentWeek() async {
+    final currentWeekStart = _startOfWeek(DateTime.now());
+    if (_selectedWeekStart == currentWeekStart) {
+      return;
+    }
+
+    _selectedWeekStart = currentWeekStart;
+    await _loadMonth(_currentYear, _currentMonth);
+  }
+
   Future<void> _loadMonth(int year, int month) async {
     emit(MonthlyOverviewState.loading(viewMode: _viewMode));
 
     try {
       final userId = await _userDataRepository.userId();
+      final userIdString = userId.toString();
 
       // Get first and last day of the month
       final firstDay = DateTime(year, month, 1);
       final lastDay = DateTime(year, month + 1, 0);
+      final selectedWeekEnd = _selectedWeekStart.add(const Duration(days: 6));
 
-      // Fetch all time entries for the month
-      final timeEntries = await _timeEntriesRepository.list(
-        userId: userId.toString(),
-        startDate: firstDay,
-        endDate: lastDay,
-        fetchAll: true,
-      );
+      // Fetch month and current-week entries independently
+      final result = await Future.wait([
+        _timeEntriesRepository.list(
+          userId: userIdString,
+          startDate: firstDay,
+          endDate: lastDay,
+          fetchAll: true,
+        ),
+        _timeEntriesRepository.list(
+          userId: userIdString,
+          startDate: _selectedWeekStart,
+          endDate: selectedWeekEnd,
+          fetchAll: true,
+        ),
+      ]);
+      final timeEntries = result[0];
+      final selectedWeekEntries = result[1];
 
       // Calculate daily hours
       final Map<int, Duration> dailyHours = {};
@@ -129,9 +173,10 @@ class MonthlyOverviewBloc extends Cubit<MonthlyOverviewState> {
         weekRow++;
       }
 
-      // Calculate weekday hours and project hours using shared service
-      final weekdayHours = TimeAggregationService.sumByWeekday(timeEntries);
-      final projectHours = TimeAggregationService.sumByProject(timeEntries);
+      // Weekly overview reflects the currently selected week range
+      final weekdayHours = TimeAggregationService.sumByWeekday(selectedWeekEntries);
+      final monthlyProjectHours = TimeAggregationService.sumByProject(timeEntries);
+      final weeklyProjectHours = TimeAggregationService.sumByProject(selectedWeekEntries);
 
       emit(MonthlyOverviewState.loaded(
         year: year,
@@ -139,48 +184,38 @@ class MonthlyOverviewBloc extends Cubit<MonthlyOverviewState> {
         dailyHours: dailyHours,
         weeklyHours: weeklyHours,
         weekdayHours: weekdayHours,
-        projectHours: projectHours,
+        projectHours: _viewMode == ViewMode.weekly
+        ? weeklyProjectHours
+        : monthlyProjectHours,
         viewMode: _viewMode,
       ));
     } on DioException {
       // Network error - emit empty state so UI can display gracefully
-      emit(MonthlyOverviewState.loaded(
-        year: year,
-        month: month,
-        dailyHours: {},
-        weeklyHours: {},
-        weekdayHours: WeekdayHours(
-          monday: Duration.zero,
-          tuesday: Duration.zero,
-          wednesday: Duration.zero,
-          thursday: Duration.zero,
-          friday: Duration.zero,
-          saturday: Duration.zero,
-          sunday: Duration.zero,
-        ),
-        projectHours: [],
-        viewMode: _viewMode,
-      ));
+      _emitEmptyState(year: year, month: month);
     } catch (e) {
       // Other errors - emit empty state so UI can display gracefully
-      emit(MonthlyOverviewState.loaded(
-        year: year,
-        month: month,
-        dailyHours: {},
-        weeklyHours: {},
-        weekdayHours: WeekdayHours(
-          monday: Duration.zero,
-          tuesday: Duration.zero,
-          wednesday: Duration.zero,
-          thursday: Duration.zero,
-          friday: Duration.zero,
-          saturday: Duration.zero,
-          sunday: Duration.zero,
-        ),
-        projectHours: [],
-        viewMode: _viewMode,
-      ));
+      _emitEmptyState(year: year, month: month);
     }
+  }
+
+  void _emitEmptyState({required int year, required int month}) {
+    emit(MonthlyOverviewState.loaded(
+      year: year,
+      month: month,
+      dailyHours: {},
+      weeklyHours: {},
+      weekdayHours: WeekdayHours(
+        monday: Duration.zero,
+        tuesday: Duration.zero,
+        wednesday: Duration.zero,
+        thursday: Duration.zero,
+        friday: Duration.zero,
+        saturday: Duration.zero,
+        sunday: Duration.zero,
+      ),
+      projectHours: [],
+      viewMode: _viewMode,
+    ));
   }
 }
 

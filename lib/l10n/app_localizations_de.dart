@@ -228,6 +228,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get monthly_overview_week => 'Woche';
 
   @override
+  String get monthly_overview_current_week => 'Aktuelle Woche';
+
+  @override
   String get monthly_overview_weekly => 'Wöchentlich';
 
   @override

@@ -6,12 +6,14 @@ class DateNavigator extends StatelessWidget {
   final DateTime selectedDate;
   final VoidCallback onPreviousDay;
   final VoidCallback onNextDay;
+  final VoidCallback? onJumpToToday;
 
   const DateNavigator({
     super.key,
     required this.selectedDate,
     required this.onPreviousDay,
     required this.onNextDay,
+    this.onJumpToToday,
   });
 
   String _formatDate(BuildContext context, DateTime date) {
@@ -25,7 +27,8 @@ class DateNavigator extends StatelessWidget {
     } else if (selectedDay == yesterday) {
       return AppLocalizations.of(context).generic_yesterday;
     } else {
-      return DateFormat('EEE, MMM d, yyyy').format(date);
+      final locale = Localizations.localeOf(context).toLanguageTag();
+      return DateFormat.yMMMEd(locale).format(date);
     }
   }
 
@@ -52,12 +55,26 @@ class DateNavigator extends StatelessWidget {
             iconSize: 32,
           ),
           Expanded(
-            child: Text(
-              _formatDate(context, selectedDate),
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton(
+                  onPressed: isTodayOrFuture ? null : onJumpToToday,
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 24),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(AppLocalizations.of(context).generic_today),
+                ),
+                Text(
+                  _formatDate(context, selectedDate),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
           IconButton(

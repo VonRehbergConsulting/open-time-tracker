@@ -174,6 +174,19 @@ class TimeEntriesListBloc
     await reload(showLoading: true);
   }
 
+  Future<void> goToToday() async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    if (selectedDate == today) {
+      return;
+    }
+
+    selectedDate = today;
+    await _appStateRepository.setSelectedDate(selectedDate);
+    await reload(showLoading: true);
+  }
+
   Future<void> unauthorize() async {
     await Future.wait([
       _calendarNotificationsService.removeNotifications(),

@@ -524,6 +524,12 @@ abstract class AppLocalizations {
   /// **'Week'**
   String get monthly_overview_week;
 
+  /// No description provided for @monthly_overview_current_week.
+  ///
+  /// In en, this message translates to:
+  /// **'Current week'**
+  String get monthly_overview_current_week;
+
   /// No description provided for @monthly_overview_weekly.
   ///
   /// In en, this message translates to:

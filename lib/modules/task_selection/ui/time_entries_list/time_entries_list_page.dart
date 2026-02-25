@@ -112,6 +112,8 @@ class TimeEntriesListPage
                         context.read<TimeEntriesListBloc>().goToPreviousDay(),
                     onNextDay: () =>
                         context.read<TimeEntriesListBloc>().goToNextDay(),
+                    onJumpToToday: () =>
+                        context.read<TimeEntriesListBloc>().goToToday(),
                   ),
                 ),
                 SliverToBoxAdapter(
@@ -202,6 +204,7 @@ class _DateNavigatorPlaceholder extends StatelessWidget {
       selectedDate: DateTime.now(),
       onPreviousDay: () {},
       onNextDay: () {},
+      onJumpToToday: () {},
     );
   }
 }

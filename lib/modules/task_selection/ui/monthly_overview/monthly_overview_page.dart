@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_shimmer.dart';
@@ -126,6 +127,32 @@ class MonthlyOverviewPage extends BlocPage<MonthlyOverviewBloc, MonthlyOverviewS
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: _WeekRangeNavigation(
+                        label: _formatWeekRange(
+                          context,
+                          context.read<MonthlyOverviewBloc>().selectedWeekStart,
+                          context.read<MonthlyOverviewBloc>().selectedWeekEnd,
+                        ),
+                        onPrevious: () => context
+                            .read<MonthlyOverviewBloc>()
+                            .goToPreviousWeek(),
+                        onJumpToCurrentWeek: context
+                            .read<MonthlyOverviewBloc>()
+                            .canGoToNextWeek
+                          ? () => context
+                            .read<MonthlyOverviewBloc>()
+                            .jumpToCurrentWeek()
+                          : null,
+                        onNext: context.read<MonthlyOverviewBloc>().canGoToNextWeek
+                            ? () => context
+                                .read<MonthlyOverviewBloc>()
+                                .goToNextWeek()
+                            : null,
+                      ),
+                    ),
+                    const SizedBox(height: 12.0),
                     DailyWorkChart(
                       data: DailyWorkChartData(
                         monday: weekdayHours.monday,
@@ -206,4 +233,70 @@ class _ViewModeButton extends StatelessWidget {
       ),
     );
   }
+}
+
+class _WeekRangeNavigation extends StatelessWidget {
+  final String label;
+  final VoidCallback onPrevious;
+  final VoidCallback? onJumpToCurrentWeek;
+  final VoidCallback? onNext;
+
+  const _WeekRangeNavigation({
+    required this.label,
+    required this.onPrevious,
+    required this.onJumpToCurrentWeek,
+    required this.onNext,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(
+          onPressed: onPrevious,
+          icon: const Icon(Icons.chevron_left),
+        ),
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(
+                onPressed: onJumpToCurrentWeek,
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: const Size(0, 24),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
+                  AppLocalizations.of(context).monthly_overview_current_week,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+          onPressed: onNext,
+          icon: const Icon(Icons.chevron_right),
+        ),
+      ],
+    );
+  }
+}
+
+String _formatWeekRange(BuildContext context, DateTime start, DateTime end) {
+  final locale = Localizations.localeOf(context).toLanguageTag();
+  final formatter = DateFormat.yMd(locale);
+  return '${formatter.format(start)} - ${formatter.format(end)}';
 }

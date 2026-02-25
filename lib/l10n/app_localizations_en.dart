@@ -226,6 +226,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get monthly_overview_week => 'Week';
 
   @override
+  String get monthly_overview_current_week => 'Current week';
+
+  @override
   String get monthly_overview_weekly => 'Weekly';
 
   @override
