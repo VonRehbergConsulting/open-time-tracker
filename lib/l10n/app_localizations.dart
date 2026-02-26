@@ -673,6 +673,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Export as PDF'**
   String get export_report_pdf;
+
+  /// No description provided for @export_report_period.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get export_report_period;
+
+  /// No description provided for @export_report_column_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get export_report_column_date;
+
+  /// No description provided for @export_report_column_project.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get export_report_column_project;
+
+  /// No description provided for @export_report_column_work_package.
+  ///
+  /// In en, this message translates to:
+  /// **'Work Package'**
+  String get export_report_column_work_package;
+
+  /// No description provided for @export_report_column_hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get export_report_column_hours;
+
+  /// No description provided for @export_report_column_comment.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment'**
+  String get export_report_column_comment;
+
+  /// No description provided for @export_report_pdf_summary_by_project.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary by Project'**
+  String get export_report_pdf_summary_by_project;
+
+  /// No description provided for @export_report_pdf_total_hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Hours'**
+  String get export_report_pdf_total_hours;
+
+  /// No description provided for @export_report_excel_open_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Excel report opened successfully'**
+  String get export_report_excel_open_success;
+
+  /// No description provided for @export_report_excel_open_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open Excel file. Please check your file viewer settings.'**
+  String get export_report_excel_open_failed;
+
+  /// No description provided for @export_report_network_fetch_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error while fetching time entries. Please check your connection.'**
+  String get export_report_network_fetch_failed;
+
+  /// No description provided for @export_report_excel_save_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save Excel file. Please check storage permissions.'**
+  String get export_report_excel_save_failed;
+
+  /// No description provided for @export_report_excel_export_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export Excel report. Please try again.'**
+  String get export_report_excel_export_failed;
+
+  /// No description provided for @export_report_pdf_create_success.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF report created successfully'**
+  String get export_report_pdf_create_success;
+
+  /// No description provided for @export_report_pdf_save_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save PDF file. Please check storage permissions.'**
+  String get export_report_pdf_save_failed;
+
+  /// No description provided for @export_report_pdf_export_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export PDF report. Please try again.'**
+  String get export_report_pdf_export_failed;
 }
 
 class _AppLocalizationsDelegate

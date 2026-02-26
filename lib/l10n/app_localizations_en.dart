@@ -299,4 +299,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get export_report_pdf => 'Export as PDF';
+
+  @override
+  String get export_report_period => 'Period';
+
+  @override
+  String get export_report_column_date => 'Date';
+
+  @override
+  String get export_report_column_project => 'Project';
+
+  @override
+  String get export_report_column_work_package => 'Work Package';
+
+  @override
+  String get export_report_column_hours => 'Hours';
+
+  @override
+  String get export_report_column_comment => 'Comment';
+
+  @override
+  String get export_report_pdf_summary_by_project => 'Summary by Project';
+
+  @override
+  String get export_report_pdf_total_hours => 'Total Hours';
+
+  @override
+  String get export_report_excel_open_success =>
+      'Excel report opened successfully';
+
+  @override
+  String get export_report_excel_open_failed =>
+      'Unable to open Excel file. Please check your file viewer settings.';
+
+  @override
+  String get export_report_network_fetch_failed =>
+      'Network error while fetching time entries. Please check your connection.';
+
+  @override
+  String get export_report_excel_save_failed =>
+      'Failed to save Excel file. Please check storage permissions.';
+
+  @override
+  String get export_report_excel_export_failed =>
+      'Failed to export Excel report. Please try again.';
+
+  @override
+  String get export_report_pdf_create_success =>
+      'PDF report created successfully';
+
+  @override
+  String get export_report_pdf_save_failed =>
+      'Failed to save PDF file. Please check storage permissions.';
+
+  @override
+  String get export_report_pdf_export_failed =>
+      'Failed to export PDF report. Please try again.';
 }

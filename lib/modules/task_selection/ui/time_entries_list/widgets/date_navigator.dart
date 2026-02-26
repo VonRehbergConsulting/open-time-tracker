@@ -69,9 +69,9 @@ class DateNavigator extends StatelessWidget {
                 ),
                 Text(
                   _formatDate(context, selectedDate),
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
               ],

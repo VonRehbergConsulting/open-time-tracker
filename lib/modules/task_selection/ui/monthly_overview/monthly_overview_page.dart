@@ -9,7 +9,8 @@ import 'package:open_project_time_tracker/modules/task_selection/ui/monthly_over
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/widgets/daily_work_chart.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/widgets/projects_chart.dart';
 
-class MonthlyOverviewPage extends BlocPage<MonthlyOverviewBloc, MonthlyOverviewState> {
+class MonthlyOverviewPage
+    extends BlocPage<MonthlyOverviewBloc, MonthlyOverviewState> {
   const MonthlyOverviewPage({super.key});
 
   @override
@@ -32,9 +33,9 @@ class MonthlyOverviewPage extends BlocPage<MonthlyOverviewBloc, MonthlyOverviewS
           child: Center(
             child: ConfiguredShimmer(
               child: viewMode == ViewMode.monthly
-                  ? const MonthlyCalendarWidget(
-                      year: 2024,
-                      month: 1,
+                  ? MonthlyCalendarWidget(
+                      year: DateTime.now().year,
+                      month: DateTime.now().month,
                       dailyHours: {},
                       weeklyHours: {},
                     )
@@ -67,118 +68,150 @@ class MonthlyOverviewPage extends BlocPage<MonthlyOverviewBloc, MonthlyOverviewS
             ),
           ),
         ),
-        loaded: (year, month, dailyHours, weeklyHours, weekdayHours, projectHours, viewMode) => SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 8.0),
-              // View mode toggle
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _ViewModeButton(
-                        label: AppLocalizations.of(context).monthly_overview_weekly,
-                        icon: Icons.view_week,
-                        isSelected: viewMode == ViewMode.weekly,
-                        onTap: () => context.read<MonthlyOverviewBloc>().toggleViewMode(ViewMode.weekly),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _ViewModeButton(
-                        label: AppLocalizations.of(context).monthly_overview_monthly,
-                        icon: Icons.calendar_month,
-                        isSelected: viewMode == ViewMode.monthly,
-                        onTap: () => context.read<MonthlyOverviewBloc>().toggleViewMode(ViewMode.monthly),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              // Display appropriate view
-              if (viewMode == ViewMode.monthly)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    MonthlyCalendarWidget(
-                      year: year,
-                      month: month,
-                      dailyHours: dailyHours,
-                      weeklyHours: weeklyHours,
-                      onMonthChanged: (newYear, newMonth) {
-                        context.read<MonthlyOverviewBloc>().changeMonth(newYear, newMonth);
-                      },
-                    ),
-                    const SizedBox(height: 16.0),
-                    ProjectsChart(
-                      items: projectHours
-                          .map((p) => ProjectChartData(
-                                title: p.title,
-                                duration: p.duration,
-                              ))
-                          .toList(),
-                    ),
-                  ],
-                )
-              else
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: _WeekRangeNavigation(
-                        label: _formatWeekRange(
-                          context,
-                          context.read<MonthlyOverviewBloc>().selectedWeekStart,
-                          context.read<MonthlyOverviewBloc>().selectedWeekEnd,
-                        ),
-                        onPrevious: () => context
-                            .read<MonthlyOverviewBloc>()
-                            .goToPreviousWeek(),
-                        onJumpToCurrentWeek: context
-                            .read<MonthlyOverviewBloc>()
-                            .canGoToNextWeek
-                          ? () => context
-                            .read<MonthlyOverviewBloc>()
-                            .jumpToCurrentWeek()
-                          : null,
-                        onNext: context.read<MonthlyOverviewBloc>().canGoToNextWeek
-                            ? () => context
+        loaded:
+            (
+              year,
+              month,
+              dailyHours,
+              weeklyHours,
+              weekdayHours,
+              projectHours,
+              viewMode,
+            ) => SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 8.0),
+                  // View mode toggle
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _ViewModeButton(
+                            label: AppLocalizations.of(
+                              context,
+                            ).monthly_overview_weekly,
+                            icon: Icons.view_week,
+                            isSelected: viewMode == ViewMode.weekly,
+                            onTap: () => context
                                 .read<MonthlyOverviewBloc>()
-                                .goToNextWeek()
-                            : null,
-                      ),
+                                .toggleViewMode(ViewMode.weekly),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _ViewModeButton(
+                            label: AppLocalizations.of(
+                              context,
+                            ).monthly_overview_monthly,
+                            icon: Icons.calendar_month,
+                            isSelected: viewMode == ViewMode.monthly,
+                            onTap: () => context
+                                .read<MonthlyOverviewBloc>()
+                                .toggleViewMode(ViewMode.monthly),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 12.0),
-                    DailyWorkChart(
-                      data: DailyWorkChartData(
-                        monday: weekdayHours.monday,
-                        tuesday: weekdayHours.tuesday,
-                        wednesday: weekdayHours.wednesday,
-                        thursday: weekdayHours.thursday,
-                        friday: weekdayHours.friday,
-                        saturday: weekdayHours.saturday,
-                        sunday: weekdayHours.sunday,
-                      ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  // Display appropriate view
+                  if (viewMode == ViewMode.monthly)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        MonthlyCalendarWidget(
+                          year: year,
+                          month: month,
+                          dailyHours: dailyHours,
+                          weeklyHours: weeklyHours,
+                          onMonthChanged: (newYear, newMonth) {
+                            context.read<MonthlyOverviewBloc>().changeMonth(
+                              newYear,
+                              newMonth,
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 16.0),
+                        ProjectsChart(
+                          items: projectHours
+                              .map(
+                                (p) => ProjectChartData(
+                                  title: p.title,
+                                  duration: p.duration,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
+                    )
+                  else
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: _WeekRangeNavigation(
+                            label: _formatWeekRange(
+                              context,
+                              context
+                                  .read<MonthlyOverviewBloc>()
+                                  .selectedWeekStart,
+                              context
+                                  .read<MonthlyOverviewBloc>()
+                                  .selectedWeekEnd,
+                            ),
+                            onPrevious: () => context
+                                .read<MonthlyOverviewBloc>()
+                                .goToPreviousWeek(),
+                            onJumpToCurrentWeek:
+                                context
+                                    .read<MonthlyOverviewBloc>()
+                                    .canGoToNextWeek
+                                ? () => context
+                                      .read<MonthlyOverviewBloc>()
+                                      .jumpToCurrentWeek()
+                                : null,
+                            onNext:
+                                context
+                                    .read<MonthlyOverviewBloc>()
+                                    .canGoToNextWeek
+                                ? () => context
+                                      .read<MonthlyOverviewBloc>()
+                                      .goToNextWeek()
+                                : null,
+                          ),
+                        ),
+                        const SizedBox(height: 12.0),
+                        DailyWorkChart(
+                          data: DailyWorkChartData(
+                            monday: weekdayHours.monday,
+                            tuesday: weekdayHours.tuesday,
+                            wednesday: weekdayHours.wednesday,
+                            thursday: weekdayHours.thursday,
+                            friday: weekdayHours.friday,
+                            saturday: weekdayHours.saturday,
+                            sunday: weekdayHours.sunday,
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+                        ProjectsChart(
+                          items: projectHours
+                              .map(
+                                (p) => ProjectChartData(
+                                  title: p.title,
+                                  duration: p.duration,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16.0),
-                    ProjectsChart(
-                      items: projectHours
-                          .map((p) => ProjectChartData(
-                                title: p.title,
-                                duration: p.duration,
-                              ))
-                          .toList(),
-                    ),
-                  ],
-                ),
-              const SizedBox(height: 16.0),
-            ],
-          ),
-        ),
+                  const SizedBox(height: 16.0),
+                ],
+              ),
+            ),
       ),
     );
   }
@@ -204,10 +237,14 @@ class _ViewModeButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
-          color: isSelected ? const Color.fromRGBO(38, 92, 185, 1) : Colors.white,
+          color: isSelected
+              ? const Color.fromRGBO(38, 92, 185, 1)
+              : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? const Color.fromRGBO(38, 92, 185, 1) : Colors.grey.shade300,
+            color: isSelected
+                ? const Color.fromRGBO(38, 92, 185, 1)
+                : Colors.grey.shade300,
             width: 1,
           ),
         ),
@@ -252,10 +289,7 @@ class _WeekRangeNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        IconButton(
-          onPressed: onPrevious,
-          icon: const Icon(Icons.chevron_left),
-        ),
+        IconButton(onPressed: onPrevious, icon: const Icon(Icons.chevron_left)),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -286,10 +320,7 @@ class _WeekRangeNavigation extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(
-          onPressed: onNext,
-          icon: const Icon(Icons.chevron_right),
-        ),
+        IconButton(onPressed: onNext, icon: const Icon(Icons.chevron_right)),
       ],
     );
   }

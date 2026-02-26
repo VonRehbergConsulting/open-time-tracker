@@ -301,4 +301,61 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get export_report_pdf => 'Als PDF exportieren';
+
+  @override
+  String get export_report_period => 'Zeitraum';
+
+  @override
+  String get export_report_column_date => 'Datum';
+
+  @override
+  String get export_report_column_project => 'Projekt';
+
+  @override
+  String get export_report_column_work_package => 'Arbeitspaket';
+
+  @override
+  String get export_report_column_hours => 'Stunden';
+
+  @override
+  String get export_report_column_comment => 'Kommentar';
+
+  @override
+  String get export_report_pdf_summary_by_project =>
+      'Zusammenfassung nach Projekt';
+
+  @override
+  String get export_report_pdf_total_hours => 'Gesamtstunden';
+
+  @override
+  String get export_report_excel_open_success =>
+      'Excel-Bericht erfolgreich geöffnet';
+
+  @override
+  String get export_report_excel_open_failed =>
+      'Excel-Datei konnte nicht geöffnet werden. Bitte überprüfe die Einstellungen deiner Dateiansicht.';
+
+  @override
+  String get export_report_network_fetch_failed =>
+      'Netzwerkfehler beim Abrufen der Zeiteinträge. Bitte überprüfe deine Verbindung.';
+
+  @override
+  String get export_report_excel_save_failed =>
+      'Excel-Datei konnte nicht gespeichert werden. Bitte überprüfe die Speicherberechtigungen.';
+
+  @override
+  String get export_report_excel_export_failed =>
+      'Excel-Bericht konnte nicht exportiert werden. Bitte versuche es erneut.';
+
+  @override
+  String get export_report_pdf_create_success =>
+      'PDF-Bericht erfolgreich erstellt';
+
+  @override
+  String get export_report_pdf_save_failed =>
+      'PDF-Datei konnte nicht gespeichert werden. Bitte überprüfe die Speicherberechtigungen.';
+
+  @override
+  String get export_report_pdf_export_failed =>
+      'PDF-Bericht konnte nicht exportiert werden. Bitte versuche es erneut.';
 }
