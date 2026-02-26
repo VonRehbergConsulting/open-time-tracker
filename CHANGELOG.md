@@ -1,3 +1,18 @@
+# [1.10.0](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.8...v1.10.0) (2026-02-26)
+
+
+### Bug Fixes
+
+* fixed fallback locale resolving ([589d714](https://github.com/VonRehbergConsulting/open-time-tracker/commit/589d714464dc5fdc93aed46bef0ed6c7878ae2ea))
+* fixed potential crash source for asynchronous data retrieval ([88297bd](https://github.com/VonRehbergConsulting/open-time-tracker/commit/88297bd7545de9a7f176e23d56a779b45a2e5e84))
+
+
+### Features
+
+* added new monthly overview and export feature ([843a089](https://github.com/VonRehbergConsulting/open-time-tracker/commit/843a08914dd22a5501ff33969024761e1fcbc4ae))
+* added support for turkish, french, spanish and french ([adca5cc](https://github.com/VonRehbergConsulting/open-time-tracker/commit/adca5cce30fc44f3039446b7ae16f6ee9aa57609))
+* improved weekly overview and fixed aggregation bug ([e942d41](https://github.com/VonRehbergConsulting/open-time-tracker/commit/e942d41fc3b221c1b55a9a94ca8e16f7b62a16ed))
+
 ## [1.9.8](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.7...v1.9.8) (2026-02-19)
 
 
