@@ -77,10 +77,17 @@ class TimeEntriesListBloc
   }
 
   Future<void> _initialize() async {
+    if (isClosed) {
+      return;
+    }
+
     // Always default to today when the app starts
     final now = DateTime.now();
     selectedDate = DateTime(now.year, now.month, now.day);
     await _appStateRepository.setSelectedDate(selectedDate);
+    if (isClosed) {
+      return;
+    }
     _isInitialized = true;
   }
 
@@ -99,13 +106,23 @@ class TimeEntriesListBloc
   }
 
   Future<void> reload({bool showLoading = false}) async {
+    if (isClosed) {
+      return;
+    }
+
     try {
       // Wait for initialization to complete before reloading
       if (!_isInitialized) {
         await _initialize();
+        if (isClosed) {
+          return;
+        }
       }
 
       if (showLoading) {
+        if (isClosed) {
+          return;
+        }
         emit(const TimeEntriesListState.loading());
       }
       final dateOnly = DateTime(
@@ -119,6 +136,9 @@ class TimeEntriesListBloc
         endDate: dateOnly,
       );
       workingHours = await _settingsRepository.workingHours;
+      if (isClosed) {
+        return;
+      }
       emit(
         TimeEntriesListState.idle(
           workingHours: workingHours,
@@ -129,6 +149,9 @@ class TimeEntriesListBloc
         ),
       );
     } catch (e) {
+      if (isClosed) {
+        return;
+      }
       emit(
         TimeEntriesListState.idle(
           workingHours: workingHours,
@@ -138,12 +161,18 @@ class TimeEntriesListBloc
           isViewingToday: isViewingToday,
         ),
       );
+      if (isClosed) {
+        return;
+      }
       emitEffect(const TimeEntriesListEffect.error());
     }
   }
 
   Future<void> updateWorkingHours(Duration value) async {
     await _settingsRepository.setWorkingHours(value);
+    if (isClosed) {
+      return;
+    }
     workingHours = value;
     emit(
       TimeEntriesListState.idle(
@@ -209,6 +238,9 @@ class TimeEntriesListBloc
       items.removeWhere((element) => element.id == id);
 
       Future.delayed(const Duration(milliseconds: 250)).then((value) {
+        if (isClosed) {
+          return;
+        }
         emit(
           TimeEntriesListState.idle(
             workingHours: workingHours,
@@ -221,12 +253,18 @@ class TimeEntriesListBloc
       });
       return true;
     } catch (e) {
-      emitEffect(const TimeEntriesListEffect.error());
+      if (!isClosed) {
+        emitEffect(const TimeEntriesListEffect.error());
+      }
       return false;
     }
   }
 
   void addTimeEntry(TimeEntry timeEntry) {
+    if (isClosed) {
+      return;
+    }
+
     // Add the newly created entry to the local list (optimistic update)
     items.add(timeEntry);
     emit(
@@ -241,6 +279,10 @@ class TimeEntriesListBloc
   }
 
   void updateTimeEntry(TimeEntry updatedEntry) {
+    if (isClosed) {
+      return;
+    }
+
     // Update the entry in the local list (optimistic update)
     final index = items.indexWhere((e) => e.id == updatedEntry.id);
     if (index != -1) {
