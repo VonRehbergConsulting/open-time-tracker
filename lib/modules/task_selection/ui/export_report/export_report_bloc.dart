@@ -104,8 +104,14 @@ class ExportReportBloc
   }
 
   AppLocalizations _l10n() {
-    final locale = WidgetsBinding.instance.platformDispatcher.locale;
-    return lookupAppLocalizations(locale);
+    final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
+    final resolvedLocale =
+        basicLocaleListResolution(
+          [deviceLocale],
+          AppLocalizations.supportedLocales,
+        );
+
+    return lookupAppLocalizations(resolvedLocale);
   }
 
   /// Fetches and filters time entries based on date range and selected projects
