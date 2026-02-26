@@ -17,12 +17,14 @@ abstract class ProjectsApi {
 
 class ProjectResponse {
   late String id;
+  int? numericId;
   late String title;
   late String href;
   late DateTime? updatedAt;
 
   ProjectResponse.fromJson(Map<String, dynamic> json) {
     id = json['identifier'];
+    numericId = (json['id'] as num?)?.toInt();
     title = json['name'];
     final links = json['_links'];
     final self = links['self'];

@@ -12,6 +12,8 @@ class LocalSettingsRepository implements SettingsRepository {
   final String _workPackagesStatusFilterKey = 'workPackagesStatusFilter';
   final String _assigneeFilterKey = 'assigneeFilter';
   final String _analyticsConsent = 'analyticsConsent';
+  final String _showOnlyProjectsWithTasksKey = 'showOnlyProjectsWithTasks';
+  final String _doNotLoadProjectListKey = 'doNotLoadProjectList';
 
   // working hours
 
@@ -80,5 +82,27 @@ class LocalSettingsRepository implements SettingsRepository {
   @override
   Future<void> setAnalyticsConsent(bool value) async {
     await _storage.setBool(_analyticsConsent, value);
+  }
+
+  // project list filters
+
+  @override
+  Future<bool> get showOnlyProjectsWithTasks async {
+    return await _storage.getBool(_showOnlyProjectsWithTasksKey) ?? false;
+  }
+
+  @override
+  Future<void> setShowOnlyProjectsWithTasks(bool value) async {
+    await _storage.setBool(_showOnlyProjectsWithTasksKey, value);
+  }
+
+  @override
+  Future<bool> get doNotLoadProjectList async {
+    return await _storage.getBool(_doNotLoadProjectListKey) ?? false;
+  }
+
+  @override
+  Future<void> setDoNotLoadProjectList(bool value) async {
+    await _storage.setBool(_doNotLoadProjectListKey, value);
   }
 }
