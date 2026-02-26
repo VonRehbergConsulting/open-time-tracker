@@ -5,7 +5,6 @@ import 'package:open_project_time_tracker/modules/authorization/ui/instance_conf
 import 'package:open_project_time_tracker/modules/profile/ui/profile_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
-import 'package:open_project_time_tracker/modules/task_selection/ui/analytics/analytics_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/notification_selection_list/notification_selection_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/projects_list/projects_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
@@ -14,6 +13,8 @@ import 'package:open_project_time_tracker/modules/task_selection/ui/work_package
 import 'package:open_project_time_tracker/modules/timer/ui/comment_suggestions_page.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/time_entry_summary/time_entry_summary_page.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_page.dart';
+import 'package:open_project_time_tracker/modules/task_selection/ui/monthly_overview/monthly_overview_page.dart';
+import 'package:open_project_time_tracker/modules/task_selection/ui/export_report/export_report_page.dart';
 
 import '../main.dart';
 
@@ -78,13 +79,6 @@ class AppRouter {
     Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 
-  static void routeToAnalytics(BuildContext context) {
-    final route = CupertinoPageRoute(
-      builder: ((context) => const AnalyticsPage()),
-    );
-    Navigator.of(context).push(route);
-  }
-
   static void routeToProfile(BuildContext context) {
     final route = CupertinoPageRoute(
       builder: ((context) => const ProfilePage()),
@@ -129,5 +123,19 @@ class AppRouter {
       builder: ((context) => const ProjectsListPage()),
     );
     return navigatorKey.currentState!.push(route);
+  }
+
+  static void routeToMonthlyOverview(BuildContext context) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => const MonthlyOverviewPage()),
+    );
+    Navigator.of(context).push(route);
+  }
+
+  static void routeToExportReport(BuildContext context) {
+    final route = CupertinoPageRoute(
+      builder: ((context) => const ExportReportPage()),
+    );
+    Navigator.of(context).push(route);
   }
 }

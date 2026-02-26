@@ -42,6 +42,7 @@ class ApiProjectsRepository implements ProjectsRepository {
         .map((element) => Project(
               id: element.id,
               title: element.title,
+              href: element.href,
               updatedAt: element.updatedAt,
             ))
         .toList();
