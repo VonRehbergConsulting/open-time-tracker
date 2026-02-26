@@ -46,8 +46,14 @@ class TimeEntriesListPage
       onRefresh: context.read<TimeEntriesListBloc>().reload,
       actions: [
         IconButton(
-          onPressed: () => AppRouter.routeToAnalytics(context),
+          onPressed: () => AppRouter.routeToExportReport(context),
+          icon: const Icon(Icons.file_download),
+          tooltip: AppLocalizations.of(context).export_report_title,
+        ),
+        IconButton(
+          onPressed: () => AppRouter.routeToMonthlyOverview(context),
           icon: const Icon(Icons.analytics_outlined),
+          tooltip: AppLocalizations.of(context).monthly_overview_title,
         ),
         IconButton(
           onPressed: () => AppRouter.routeToProfile(context),
@@ -106,6 +112,8 @@ class TimeEntriesListPage
                         context.read<TimeEntriesListBloc>().goToPreviousDay(),
                     onNextDay: () =>
                         context.read<TimeEntriesListBloc>().goToNextDay(),
+                    onJumpToToday: () =>
+                        context.read<TimeEntriesListBloc>().goToToday(),
                   ),
                 ),
                 SliverToBoxAdapter(
@@ -196,6 +204,7 @@ class _DateNavigatorPlaceholder extends StatelessWidget {
       selectedDate: DateTime.now(),
       onPreviousDay: () {},
       onNextDay: () {},
+      onJumpToToday: () {},
     );
   }
 }

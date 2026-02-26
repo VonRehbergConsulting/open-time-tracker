@@ -7,6 +7,9 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_tr.dart';
 
 // ignore_for_file: type=lint
 
@@ -96,6 +99,9 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
     Locale('en'),
+    Locale('es'),
+    Locale('fr'),
+    Locale('tr'),
   ];
 
   /// No description provided for @generic_error.
@@ -511,6 +517,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy policy'**
   String get analytics_consent_request__privacy_policy;
+
+  /// No description provided for @monthly_overview_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Overview'**
+  String get monthly_overview_title;
+
+  /// No description provided for @monthly_overview_week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get monthly_overview_week;
+
+  /// No description provided for @monthly_overview_current_week.
+  ///
+  /// In en, this message translates to:
+  /// **'Current week'**
+  String get monthly_overview_current_week;
+
+  /// No description provided for @monthly_overview_weekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get monthly_overview_weekly;
+
+  /// No description provided for @monthly_overview_monthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get monthly_overview_monthly;
+
+  /// No description provided for @monthly_overview_total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get monthly_overview_total;
+
+  /// No description provided for @weekday_monday.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get weekday_monday;
+
+  /// No description provided for @weekday_tuesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get weekday_tuesday;
+
+  /// No description provided for @weekday_wednesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get weekday_wednesday;
+
+  /// No description provided for @weekday_thursday.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get weekday_thursday;
+
+  /// No description provided for @weekday_friday.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get weekday_friday;
+
+  /// No description provided for @weekday_saturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get weekday_saturday;
+
+  /// No description provided for @weekday_sunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get weekday_sunday;
+
+  /// No description provided for @export_report_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Report'**
+  String get export_report_title;
+
+  /// No description provided for @export_report_date_range.
+  ///
+  /// In en, this message translates to:
+  /// **'Date Range'**
+  String get export_report_date_range;
+
+  /// No description provided for @export_report_start_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get export_report_start_date;
+
+  /// No description provided for @export_report_end_date.
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get export_report_end_date;
+
+  /// No description provided for @export_report_project_filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Filter (Optional)'**
+  String get export_report_project_filter;
+
+  /// No description provided for @export_report_all_projects.
+  ///
+  /// In en, this message translates to:
+  /// **'All Projects'**
+  String get export_report_all_projects;
+
+  /// No description provided for @export_report_select_projects.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Projects'**
+  String get export_report_select_projects;
+
+  /// No description provided for @export_report_add_more_projects.
+  ///
+  /// In en, this message translates to:
+  /// **'Add More Projects'**
+  String get export_report_add_more_projects;
+
+  /// No description provided for @export_report_search_projects.
+  ///
+  /// In en, this message translates to:
+  /// **'Search projects...'**
+  String get export_report_search_projects;
+
+  /// No description provided for @export_report_clear_selection.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Selection'**
+  String get export_report_clear_selection;
+
+  /// No description provided for @export_report_no_projects.
+  ///
+  /// In en, this message translates to:
+  /// **'No projects available'**
+  String get export_report_no_projects;
+
+  /// No description provided for @export_report_format.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Format'**
+  String get export_report_format;
+
+  /// No description provided for @export_report_xlsx.
+  ///
+  /// In en, this message translates to:
+  /// **'Export as Excel (XLSX)'**
+  String get export_report_xlsx;
+
+  /// No description provided for @export_report_pdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Export as PDF'**
+  String get export_report_pdf;
+
+  /// No description provided for @export_report_period.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get export_report_period;
+
+  /// No description provided for @export_report_column_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get export_report_column_date;
+
+  /// No description provided for @export_report_column_project.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get export_report_column_project;
+
+  /// No description provided for @export_report_column_work_package.
+  ///
+  /// In en, this message translates to:
+  /// **'Work Package'**
+  String get export_report_column_work_package;
+
+  /// No description provided for @export_report_column_hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get export_report_column_hours;
+
+  /// No description provided for @export_report_column_comment.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment'**
+  String get export_report_column_comment;
+
+  /// No description provided for @export_report_pdf_summary_by_project.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary by Project'**
+  String get export_report_pdf_summary_by_project;
+
+  /// No description provided for @export_report_pdf_total_hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Hours'**
+  String get export_report_pdf_total_hours;
+
+  /// No description provided for @export_report_excel_open_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Excel report opened successfully'**
+  String get export_report_excel_open_success;
+
+  /// No description provided for @export_report_excel_open_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open Excel file. Please check your file viewer settings.'**
+  String get export_report_excel_open_failed;
+
+  /// No description provided for @export_report_network_fetch_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error while fetching time entries. Please check your connection.'**
+  String get export_report_network_fetch_failed;
+
+  /// No description provided for @export_report_excel_save_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save Excel file. Please check storage permissions.'**
+  String get export_report_excel_save_failed;
+
+  /// No description provided for @export_report_excel_export_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export Excel report. Please try again.'**
+  String get export_report_excel_export_failed;
+
+  /// No description provided for @export_report_pdf_create_success.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF report created successfully'**
+  String get export_report_pdf_create_success;
+
+  /// No description provided for @export_report_pdf_save_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save PDF file. Please check storage permissions.'**
+  String get export_report_pdf_save_failed;
+
+  /// No description provided for @export_report_pdf_export_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export PDF report. Please try again.'**
+  String get export_report_pdf_export_failed;
 }
 
 class _AppLocalizationsDelegate
@@ -524,7 +788,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['de', 'en'].contains(locale.languageCode);
+      <String>['de', 'en', 'es', 'fr', 'tr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -537,6 +801,12 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'tr':
+      return AppLocalizationsTr();
   }
 
   throw FlutterError(

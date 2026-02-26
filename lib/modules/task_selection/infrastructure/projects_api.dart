@@ -18,11 +18,15 @@ abstract class ProjectsApi {
 class ProjectResponse {
   late String id;
   late String title;
+  late String href;
   late DateTime? updatedAt;
 
   ProjectResponse.fromJson(Map<String, dynamic> json) {
     id = json['identifier'];
     title = json['name'];
+    final links = json['_links'];
+    final self = links['self'];
+    href = self['href'];
     updatedAt = DateTime.tryParse(json['updatedAt']);
   }
 }

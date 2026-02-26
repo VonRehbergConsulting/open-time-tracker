@@ -2,27 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/models/weekday_hours.dart';
 
 import '../../../../../app/ui/widgets/configured_bar_chart.dart';
 import '../../../../../app/ui/widgets/chart_text_style.dart';
 
-class DailyWorkChartData {
-  final Duration monday;
-  final Duration tuesday;
-  final Duration wednesday;
-  final Duration thursday;
-  final Duration friday;
-  final Duration saturday;
-  final Duration sunday;
-
+class DailyWorkChartData extends WeekdayHours {
   DailyWorkChartData({
-    required this.monday,
-    required this.tuesday,
-    required this.wednesday,
-    required this.thursday,
-    required this.friday,
-    required this.saturday,
-    required this.sunday,
+    required super.monday,
+    required super.tuesday,
+    required super.wednesday,
+    required super.thursday,
+    required super.friday,
+    required super.saturday,
+    required super.sunday,
   });
 }
 

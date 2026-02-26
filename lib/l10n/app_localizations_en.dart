@@ -218,4 +218,141 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get analytics_consent_request__privacy_policy => 'Privacy policy';
+
+  @override
+  String get monthly_overview_title => 'Monthly Overview';
+
+  @override
+  String get monthly_overview_week => 'Week';
+
+  @override
+  String get monthly_overview_current_week => 'Current week';
+
+  @override
+  String get monthly_overview_weekly => 'Weekly';
+
+  @override
+  String get monthly_overview_monthly => 'Monthly';
+
+  @override
+  String get monthly_overview_total => 'Total';
+
+  @override
+  String get weekday_monday => 'Mon';
+
+  @override
+  String get weekday_tuesday => 'Tue';
+
+  @override
+  String get weekday_wednesday => 'Wed';
+
+  @override
+  String get weekday_thursday => 'Thu';
+
+  @override
+  String get weekday_friday => 'Fri';
+
+  @override
+  String get weekday_saturday => 'Sat';
+
+  @override
+  String get weekday_sunday => 'Sun';
+
+  @override
+  String get export_report_title => 'Export Report';
+
+  @override
+  String get export_report_date_range => 'Date Range';
+
+  @override
+  String get export_report_start_date => 'Start Date';
+
+  @override
+  String get export_report_end_date => 'End Date';
+
+  @override
+  String get export_report_project_filter => 'Project Filter (Optional)';
+
+  @override
+  String get export_report_all_projects => 'All Projects';
+
+  @override
+  String get export_report_select_projects => 'Select Projects';
+
+  @override
+  String get export_report_add_more_projects => 'Add More Projects';
+
+  @override
+  String get export_report_search_projects => 'Search projects...';
+
+  @override
+  String get export_report_clear_selection => 'Clear Selection';
+
+  @override
+  String get export_report_no_projects => 'No projects available';
+
+  @override
+  String get export_report_format => 'Export Format';
+
+  @override
+  String get export_report_xlsx => 'Export as Excel (XLSX)';
+
+  @override
+  String get export_report_pdf => 'Export as PDF';
+
+  @override
+  String get export_report_period => 'Period';
+
+  @override
+  String get export_report_column_date => 'Date';
+
+  @override
+  String get export_report_column_project => 'Project';
+
+  @override
+  String get export_report_column_work_package => 'Work Package';
+
+  @override
+  String get export_report_column_hours => 'Hours';
+
+  @override
+  String get export_report_column_comment => 'Comment';
+
+  @override
+  String get export_report_pdf_summary_by_project => 'Summary by Project';
+
+  @override
+  String get export_report_pdf_total_hours => 'Total Hours';
+
+  @override
+  String get export_report_excel_open_success =>
+      'Excel report opened successfully';
+
+  @override
+  String get export_report_excel_open_failed =>
+      'Unable to open Excel file. Please check your file viewer settings.';
+
+  @override
+  String get export_report_network_fetch_failed =>
+      'Network error while fetching time entries. Please check your connection.';
+
+  @override
+  String get export_report_excel_save_failed =>
+      'Failed to save Excel file. Please check storage permissions.';
+
+  @override
+  String get export_report_excel_export_failed =>
+      'Failed to export Excel report. Please try again.';
+
+  @override
+  String get export_report_pdf_create_success =>
+      'PDF report created successfully';
+
+  @override
+  String get export_report_pdf_save_failed =>
+      'Failed to save PDF file. Please check storage permissions.';
+
+  @override
+  String get export_report_pdf_export_failed =>
+      'Failed to export PDF report. Please try again.';
 }

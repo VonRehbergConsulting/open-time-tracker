@@ -8,6 +8,7 @@ abstract class TimeEntriesRepository {
     DateTime? endDate,
     int? workPackageId,
     int? pageSize,
+    bool fetchAll = false,
   });
 
   Future<TimeEntry> create({required TimeEntry timeEntry, required int userId});

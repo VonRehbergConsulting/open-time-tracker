@@ -11,11 +11,13 @@ abstract class ProjectsRepository {
 class Project {
   final String id;
   final String title;
+  final String href;
   final DateTime? updatedAt;
 
   Project({
     required this.id,
     required this.title,
+    required this.href,
     required this.updatedAt,
   });
 }

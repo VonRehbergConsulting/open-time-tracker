@@ -100,7 +100,13 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [Locale('en'), Locale('de')],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('de'),
+        Locale('es'),
+        Locale('fr'),
+        Locale('tr'),
+      ],
       title: 'Open Project Time Tracker',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
