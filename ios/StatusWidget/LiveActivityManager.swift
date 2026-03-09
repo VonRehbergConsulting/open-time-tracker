@@ -6,6 +6,14 @@ class LiveActivityManager {
     var activity: Activity<StatusWidgetAttributes>?
     
     func startLiveActivity(startTimestamp: Double, title: String, subtitle: String, tag: String) {
+        // Stop any existing activity before starting a new one
+        // to prevent multiple Live Activities running simultaneously
+        if let existingActivity = activity {
+            Task {
+                await existingActivity.end(using: nil, dismissalPolicy: .immediate)
+            }
+        }
+        
         let state = StatusWidgetAttributes.ContentState(startTimestamp: startTimestamp)
         let activityAttributes = StatusWidgetAttributes(title: title, subtitle: subtitle, tag: tag)
         
