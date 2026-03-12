@@ -44,9 +44,6 @@ function(APPLY_STANDARD_SETTINGS TARGET)
   target_compile_options(${TARGET} PRIVATE -Wall -Werror)
   target_compile_options(${TARGET} PRIVATE "$<$<NOT:$<CONFIG:Debug>>:-O3>")
   target_compile_definitions(${TARGET} PRIVATE "$<$<NOT:$<CONFIG:Debug>>:NDEBUG>")
-
-  # Needed for flutter_secret_storage below version 10
-  target_compile_options(${TARGET} PRIVATE -Wno-deprecated)
 endfunction()
 
 # Flutter library and tool build rules.
@@ -57,6 +54,7 @@ add_subdirectory(${FLUTTER_MANAGED_DIR})
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK REQUIRED IMPORTED_TARGET gtk+-3.0)
 
+# Add preprocessor definitions for the application ID.
 add_definitions(-DAPPLICATION_ID="${APPLICATION_ID}")
 
 # Application build; see runner/CMakeLists.txt.
@@ -79,6 +77,8 @@ set_target_properties(${BINARY_NAME}
 # them to the application.
 include(flutter/generated_plugins.cmake)
 
+# Needed for flutter_secure_storage below version 10
+target_compile_options(flutter_secure_storage_linux_plugin PRIVATE -Wno-deprecated)
 
 # === Installation ===
 # By default, "installing" just makes a relocatable bundle in the build
