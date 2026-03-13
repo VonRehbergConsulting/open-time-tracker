@@ -18,7 +18,11 @@ abstract class GraphApiModule {
   @Named('graph')
   @lazySingleton
   AuthTokenStorage authTokenStorage() => SecureAuthTokenStorage(
-    const FlutterSecureStorage(),
+    const FlutterSecureStorage(
+      mOptions: MacOsOptions(
+        accessibility: KeychainAccessibility.first_unlock_this_device,
+      ),
+    ),
     accessTokenKey: 'graphAccessToken',
     refreshTokenKey: 'graphRefreshToken',
   );
