@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/live_activity/domain/live_activity_manager.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
+import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
@@ -31,6 +33,17 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   // Track current task to detect task switches
   String? _currentTaskTitle;
 
+  AppLocalizations _l10n() {
+    final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
+    final resolvedLocale =
+        basicLocaleListResolution(
+          [deviceLocale],
+          AppLocalizations.supportedLocales,
+        );
+
+    return lookupAppLocalizations(resolvedLocale);
+  }
+
   TimerBloc(
     this._timerRepository,
     this._liveActivityManager,
@@ -52,7 +65,21 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
       _timerRepository.timeSpent,
     ]);
     try {
-      final timeEntry = data[0] as TimeEntry;
+      final timeEntry = data[0] as TimeEntry?;
+      if (timeEntry == null) {
+        // No task selected yet, emit empty state
+        emit(
+          const TimerState.idle(
+            timeSpent: Duration(),
+            title: '',
+            subtitle: '',
+            hasStarted: false,
+            isActive: false,
+          ),
+        );
+        return;
+      }
+      
       final hasStarted = data[1] as bool;
       final isActive = data[2] as bool;
       final timeSpent = data[3] as Duration;
@@ -66,6 +93,8 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
           _liveActivityManager.stopLiveActivity();
           _liveActivitySessionStart = null;
         }
+        // Note: No need to call updateLiveActivity() - the native chronometer
+        // on Android and Live Activity on iOS both update themselves automatically
       }
       
       _currentTaskTitle = timeEntry.workPackageSubject;
@@ -108,8 +137,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
             (_liveActivitySessionStart!.millisecondsSinceEpoch / 1000).round(),
         title: state.title,
         subtitle: state.subtitle,
-        // TODO: Make localiaztions context independent and localize tag
-        tag: 'In progress',
+        tag: _l10n().generic__in_progress,
       ).toMap(),
     );
     _currentTaskTitle = state.title;
@@ -145,8 +173,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
                   .round(),
           title: state.title,
           subtitle: state.subtitle,
-          // TODO: Make localiaztions context independent and localize tag
-          tag: 'In progress',
+          tag: _l10n().generic__in_progress,
         ).toMap(),
       );
     }
