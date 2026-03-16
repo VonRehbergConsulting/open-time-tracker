@@ -69,7 +69,7 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
     final addButtonWidth = deviceSize.width * 0.23;
 
     if (state.isActive) {
-      timer ??= Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      timer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
         try {
           context.read<TimerBloc>().updateState();
         } catch (e) {
