@@ -57,7 +57,26 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
 
     // Proactively request notification permission on first launch after update
     // This provides better UX by explaining why the permission is needed
-    _requestNotificationPermissionIfNeeded(context);
+    _startNotificationPermissionFlow(context);
+  }
+
+  void _startNotificationPermissionFlow(BuildContext context) {
+    unawaited(() async {
+      try {
+        await _requestNotificationPermissionIfNeeded(context);
+      } catch (error, stackTrace) {
+        FlutterError.reportError(
+          FlutterErrorDetails(
+            exception: error,
+            stack: stackTrace,
+            library: 'timer_page',
+            context: ErrorDescription(
+              'while requesting notification permission from TimerPage.onCreate',
+            ),
+          ),
+        );
+      }
+    }());
   }
 
   Future<void> _requestNotificationPermissionIfNeeded(

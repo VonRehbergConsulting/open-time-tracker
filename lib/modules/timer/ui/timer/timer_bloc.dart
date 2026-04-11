@@ -66,7 +66,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
       if (timeEntry == null) {
         // No task selected; ensure any running live activity is stopped
         if (_liveActivitySessionStart != null) {
-          _liveActivityManager.stopLiveActivity();
+          await _liveActivityManager.stopLiveActivity();
           _liveActivitySessionStart = null;
         }
         _currentTaskTitle = null;
@@ -94,7 +94,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
             _currentTaskTitle != timeEntry.workPackageSubject;
         if (!isActive || taskChanged) {
           // Timer stopped or task switched, stop live activity
-          _liveActivityManager.stopLiveActivity();
+          await _liveActivityManager.stopLiveActivity();
           _liveActivitySessionStart = null;
           _currentTaskTitle = null;
         }
@@ -120,7 +120,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
 
   Future<void> reset() async {
     await _timerRepository.reset();
-    _liveActivityManager.stopLiveActivity();
+    await _liveActivityManager.stopLiveActivity();
     _liveActivitySessionStart = null;
     _currentTaskTitle = null;
   }
@@ -159,14 +159,14 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
 
   Future<void> stop() async {
     await _timerRepository.stopTimer(stopTime: DateTime.now());
-    _liveActivityManager.stopLiveActivity();
+    await _liveActivityManager.stopLiveActivity();
     _liveActivitySessionStart = null;
     await updateState();
   }
 
   Future<void> finish() async {
     await _timerRepository.stopTimer(stopTime: DateTime.now());
-    _liveActivityManager.stopLiveActivity();
+    await _liveActivityManager.stopLiveActivity();
     _liveActivitySessionStart = null;
     await updateState();
     emitEffect(const TimerEffect.finish());
@@ -179,16 +179,22 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
     // so the timer shows the additional time
     if (_liveActivitySessionStart != null) {
       _liveActivitySessionStart = _liveActivitySessionStart!.add(-duration);
-      _liveActivityManager.updateLiveActivity(
-        activityModel: LiveActivityModel(
-          startTimestamp:
-              (_liveActivitySessionStart!.millisecondsSinceEpoch / 1000)
-                  .round(),
-          title: state.title,
-          subtitle: state.subtitle,
-          tag: _l10n().generic__in_progress,
-        ).toMap(),
-      );
+      try {
+        await _liveActivityManager.updateLiveActivity(
+          activityModel: LiveActivityModel(
+            startTimestamp:
+                (_liveActivitySessionStart!.millisecondsSinceEpoch / 1000)
+                    .round(),
+            title: state.title,
+            subtitle: state.subtitle,
+            tag: _l10n().generic__in_progress,
+          ).toMap(),
+        );
+      } on LiveActivityPermissionException catch (e) {
+        debugPrint('Live activity permission denied: ${e.message}');
+      } catch (e) {
+        debugPrint('Failed to update live activity: $e');
+      }
     }
     emit(state.copyWith(timeSpent: timeSpent, hasStarted: true));
   }

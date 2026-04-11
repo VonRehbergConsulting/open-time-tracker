@@ -17,9 +17,8 @@ class LiveActivityManager {
         
         do {
             activity = try Activity.request(attributes: activityAttributes, contentState: state)
-            print("ASD Requested a Live Activity \(activity?.id ?? "N/A")).")
-        } catch (let error) {
-            print("ASD Error requesting Live Activity \(error.localizedDescription).")
+        } catch {
+            // Silently fail - Live Activity is optional feature
         }
     }
     
