@@ -45,17 +45,21 @@ import ActivityKit
                 let title = info["title"] as? String ?? ""
                 let subtitle = info["subtitle"] as? String ?? ""
                 let tag = info["tag"] as? String ?? ""
+                result(nil)
                 Task {
                     await liveActivityManager.startLiveActivity(startTimestamp: startTimestamp, title: title, subtitle: subtitle, tag: tag)
                 }
             }
+            result(nil)
         case "updateLiveActivity":
             if let info = call.arguments as? [String: Any] {
                 let startTimestamp = info["startTimestamp"] as? Double ?? 0
                 liveActivityManager.updateLiveActivity(startTimestamp: startTimestamp)
             }
+            result(nil)
         case "stopLiveActivity":
             liveActivityManager.stopLiveActivity()
+            result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }

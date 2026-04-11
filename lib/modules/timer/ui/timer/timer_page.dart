@@ -108,10 +108,8 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
 
     if (state.isActive) {
       timer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
-        try {
+        if (context.mounted) {
           context.read<TimerBloc>().updateState();
-        } catch (e) {
-          print(e);
         }
       });
     } else {

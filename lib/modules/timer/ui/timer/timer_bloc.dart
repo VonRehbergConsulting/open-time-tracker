@@ -133,25 +133,26 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
 
     // Calculate session start: if resuming (timeSpent > 0), offset by existing time
     // This ensures the live activity continues from where it left off, not from 0:00:00
-    _liveActivitySessionStart = DateTime.now().add(-timeSpent);
+    final sessionStart = DateTime.now().add(-timeSpent);
 
     // Live activity should show current session time only, not accumulated time from other tasks
     try {
       await _liveActivityManager.startLiveActivity(
         activityModel: LiveActivityModel(
-          startTimestamp:
-              (_liveActivitySessionStart!.millisecondsSinceEpoch / 1000)
-                  .round(),
+          startTimestamp: (sessionStart.millisecondsSinceEpoch / 1000).round(),
           title: state.title,
           subtitle: state.subtitle,
           tag: _l10n().generic__in_progress,
         ).toMap(),
       );
+      // Only set session start after successful start
+      _liveActivitySessionStart = sessionStart;
     } on LiveActivityPermissionException catch (e) {
       // Permission was denied - live activity won't be shown, but timer still works
       // The proactive permission check in TimerPage should prevent this scenario
       debugPrint('Live activity permission denied: ${e.message}');
-      // Continue without live activity - timer functionality is not blocked
+      // Ensure session start remains null since live activity didn't start
+      _liveActivitySessionStart = null;
     }
     _currentTaskTitle = state.title;
     await updateState();
