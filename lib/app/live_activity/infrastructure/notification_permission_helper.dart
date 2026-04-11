@@ -68,6 +68,7 @@ class NotificationPermissionHelper {
 
     // If permanently denied, offer to open settings
     if (status.isPermanentlyDenied) {
+      if (!context.mounted) return false;
       await _showOpenSettingsDialog(context);
       return false;
     }
@@ -88,6 +89,7 @@ class NotificationPermissionHelper {
 
     if (status.isPermanentlyDenied) {
       // Show dialog to open settings
+      if (!context.mounted) return false;
       final shouldOpen = await _showOpenSettingsDialog(context);
       if (shouldOpen) {
         await openAppSettings();
@@ -99,6 +101,7 @@ class NotificationPermissionHelper {
     status = await Permission.notification.request();
 
     if (status.isPermanentlyDenied) {
+      if (!context.mounted) return false;
       final shouldOpen = await _showOpenSettingsDialog(context);
       if (shouldOpen) {
         await openAppSettings();
