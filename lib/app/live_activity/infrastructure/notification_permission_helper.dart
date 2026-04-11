@@ -17,8 +17,8 @@ class NotificationPermissionHelper {
     // Note: We can't check API level directly in Dart, so we check permission status
     final status = await Permission.notification.status;
 
-    // If already granted or denied, don't show our dialog
-    if (status.isGranted || status.isDenied || status.isPermanentlyDenied) {
+    // Skip our dialog only when permission is already granted or can't be requested normally
+    if (status.isGranted || status.isPermanentlyDenied) {
       return false;
     }
 
