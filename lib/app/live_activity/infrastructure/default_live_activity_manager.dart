@@ -20,6 +20,30 @@ class DefaultLiveActivityManager implements LiveActivityManager {
     _methodChannel = MethodChannel(channelKey);
   }
 
+  bool _supportsLiveActivityPlatform() {
+    if (kIsWeb) {
+      return false;
+    }
+
+    return defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS;
+  }
+
+  Future<void> _invokeMethodSafely(
+    String method, [
+    Map<String, dynamic>? arguments,
+  ]) async {
+    if (!_supportsLiveActivityPlatform()) {
+      return;
+    }
+
+    try {
+      await _methodChannel.invokeMethod(method, arguments);
+    } on MissingPluginException {
+      // No-op on unsupported/unregistered platforms.
+    }
+  }
+
   /// Ensure notification permission is granted
   /// Throws LiveActivityPermissionException if permission is denied or permanently denied
   Future<void> _ensureNotificationPermission() async {
@@ -58,18 +82,18 @@ class DefaultLiveActivityManager implements LiveActivityManager {
     // Request notification permission on Android if needed
     await _ensureNotificationPermission();
 
-    await _methodChannel.invokeMethod('startLiveActivity', activityModel);
+    await _invokeMethodSafely('startLiveActivity', activityModel);
   }
 
   @override
   Future<void> updateLiveActivity({
     required Map<String, dynamic> activityModel,
   }) async {
-    await _methodChannel.invokeMethod('updateLiveActivity', activityModel);
+    await _invokeMethodSafely('updateLiveActivity', activityModel);
   }
 
   @override
   Future<void> stopLiveActivity() async {
-    await _methodChannel.invokeMethod('stopLiveActivity');
+    await _invokeMethodSafely('stopLiveActivity');
   }
 }
