@@ -1,5 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="vonrehberg.timetracker">
+   <!-- Permission for notifications on Android 13+ -->
+   <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+   <!-- Permission for foreground service -->
+   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+   <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
+   
    <application
         android:label="Time Tracker"
         android:name="${applicationName}"
@@ -45,5 +51,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        
+        <!-- Timer foreground service for battery-efficient notifications -->
+        <service
+            android:name=".TimerForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"/>
     </application>
 </manifest>

@@ -355,4 +355,31 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get export_report_pdf_export_failed =>
       'Failed to export PDF report. Please try again.';
+
+  @override
+  String get permission_notification_title => 'Enable Timer Notifications?';
+
+  @override
+  String get permission_notification_message =>
+      'To show your active timer in the notification area, we need notification permission. This helps you track time even when the app is in the background.';
+
+  @override
+  String get permission_notification_enable => 'Enable';
+
+  @override
+  String get permission_notification_not_now => 'Not Now';
+
+  @override
+  String get permission_notification_settings_title => 'Permission Required';
+
+  @override
+  String get permission_notification_settings_message =>
+      'Notification permission is required to show the active timer. Would you like to open settings?';
+
+  @override
+  String get permission_notification_open_settings => 'Open Settings';
+
+  @override
+  String get permission_notification_denied_error =>
+      'Notification permission required to show active timer. Enable it in Settings > Apps > Time Tracker > Notifications';
 }

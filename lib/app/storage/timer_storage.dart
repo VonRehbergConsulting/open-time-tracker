@@ -40,12 +40,15 @@ class TimerStorage {
 
   Future<TimeEntry?> getTimeEntry() async {
     final string = await storage.getString(_timeEntryKey);
+    if (string == null) {
+      return null;
+    }
     try {
-      final decoded = jsonDecode(string!);
-      print('Time entry loaded');
+      final decoded = jsonDecode(string);
+      // Removed excessive logging - was printing every 500ms
       return _TimeEntrySerialization.parse(decoded);
     } catch (error) {
-      print('Can\'t load time entry');
+      print('Can\'t load time entry: $error');
       return null;
     }
   }

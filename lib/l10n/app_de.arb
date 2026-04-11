@@ -127,5 +127,14 @@
     "export_report_excel_export_failed": "Excel-Bericht konnte nicht exportiert werden. Bitte versuche es erneut.",
     "export_report_pdf_create_success": "PDF-Bericht erfolgreich erstellt",
     "export_report_pdf_save_failed": "PDF-Datei konnte nicht gespeichert werden. Bitte überprüfe die Speicherberechtigungen.",
-    "export_report_pdf_export_failed": "PDF-Bericht konnte nicht exportiert werden. Bitte versuche es erneut."
+    "export_report_pdf_export_failed": "PDF-Bericht konnte nicht exportiert werden. Bitte versuche es erneut.",
+
+    "permission_notification_title": "Timer-Benachrichtigungen aktivieren?",
+    "permission_notification_message": "Um deinen aktiven Timer im Benachrichtigungsbereich anzuzeigen, benötigen wir die Benachrichtigungsberechtigung. Dies hilft dir, die Zeit auch im Hintergrund zu verfolgen.",
+    "permission_notification_enable": "Aktivieren",
+    "permission_notification_not_now": "Nicht jetzt",
+    "permission_notification_settings_title": "Berechtigung erforderlich",
+    "permission_notification_settings_message": "Die Benachrichtigungsberechtigung ist erforderlich, um den aktiven Timer anzuzeigen. Möchtest du die Einstellungen öffnen?",
+    "permission_notification_open_settings": "Einstellungen öffnen",
+    "permission_notification_denied_error": "Benachrichtigungsberechtigung erforderlich, um den aktiven Timer anzuzeigen. Aktiviere sie unter Einstellungen > Apps > Time Tracker > Benachrichtigungen"
 }
