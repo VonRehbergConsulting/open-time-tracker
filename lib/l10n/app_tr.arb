@@ -127,5 +127,14 @@
     "export_report_excel_export_failed": "Excel raporu dışa aktarılamadı. Lütfen tekrar deneyin.",
     "export_report_pdf_create_success": "PDF raporu başarıyla oluşturuldu",
     "export_report_pdf_save_failed": "PDF dosyası kaydedilemedi. Lütfen depolama izinlerini kontrol edin.",
-    "export_report_pdf_export_failed": "PDF raporu dışa aktarılamadı. Lütfen tekrar deneyin."
+    "export_report_pdf_export_failed": "PDF raporu dışa aktarılamadı. Lütfen tekrar deneyin.",
+
+    "permission_notification_title": "Zamanlayıcı bildirimleri etkinleştirilsin mi?",
+    "permission_notification_message": "Aktif zamanlayıcınızı bildirim alanında göstermek için bildirim iznine ihtiyacımız var. Bu, arka planda bile zamanı takip etmenize yardımcı olur.",
+    "permission_notification_enable": "Etkinleştir",
+    "permission_notification_not_now": "Şimdi değil",
+    "permission_notification_settings_title": "İzin gerekli",
+    "permission_notification_settings_message": "Aktif zamanlayıcıyı göstermek için bildirim izni gereklidir. Ayarları açmak ister misiniz?",
+    "permission_notification_open_settings": "Ayarları aç",
+    "permission_notification_denied_error": "Aktif zamanlayıcıyı göstermek için bildirim izni gereklidir. Ayarlar > Uygulamalar > Time Tracker > Bildirimler'den etkinleştirin"
 }

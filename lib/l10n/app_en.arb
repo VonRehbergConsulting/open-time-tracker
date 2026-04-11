@@ -127,5 +127,14 @@
     "export_report_excel_export_failed": "Failed to export Excel report. Please try again.",
     "export_report_pdf_create_success": "PDF report created successfully",
     "export_report_pdf_save_failed": "Failed to save PDF file. Please check storage permissions.",
-    "export_report_pdf_export_failed": "Failed to export PDF report. Please try again."
+    "export_report_pdf_export_failed": "Failed to export PDF report. Please try again.",
+
+    "permission_notification_title": "Enable Timer Notifications?",
+    "permission_notification_message": "To show your active timer in the notification area, we need notification permission. This helps you track time even when the app is in the background.",
+    "permission_notification_enable": "Enable",
+    "permission_notification_not_now": "Not Now",
+    "permission_notification_settings_title": "Permission Required",
+    "permission_notification_settings_message": "Notification permission is required to show the active timer. Would you like to open settings?",
+    "permission_notification_open_settings": "Open Settings",
+    "permission_notification_denied_error": "Notification permission required to show active timer. Enable it in Settings > Apps > Time Tracker > Notifications"
 }

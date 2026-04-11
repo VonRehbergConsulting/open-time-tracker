@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide FilledButton;
 import 'package:flutter/services.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
+import 'package:open_project_time_tracker/app/live_activity/infrastructure/notification_permission_helper.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/filled_button.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
@@ -53,6 +54,43 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
   void onCreate(BuildContext context, TimerBloc bloc) {
     super.onCreate(context, bloc);
     bloc.updateState();
+
+    // Proactively request notification permission on first launch after update
+    // This provides better UX by explaining why the permission is needed
+    _startNotificationPermissionFlow(context);
+  }
+
+  void _startNotificationPermissionFlow(BuildContext context) {
+    unawaited(() async {
+      try {
+        await _requestNotificationPermissionIfNeeded(context);
+      } catch (error, stackTrace) {
+        FlutterError.reportError(
+          FlutterErrorDetails(
+            exception: error,
+            stack: stackTrace,
+            library: 'timer_page',
+            context: ErrorDescription(
+              'while requesting notification permission from TimerPage.onCreate',
+            ),
+          ),
+        );
+      }
+    }());
+  }
+
+  Future<void> _requestNotificationPermissionIfNeeded(
+    BuildContext context,
+  ) async {
+    // Only show permission dialog if this is the first time
+    if (await NotificationPermissionHelper.shouldRequestPermission()) {
+      // Wait a bit to let the page render first
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      if (context.mounted) {
+        await NotificationPermissionHelper.requestPermissionWithDialog(context);
+      }
+    }
   }
 
   @override
@@ -69,11 +107,9 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
     final addButtonWidth = deviceSize.width * 0.23;
 
     if (state.isActive) {
-      timer ??= Timer.periodic(const Duration(milliseconds: 500), (timer) {
-        try {
+      timer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (context.mounted) {
           context.read<TimerBloc>().updateState();
-        } catch (e) {
-          print(e);
         }
       });
     } else {

@@ -359,4 +359,32 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get export_report_pdf_export_failed =>
       'No se pudo exportar el informe PDF. Inténtalo de nuevo.';
+
+  @override
+  String get permission_notification_title =>
+      '¿Activar notificaciones del temporizador?';
+
+  @override
+  String get permission_notification_message =>
+      'Para mostrar tu temporizador activo en el área de notificaciones, necesitamos permiso de notificación. Esto te ayuda a rastrear el tiempo incluso cuando la aplicación está en segundo plano.';
+
+  @override
+  String get permission_notification_enable => 'Activar';
+
+  @override
+  String get permission_notification_not_now => 'Ahora no';
+
+  @override
+  String get permission_notification_settings_title => 'Permiso requerido';
+
+  @override
+  String get permission_notification_settings_message =>
+      'Se requiere permiso de notificación para mostrar el temporizador activo. ¿Deseas abrir la configuración?';
+
+  @override
+  String get permission_notification_open_settings => 'Abrir configuración';
+
+  @override
+  String get permission_notification_denied_error =>
+      'Se requiere permiso de notificación para mostrar el temporizador activo. Actívalo en Configuración > Aplicaciones > Time Tracker > Notificaciones';
 }

@@ -358,4 +358,32 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get export_report_pdf_export_failed =>
       'Échec de l\'export du rapport PDF. Veuillez réessayer.';
+
+  @override
+  String get permission_notification_title =>
+      'Activer les notifications du minuteur ?';
+
+  @override
+  String get permission_notification_message =>
+      'Pour afficher votre minuteur actif dans la zone de notification, nous avons besoin de l\'autorisation de notification. Cela vous aide à suivre le temps même lorsque l\'application est en arrière-plan.';
+
+  @override
+  String get permission_notification_enable => 'Activer';
+
+  @override
+  String get permission_notification_not_now => 'Pas maintenant';
+
+  @override
+  String get permission_notification_settings_title => 'Autorisation requise';
+
+  @override
+  String get permission_notification_settings_message =>
+      'L\'autorisation de notification est requise pour afficher le minuteur actif. Voulez-vous ouvrir les paramètres ?';
+
+  @override
+  String get permission_notification_open_settings => 'Ouvrir les paramètres';
+
+  @override
+  String get permission_notification_denied_error =>
+      'Autorisation de notification requise pour afficher le minuteur actif. Activez-la dans Paramètres > Applications > Time Tracker > Notifications';
 }

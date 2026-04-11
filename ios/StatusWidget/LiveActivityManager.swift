@@ -5,15 +5,20 @@ import ActivityKit
 class LiveActivityManager {
     var activity: Activity<StatusWidgetAttributes>?
     
-    func startLiveActivity(startTimestamp: Double, title: String, subtitle: String, tag: String) {
+    func startLiveActivity(startTimestamp: Double, title: String, subtitle: String, tag: String) async {
+        // Stop any existing activity before starting a new one
+        // to prevent multiple Live Activities running simultaneously
+        if let existingActivity = activity {
+            await existingActivity.end(using: nil, dismissalPolicy: .immediate)
+        }
+        
         let state = StatusWidgetAttributes.ContentState(startTimestamp: startTimestamp)
         let activityAttributes = StatusWidgetAttributes(title: title, subtitle: subtitle, tag: tag)
         
         do {
             activity = try Activity.request(attributes: activityAttributes, contentState: state)
-            print("ASD Requested a Live Activity \(activity?.id ?? "N/A")).")
-        } catch (let error) {
-            print("ASD Error requesting Live Activity \(error.localizedDescription).")
+        } catch {
+            // Silently fail - Live Activity is optional feature
         }
     }
     

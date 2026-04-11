@@ -358,4 +358,33 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get export_report_pdf_export_failed =>
       'PDF-Bericht konnte nicht exportiert werden. Bitte versuche es erneut.';
+
+  @override
+  String get permission_notification_title =>
+      'Timer-Benachrichtigungen aktivieren?';
+
+  @override
+  String get permission_notification_message =>
+      'Um deinen aktiven Timer im Benachrichtigungsbereich anzuzeigen, benötigen wir die Benachrichtigungsberechtigung. Dies hilft dir, die Zeit auch im Hintergrund zu verfolgen.';
+
+  @override
+  String get permission_notification_enable => 'Aktivieren';
+
+  @override
+  String get permission_notification_not_now => 'Nicht jetzt';
+
+  @override
+  String get permission_notification_settings_title =>
+      'Berechtigung erforderlich';
+
+  @override
+  String get permission_notification_settings_message =>
+      'Die Benachrichtigungsberechtigung ist erforderlich, um den aktiven Timer anzuzeigen. Möchtest du die Einstellungen öffnen?';
+
+  @override
+  String get permission_notification_open_settings => 'Einstellungen öffnen';
+
+  @override
+  String get permission_notification_denied_error =>
+      'Benachrichtigungsberechtigung erforderlich, um den aktiven Timer anzuzeigen. Aktiviere sie unter Einstellungen > Apps > Time Tracker > Benachrichtigungen';
 }
