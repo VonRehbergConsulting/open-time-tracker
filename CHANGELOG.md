@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.10.0...v1.11.0) (2026-04-11)
+
+
+### Features
+
+* added android lock screen activity and fixed ios lock screen activity bug ([4aeff4e](https://github.com/VonRehbergConsulting/open-time-tracker/commit/4aeff4e4c22b8dffc1bbe2307d83bbc93e976d99))
+
 # [1.10.0](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.9.8...v1.10.0) (2026-02-26)
 
 
