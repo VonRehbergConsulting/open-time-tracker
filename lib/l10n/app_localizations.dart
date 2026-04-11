@@ -775,6 +775,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to export PDF report. Please try again.'**
   String get export_report_pdf_export_failed;
+
+  /// No description provided for @permission_notification_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Timer Notifications?'**
+  String get permission_notification_title;
+
+  /// No description provided for @permission_notification_message.
+  ///
+  /// In en, this message translates to:
+  /// **'To show your active timer in the notification area, we need notification permission. This helps you track time even when the app is in the background.'**
+  String get permission_notification_message;
+
+  /// No description provided for @permission_notification_enable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get permission_notification_enable;
+
+  /// No description provided for @permission_notification_not_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Now'**
+  String get permission_notification_not_now;
+
+  /// No description provided for @permission_notification_settings_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission Required'**
+  String get permission_notification_settings_title;
+
+  /// No description provided for @permission_notification_settings_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission is required to show the active timer. Would you like to open settings?'**
+  String get permission_notification_settings_message;
+
+  /// No description provided for @permission_notification_open_settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get permission_notification_open_settings;
+
+  /// No description provided for @permission_notification_denied_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission required to show active timer. Enable it in Settings > Apps > Time Tracker > Notifications'**
+  String get permission_notification_denied_error;
 }
 
 class _AppLocalizationsDelegate

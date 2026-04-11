@@ -127,5 +127,14 @@
     "export_report_excel_export_failed": "Échec de l'export du rapport Excel. Veuillez réessayer.",
     "export_report_pdf_create_success": "Rapport PDF créé avec succès",
     "export_report_pdf_save_failed": "Échec de l'enregistrement du fichier PDF. Veuillez vérifier les autorisations de stockage.",
-    "export_report_pdf_export_failed": "Échec de l'export du rapport PDF. Veuillez réessayer."
+    "export_report_pdf_export_failed": "Échec de l'export du rapport PDF. Veuillez réessayer.",
+
+    "permission_notification_title": "Activer les notifications du minuteur ?",
+    "permission_notification_message": "Pour afficher votre minuteur actif dans la zone de notification, nous avons besoin de l'autorisation de notification. Cela vous aide à suivre le temps même lorsque l'application est en arrière-plan.",
+    "permission_notification_enable": "Activer",
+    "permission_notification_not_now": "Pas maintenant",
+    "permission_notification_settings_title": "Autorisation requise",
+    "permission_notification_settings_message": "L'autorisation de notification est requise pour afficher le minuteur actif. Voulez-vous ouvrir les paramètres ?",
+    "permission_notification_open_settings": "Ouvrir les paramètres",
+    "permission_notification_denied_error": "Autorisation de notification requise pour afficher le minuteur actif. Activez-la dans Paramètres > Applications > Time Tracker > Notifications"
 }

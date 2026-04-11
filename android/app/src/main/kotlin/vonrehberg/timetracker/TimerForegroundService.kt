@@ -55,12 +55,17 @@ class TimerForegroundService : Service() {
                 notificationManager.notify(notificationId, notification)
             }
             ACTION_STOP -> {
-                stopForeground(STOP_FOREGROUND_REMOVE)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    stopForeground(STOP_FOREGROUND_REMOVE)
+                } else {
+                    @Suppress("DEPRECATION")
+                    stopForeground(true)
+                }
                 stopSelf()
             }
         }
         
-        return START_STICKY
+        return START_NOT_STICKY
     }
     
     override fun onBind(intent: Intent?): IBinder? = null
@@ -84,7 +89,9 @@ class TimerForegroundService : Service() {
     }
     
     private fun buildNotification(): Notification {
-        val intent = packageManager.getLaunchIntentForPackage(packageName)
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
         val pendingIntent = PendingIntent.getActivity(
             this,
             0,

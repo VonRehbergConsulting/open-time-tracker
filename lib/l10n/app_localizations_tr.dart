@@ -356,4 +356,32 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get export_report_pdf_export_failed =>
       'PDF raporu dışa aktarılamadı. Lütfen tekrar deneyin.';
+
+  @override
+  String get permission_notification_title =>
+      'Zamanlayıcı bildirimleri etkinleştirilsin mi?';
+
+  @override
+  String get permission_notification_message =>
+      'Aktif zamanlayıcınızı bildirim alanında göstermek için bildirim iznine ihtiyacımız var. Bu, arka planda bile zamanı takip etmenize yardımcı olur.';
+
+  @override
+  String get permission_notification_enable => 'Etkinleştir';
+
+  @override
+  String get permission_notification_not_now => 'Şimdi değil';
+
+  @override
+  String get permission_notification_settings_title => 'İzin gerekli';
+
+  @override
+  String get permission_notification_settings_message =>
+      'Aktif zamanlayıcıyı göstermek için bildirim izni gereklidir. Ayarları açmak ister misiniz?';
+
+  @override
+  String get permission_notification_open_settings => 'Ayarları aç';
+
+  @override
+  String get permission_notification_denied_error =>
+      'Aktif zamanlayıcıyı göstermek için bildirim izni gereklidir. Ayarlar > Uygulamalar > Time Tracker > Bildirimler\'den etkinleştirin';
 }

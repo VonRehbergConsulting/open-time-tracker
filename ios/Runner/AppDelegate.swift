@@ -45,7 +45,9 @@ import ActivityKit
                 let title = info["title"] as? String ?? ""
                 let subtitle = info["subtitle"] as? String ?? ""
                 let tag = info["tag"] as? String ?? ""
-                liveActivityManager.startLiveActivity(startTimestamp: startTimestamp, title: title, subtitle: subtitle, tag: tag)
+                Task {
+                    await liveActivityManager.startLiveActivity(startTimestamp: startTimestamp, title: title, subtitle: subtitle, tag: tag)
+                }
             }
         case "updateLiveActivity":
             if let info = call.arguments as? [String: Any] {
