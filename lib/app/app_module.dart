@@ -30,7 +30,11 @@ abstract class AppModule {
   @Named('openProject')
   @lazySingleton
   AuthTokenStorage authTokenStorage() => SecureAuthTokenStorage(
-    const FlutterSecureStorage(),
+    const FlutterSecureStorage(
+      mOptions: MacOsOptions(
+        accessibility: KeychainAccessibility.first_unlock_this_device,
+      ),
+    ),
     accessTokenKey: 'accessToken',
     refreshTokenKey: 'refreshToken',
   );
