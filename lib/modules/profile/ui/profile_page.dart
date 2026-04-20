@@ -104,6 +104,16 @@ class ProfilePage
 
             const SizedBox(height: 24),
 
+            // Project Filters Section
+            _buildSectionTitle(
+              context,
+              AppLocalizations.of(context).profile_project_filters_title,
+            ),
+            const SizedBox(height: 8),
+            _buildProjectFiltersTile(context, state),
+
+            const SizedBox(height: 24),
+
             // Logout Section
             _buildSectionTitle(
               context,
@@ -171,6 +181,31 @@ class ProfilePage
         title: Text(AppLocalizations.of(context).profile_logout_description),
         trailing: const Icon(Icons.chevron_right),
         onTap: context.read<ProfileBloc>().logout,
+      ),
+    );
+  }
+
+  Widget _buildProjectFiltersTile(BuildContext context, ProfileState state) {
+    return ConfiguredCard(
+      child: Column(
+        children: [
+          SwitchListTile(
+            value: state.showOnlyProjectsWithTasks,
+            title: Text(
+              AppLocalizations.of(context)
+                  .profile_project_filters_only_with_tasks,
+            ),
+            onChanged: context.read<ProfileBloc>().setShowOnlyProjectsWithTasks,
+          ),
+          const Divider(height: 1),
+          SwitchListTile(
+            value: state.doNotLoadProjectList,
+            title: Text(
+              AppLocalizations.of(context).profile_project_filters_lazy_load,
+            ),
+            onChanged: context.read<ProfileBloc>().setDoNotLoadProjectList,
+          ),
+        ],
       ),
     );
   }

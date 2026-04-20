@@ -120,6 +120,9 @@ abstract class TaskSelectionModule {
   ) => WorkPackagesFilterBloc(statusesRepository, settingsRepository);
 
   @injectable
-  ProjectsListBloc projectsListBloc(ProjectsRepository projectsRepository) =>
-      ProjectsListBloc(projectsRepository);
+  ProjectsListBloc projectsListBloc(
+    ProjectsRepository projectsRepository,
+    SettingsRepository settingsRepository,
+    WorkPackagesRepository workPackagesRepository,
+  ) => ProjectsListBloc(projectsRepository, settingsRepository, workPackagesRepository);
 }

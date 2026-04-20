@@ -5,6 +5,51 @@ abstract class WorkPackagesRepository {
     Set<int>? statuses,
     String? user,
   });
+
+  /// Returns a single page of work packages including pagination metadata.
+  ///
+  /// OpenProject API v3 returns collections that may be paginated. Pagination
+  /// metadata includes `total`, `count`, `pageSize` and `offset` (page number).
+  ///
+  /// See: https://www.openproject.org/docs/api/collections/
+  Future<WorkPackagesPage> listPaged({
+    String? projectId,
+    int? pageSize,
+    int? offset,
+    Set<int>? statuses,
+    String? user,
+  });
+}
+
+class WorkPackagesPage {
+  final List<WorkPackage> items;
+  final int total;
+  final int count;
+  final int? pageSize;
+  final int? offset;
+
+  const WorkPackagesPage({
+    required this.items,
+    required this.total,
+    required this.count,
+    required this.pageSize,
+    required this.offset,
+  });
+
+  bool get hasNext {
+    final ps = pageSize;
+    final off = offset;
+    if (ps == null || off == null) return false;
+    if (count <= 0) return false;
+    return (off * ps) < total;
+  }
+
+  int? get nextOffset {
+    if (!hasNext) return null;
+    final off = offset;
+    if (off == null) return null;
+    return off + 1;
+  }
 }
 
 enum WorkPackageAssigneeType {

@@ -7,6 +7,7 @@ import 'package:open_project_time_tracker/modules/authorization/domain/user_data
 import 'package:open_project_time_tracker/modules/authorization/infrastructure/api_user_data_repository.dart';
 import 'package:open_project_time_tracker/modules/calendar/domain/calendar_connection_service.dart';
 import 'package:open_project_time_tracker/modules/calendar/domain/calendar_notifications_service.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 
 part 'profile_bloc.freezed.dart';
 
@@ -14,6 +15,8 @@ part 'profile_bloc.freezed.dart';
 class ProfileState with _$ProfileState {
   const factory ProfileState.idle({
     required bool isCalendarConnected,
+    required bool showOnlyProjectsWithTasks,
+    required bool doNotLoadProjectList,
     String? userName,
   }) = _Idle;
 }
@@ -28,6 +31,7 @@ class ProfileBloc extends EffectCubit<ProfileState, ProfileEffect> {
   final CalendarNotificationsService _calendarNotificationsService;
   final UserDataRepository _userDataRepository;
   final CalendarConnectionService _calendarConnectionService;
+  final SettingsRepository _settingsRepository;
 
   StreamSubscription? _connectionSubscription;
 
@@ -36,7 +40,14 @@ class ProfileBloc extends EffectCubit<ProfileState, ProfileEffect> {
     this._calendarNotificationsService,
     this._userDataRepository,
     this._calendarConnectionService,
-  ) : super(const ProfileState.idle(isCalendarConnected: false)) {
+    this._settingsRepository,
+  ) : super(
+          const ProfileState.idle(
+            isCalendarConnected: false,
+            showOnlyProjectsWithTasks: false,
+            doNotLoadProjectList: false,
+          ),
+        ) {
     _init();
   }
 
@@ -53,10 +64,34 @@ class ProfileBloc extends EffectCubit<ProfileState, ProfileEffect> {
     } catch (e) {
       print('Error fetching user name: $e');
     }
+
+    // Load project list preferences
+    try {
+      final onlyWithTasks = await _settingsRepository.showOnlyProjectsWithTasks;
+      final doNotLoad = await _settingsRepository.doNotLoadProjectList;
+      emit(
+        state.copyWith(
+          showOnlyProjectsWithTasks: onlyWithTasks,
+          doNotLoadProjectList: doNotLoad,
+        ),
+      );
+    } catch (e) {
+      // Keep defaults if reading settings fails
+    }
   }
 
   void _onConnectionStateChanged(bool isConnected) {
     emit(state.copyWith(isCalendarConnected: isConnected));
+  }
+
+  Future<void> setShowOnlyProjectsWithTasks(bool value) async {
+    await _settingsRepository.setShowOnlyProjectsWithTasks(value);
+    emit(state.copyWith(showOnlyProjectsWithTasks: value));
+  }
+
+  Future<void> setDoNotLoadProjectList(bool value) async {
+    await _settingsRepository.setDoNotLoadProjectList(value);
+    emit(state.copyWith(doNotLoadProjectList: value));
   }
 
   @override
