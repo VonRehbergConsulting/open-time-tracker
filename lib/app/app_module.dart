@@ -6,10 +6,16 @@ import 'package:open_project_time_tracker/app/api/rest_api_client.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_client.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_token_storage.dart';
+import 'package:open_project_time_tracker/app/auth/infrastructure/active_instance_configuration_repository.dart';
 import 'package:open_project_time_tracker/app/auth/infrastructure/oauth_auth_service.dart';
 import 'package:open_project_time_tracker/app/auth/infrastructure/oauth_client.dart';
 import 'package:open_project_time_tracker/app/auth/infrastructure/open_project_auth_client_data.dart';
 import 'package:open_project_time_tracker/app/auth/infrastructure/secure_auth_token_storage.dart';
+import 'package:open_project_time_tracker/app/di/inject.dart';
+import 'package:open_project_time_tracker/app/instances/domain/instance_switcher.dart';
+import 'package:open_project_time_tracker/app/instances/domain/instances_repository.dart';
+import 'package:open_project_time_tracker/app/instances/infrastructure/default_instance_switcher.dart';
+import 'package:open_project_time_tracker/app/instances/infrastructure/local_instances_repository.dart';
 import 'package:open_project_time_tracker/app/live_activity/domain/live_activity_manager.dart';
 import 'package:open_project_time_tracker/app/live_activity/infrastructure/default_live_activity_manager.dart';
 import 'package:open_project_time_tracker/app/services/analytics_service.dart';
@@ -19,7 +25,9 @@ import 'package:open_project_time_tracker/app/storage/app_state_storage.dart';
 import 'package:open_project_time_tracker/app/storage/local_app_state_repository.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
-import 'package:open_project_time_tracker/app/auth/infrastructure/instance_configuration_repository_local.dart';
+import 'package:open_project_time_tracker/modules/authorization/domain/user_data_repository.dart';
+import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
+import 'package:open_project_time_tracker/modules/timer/infrastructure/live_activity_coordinator.dart';
 
 import '../modules/calendar/domain/calendar_notifications_service.dart';
 import 'api/api_client.dart';
@@ -27,12 +35,32 @@ import 'auth/domain/auth_client_data.dart';
 
 @module
 abstract class AppModule {
+  static const _accessTokenKey = 'accessToken';
+  static const _refreshTokenKey = 'refreshToken';
+
+  @lazySingleton
+  InstancesRepository instancesRepository() => LocalInstancesRepository(
+    // Lazy hook: resolves the token storage from GetIt at the moment
+    // the migration actually runs (after both singletons are wired).
+    onLegacyTokenMigration: (newInstanceId, legacyAccess, legacyRefresh) async {
+      final storage =
+          inject<AuthTokenStorage>(instanceName: 'openProject')
+              as SecureAuthTokenStorage;
+      await storage.migrateLegacyTokens(newInstanceId);
+    },
+  );
+
   @Named('openProject')
   @lazySingleton
-  AuthTokenStorage authTokenStorage() => SecureAuthTokenStorage(
+  AuthTokenStorage authTokenStorage() => SecureAuthTokenStorage.withKeys(
     const FlutterSecureStorage(),
-    accessTokenKey: 'accessToken',
-    refreshTokenKey: 'refreshToken',
+    accessTokenKey: _accessTokenKey,
+    refreshTokenKey: _refreshTokenKey,
+    // Lazy resolver: keeps SecureAuthTokenStorage decoupled from
+    // InstancesRepository at construction time (they would otherwise
+    // form a DI cycle).
+    resolveActiveInstanceId: () =>
+        inject<InstancesRepository>().current.activeInstanceId,
   );
 
   @Named('openProject')
@@ -46,7 +74,7 @@ abstract class AppModule {
   @injectable
   AuthClientData authClientData(
     @Named('openProject')
-    InstanceConfigurationRepository instanceConfigurationRepository,
+    InstanceConfigurationReadRepository instanceConfigurationRepository,
   ) => OpenProjectAuthClientData(instanceConfigurationRepository);
 
   @Named('openProject')
@@ -58,21 +86,24 @@ abstract class AppModule {
 
   @Named('openProject')
   @injectable
-  InstanceConfigurationReadRepository instanceConfigurationReadRepository() =>
-      InstanceConfigurationRepositoryLocal(
-        PreferencesStorage(),
-        baseUrlKey: 'baseUrl',
-        clientIdKey: 'clientId',
-      );
+  InstanceConfigurationReadRepository instanceConfigurationReadRepository(
+    InstancesRepository instancesRepository,
+  ) => ActiveInstanceConfigurationRepository(instancesRepository);
 
-  @Named('openProject')
-  @injectable
-  InstanceConfigurationRepository instanceConfigurationRepository() =>
-      InstanceConfigurationRepositoryLocal(
-        PreferencesStorage(),
-        baseUrlKey: 'baseUrl',
-        clientIdKey: 'clientId',
-      );
+  @lazySingleton
+  InstanceSwitcher instanceSwitcher(
+    InstancesRepository instancesRepository,
+    TimerRepository timerRepository,
+    @Named('openProject') AuthService authService,
+    UserDataRepository userDataRepository,
+    LiveActivityCoordinator liveActivityCoordinator,
+  ) => DefaultInstanceSwitcher(
+    instancesRepository,
+    timerRepository,
+    authService,
+    userDataRepository,
+    liveActivityCoordinator,
+  );
 
   @Named('openProject')
   @injectable
@@ -118,3 +149,5 @@ abstract class AppModule {
   AppStateRepository appStateRepository(AppStateStorage appStateStorage) =>
       LocalAppStateRepository(appStateStorage);
 }
+
+

@@ -80,10 +80,7 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   /// When [label] is provided, any exception thrown by [action] is
   /// surfaced to the UI via [TimerEffect.error] in addition to being
   /// logged, so user-triggered failures are not silent.
-  Future<void> _enqueue(
-    Future<void> Function() action, {
-    String? label,
-  }) {
+  Future<void> _enqueue(Future<void> Function() action, {String? label}) {
     final next = _actionQueue.then((_) async {
       try {
         await action();
@@ -175,9 +172,8 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
         unawaited(
           updateState()
               .catchError(
-                (error) => debugPrint(
-                  'TimerBloc: ticker update failed: $error',
-                ),
+                (error) =>
+                    debugPrint('TimerBloc: ticker update failed: $error'),
               )
               .whenComplete(() => _isTickerUpdatePending = false),
         );

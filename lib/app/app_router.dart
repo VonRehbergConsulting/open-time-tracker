@@ -5,7 +5,9 @@ import 'package:open_project_time_tracker/app/storage/app_state_repository.dart'
 import 'package:open_project_time_tracker/app/ui/widgets/splash_screen.dart';
 import 'package:open_project_time_tracker/extensions/date_time.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
-import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
+import 'package:open_project_time_tracker/app/instances/domain/open_project_instance.dart';
+import 'package:open_project_time_tracker/modules/instances/ui/instance_editor/instance_editor_page.dart';
+import 'package:open_project_time_tracker/modules/instances/ui/instances_list/instances_list_page.dart';
 import 'package:open_project_time_tracker/modules/profile/ui/profile_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
@@ -25,7 +27,8 @@ import '../main.dart';
 class AppRouter {
   static Route<void> _timerRoute() {
     return PageRouteBuilder<void>(
-      pageBuilder: (context, animation, secondaryAnimation) => const TimerPage(),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const TimerPage(),
       transitionDuration: const Duration(milliseconds: 320),
       reverseTransitionDuration: const Duration(milliseconds: 260),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -47,10 +50,7 @@ class AppRouter {
 
         return FadeTransition(
           opacity: opacityAnimation,
-          child: SlideTransition(
-            position: positionAnimation,
-            child: child,
-          ),
+          child: SlideTransition(position: positionAnimation, child: child),
         );
       },
     );
@@ -73,11 +73,23 @@ class AppRouter {
     return navigatorKey.currentState!.push(route);
   }
 
+  /// Returns to the time entries list. Prefers popping back to the
+  /// already-mounted list under the current route (preserving the
+  /// `_KeyedAuthorizedRouter` wrapper and its instance-snapshot
+  /// subscription). Only fabricates a fresh [AppAuthorizedRouter] when
+  /// there is nothing to pop to (edge case: the app was launched
+  /// directly into the timer, e.g. via a Live Activity, so no time
+  /// entries list is on the stack yet).
   static void routeToTimeEntriesListTemporary(BuildContext context) {
+    final navigator = Navigator.of(context);
+    if (navigator.canPop()) {
+      navigator.popUntil((route) => route.isFirst);
+      return;
+    }
     final route = CupertinoPageRoute(
       builder: ((context) => const AppAuthorizedRouter()),
     );
-    Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
+    navigator.pushAndRemoveUntil(route, (route) => false);
   }
 
   static Future<bool> redirectToTimerIfActiveToday({
@@ -141,14 +153,21 @@ class AppRouter {
     Navigator.of(context).push(route);
   }
 
-  static void routeToInstanceConfiguration({
-    required BuildContext context,
-    required Function completion,
-  }) {
+  static void routeToInstances(BuildContext context) {
     final route = CupertinoPageRoute(
-      builder: ((context) => InstanceConfigurationPage(completion)),
+      builder: ((context) => const InstancesListPage()),
     );
     Navigator.of(context).push(route);
+  }
+
+  static Future<void> routeToInstanceEditor({
+    required BuildContext context,
+    OpenProjectInstance? existing,
+  }) {
+    final route = CupertinoPageRoute<void>(
+      builder: ((context) => InstanceEditorPage(existing: existing)),
+    );
+    return Navigator.of(context).push(route);
   }
 
   static void routeToAuth({required BuildContext context}) {

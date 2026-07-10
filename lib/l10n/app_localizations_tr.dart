@@ -103,6 +103,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get work_packages_filter__title => 'Filtreler';
 
   @override
+  String get work_packages_filter__assignee_header => 'Atanan kişi';
+
+  @override
+  String get work_packages_filter__assignee_me => 'Ben';
+
+  @override
+  String get work_packages_filter__assignee_everyone => 'Herkes';
+
+  @override
+  String get work_packages_filter__status_header => 'Durum';
+
+  @override
   String get analytics_title => 'Analitik';
 
   @override
@@ -384,4 +396,78 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get permission_notification_denied_error =>
       'Aktif zamanlayıcıyı göstermek için bildirim izni gereklidir. Ayarlar > Uygulamalar > Time Tracker > Bildirimler\'den etkinleştirin';
+
+  @override
+  String get instances_title => 'OpenProject örnekleri';
+
+  @override
+  String get instances_add => 'Örnek ekle';
+
+  @override
+  String get instances_edit => 'Düzenle';
+
+  @override
+  String get instances_delete => 'Sil';
+
+  @override
+  String get instances_empty =>
+      'Henüz yapılandırılmış bir örnek yok. Başlamak için bir tane ekleyin.';
+
+  @override
+  String get instances_manage => 'Örnekleri yönet';
+
+  @override
+  String get instances_none_active => 'Aktif örnek yok';
+
+  @override
+  String get instances_delete_title => 'Örnek silinsin mi?';
+
+  @override
+  String instances_delete_description(String label) {
+    return '\'$label\' silinsin mi? Bu, kayıtlı kimlik bilgilerini kaldırır ve geri alınamaz.';
+  }
+
+  @override
+  String get instances_switcher_title => 'Örnek değiştir';
+
+  @override
+  String get instances_switcher_manage => 'Yönet';
+
+  @override
+  String get instance_editor_add_title => 'Örnek ekle';
+
+  @override
+  String get instance_editor_edit_title => 'Örneği düzenle';
+
+  @override
+  String get instance_editor_label => 'Etiket';
+
+  @override
+  String get instance_editor_label_hint => 'örn. İş, Kişisel';
+
+  @override
+  String get instance_editor_invalid_label => 'Etiket boş olamaz';
+
+  @override
+  String get instance_editor_invalid_client_id => 'İstemci Kimliği boş olamaz';
+
+  @override
+  String get instance_editor_reauth_notice =>
+      'Temel URL\'yi veya İstemci Kimliğini değiştirmek yeniden kimlik doğrulama gerektirir.';
+
+  @override
+  String get instance_switch_timer_title => 'Zamanlayıcı çalışıyor';
+
+  @override
+  String get instance_switch_timer_description =>
+      'Şu anda aktif bir zamanlayıcı var. Örneği değiştirmeden önce ne yapmak istersiniz?';
+
+  @override
+  String get instance_switch_timer_save => 'Kaydet ve değiştir';
+
+  @override
+  String get instance_switch_timer_discard => 'İptal et ve değiştir';
+
+  @override
+  String get instance_switch_timer_cancel => 'Vazgeç';
 }

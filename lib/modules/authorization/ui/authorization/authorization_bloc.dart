@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
+import 'package:open_project_time_tracker/app/instances/domain/instances_repository.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/effect_bloc.dart';
-import 'package:open_project_time_tracker/app/auth/domain/instance_configuration_repository.dart';
 
 part 'authorization_bloc.freezed.dart';
 
@@ -19,25 +20,23 @@ class AuthorizationEffect with _$AuthorizationEffect {
 
 class AuthorizationBloc
     extends EffectCubit<AuthorizationState, AuthorizationEffect> {
-  final InstanceConfigurationReadRepository _instanceConfigurationRepository;
   final AuthService _authService;
+  final InstancesRepository _instancesRepository;
 
   AuthorizationBloc(
-    this._instanceConfigurationRepository,
     this._authService,
+    this._instancesRepository,
   ) : super(const AuthorizationState.idle(
           canAuthorize: false,
         ));
 
   Future<void> checkInstanceConfiguration() async {
-    final baseUrl = await _instanceConfigurationRepository.baseUrl;
-    final clientID = await _instanceConfigurationRepository.clientID;
-    final isConfigured = baseUrl != null &&
-        baseUrl.isNotEmpty &&
-        clientID != null &&
-        clientID.isNotEmpty;
+    // Ensure the instances repository has loaded its snapshot at least
+    // once so [current.hasAny] reflects persisted state (including the
+    // one-time migration from legacy single-instance keys).
+    await _instancesRepository.load();
     emit(state.copyWith(
-      canAuthorize: isConfigured,
+      canAuthorize: _instancesRepository.current.hasAny,
     ));
   }
 
@@ -48,7 +47,7 @@ class AuthorizationBloc
         throw Error();
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       emitEffect(const AuthorizationEffect.error());
     }
   }

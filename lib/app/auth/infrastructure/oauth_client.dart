@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +26,14 @@ class OAuthClient implements AuthClient {
     }
     final scopes = _authClientData.scopes.join(' ');
 
+    // PKCE (RFC 7636). Newer OpenProject / Doorkeeper versions can
+    // enforce it; older ones ignore the extra `code_challenge` /
+    // `code_challenge_method` on the auth request and the extra
+    // `code_verifier` on the token exchange, so sending them is
+    // always safe. We use the S256 method (SHA-256 + base64url).
+    final codeVerifier = _generateCodeVerifier();
+    final codeChallenge = _deriveCodeChallenge(codeVerifier);
+
     // Build authorization URL with response_type=code
     final authUrl = Uri.parse(authEndpoint)
         .replace(
@@ -32,6 +42,8 @@ class OAuthClient implements AuthClient {
             'client_id': clientID,
             'redirect_uri': redirectUrl,
             'scope': scopes,
+            'code_challenge': codeChallenge,
+            'code_challenge_method': 'S256',
           },
         )
         .toString();
@@ -50,7 +62,9 @@ class OAuthClient implements AuthClient {
 
     if (code == null) throw ErrorDescription('authorization_code_null');
 
-    // Exchange code for tokens
+    // Exchange code for tokens. `code_verifier` completes the PKCE
+    // handshake — required by servers that enforce PKCE, ignored by
+    // those that don't.
     final tokenResp = await http.post(
       Uri.parse(tokenEndpoint),
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -59,6 +73,7 @@ class OAuthClient implements AuthClient {
         'code': code,
         'redirect_uri': redirectUrl,
         'client_id': clientID,
+        'code_verifier': codeVerifier,
       },
     );
 
@@ -104,5 +119,22 @@ class OAuthClient implements AuthClient {
     } catch (e) {
       rethrow;
     }
+  }
+
+  /// RFC 7636 §4.1 — 43-128 chars from the unreserved set
+  /// `[A-Z] / [a-z] / [0-9] / "-" / "." / "_" / "~"`. We take 32 random
+  /// bytes from a cryptographically-secure source and base64url-encode
+  /// them (no padding), which yields exactly 43 URL-safe characters.
+  static String _generateCodeVerifier() {
+    final random = Random.secure();
+    final bytes = List<int>.generate(32, (_) => random.nextInt(256));
+    return base64UrlEncode(bytes).replaceAll('=', '');
+  }
+
+  /// RFC 7636 §4.2 — `BASE64URL(SHA256(ASCII(code_verifier)))` with
+  /// padding stripped.
+  static String _deriveCodeChallenge(String verifier) {
+    final digest = sha256.convert(ascii.encode(verifier));
+    return base64UrlEncode(digest.bytes).replaceAll('=', '');
   }
 }

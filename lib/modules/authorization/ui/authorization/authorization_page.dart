@@ -62,12 +62,20 @@ class AuthorizationPage
                     text: AppLocalizations.of(context).authorization_log_in,
                   ),
                   CupertinoButton(
-                    onPressed: () => AppRouter.routeToInstanceConfiguration(
-                      context: context,
-                      completion: context
-                          .read<AuthorizationBloc>()
-                          .checkInstanceConfiguration,
-                    ),
+                    onPressed: () async {
+                      // If any instance is already configured we open
+                      // the list (edit/add); otherwise we go straight
+                      // to the editor for the first-time setup.
+                      final bloc = context.read<AuthorizationBloc>();
+                      if (state.canAuthorize) {
+                        AppRouter.routeToInstances(context);
+                      } else {
+                        await AppRouter.routeToInstanceEditor(
+                          context: context,
+                        );
+                      }
+                      await bloc.checkInstanceConfiguration();
+                    },
                     child: Text(
                       AppLocalizations.of(
                         context,

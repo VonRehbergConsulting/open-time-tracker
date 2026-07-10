@@ -35,6 +35,10 @@
     "work_package_list_empty": "No tasks",
 
     "work_packages_filter__title": "Filters",
+    "work_packages_filter__assignee_header": "Assignee",
+    "work_packages_filter__assignee_me": "Me",
+    "work_packages_filter__assignee_everyone": "Everyone",
+    "work_packages_filter__status_header": "Status",
 
     "analytics_title": "Analytics",
     "analytics_empty": "No time logged this week",
@@ -136,5 +140,38 @@
     "permission_notification_settings_title": "Permission Required",
     "permission_notification_settings_message": "Notification permission is required to show the active timer. Would you like to open settings?",
     "permission_notification_open_settings": "Open Settings",
-    "permission_notification_denied_error": "Notification permission required to show active timer. Enable it in Settings > Apps > Time Tracker > Notifications"
+    "permission_notification_denied_error": "Notification permission required to show active timer. Enable it in Settings > Apps > Time Tracker > Notifications",
+
+    "instances_title": "OpenProject instances",
+    "instances_add": "Add instance",
+    "instances_edit": "Edit",
+    "instances_delete": "Delete",
+    "instances_empty": "No instances configured yet. Add one to get started.",
+    "instances_manage": "Manage instances",
+    "instances_none_active": "No active instance",
+    "instances_delete_title": "Delete instance?",
+    "instances_delete_description": "Delete '{label}'? This removes the stored credentials and cannot be undone.",
+    "@instances_delete_description": {
+        "placeholders": {
+            "label": {
+                "type": "String"
+            }
+        }
+    },
+    "instances_switcher_title": "Switch instance",
+    "instances_switcher_manage": "Manage",
+
+    "instance_editor_add_title": "Add instance",
+    "instance_editor_edit_title": "Edit instance",
+    "instance_editor_label": "Label",
+    "instance_editor_label_hint": "e.g. Work, Personal",
+    "instance_editor_invalid_label": "Label cannot be empty",
+    "instance_editor_invalid_client_id": "Client ID cannot be empty",
+    "instance_editor_reauth_notice": "Changing the base URL or Client ID will require re-authentication.",
+
+    "instance_switch_timer_title": "Timer is running",
+    "instance_switch_timer_description": "A timer is currently active. What would you like to do before switching instances?",
+    "instance_switch_timer_save": "Save & switch",
+    "instance_switch_timer_discard": "Discard & switch",
+    "instance_switch_timer_cancel": "Cancel"
 }

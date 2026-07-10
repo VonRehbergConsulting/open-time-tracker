@@ -15,47 +15,39 @@ import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_bloc.dart
 @module
 abstract class TimerModule {
   @lazySingleton
-  TimerRepository timerRepository() => LocalTimerRepository(
-        TimerStorage(PreferencesStorage()),
-      );
+  TimerRepository timerRepository() =>
+      LocalTimerRepository(TimerStorage(PreferencesStorage()));
 
   @lazySingleton
   TimerService timerService(
     TimeEntriesRepository timeEntriesRepository,
     UserDataRepository userDataRepository,
     TimerRepository timerRepository,
-  ) =>
-      ApiTimerService(
-        timeEntriesRepository,
-        userDataRepository,
-        timerRepository,
-      );
+  ) => ApiTimerService(
+    timeEntriesRepository,
+    userDataRepository,
+    timerRepository,
+  );
 
   @lazySingleton
   LiveActivityCoordinator liveActivityCoordinator(
     LiveActivityManager liveActivityManager,
-  ) =>
-      LiveActivityCoordinator(liveActivityManager);
+  ) => LiveActivityCoordinator(liveActivityManager);
 
   @injectable
   TimerBloc timerBloc(
     TimerRepository timerRepository,
     LiveActivityCoordinator liveActivityCoordinator,
-  ) =>
-      TimerBloc(
-        timerRepository,
-        liveActivityCoordinator,
-      );
+  ) => TimerBloc(timerRepository, liveActivityCoordinator);
 
   @injectable
   TimeEntrySummaryBloc timeEntrySummaryBloc(
     TimeEntriesRepository timeEntriesRepository,
     TimerRepository timerRepository,
     TimerService timerService,
-  ) =>
-      TimeEntrySummaryBloc(
-        timeEntriesRepository,
-        timerRepository,
-        timerService,
-      );
+  ) => TimeEntrySummaryBloc(
+    timeEntriesRepository,
+    timerRepository,
+    timerService,
+  );
 }

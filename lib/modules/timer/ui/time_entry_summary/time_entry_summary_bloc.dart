@@ -94,10 +94,7 @@ class TimeEntrySummaryBloc
       );
       if (isClosed) return;
 
-      final comments = timeEntries
-          .map((e) => e.comment ?? '')
-          .toSet()
-          .toList();
+      final comments = timeEntries.map((e) => e.comment ?? '').toSet().toList();
       comments.remove('');
       _commentSuggestions = comments;
       await _emitIdleState();

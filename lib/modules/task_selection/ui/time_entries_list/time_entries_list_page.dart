@@ -5,6 +5,7 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_shimmer.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
+import 'package:open_project_time_tracker/modules/instances/ui/switcher/instance_switcher_chip.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/widgets/total_time_list_item.dart';
@@ -59,6 +60,7 @@ class TimeEntriesListPage
       title: AppLocalizations.of(context).time_entries_list_title,
       onRefresh: context.read<TimeEntriesListBloc>().reload,
       actions: [
+        const InstanceSwitcherChip(),
         IconButton(
           onPressed: () => AppRouter.routeToExportReport(context),
           icon: const Icon(Icons.file_download),
@@ -81,13 +83,14 @@ class TimeEntriesListPage
         child: const Icon(Icons.add),
         onPressed: () async {
           final selectedDate = state.maybeWhen(
-            idle: (
-              timeEntries,
-              workingHours,
-              totalDuration,
-              selectedDate,
-              isViewingToday,
-            ) => selectedDate,
+            idle:
+                (
+                  timeEntries,
+                  workingHours,
+                  totalDuration,
+                  selectedDate,
+                  isViewingToday,
+                ) => selectedDate,
             orElse: () => null,
           );
           final isBlocked = await AppRouter.redirectToTimerIfActiveToday(
