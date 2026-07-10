@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
+import 'package:open_project_time_tracker/extensions/date_time.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
 import '../ui/bloc/bloc.dart';
@@ -36,12 +37,7 @@ class AppAuthorizedRouterBloc extends Cubit<AppAuthorizedRouterState> {
   Future<void> _onStateChanged(bool isTimerSet) async {
     // Check if the selected date is today
     final selectedDate = await _getAppStateRepository().selectedDate;
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final isViewingToday =
-        selectedDate == null ||
-        DateTime(selectedDate.year, selectedDate.month, selectedDate.day) ==
-            today;
+    final isViewingToday = selectedDate == null || selectedDate.isToday;
 
     emit(
       AppAuthorizedRouterState.idle(

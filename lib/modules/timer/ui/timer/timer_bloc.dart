@@ -1,11 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:open_project_time_tracker/app/live_activity/domain/live_activity_manager.dart';
-import 'package:open_project_time_tracker/app/live_activity/infrastructure/default_live_activity_manager.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
+import 'package:open_project_time_tracker/modules/timer/infrastructure/live_activity_coordinator.dart';
 
 part 'timer_bloc.freezed.dart';
 
@@ -23,27 +24,36 @@ class TimerState with _$TimerState {
 @freezed
 class TimerEffect with _$TimerEffect {
   const factory TimerEffect.finish() = _Finish;
+  const factory TimerEffect.error() = _Error;
 }
 
 class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
   final TimerRepository _timerRepository;
-  final LiveActivityManager _liveActivityManager;
+  final LiveActivityCoordinator _liveActivityCoordinator;
+  Timer? _uiTicker;
+  StreamSubscription<bool>? _timerStateSubscription;
+  Future<void> _actionQueue = Future.value();
+  bool _isTickerUpdatePending = false;
 
-  // Track when the current live activity session started
-  DateTime? _liveActivitySessionStart;
-  // Track current task to detect task switches
-  String? _currentTaskTitle;
+  Locale? _cachedLocale;
+  AppLocalizations? _cachedL10n;
 
   AppLocalizations _l10n() {
     final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
+    final cached = _cachedL10n;
+    if (cached != null && _cachedLocale == deviceLocale) {
+      return cached;
+    }
     final resolvedLocale = basicLocaleListResolution([
       deviceLocale,
     ], AppLocalizations.supportedLocales);
-
-    return lookupAppLocalizations(resolvedLocale);
+    final resolved = lookupAppLocalizations(resolvedLocale);
+    _cachedLocale = deviceLocale;
+    _cachedL10n = resolved;
+    return resolved;
   }
 
-  TimerBloc(this._timerRepository, this._liveActivityManager)
+  TimerBloc(this._timerRepository, this._liveActivityCoordinator)
     : super(
         const TimerState.idle(
           timeSpent: Duration(),
@@ -52,25 +62,65 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
           hasStarted: false,
           isActive: false,
         ),
+      ) {
+    _timerStateSubscription = _timerRepository.observeIsSet().listen((_) {
+      unawaited(
+        updateState().catchError(
+          (error) => debugPrint(
+            'TimerBloc: failed to react to timer state change: $error',
+          ),
+        ),
       );
+    });
+  }
 
-  Future<void> updateState() async {
-    final data = await Future.wait([
-      _timerRepository.timeEntry,
-      _timerRepository.hasStarted,
-      _timerRepository.isActive,
-      _timerRepository.timeSpent,
-    ]);
+  /// Enqueues [action] on the single mutation/read queue so that every
+  /// repository + live-activity + emit round-trip runs sequentially.
+  ///
+  /// When [label] is provided, any exception thrown by [action] is
+  /// surfaced to the UI via [TimerEffect.error] in addition to being
+  /// logged, so user-triggered failures are not silent.
+  Future<void> _enqueue(
+    Future<void> Function() action, {
+    String? label,
+  }) {
+    final next = _actionQueue.then((_) async {
+      try {
+        await action();
+      } catch (error, stackTrace) {
+        debugPrint(
+          'TimerBloc: ${label ?? 'action'} failed: $error\n$stackTrace',
+        );
+        if (label != null && !isClosed) {
+          emitEffect(const TimerEffect.error());
+        }
+        rethrow;
+      }
+    });
+    _actionQueue = next.catchError((_) {});
+    return next;
+  }
+
+  Future<void> updateState() => _enqueue(_updateStateInternal);
+
+  Future<void> _updateStateInternal() async {
     try {
+      final data = await Future.wait([
+        _timerRepository.timeEntry,
+        _timerRepository.hasStarted,
+        _timerRepository.isActive,
+        _timerRepository.timeSpent,
+      ]);
+
       final timeEntry = data[0] as TimeEntry?;
       if (timeEntry == null) {
-        // No task selected; ensure any running live activity is stopped
-        if (_liveActivitySessionStart != null) {
-          await _liveActivityManager.stopLiveActivity();
-          _liveActivitySessionStart = null;
+        _syncUiTicker(false);
+        await _liveActivityCoordinator.stop();
+
+        if (isClosed) {
+          return;
         }
-        _currentTaskTitle = null;
-        // Emit empty idle state
+
         emit(
           const TimerState.idle(
             timeSpent: Duration(),
@@ -86,23 +136,18 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
       final hasStarted = data[1] as bool;
       final isActive = data[2] as bool;
       final timeSpent = data[3] as Duration;
+      _syncUiTicker(isActive);
 
-      // Detect task switch or timer becoming inactive while live activity is running
-      if (_liveActivitySessionStart != null) {
-        final taskChanged =
-            _currentTaskTitle != null &&
-            _currentTaskTitle != timeEntry.workPackageSubject;
-        if (!isActive || taskChanged) {
-          // Timer stopped or task switched, stop live activity
-          await _liveActivityManager.stopLiveActivity();
-          _liveActivitySessionStart = null;
-          _currentTaskTitle = null;
-        }
-        // Note: No need to call updateLiveActivity() - the native chronometer
-        // on Android and Live Activity on iOS both update themselves automatically
+      await _liveActivityCoordinator.sync(
+        isActive: isActive,
+        timeSpent: timeSpent,
+        timeEntry: timeEntry,
+        inProgressTag: _l10n().generic__in_progress,
+      );
+
+      if (isClosed) {
+        return;
       }
-
-      _currentTaskTitle = timeEntry.workPackageSubject;
 
       emit(
         TimerState.idle(
@@ -114,89 +159,110 @@ class TimerBloc extends EffectCubit<TimerState, TimerEffect> {
         ),
       );
     } catch (e) {
-      print('Cannot load timer data: $e');
+      debugPrint('Cannot load timer data: $e');
     }
   }
 
-  Future<void> reset() async {
-    await _timerRepository.reset();
-    await _liveActivityManager.stopLiveActivity();
-    _liveActivitySessionStart = null;
-    _currentTaskTitle = null;
-  }
-
-  Future<void> start() async {
-    await _timerRepository.startTimer(startTime: DateTime.now());
-
-    // Get the actual time spent to handle resume correctly
-    final timeSpent = await _timerRepository.timeSpent;
-
-    // Calculate session start: if resuming (timeSpent > 0), offset by existing time
-    // This ensures the live activity continues from where it left off, not from 0:00:00
-    final sessionStart = DateTime.now().add(-timeSpent);
-
-    // Live activity should show current session time only, not accumulated time from other tasks
-    try {
-      await _liveActivityManager.startLiveActivity(
-        activityModel: LiveActivityModel(
-          startTimestamp: (sessionStart.millisecondsSinceEpoch / 1000).round(),
-          title: state.title,
-          subtitle: state.subtitle,
-          tag: _l10n().generic__in_progress,
-        ).toMap(),
-      );
-      // Only set session start after successful start
-      _liveActivitySessionStart = sessionStart;
-    } on LiveActivityPermissionException catch (e) {
-      // Permission was denied - live activity won't be shown, but timer still works
-      // The proactive permission check in TimerPage should prevent this scenario
-      debugPrint('Live activity permission denied: ${e.message}');
-      // Ensure session start remains null since live activity didn't start
-      _liveActivitySessionStart = null;
-    }
-    _currentTaskTitle = state.title;
-    await updateState();
-  }
-
-  Future<void> stop() async {
-    await _timerRepository.stopTimer(stopTime: DateTime.now());
-    await _liveActivityManager.stopLiveActivity();
-    _liveActivitySessionStart = null;
-    await updateState();
-  }
-
-  Future<void> finish() async {
-    await _timerRepository.stopTimer(stopTime: DateTime.now());
-    await _liveActivityManager.stopLiveActivity();
-    _liveActivitySessionStart = null;
-    await updateState();
-    emitEffect(const TimerEffect.finish());
-  }
-
-  Future<void> add(Duration duration) async {
-    await _timerRepository.add(duration);
-    final timeSpent = state.timeSpent + duration;
-    // When manually adding time, shift the live activity session start backwards
-    // so the timer shows the additional time
-    if (_liveActivitySessionStart != null) {
-      _liveActivitySessionStart = _liveActivitySessionStart!.add(-duration);
-      try {
-        await _liveActivityManager.updateLiveActivity(
-          activityModel: LiveActivityModel(
-            startTimestamp:
-                (_liveActivitySessionStart!.millisecondsSinceEpoch / 1000)
-                    .round(),
-            title: state.title,
-            subtitle: state.subtitle,
-            tag: _l10n().generic__in_progress,
-          ).toMap(),
+  void _syncUiTicker(bool isActive) {
+    if (isActive) {
+      _uiTicker ??= Timer.periodic(const Duration(seconds: 1), (_) {
+        // Drop ticks if a previous update is still in flight to avoid
+        // unbounded queue growth if the pipeline takes >1s.
+        if (_isTickerUpdatePending || isClosed) {
+          return;
+        }
+        _isTickerUpdatePending = true;
+        unawaited(
+          updateState()
+              .catchError(
+                (error) => debugPrint(
+                  'TimerBloc: ticker update failed: $error',
+                ),
+              )
+              .whenComplete(() => _isTickerUpdatePending = false),
         );
-      } on LiveActivityPermissionException catch (e) {
-        debugPrint('Live activity permission denied: ${e.message}');
-      } catch (e) {
-        debugPrint('Failed to update live activity: $e');
-      }
+      });
+      return;
     }
-    emit(state.copyWith(timeSpent: timeSpent, hasStarted: true));
+
+    _uiTicker?.cancel();
+    _uiTicker = null;
+  }
+
+  Future<void> reset() => _enqueue(_resetInternal, label: 'reset');
+
+  Future<void> _resetInternal() async {
+    _syncUiTicker(false);
+    await _timerRepository.reset();
+    await _liveActivityCoordinator.stop();
+    await _updateStateInternal();
+  }
+
+  Future<void> start() => _enqueue(_startInternal, label: 'start');
+
+  Future<void> _startInternal() async {
+    await _timerRepository.startTimer(startTime: DateTime.now());
+    _syncUiTicker(true);
+
+    final timeSpent = await _timerRepository.timeSpent;
+    final timeEntry = await _timerRepository.timeEntry;
+    if (timeEntry != null) {
+      await _liveActivityCoordinator.start(
+        timeSpent: timeSpent,
+        timeEntry: timeEntry,
+        inProgressTag: _l10n().generic__in_progress,
+      );
+    }
+
+    await _updateStateInternal();
+  }
+
+  Future<void> stop() => _enqueue(_stopInternal, label: 'stop');
+
+  Future<void> _stopInternal() async {
+    _syncUiTicker(false);
+    await _timerRepository.stopTimer(stopTime: DateTime.now());
+    await _liveActivityCoordinator.stop();
+    await _updateStateInternal();
+  }
+
+  Future<void> finish() => _enqueue(_finishInternal, label: 'finish');
+
+  Future<void> _finishInternal() async {
+    _syncUiTicker(false);
+    await _timerRepository.stopTimer(stopTime: DateTime.now());
+    await _liveActivityCoordinator.stop();
+    await _updateStateInternal();
+    if (!isClosed) {
+      emitEffect(const TimerEffect.finish());
+    }
+  }
+
+  Future<void> add(Duration duration) =>
+      _enqueue(() => _addInternal(duration), label: 'add');
+
+  Future<void> _addInternal(Duration duration) async {
+    await _timerRepository.add(duration);
+    final timeEntry = await _timerRepository.timeEntry;
+
+    await _liveActivityCoordinator.add(
+      duration: duration,
+      timeEntry: timeEntry,
+      inProgressTag: _l10n().generic__in_progress,
+    );
+
+    if (isClosed) {
+      return;
+    }
+    emit(
+      state.copyWith(timeSpent: state.timeSpent + duration, hasStarted: true),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _syncUiTicker(false);
+    _timerStateSubscription?.cancel();
+    return super.close();
   }
 }

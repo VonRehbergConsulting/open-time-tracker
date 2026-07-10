@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 
 import 'preferences_storage.dart';
@@ -10,7 +11,10 @@ class TimerStorage {
   PreferencesStorage storage;
 
   final String _timeEntryKey = 'timeEntry';
-  final String _startTimeKey = 'statTime';
+  final String _startTimeKey = 'startTime';
+  // Legacy key from earlier versions (typo). Read once for migration, then
+  // removed so subsequent runs use [_startTimeKey].
+  final String _legacyStartTimeKey = 'statTime';
   final String _stopTimeKey = 'stopTime';
 
   // Init
@@ -45,10 +49,9 @@ class TimerStorage {
     }
     try {
       final decoded = jsonDecode(string);
-      // Removed excessive logging - was printing every 500ms
       return _TimeEntrySerialization.parse(decoded);
     } catch (error) {
-      print('Can\'t load time entry: $error');
+      debugPrint('TimerStorage: cannot load time entry: $error');
       return null;
     }
   }
@@ -60,14 +63,25 @@ class TimerStorage {
     }
     final string = jsonEncode(_TimeEntrySerialization.toMap(timeEntry));
     await storage.setString(_timeEntryKey, string);
-    print('Time entry saved');
   }
 
   Future<DateTime?> getStartTime() async {
-    return _loadDateTime(_startTimeKey);
+    final current = await _loadDateTime(_startTimeKey);
+    if (current != null) {
+      return current;
+    }
+    // Migrate value written by an earlier version under a mistyped key.
+    final legacy = await _loadDateTime(_legacyStartTimeKey);
+    if (legacy != null) {
+      await _saveDateTime(_startTimeKey, legacy);
+      storage.remove(_legacyStartTimeKey);
+    }
+    return legacy;
   }
 
   Future<void> setStartTime(DateTime? dateTime) async {
+    // Always clear the legacy key to prevent stale reads after a migration.
+    storage.remove(_legacyStartTimeKey);
     return _saveDateTime(_startTimeKey, dateTime);
   }
 

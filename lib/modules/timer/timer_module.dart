@@ -7,6 +7,7 @@ import 'package:open_project_time_tracker/modules/task_selection/domain/time_ent
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_service.dart';
 import 'package:open_project_time_tracker/modules/timer/infrastructure/api_timer_service.dart';
+import 'package:open_project_time_tracker/modules/timer/infrastructure/live_activity_coordinator.dart';
 import 'package:open_project_time_tracker/modules/timer/infrastructure/local_timer_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/time_entry_summary/time_entry_summary_bloc.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/timer/timer_bloc.dart';
@@ -30,14 +31,20 @@ abstract class TimerModule {
         timerRepository,
       );
 
+  @lazySingleton
+  LiveActivityCoordinator liveActivityCoordinator(
+    LiveActivityManager liveActivityManager,
+  ) =>
+      LiveActivityCoordinator(liveActivityManager);
+
   @injectable
   TimerBloc timerBloc(
     TimerRepository timerRepository,
-    LiveActivityManager liveActivityManager,
+    LiveActivityCoordinator liveActivityCoordinator,
   ) =>
       TimerBloc(
         timerRepository,
-        liveActivityManager,
+        liveActivityCoordinator,
       );
 
   @injectable

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
+import 'package:open_project_time_tracker/extensions/date_time.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/work_packages_repository.dart';
@@ -22,6 +23,7 @@ class WorkPackagesListState with _$WorkPackagesListState {
 class WorkPackagesListEffect with _$WorkPackagesListEffect {
   const factory WorkPackagesListEffect.complete({
     required bool isViewingToday,
+    required TimeEntry timeEntry,
   }) = _Complete;
   const factory WorkPackagesListEffect.error() = _Error;
 }
@@ -45,7 +47,7 @@ class WorkPackagesListBloc
     WidgetsBinding.instance.addObserver(this);
   }
 
-  setProject(String projectId) {
+  void setProject(String projectId) {
     _projectId = projectId;
   }
 
@@ -91,7 +93,7 @@ class WorkPackagesListBloc
     } on DioException catch (e) {
       // Ignore cancellation errors
       if (CancelToken.isCancel(e)) {
-        print('Reload cancelled');
+        debugPrint('WorkPackagesListBloc: reload cancelled');
         return;
       }
       emit(const WorkPackagesListState.idle(workPackages: []));
@@ -109,31 +111,31 @@ class WorkPackagesListBloc
         workPackage,
         selectedDate: selectedDate,
       );
-      await _timerRepository.setTimeEntry(timeEntry: timeEntry);
 
-      // Wait for timer state to propagate through the stream
-      // This ensures the AppAuthorizedRouter receives the update before navigation
-      await _timerRepository
-          .observeIsSet()
-          .firstWhere((isSet) => isSet == true)
-          .timeout(
-            const Duration(seconds: 2),
-            onTimeout: () {
-              print('Warning: Timer state confirmation timed out');
-              return true;
-            },
-          );
+      final isViewingToday = selectedDate == null || selectedDate.isToday;
 
-      // Determine if we're viewing today
-      final now = DateTime.now();
-      final today = DateTime(now.year, now.month, now.day);
-      final isViewingToday =
-          selectedDate == null ||
-          DateTime(selectedDate.year, selectedDate.month, selectedDate.day) ==
-              today;
+      if (isViewingToday) {
+        await _timerRepository.setTimeEntry(timeEntry: timeEntry);
+
+        await _timerRepository
+            .observeIsSet()
+            .firstWhere((isSet) => isSet == true)
+            .timeout(
+              const Duration(seconds: 2),
+              onTimeout: () {
+                debugPrint(
+                  'WorkPackagesListBloc: timer state confirmation timed out',
+                );
+                return true;
+              },
+            );
+      }
 
       emitEffect(
-        WorkPackagesListEffect.complete(isViewingToday: isViewingToday),
+        WorkPackagesListEffect.complete(
+          isViewingToday: isViewingToday,
+          timeEntry: timeEntry,
+        ),
       );
     } catch (e) {
       emitEffect(const WorkPackagesListEffect.error());

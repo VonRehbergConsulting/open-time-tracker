@@ -16,9 +16,16 @@ import '../../../../app/ui/widgets/configured_outlined_button.dart';
 
 // ignore: must_be_immutable
 class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
-  Timer? timer;
+  const TimerPage({super.key});
 
-  TimerPage({super.key});
+  void _minimize(BuildContext context) {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+      return;
+    }
+
+    AppRouter.routeToTimeEntriesListTemporary(context);
+  }
 
   void _showCloseDialog(BuildContext context) {
     showDialog(
@@ -35,8 +42,11 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
             isDestructiveAction: true,
             onPressed: () async {
               await context.read<TimerBloc>().reset();
-              // ignore: use_build_context_synchronously
+              if (!context.mounted) {
+                return;
+              }
               Navigator.of(context).pop();
+              _minimize(context);
             },
             child: Text(AppLocalizations.of(context).generic_yes),
           ),
@@ -47,7 +57,24 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
 
   @override
   void onEffect(BuildContext context, TimerEffect effect) {
-    effect.when(finish: () => AppRouter.routeToTimeEntrySummary(context));
+    effect.when(
+      finish: () {
+        AppRouter.routeToTimeEntrySummary(context).then((savedEntry) {
+          if (savedEntry != null && context.mounted) {
+            AppRouter.routeToTimeEntriesListTemporary(context);
+          }
+        });
+      },
+      error: () {
+        final messenger = ScaffoldMessenger.maybeOf(context);
+        messenger?.showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context).generic_error),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -106,23 +133,21 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
     final buttonWidth = deviceSize.width * 0.39;
     final addButtonWidth = deviceSize.width * 0.23;
 
-    if (state.isActive) {
-      timer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
-        if (context.mounted) {
-          context.read<TimerBloc>().updateState();
-        }
-      });
-    } else {
-      timer?.cancel();
-      timer = null;
-    }
-
     return Scaffold(
-      floatingActionButton: IconButton(
-        onPressed: () => _showCloseDialog(context),
-        icon: const Icon(Icons.close),
+      floatingActionButton: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            onPressed: () => _minimize(context),
+            icon: const Icon(Icons.keyboard_arrow_down),
+          ),
+          IconButton(
+            onPressed: () => _showCloseDialog(context),
+            icon: const Icon(Icons.close),
+          ),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
         child: Column(
