@@ -70,9 +70,7 @@ class AuthorizationPage
                       if (state.canAuthorize) {
                         AppRouter.routeToInstances(context);
                       } else {
-                        await AppRouter.routeToInstanceEditor(
-                          context: context,
-                        );
+                        await AppRouter.routeToInstanceEditor(context: context);
                       }
                       await bloc.checkInstanceConfiguration();
                     },

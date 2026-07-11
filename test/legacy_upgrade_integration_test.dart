@@ -110,86 +110,80 @@ void main() {
     },
   );
 
-  test(
-    'a second launch after the upgrade does not re-migrate and leaves '
-    'the migrated tokens intact',
-    () async {
-      SharedPreferences.setMockInitialValues({
-        'baseUrl': 'https://openproject.example.com',
-        'clientId': 'legacy-client-id',
-      });
-      secureStorage.seed({
-        'accessToken': 'legacy-access-token',
-        'refreshToken': 'legacy-refresh-token',
-      });
+  test('a second launch after the upgrade does not re-migrate and leaves '
+      'the migrated tokens intact', () async {
+    SharedPreferences.setMockInitialValues({
+      'baseUrl': 'https://openproject.example.com',
+      'clientId': 'legacy-client-id',
+    });
+    secureStorage.seed({
+      'accessToken': 'legacy-access-token',
+      'refreshToken': 'legacy-refresh-token',
+    });
 
-      // First launch (as above).
-      late final LocalInstancesRepository firstRepo;
-      final firstStorage = SecureAuthTokenStorage.withKeys(
-        const FlutterSecureStorage(),
-        accessTokenKey: 'accessToken',
-        refreshTokenKey: 'refreshToken',
-        resolveActiveInstanceId: () => firstRepo.current.activeInstanceId,
-      );
-      firstRepo = LocalInstancesRepository(
-        onLegacyTokenMigration: (id) => firstStorage.migrateLegacyTokens(id),
-      );
-      final firstSnapshot = await firstRepo.load();
-      final migratedId = firstSnapshot.instances.single.id;
+    // First launch (as above).
+    late final LocalInstancesRepository firstRepo;
+    final firstStorage = SecureAuthTokenStorage.withKeys(
+      const FlutterSecureStorage(),
+      accessTokenKey: 'accessToken',
+      refreshTokenKey: 'refreshToken',
+      resolveActiveInstanceId: () => firstRepo.current.activeInstanceId,
+    );
+    firstRepo = LocalInstancesRepository(
+      onLegacyTokenMigration: (id) => firstStorage.migrateLegacyTokens(id),
+    );
+    final firstSnapshot = await firstRepo.load();
+    final migratedId = firstSnapshot.instances.single.id;
 
-      // Second launch: fresh repositories against the *already
-      // migrated* prefs + secure storage. The migration hook must NOT
-      // fire (there's no legacy prefs left to trigger it), and the
-      // scoped tokens must still be present and readable.
-      var hookCalls = 0;
-      late final LocalInstancesRepository secondRepo;
-      final secondStorage = SecureAuthTokenStorage.withKeys(
-        const FlutterSecureStorage(),
-        accessTokenKey: 'accessToken',
-        refreshTokenKey: 'refreshToken',
-        resolveActiveInstanceId: () => secondRepo.current.activeInstanceId,
-      );
-      secondRepo = LocalInstancesRepository(
-        onLegacyTokenMigration: (_) async => hookCalls++,
-      );
+    // Second launch: fresh repositories against the *already
+    // migrated* prefs + secure storage. The migration hook must NOT
+    // fire (there's no legacy prefs left to trigger it), and the
+    // scoped tokens must still be present and readable.
+    var hookCalls = 0;
+    late final LocalInstancesRepository secondRepo;
+    final secondStorage = SecureAuthTokenStorage.withKeys(
+      const FlutterSecureStorage(),
+      accessTokenKey: 'accessToken',
+      refreshTokenKey: 'refreshToken',
+      resolveActiveInstanceId: () => secondRepo.current.activeInstanceId,
+    );
+    secondRepo = LocalInstancesRepository(
+      onLegacyTokenMigration: (_) async => hookCalls++,
+    );
 
-      final secondSnapshot = await secondRepo.load();
+    final secondSnapshot = await secondRepo.load();
 
-      expect(hookCalls, 0);
-      expect(secondSnapshot.instances.single.id, migratedId);
-      expect(secondSnapshot.activeInstanceId, migratedId);
+    expect(hookCalls, 0);
+    expect(secondSnapshot.instances.single.id, migratedId);
+    expect(secondSnapshot.activeInstanceId, migratedId);
 
-      final token = await secondStorage.getToken();
-      expect(token, isNotNull);
-      expect(token!.accessToken, 'legacy-access-token');
-      expect(token.refreshToken, 'legacy-refresh-token');
-    },
-  );
+    final token = await secondStorage.getToken();
+    expect(token, isNotNull);
+    expect(token!.accessToken, 'legacy-access-token');
+    expect(token.refreshToken, 'legacy-refresh-token');
+  });
 
-  test(
-    'a fresh install (no legacy prefs, no legacy tokens) migrates '
-    'nothing and yields an empty snapshot',
-    () async {
-      final tokenStorage = SecureAuthTokenStorage.withKeys(
-        const FlutterSecureStorage(),
-        accessTokenKey: 'accessToken',
-        refreshTokenKey: 'refreshToken',
-        resolveActiveInstanceId: () => null,
-      );
-      var hookCalls = 0;
-      final instancesRepo = LocalInstancesRepository(
-        onLegacyTokenMigration: (id) async {
-          hookCalls++;
-          await tokenStorage.migrateLegacyTokens(id);
-        },
-      );
+  test('a fresh install (no legacy prefs, no legacy tokens) migrates '
+      'nothing and yields an empty snapshot', () async {
+    final tokenStorage = SecureAuthTokenStorage.withKeys(
+      const FlutterSecureStorage(),
+      accessTokenKey: 'accessToken',
+      refreshTokenKey: 'refreshToken',
+      resolveActiveInstanceId: () => null,
+    );
+    var hookCalls = 0;
+    final instancesRepo = LocalInstancesRepository(
+      onLegacyTokenMigration: (id) async {
+        hookCalls++;
+        await tokenStorage.migrateLegacyTokens(id);
+      },
+    );
 
-      final snapshot = await instancesRepo.load();
+    final snapshot = await instancesRepo.load();
 
-      expect(snapshot.instances, isEmpty);
-      expect(snapshot.activeInstanceId, isNull);
-      expect(hookCalls, 0);
-      expect(secureStorage.data, isEmpty);
-    },
-  );
+    expect(snapshot.instances, isEmpty);
+    expect(snapshot.activeInstanceId, isNull);
+    expect(hookCalls, 0);
+    expect(secureStorage.data, isEmpty);
+  });
 }

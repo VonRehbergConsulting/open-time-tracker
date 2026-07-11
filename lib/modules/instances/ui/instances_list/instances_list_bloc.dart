@@ -35,19 +35,18 @@ class InstancesListBloc
 
   StreamSubscription<InstancesSnapshot>? _subscription;
 
-  InstancesListBloc(
-    this._instancesRepository,
-    this._instanceSwitcher,
-  ) : super(
+  InstancesListBloc(this._instancesRepository, this._instanceSwitcher)
+    : super(
         const InstancesListState.idle(instances: [], activeInstanceId: null),
       );
 
   Future<void> init() async {
     await _instancesRepository.load();
     await _subscription?.cancel();
-    _subscription = _instancesRepository
-        .observe()
-        .listen(_onSnapshot, onError: addError);
+    _subscription = _instancesRepository.observe().listen(
+      _onSnapshot,
+      onError: addError,
+    );
   }
 
   void _onSnapshot(InstancesSnapshot snapshot) {

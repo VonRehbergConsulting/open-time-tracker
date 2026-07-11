@@ -98,13 +98,10 @@ void main() {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   CupertinoPageRoute<void>(
-                                    builder: (_) =>
-                                        const CupertinoPageScaffold(
-                                          key: topKey,
-                                          child: Center(
-                                            child: Text('top page'),
-                                          ),
-                                        ),
+                                    builder: (_) => const CupertinoPageScaffold(
+                                      key: topKey,
+                                      child: Center(child: Text('top page')),
+                                    ),
                                   ),
                                 );
                               },

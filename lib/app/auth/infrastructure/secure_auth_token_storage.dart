@@ -26,11 +26,9 @@ class SecureAuthTokenStorage implements AuthTokenStorage {
   @override
   AuthToken? get current => _current?.copyWith();
 
-  SecureAuthTokenStorage(
-    this._storage, [
-    this._resolveActiveInstanceId,
-  ]) : accessTokenKey = _accessTokenKeyDefault,
-       refreshTokenKey = _refreshTokenKeyDefault;
+  SecureAuthTokenStorage(this._storage, [this._resolveActiveInstanceId])
+    : accessTokenKey = _accessTokenKeyDefault,
+      refreshTokenKey = _refreshTokenKeyDefault;
 
   /// Named constructor kept for call sites that already pass explicit
   /// key names (Graph module, tests) — mirrors the previous API but
@@ -153,4 +151,3 @@ class SecureAuthTokenStorage implements AuthTokenStorage {
     }
   }
 }
-

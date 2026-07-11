@@ -47,50 +47,41 @@ void main() {
   });
 
   group('SecureAuthTokenStorage.migrateLegacyTokens', () {
-    test(
-      're-keys both tokens under the per-instance keyspace and deletes '
-      'the legacy keys',
-      () async {
-        mock.seed({
-          accessKey: 'legacy-access-token',
-          refreshKey: 'legacy-refresh-token',
-        });
+    test('re-keys both tokens under the per-instance keyspace and deletes '
+        'the legacy keys', () async {
+      mock.seed({
+        accessKey: 'legacy-access-token',
+        refreshKey: 'legacy-refresh-token',
+      });
 
-        await storage.migrateLegacyTokens(activeId);
+      await storage.migrateLegacyTokens(activeId);
 
-        expect(mock.data.containsKey(accessKey), isFalse);
-        expect(mock.data.containsKey(refreshKey), isFalse);
-        expect(mock.data[scopedAccessKey], 'legacy-access-token');
-        expect(mock.data[scopedRefreshKey], 'legacy-refresh-token');
-      },
-    );
+      expect(mock.data.containsKey(accessKey), isFalse);
+      expect(mock.data.containsKey(refreshKey), isFalse);
+      expect(mock.data[scopedAccessKey], 'legacy-access-token');
+      expect(mock.data[scopedRefreshKey], 'legacy-refresh-token');
+    });
 
-    test(
-      'is a no-op when no legacy tokens are present (fresh install or '
-      'already-migrated user relaunching)',
-      () async {
-        expect(mock.data, isEmpty);
+    test('is a no-op when no legacy tokens are present (fresh install or '
+        'already-migrated user relaunching)', () async {
+      expect(mock.data, isEmpty);
 
-        await storage.migrateLegacyTokens(activeId);
+      await storage.migrateLegacyTokens(activeId);
 
-        expect(mock.data, isEmpty);
-      },
-    );
+      expect(mock.data, isEmpty);
+    });
 
-    test(
-      'migrates the access token alone when the refresh token is missing '
-      '(partial legacy state, e.g. after a failed refresh)',
-      () async {
-        mock.seed({accessKey: 'legacy-access-only'});
+    test('migrates the access token alone when the refresh token is missing '
+        '(partial legacy state, e.g. after a failed refresh)', () async {
+      mock.seed({accessKey: 'legacy-access-only'});
 
-        await storage.migrateLegacyTokens(activeId);
+      await storage.migrateLegacyTokens(activeId);
 
-        expect(mock.data[scopedAccessKey], 'legacy-access-only');
-        expect(mock.data.containsKey(scopedRefreshKey), isFalse);
-        expect(mock.data.containsKey(accessKey), isFalse);
-        expect(mock.data.containsKey(refreshKey), isFalse);
-      },
-    );
+      expect(mock.data[scopedAccessKey], 'legacy-access-only');
+      expect(mock.data.containsKey(scopedRefreshKey), isFalse);
+      expect(mock.data.containsKey(accessKey), isFalse);
+      expect(mock.data.containsKey(refreshKey), isFalse);
+    });
 
     test(
       'migrates the refresh token alone when the access token is missing',
@@ -105,71 +96,59 @@ void main() {
       },
     );
 
-    test(
-      'after migration, getToken() with the resolver returning the new '
-      'id returns the migrated token pair',
-      () async {
-        mock.seed({
-          accessKey: 'legacy-access',
-          refreshKey: 'legacy-refresh',
-        });
-
-        await storage.migrateLegacyTokens(activeId);
-        final token = await storage.getToken();
-
-        expect(token, isNotNull);
-        expect(token!.accessToken, 'legacy-access');
-        expect(token.refreshToken, 'legacy-refresh');
-      },
-    );
-
-    test('is idempotent: a second call with the same id is a safe no-op',
-        () async {
-      mock.seed({
-        accessKey: 'legacy-access',
-        refreshKey: 'legacy-refresh',
-      });
+    test('after migration, getToken() with the resolver returning the new '
+        'id returns the migrated token pair', () async {
+      mock.seed({accessKey: 'legacy-access', refreshKey: 'legacy-refresh'});
 
       await storage.migrateLegacyTokens(activeId);
-      final afterFirst = Map<String, String>.from(mock.data);
+      final token = await storage.getToken();
 
-      await storage.migrateLegacyTokens(activeId);
-
-      expect(mock.data, equals(afterFirst));
+      expect(token, isNotNull);
+      expect(token!.accessToken, 'legacy-access');
+      expect(token.refreshToken, 'legacy-refresh');
     });
 
     test(
-      'swallows platform exceptions (best-effort contract): user is '
-      'logged out but the app does not crash',
+      'is idempotent: a second call with the same id is a safe no-op',
       () async {
-        // Replace the mock with one that throws for read, simulating a
-        // corrupt or locked secure store.
-        mock.uninstall();
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-            .setMockMethodCallHandler(
-          const MethodChannel(
-            'plugins.it_nomads.com/flutter_secure_storage',
-          ),
-          (call) async {
-            if (call.method == 'read') {
-              throw PlatformException(code: 'BadPaddingException');
-            }
-            return null;
-          },
-        );
-        addTearDown(() {
-          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-              .setMockMethodCallHandler(
-            const MethodChannel(
-              'plugins.it_nomads.com/flutter_secure_storage',
-            ),
-            null,
-          );
-        });
+        mock.seed({accessKey: 'legacy-access', refreshKey: 'legacy-refresh'});
 
-        // Must not throw.
         await storage.migrateLegacyTokens(activeId);
+        final afterFirst = Map<String, String>.from(mock.data);
+
+        await storage.migrateLegacyTokens(activeId);
+
+        expect(mock.data, equals(afterFirst));
       },
     );
+
+    test('swallows platform exceptions (best-effort contract): user is '
+        'logged out but the app does not crash', () async {
+      // Replace the mock with one that throws for read, simulating a
+      // corrupt or locked secure store.
+      mock.uninstall();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('plugins.it_nomads.com/flutter_secure_storage'),
+            (call) async {
+              if (call.method == 'read') {
+                throw PlatformException(code: 'BadPaddingException');
+              }
+              return null;
+            },
+          );
+      addTearDown(() {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(
+              const MethodChannel(
+                'plugins.it_nomads.com/flutter_secure_storage',
+              ),
+              null,
+            );
+      });
+
+      // Must not throw.
+      await storage.migrateLegacyTokens(activeId);
+    });
   });
 }

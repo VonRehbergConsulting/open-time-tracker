@@ -100,11 +100,21 @@ class TimeEntryListItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(trailing, style: const TextStyle(color: Colors.black54)),
+                  Text(
+                    trailing,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 4),
-              Text(projectTitle, style: const TextStyle(color: Colors.grey)),
+              Text(
+                projectTitle,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
               SizedBox(height: comment != null && comment!.isNotEmpty ? 6 : 0),
               if (comment != null && comment!.isNotEmpty) Text(comment!),
             ],

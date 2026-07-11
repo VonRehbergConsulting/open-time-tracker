@@ -71,4 +71,3 @@ class OAuthAuthService implements AuthService {
     _state.add(state);
   }
 }
-

@@ -104,8 +104,6 @@ class _KeyedAuthorizedRouterState extends State<_KeyedAuthorizedRouter> {
   @override
   Widget build(BuildContext context) {
     final id = _activeId ?? '_';
-    return AppAuthorizedRouter(
-      key: ValueKey<String>('authorized:$id'),
-    );
+    return AppAuthorizedRouter(key: ValueKey<String>('authorized:$id'));
   }
 }

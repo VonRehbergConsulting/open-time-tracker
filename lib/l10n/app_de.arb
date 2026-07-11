@@ -70,6 +70,12 @@
     "profile_logout_description": "Von Ihrem Konto abmelden",
     "profile_logout_button": "Abmelden",
 
+    "appearance_title": "Erscheinungsbild",
+    "appearance_description": "Wähle das Erscheinungsbild der App",
+    "appearance_theme_system": "System",
+    "appearance_theme_light": "Hell",
+    "appearance_theme_dark": "Dunkel",
+
     "calendar_title": "Kalenderbenachrichtigungen",
     "calendar_connect": "Kalender verbinden",
     "calendar_disconnect": "Kalender trennen",

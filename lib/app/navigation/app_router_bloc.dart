@@ -35,7 +35,6 @@ class AppRouterBloc extends Cubit<AppRouterState> {
     this._getInstancesRepository,
   ) : super(AppRouterState.loading());
 
-
   Future<void> init() async {
     await _authStateSubscription?.cancel();
     await _instancesSubscription?.cancel();
@@ -45,15 +44,15 @@ class AppRouterBloc extends Cubit<AppRouterState> {
     // Seed the baseline so the very first instances snapshot doesn't
     // count as a "switch" and force an unnecessary remount on cold
     // start.
-    _lastActiveInstanceId =
-        _getInstancesRepository().current.activeInstanceId;
+    _lastActiveInstanceId = _getInstancesRepository().current.activeInstanceId;
     _authStateSubscription = _getAuthService()
         .observeAuthState()
         .distinct()
         .listen(_onAuthServiceStateChanged, onError: addError);
-    _instancesSubscription = _getInstancesRepository()
-        .observe()
-        .listen(_onInstancesSnapshot, onError: addError);
+    _instancesSubscription = _getInstancesRepository().observe().listen(
+      _onInstancesSnapshot,
+      onError: addError,
+    );
   }
 
   Future<void> retryAuthorization() async {

@@ -191,6 +191,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profile_logout_button => 'Çıkış yap';
 
   @override
+  String get appearance_title => 'Görünüm';
+
+  @override
+  String get appearance_description => 'Uygulamanın görünümünü seçin';
+
+  @override
+  String get appearance_theme_system => 'Sistem';
+
+  @override
+  String get appearance_theme_light => 'Açık';
+
+  @override
+  String get appearance_theme_dark => 'Koyu';
+
+  @override
   String get calendar_title => 'Takvim bildirimleri';
 
   @override
