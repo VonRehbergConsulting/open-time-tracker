@@ -1,3 +1,9 @@
+## [2.1.0](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v2.0.0...v2.1.0) (2026-07-11)
+
+### Features
+
+* implemented dark theme ([dbea181](https://github.com/VonRehbergConsulting/open-time-tracker/commit/dbea181bf3058d04b9821751cc7b6ed9a37d7277))
+
 ## [2.0.0](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.11.0...v2.0.0) (2026-07-11)
 
 ### ⚠ BREAKING CHANGES
