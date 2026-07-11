@@ -1,3 +1,13 @@
+## [2.0.0](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.11.0...v2.0.0) (2026-07-11)
+
+### ⚠ BREAKING CHANGES
+
+* added minimizable timer and multi instance support
+
+### Features
+
+* added minimizable timer and multi instance support ([a3a3ad3](https://github.com/VonRehbergConsulting/open-time-tracker/commit/a3a3ad34fcc07efcf40cdd0a49387eb839a71674))
+
 # [1.11.0](https://github.com/VonRehbergConsulting/open-time-tracker/compare/v1.10.0...v1.11.0) (2026-04-11)
 
 
