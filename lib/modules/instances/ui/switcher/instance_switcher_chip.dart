@@ -55,11 +55,7 @@ class _InstanceSwitcherChipState extends State<InstanceSwitcherChip> {
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: ActionChip(
             avatar: const Icon(Icons.dns_outlined, size: 18),
-            label: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            label: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
             onPressed: () => _showSwitcher(context, snapshot),
           ),
         );
@@ -75,9 +71,7 @@ class _InstanceSwitcherChipState extends State<InstanceSwitcherChip> {
       context: context,
       showDragHandle: true,
       builder: (sheetContext) {
-        return SafeArea(
-          child: _SwitcherSheet(snapshot: snapshot),
-        );
+        return SafeArea(child: _SwitcherSheet(snapshot: snapshot));
       },
     );
   }
@@ -126,7 +120,7 @@ class _SwitcherSheet extends StatelessWidget {
                   isActive ? Icons.check_circle : Icons.circle_outlined,
                   color: isActive
                       ? Theme.of(context).primaryColor
-                      : Colors.grey,
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
                 title: Text(instance.label),
                 subtitle: Text(
@@ -134,9 +128,7 @@ class _SwitcherSheet extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                onTap: isActive
-                    ? null
-                    : () => _handleSelect(context, instance),
+                onTap: isActive ? null : () => _handleSelect(context, instance),
               );
             },
           ),

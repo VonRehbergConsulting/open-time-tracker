@@ -47,10 +47,8 @@ class InstanceEditorBloc
 
   OpenProjectInstance? _existing;
 
-  InstanceEditorBloc(
-    this._instancesRepository,
-    this._authService,
-  ) : super(
+  InstanceEditorBloc(this._instancesRepository, this._authService)
+    : super(
         const InstanceEditorState.idle(
           isEditing: false,
           label: '',

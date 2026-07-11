@@ -49,7 +49,9 @@ class ListItem extends StatelessWidget {
                   if (trailing != null)
                     Text(
                       trailing!,
-                      style: const TextStyle(color: Colors.black54),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                 ],
               ),
@@ -63,7 +65,9 @@ class ListItem extends StatelessWidget {
                     Expanded(
                       child: Text(
                         comment!,
-                        style: const TextStyle(color: Colors.black54),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ),
                   if (commentTrailing != null) commentTrailing!,

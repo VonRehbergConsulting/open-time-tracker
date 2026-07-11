@@ -42,8 +42,7 @@ class _AppAuthorizedRouterState extends State<AppAuthorizedRouter> {
       AppAuthorizedRouterBloc,
       AppAuthorizedRouterState
     >(
-      create: (context) =>
-          AppAuthorizedRouterBloc(() => inject())..init(),
+      create: (context) => AppAuthorizedRouterBloc(() => inject())..init(),
       builder: (context, state) {
         return state.when(
           initializing: () => const SplashScreen(),

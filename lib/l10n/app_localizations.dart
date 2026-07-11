@@ -464,6 +464,36 @@ abstract class AppLocalizations {
   /// **'Sign out'**
   String get profile_logout_button;
 
+  /// No description provided for @appearance_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance_title;
+
+  /// No description provided for @appearance_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how the app looks'**
+  String get appearance_description;
+
+  /// No description provided for @appearance_theme_system.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get appearance_theme_system;
+
+  /// No description provided for @appearance_theme_light.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get appearance_theme_light;
+
+  /// No description provided for @appearance_theme_dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get appearance_theme_dark;
+
   /// No description provided for @calendar_title.
   ///
   /// In en, this message translates to:

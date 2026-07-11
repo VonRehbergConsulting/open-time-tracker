@@ -192,6 +192,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profile_logout_button => 'Cerrar sesión';
 
   @override
+  String get appearance_title => 'Apariencia';
+
+  @override
+  String get appearance_description => 'Elige la apariencia de la app';
+
+  @override
+  String get appearance_theme_system => 'Sistema';
+
+  @override
+  String get appearance_theme_light => 'Claro';
+
+  @override
+  String get appearance_theme_dark => 'Oscuro';
+
+  @override
   String get calendar_title => 'Notificaciones del calendario';
 
   @override

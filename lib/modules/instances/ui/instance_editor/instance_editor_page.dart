@@ -113,9 +113,8 @@ class _InstanceEditorFormState extends State<_InstanceEditorForm> {
       invalidUrl: () => _snack(l10n.instance_configuration__invalid_url),
       invalidClientId: () => _snack(l10n.instance_editor_invalid_client_id),
       saved: (_) => Navigator.of(context).pop(),
-      createdAndNeedsAuth: (instanceId) => _handleCreatedAndNeedsAuth(
-        instanceId,
-      ),
+      createdAndNeedsAuth: (instanceId) =>
+          _handleCreatedAndNeedsAuth(instanceId),
     );
   }
 
@@ -205,10 +204,7 @@ class _InstanceEditorFormState extends State<_InstanceEditorForm> {
 
   void _snack(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 2),
-      ),
+      SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
     );
   }
 

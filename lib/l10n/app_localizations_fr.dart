@@ -192,6 +192,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profile_logout_button => 'Se déconnecter';
 
   @override
+  String get appearance_title => 'Apparence';
+
+  @override
+  String get appearance_description =>
+      'Choisissez l\'apparence de l\'application';
+
+  @override
+  String get appearance_theme_system => 'Système';
+
+  @override
+  String get appearance_theme_light => 'Clair';
+
+  @override
+  String get appearance_theme_dark => 'Sombre';
+
+  @override
   String get calendar_title => 'Notifications du calendrier';
 
   @override

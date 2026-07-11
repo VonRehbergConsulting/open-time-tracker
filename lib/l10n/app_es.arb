@@ -70,6 +70,12 @@
     "profile_logout_description": "Cerrar sesión de tu cuenta",
     "profile_logout_button": "Cerrar sesión",
 
+    "appearance_title": "Apariencia",
+    "appearance_description": "Elige la apariencia de la app",
+    "appearance_theme_system": "Sistema",
+    "appearance_theme_light": "Claro",
+    "appearance_theme_dark": "Oscuro",
+
     "calendar_title": "Notificaciones del calendario",
     "calendar_connect": "Conectar calendario",
     "calendar_disconnect": "Desconectar calendario",

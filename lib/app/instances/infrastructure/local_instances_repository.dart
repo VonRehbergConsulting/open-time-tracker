@@ -213,10 +213,7 @@ class LocalInstancesRepository implements InstancesRepository {
     final prefs = await SharedPreferences.getInstance();
     await _writeActive(prefs, id);
     _emit(
-      InstancesSnapshot(
-        instances: _current.instances,
-        activeInstanceId: id,
-      ),
+      InstancesSnapshot(instances: _current.instances, activeInstanceId: id),
     );
   }
 

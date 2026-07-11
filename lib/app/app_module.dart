@@ -20,6 +20,8 @@ import 'package:open_project_time_tracker/app/live_activity/domain/live_activity
 import 'package:open_project_time_tracker/app/live_activity/infrastructure/default_live_activity_manager.dart';
 import 'package:open_project_time_tracker/app/services/analytics_service.dart';
 import 'package:open_project_time_tracker/app/services/local_notification_service.dart';
+import 'package:open_project_time_tracker/app/settings/domain/settings_repository.dart';
+import 'package:open_project_time_tracker/app/settings/infrastructure/local_settings_repository.dart';
 import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
 import 'package:open_project_time_tracker/app/storage/app_state_storage.dart';
 import 'package:open_project_time_tracker/app/storage/local_app_state_repository.dart';
@@ -148,6 +150,8 @@ abstract class AppModule {
   @lazySingleton
   AppStateRepository appStateRepository(AppStateStorage appStateStorage) =>
       LocalAppStateRepository(appStateStorage);
+
+  @lazySingleton
+  SettingsRepository settingsRepository() =>
+      LocalSettingsRepository(PreferencesStorage());
 }
-
-

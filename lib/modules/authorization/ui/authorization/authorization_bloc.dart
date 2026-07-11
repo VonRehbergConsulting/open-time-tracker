@@ -8,9 +8,7 @@ part 'authorization_bloc.freezed.dart';
 
 @freezed
 class AuthorizationState with _$AuthorizationState {
-  const factory AuthorizationState.idle({
-    required bool canAuthorize,
-  }) = _Idle;
+  const factory AuthorizationState.idle({required bool canAuthorize}) = _Idle;
 }
 
 @freezed
@@ -23,21 +21,15 @@ class AuthorizationBloc
   final AuthService _authService;
   final InstancesRepository _instancesRepository;
 
-  AuthorizationBloc(
-    this._authService,
-    this._instancesRepository,
-  ) : super(const AuthorizationState.idle(
-          canAuthorize: false,
-        ));
+  AuthorizationBloc(this._authService, this._instancesRepository)
+    : super(const AuthorizationState.idle(canAuthorize: false));
 
   Future<void> checkInstanceConfiguration() async {
     // Ensure the instances repository has loaded its snapshot at least
     // once so [current.hasAny] reflects persisted state (including the
     // one-time migration from legacy single-instance keys).
     await _instancesRepository.load();
-    emit(state.copyWith(
-      canAuthorize: _instancesRepository.current.hasAny,
-    ));
+    emit(state.copyWith(canAuthorize: _instancesRepository.current.hasAny));
   }
 
   Future<void> authorize() async {

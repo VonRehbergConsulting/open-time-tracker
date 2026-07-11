@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
+import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/export_report/export_report_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
@@ -41,6 +42,7 @@ class ExportReportPage
   Widget buildState(BuildContext context, ExportReportState state) {
     final locale = Localizations.localeOf(context).toLanguageTag();
     final dateFormat = DateFormat.yMd(locale);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return SliverScreen(
       title: AppLocalizations.of(context).export_report_title,
@@ -50,12 +52,7 @@ class ExportReportPage
           children: [
             const SizedBox(height: 8.0),
             // Date range selection
-            Card(
-              clipBehavior: Clip.hardEdge,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(18.0)),
-              ),
-              color: Colors.white,
+            ConfiguredCard(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -78,17 +75,6 @@ class ExportReportPage
                           initialDate: state.startDate,
                           firstDate: DateTime(2020),
                           lastDate: DateTime.now(),
-                          builder: (context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                colorScheme: const ColorScheme.light(
-                                  primary: Color.fromRGBO(38, 92, 185, 1),
-                                  surface: Colors.white,
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          },
                         );
                         if (date != null && context.mounted) {
                           context.read<ExportReportBloc>().setStartDate(date);
@@ -97,7 +83,7 @@ class ExportReportPage
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
+                          border: Border.all(color: colorScheme.outlineVariant),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -128,17 +114,6 @@ class ExportReportPage
                           initialDate: state.endDate,
                           firstDate: state.startDate,
                           lastDate: DateTime.now(),
-                          builder: (context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                colorScheme: const ColorScheme.light(
-                                  primary: Color.fromRGBO(38, 92, 185, 1),
-                                  surface: Colors.white,
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          },
                         );
                         if (date != null && context.mounted) {
                           context.read<ExportReportBloc>().setEndDate(date);
@@ -147,7 +122,7 @@ class ExportReportPage
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
+                          border: Border.all(color: colorScheme.outlineVariant),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -175,12 +150,7 @@ class ExportReportPage
             const SizedBox(height: 16),
 
             // Project filter (optional)
-            Card(
-              clipBehavior: Clip.hardEdge,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(18.0)),
-              ),
-              color: Colors.white,
+            ConfiguredCard(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -201,7 +171,9 @@ class ExportReportPage
                     else if (state.availableProjects.isEmpty)
                       Text(
                         AppLocalizations.of(context).export_report_no_projects,
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                       )
                     else
                       _ProjectMultiSelect(
@@ -220,12 +192,7 @@ class ExportReportPage
             const SizedBox(height: 16),
 
             // Export format selection
-            Card(
-              clipBehavior: Clip.hardEdge,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(18.0)),
-              ),
-              color: Colors.white,
+            ConfiguredCard(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -371,7 +338,7 @@ class _ProjectMultiSelectState extends State<_ProjectMultiSelect> {
               offset: Offset(0.0, size.height + 5.0),
               child: Material(
                 elevation: 4.0,
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(8),
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxHeight: 300),
@@ -439,9 +406,11 @@ class _ProjectMultiSelectState extends State<_ProjectMultiSelect> {
                                   dense: true,
                                   title: Text(project.title),
                                   trailing: isSelected
-                                      ? const Icon(
+                                      ? Icon(
                                           Icons.check_circle,
-                                          color: Color.fromRGBO(38, 92, 185, 1),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         )
                                       : null,
                                   onTap: () {
@@ -476,6 +445,7 @@ class _ProjectMultiSelectState extends State<_ProjectMultiSelect> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return CompositedTransformTarget(
       link: _layerLink,
       child: InkWell(
@@ -500,7 +470,7 @@ class _ProjectMultiSelectState extends State<_ProjectMultiSelect> {
           child: widget.selectedProjects.isEmpty
               ? Text(
                   AppLocalizations.of(context).export_report_all_projects,
-                  style: TextStyle(color: Colors.grey[600]),
+                  style: TextStyle(color: colorScheme.onSurfaceVariant),
                 )
               : Wrap(
                   spacing: 4,
@@ -524,8 +494,9 @@ class _ProjectMultiSelectState extends State<_ProjectMultiSelect> {
                         horizontal: 4,
                         vertical: 0,
                       ),
-                      backgroundColor: Colors.blue.shade50,
-                      labelStyle: TextStyle(color: Colors.blue.shade900),
+                      backgroundColor: colorScheme.primaryContainer,
+                      labelStyle:
+                          TextStyle(color: colorScheme.onPrimaryContainer),
                     );
                   }).toList(),
                 ),
