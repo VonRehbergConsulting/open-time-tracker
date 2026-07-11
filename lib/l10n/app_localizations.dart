@@ -290,6 +290,30 @@ abstract class AppLocalizations {
   /// **'Filters'**
   String get work_packages_filter__title;
 
+  /// No description provided for @work_packages_filter__assignee_header.
+  ///
+  /// In en, this message translates to:
+  /// **'Assignee'**
+  String get work_packages_filter__assignee_header;
+
+  /// No description provided for @work_packages_filter__assignee_me.
+  ///
+  /// In en, this message translates to:
+  /// **'Me'**
+  String get work_packages_filter__assignee_me;
+
+  /// No description provided for @work_packages_filter__assignee_everyone.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone'**
+  String get work_packages_filter__assignee_everyone;
+
+  /// No description provided for @work_packages_filter__status_header.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get work_packages_filter__status_header;
+
   /// No description provided for @analytics_title.
   ///
   /// In en, this message translates to:
@@ -823,6 +847,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Notification permission required to show active timer. Enable it in Settings > Apps > Time Tracker > Notifications'**
   String get permission_notification_denied_error;
+
+  /// No description provided for @instances_title.
+  ///
+  /// In en, this message translates to:
+  /// **'OpenProject instances'**
+  String get instances_title;
+
+  /// No description provided for @instances_add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add instance'**
+  String get instances_add;
+
+  /// No description provided for @instances_edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get instances_edit;
+
+  /// No description provided for @instances_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get instances_delete;
+
+  /// No description provided for @instances_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No instances configured yet. Add one to get started.'**
+  String get instances_empty;
+
+  /// No description provided for @instances_manage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage instances'**
+  String get instances_manage;
+
+  /// No description provided for @instances_none_active.
+  ///
+  /// In en, this message translates to:
+  /// **'No active instance'**
+  String get instances_none_active;
+
+  /// No description provided for @instances_delete_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete instance?'**
+  String get instances_delete_title;
+
+  /// No description provided for @instances_delete_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \'{label}\'? This removes the stored credentials and cannot be undone.'**
+  String instances_delete_description(String label);
+
+  /// No description provided for @instances_switcher_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch instance'**
+  String get instances_switcher_title;
+
+  /// No description provided for @instances_switcher_manage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get instances_switcher_manage;
+
+  /// No description provided for @instance_editor_add_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Add instance'**
+  String get instance_editor_add_title;
+
+  /// No description provided for @instance_editor_edit_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit instance'**
+  String get instance_editor_edit_title;
+
+  /// No description provided for @instance_editor_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get instance_editor_label;
+
+  /// No description provided for @instance_editor_label_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Work, Personal'**
+  String get instance_editor_label_hint;
+
+  /// No description provided for @instance_editor_invalid_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Label cannot be empty'**
+  String get instance_editor_invalid_label;
+
+  /// No description provided for @instance_editor_invalid_client_id.
+  ///
+  /// In en, this message translates to:
+  /// **'Client ID cannot be empty'**
+  String get instance_editor_invalid_client_id;
+
+  /// No description provided for @instance_editor_reauth_notice.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing the base URL or Client ID will require re-authentication.'**
+  String get instance_editor_reauth_notice;
+
+  /// No description provided for @instance_switch_timer_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer is running'**
+  String get instance_switch_timer_title;
+
+  /// No description provided for @instance_switch_timer_description.
+  ///
+  /// In en, this message translates to:
+  /// **'A timer is currently active. What would you like to do before switching instances?'**
+  String get instance_switch_timer_description;
+
+  /// No description provided for @instance_switch_timer_save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save & switch'**
+  String get instance_switch_timer_save;
+
+  /// No description provided for @instance_switch_timer_discard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard & switch'**
+  String get instance_switch_timer_discard;
+
+  /// No description provided for @instance_switch_timer_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get instance_switch_timer_cancel;
 }
 
 class _AppLocalizationsDelegate

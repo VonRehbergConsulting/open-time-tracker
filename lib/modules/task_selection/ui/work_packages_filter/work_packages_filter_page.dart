@@ -90,12 +90,16 @@ class WorkPackagesFilterPage
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           sliver: SliverMainAxisGroup(
             slivers: [
-              _header('Assignee'),
+              _header(
+                AppLocalizations.of(context).work_packages_filter__assignee_header,
+              ),
               SliverToBoxAdapter(
                 child: _item(
                   context,
                   isSelected: assigneeFilter == 0,
-                  text: 'Me',
+                  text: AppLocalizations.of(
+                    context,
+                  ).work_packages_filter__assignee_me,
                   onToggle: () => context
                       .read<WorkPackagesFilterBloc>()
                       .setAssigneeFilter(0),
@@ -105,14 +109,18 @@ class WorkPackagesFilterPage
                 child: _item(
                   context,
                   isSelected: assigneeFilter == 1,
-                  text: 'Everyone',
+                  text: AppLocalizations.of(
+                    context,
+                  ).work_packages_filter__assignee_everyone,
                   onToggle: () => context
                       .read<WorkPackagesFilterBloc>()
                       .setAssigneeFilter(1),
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
-              _header('Status'),
+              _header(
+                AppLocalizations.of(context).work_packages_filter__status_header,
+              ),
               SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   final status = statuses[index];

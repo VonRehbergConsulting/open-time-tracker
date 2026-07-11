@@ -103,6 +103,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get work_packages_filter__title => 'Filters';
 
   @override
+  String get work_packages_filter__assignee_header => 'Assignee';
+
+  @override
+  String get work_packages_filter__assignee_me => 'Me';
+
+  @override
+  String get work_packages_filter__assignee_everyone => 'Everyone';
+
+  @override
+  String get work_packages_filter__status_header => 'Status';
+
+  @override
   String get analytics_title => 'Analytics';
 
   @override
@@ -382,4 +394,78 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get permission_notification_denied_error =>
       'Notification permission required to show active timer. Enable it in Settings > Apps > Time Tracker > Notifications';
+
+  @override
+  String get instances_title => 'OpenProject instances';
+
+  @override
+  String get instances_add => 'Add instance';
+
+  @override
+  String get instances_edit => 'Edit';
+
+  @override
+  String get instances_delete => 'Delete';
+
+  @override
+  String get instances_empty =>
+      'No instances configured yet. Add one to get started.';
+
+  @override
+  String get instances_manage => 'Manage instances';
+
+  @override
+  String get instances_none_active => 'No active instance';
+
+  @override
+  String get instances_delete_title => 'Delete instance?';
+
+  @override
+  String instances_delete_description(String label) {
+    return 'Delete \'$label\'? This removes the stored credentials and cannot be undone.';
+  }
+
+  @override
+  String get instances_switcher_title => 'Switch instance';
+
+  @override
+  String get instances_switcher_manage => 'Manage';
+
+  @override
+  String get instance_editor_add_title => 'Add instance';
+
+  @override
+  String get instance_editor_edit_title => 'Edit instance';
+
+  @override
+  String get instance_editor_label => 'Label';
+
+  @override
+  String get instance_editor_label_hint => 'e.g. Work, Personal';
+
+  @override
+  String get instance_editor_invalid_label => 'Label cannot be empty';
+
+  @override
+  String get instance_editor_invalid_client_id => 'Client ID cannot be empty';
+
+  @override
+  String get instance_editor_reauth_notice =>
+      'Changing the base URL or Client ID will require re-authentication.';
+
+  @override
+  String get instance_switch_timer_title => 'Timer is running';
+
+  @override
+  String get instance_switch_timer_description =>
+      'A timer is currently active. What would you like to do before switching instances?';
+
+  @override
+  String get instance_switch_timer_save => 'Save & switch';
+
+  @override
+  String get instance_switch_timer_discard => 'Discard & switch';
+
+  @override
+  String get instance_switch_timer_cancel => 'Cancel';
 }

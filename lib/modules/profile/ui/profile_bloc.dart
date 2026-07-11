@@ -83,7 +83,11 @@ class ProfileBloc extends EffectCubit<ProfileState, ProfileEffect> {
     if (repository is ApiUserDataRepository) {
       repository.clearCache();
     }
-    await _authService.logout();
+    // Sign out of *every* configured OpenProject instance — the
+    // profile-page action reads as "log out of your account", so a
+    // per-instance clear would leave stale tokens behind for the
+    // other configured tenants.
+    await _authService.logoutAll();
     emitEffect(const ProfileEffect.logout());
   }
 }

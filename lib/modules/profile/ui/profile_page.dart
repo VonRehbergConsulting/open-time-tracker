@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:open_project_time_tracker/app/app_router.dart';
+import 'package:open_project_time_tracker/app/di/inject.dart';
+import 'package:open_project_time_tracker/app/instances/domain/instances_repository.dart';
 import 'package:open_project_time_tracker/app/ui/asset_images.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
@@ -94,6 +97,16 @@ class ProfilePage
 
             const SizedBox(height: 24),
 
+            // Instances Section
+            _buildSectionTitle(
+              context,
+              AppLocalizations.of(context).instances_title,
+            ),
+            const SizedBox(height: 8),
+            _buildInstancesTile(context),
+
+            const SizedBox(height: 24),
+
             // Calendar Integration Section
             _buildSectionTitle(
               context,
@@ -172,6 +185,61 @@ class ProfilePage
         trailing: const Icon(Icons.chevron_right),
         onTap: context.read<ProfileBloc>().logout,
       ),
+    );
+  }
+
+  Widget _buildInstancesTile(BuildContext context) {
+    return const _InstancesTile();
+  }
+}
+
+class _InstancesTile extends StatefulWidget {
+  const _InstancesTile();
+
+  @override
+  State<_InstancesTile> createState() => _InstancesTileState();
+}
+
+class _InstancesTileState extends State<_InstancesTile> {
+  late final InstancesRepository _repository;
+  late final Stream<InstancesSnapshot> _stream;
+
+  @override
+  void initState() {
+    super.initState();
+    _repository = inject<InstancesRepository>();
+    _stream = _repository.observe();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<InstancesSnapshot>(
+      stream: _stream,
+      initialData: _repository.current,
+      builder: (context, snap) {
+        final snapshot = snap.data ?? _repository.current;
+        final active = snapshot.activeInstance;
+        final l10n = AppLocalizations.of(context);
+        final title = active?.label ?? l10n.instances_none_active;
+        final subtitle = active?.baseUrl ?? l10n.instances_manage;
+        return ConfiguredCard(
+          child: ListTile(
+            leading: const Icon(
+              Icons.dns_outlined,
+              size: 40,
+              color: Colors.blueGrey,
+            ),
+            title: Text(title),
+            subtitle: Text(
+              subtitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => AppRouter.routeToInstances(context),
+          ),
+        );
+      },
     );
   }
 }

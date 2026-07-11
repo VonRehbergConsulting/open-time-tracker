@@ -104,6 +104,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get work_packages_filter__title => 'Filtres';
 
   @override
+  String get work_packages_filter__assignee_header => 'Assigné à';
+
+  @override
+  String get work_packages_filter__assignee_me => 'Moi';
+
+  @override
+  String get work_packages_filter__assignee_everyone => 'Tout le monde';
+
+  @override
+  String get work_packages_filter__status_header => 'Statut';
+
+  @override
   String get analytics_title => 'Analyses';
 
   @override
@@ -386,4 +398,80 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get permission_notification_denied_error =>
       'Autorisation de notification requise pour afficher le minuteur actif. Activez-la dans Paramètres > Applications > Time Tracker > Notifications';
+
+  @override
+  String get instances_title => 'Instances OpenProject';
+
+  @override
+  String get instances_add => 'Ajouter une instance';
+
+  @override
+  String get instances_edit => 'Modifier';
+
+  @override
+  String get instances_delete => 'Supprimer';
+
+  @override
+  String get instances_empty =>
+      'Aucune instance configurée pour l\'instant. Ajoutez-en une pour commencer.';
+
+  @override
+  String get instances_manage => 'Gérer les instances';
+
+  @override
+  String get instances_none_active => 'Aucune instance active';
+
+  @override
+  String get instances_delete_title => 'Supprimer l\'instance ?';
+
+  @override
+  String instances_delete_description(String label) {
+    return 'Supprimer \'$label\' ? Cela supprime les identifiants enregistrés et ne peut être annulé.';
+  }
+
+  @override
+  String get instances_switcher_title => 'Changer d\'instance';
+
+  @override
+  String get instances_switcher_manage => 'Gérer';
+
+  @override
+  String get instance_editor_add_title => 'Ajouter une instance';
+
+  @override
+  String get instance_editor_edit_title => 'Modifier l\'instance';
+
+  @override
+  String get instance_editor_label => 'Libellé';
+
+  @override
+  String get instance_editor_label_hint => 'ex. Travail, Personnel';
+
+  @override
+  String get instance_editor_invalid_label =>
+      'Le libellé ne peut pas être vide';
+
+  @override
+  String get instance_editor_invalid_client_id =>
+      'Le Client ID ne peut pas être vide';
+
+  @override
+  String get instance_editor_reauth_notice =>
+      'Modifier l\'URL de base ou le Client ID nécessitera une nouvelle authentification.';
+
+  @override
+  String get instance_switch_timer_title => 'Minuteur en cours';
+
+  @override
+  String get instance_switch_timer_description =>
+      'Un minuteur est actuellement actif. Que voulez-vous faire avant de changer d\'instance ?';
+
+  @override
+  String get instance_switch_timer_save => 'Enregistrer et changer';
+
+  @override
+  String get instance_switch_timer_discard => 'Ignorer et changer';
+
+  @override
+  String get instance_switch_timer_cancel => 'Annuler';
 }

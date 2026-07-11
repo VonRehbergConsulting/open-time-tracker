@@ -6,6 +6,7 @@ import 'package:open_project_time_tracker/app/ui/widgets/activity_indicator.dart
 import 'package:open_project_time_tracker/app/ui/widgets/filled_button.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/time_picker.dart';
 import 'package:open_project_time_tracker/extensions/duration.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/time_entry_summary/time_entry_summary_bloc.dart';
 
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
@@ -21,27 +22,31 @@ class TimeEntrySummaryPage
   final _form = GlobalKey<FormState>();
   final _timeFieldController = TextEditingController();
   final _commentFieldController = TextEditingController();
+  final TimeEntry? draft;
 
-  Duration? timeSpent;
+  TimeEntrySummaryPage({super.key, this.draft});
 
-  TimeEntrySummaryPage({super.key});
+  @override
+  void onCreate(BuildContext context, TimeEntrySummaryBloc bloc) {
+    super.onCreate(context, bloc);
+    bloc.init(draft: draft);
+  }
 
-  void _showTimePicker(BuildContext context) {
-    if (timeSpent != null) {
-      final hours = timeSpent!.inHours;
-      final minutes = timeSpent!.inMinutes.remainder(60);
-      showCupertinoModalPopup(
-        context: context,
-        builder: ((_) => TimePicker(
-          hours: hours,
-          minutes: minutes,
-          onTimeChanged: (value) {
-            final duration = Duration(hours: value.hour, minutes: value.minute);
-            context.read<TimeEntrySummaryBloc>().updateTimeSpent(duration);
-          },
-        )),
-      );
-    }
+  void _showTimePicker(BuildContext context, Duration? timeSpent) {
+    if (timeSpent == null) return;
+    final hours = timeSpent.inHours;
+    final minutes = timeSpent.inMinutes.remainder(60);
+    showCupertinoModalPopup(
+      context: context,
+      builder: ((_) => TimePicker(
+        hours: hours,
+        minutes: minutes,
+        onTimeChanged: (value) {
+          final duration = Duration(hours: value.hour, minutes: value.minute);
+          context.read<TimeEntrySummaryBloc>().updateTimeSpent(duration);
+        },
+      )),
+    );
   }
 
   Future<void> _submit(BuildContext context) async {
@@ -85,9 +90,13 @@ class TimeEntrySummaryPage
     super.onStateChange(context, state);
     state.whenOrNull(
       idle: (title, projectTitle, timeSpent, comment, commentSuggestions) {
-        this.timeSpent = timeSpent;
-        // TODO: fix comment lose after hot reload
-        _commentFieldController.text = comment ?? '';
+        final next = comment ?? '';
+        // Only touch the controller when the value actually changes,
+        // otherwise reassignment resets the caret to position 0 and
+        // interrupts the user while typing (e.g. when suggestions arrive).
+        if (_commentFieldController.text != next) {
+          _commentFieldController.text = next;
+        }
       },
     );
   }
@@ -100,7 +109,6 @@ class TimeEntrySummaryPage
     final Widget body = state.when(
       loading: () => const Center(child: ActivityIndicator()),
       idle: (title, projectTitle, timeSpent, comment, commentSuggestions) {
-        this.timeSpent = timeSpent;
         _timeFieldController.text = timeSpent.shortWatch();
         return Padding(
           padding: const EdgeInsets.all(16.0),
@@ -137,7 +145,7 @@ class TimeEntrySummaryPage
                         ).time_entry_summary_time_spent,
                       ),
                       readOnly: true,
-                      onTap: () => _showTimePicker(context),
+                      onTap: () => _showTimePicker(context, timeSpent),
                     ),
                     TextFormField(
                       textCapitalization: TextCapitalization.sentences,
