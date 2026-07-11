@@ -112,7 +112,9 @@ class NotificationSelectionListBloc
         .timeout(
           const Duration(seconds: 2),
           onTimeout: () {
-            print('Warning: Timer state confirmation timed out');
+            debugPrint(
+              'NotificationSelectionListBloc: timer state confirmation timed out',
+            );
             return true;
           },
         );

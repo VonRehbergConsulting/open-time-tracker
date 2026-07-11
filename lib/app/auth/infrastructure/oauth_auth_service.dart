@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_client.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_token_storage.dart';
 import 'package:rxdart/rxdart.dart';
@@ -15,21 +16,26 @@ class OAuthAuthService implements AuthService {
 
   @override
   Stream<AuthState> observeAuthState() => _state.doOnListen(() async {
-    await _init();
+    await refreshState();
   });
 
-  Future<void> _init() async {
+  /// Re-reads the token storage and re-emits the current [AuthState].
+  /// Used both on first subscribe and after external state changes
+  /// (e.g. the active OpenProject instance was switched).
+  @override
+  Future<AuthState> refreshState() async {
     try {
       final token = await _authTokenStorage.getToken();
-      if (token == null) {
-        _state.add(AuthState.notAuthenticated());
-      } else {
-        _state.add(AuthState.authenticated());
-      }
+      final state = token == null
+          ? AuthState.notAuthenticated()
+          : AuthState.authenticated();
+      _state.add(state);
+      return state;
     } catch (e) {
-      // If token retrieval fails, treat as not authenticated
-      print('Auth initialization failed: $e');
-      _state.add(AuthState.notAuthenticated());
+      debugPrint('Auth refresh failed: $e');
+      final state = AuthState.notAuthenticated();
+      _state.add(state);
+      return state;
     }
   }
 
@@ -44,7 +50,7 @@ class OAuthAuthService implements AuthService {
       _state.add(state);
       return state;
     } catch (e) {
-      print("error $e");
+      debugPrint('Login failed: $e');
     }
     return AuthState.undefined();
   }
@@ -56,4 +62,13 @@ class OAuthAuthService implements AuthService {
     final state = AuthState.notAuthenticated();
     _state.add(state);
   }
+
+  @override
+  Future<void> logoutAll() async {
+    await _authTokenStorage.clearAll();
+
+    final state = AuthState.notAuthenticated();
+    _state.add(state);
+  }
 }
+

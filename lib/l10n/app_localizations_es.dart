@@ -104,6 +104,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get work_packages_filter__title => 'Filtros';
 
   @override
+  String get work_packages_filter__assignee_header => 'Asignado a';
+
+  @override
+  String get work_packages_filter__assignee_me => 'Yo';
+
+  @override
+  String get work_packages_filter__assignee_everyone => 'Todos';
+
+  @override
+  String get work_packages_filter__status_header => 'Estado';
+
+  @override
   String get analytics_title => 'Analíticas';
 
   @override
@@ -387,4 +399,80 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get permission_notification_denied_error =>
       'Se requiere permiso de notificación para mostrar el temporizador activo. Actívalo en Configuración > Aplicaciones > Time Tracker > Notificaciones';
+
+  @override
+  String get instances_title => 'Instancias de OpenProject';
+
+  @override
+  String get instances_add => 'Añadir instancia';
+
+  @override
+  String get instances_edit => 'Editar';
+
+  @override
+  String get instances_delete => 'Eliminar';
+
+  @override
+  String get instances_empty =>
+      'Aún no hay instancias configuradas. Añade una para empezar.';
+
+  @override
+  String get instances_manage => 'Gestionar instancias';
+
+  @override
+  String get instances_none_active => 'Sin instancia activa';
+
+  @override
+  String get instances_delete_title => '¿Eliminar instancia?';
+
+  @override
+  String instances_delete_description(String label) {
+    return '¿Eliminar \'$label\'? Esto elimina las credenciales guardadas y no se puede deshacer.';
+  }
+
+  @override
+  String get instances_switcher_title => 'Cambiar de instancia';
+
+  @override
+  String get instances_switcher_manage => 'Gestionar';
+
+  @override
+  String get instance_editor_add_title => 'Añadir instancia';
+
+  @override
+  String get instance_editor_edit_title => 'Editar instancia';
+
+  @override
+  String get instance_editor_label => 'Etiqueta';
+
+  @override
+  String get instance_editor_label_hint => 'p. ej. Trabajo, Personal';
+
+  @override
+  String get instance_editor_invalid_label =>
+      'La etiqueta no puede estar vacía';
+
+  @override
+  String get instance_editor_invalid_client_id =>
+      'El Client ID no puede estar vacío';
+
+  @override
+  String get instance_editor_reauth_notice =>
+      'Cambiar la URL base o el Client ID requiere volver a autenticarse.';
+
+  @override
+  String get instance_switch_timer_title => 'Temporizador activo';
+
+  @override
+  String get instance_switch_timer_description =>
+      'Hay un temporizador activo. ¿Qué quieres hacer antes de cambiar de instancia?';
+
+  @override
+  String get instance_switch_timer_save => 'Guardar y cambiar';
+
+  @override
+  String get instance_switch_timer_discard => 'Descartar y cambiar';
+
+  @override
+  String get instance_switch_timer_cancel => 'Cancelar';
 }

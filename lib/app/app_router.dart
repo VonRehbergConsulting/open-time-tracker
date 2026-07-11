@@ -1,13 +1,19 @@
 import 'package:flutter/cupertino.dart';
+import 'package:open_project_time_tracker/app/di/inject.dart';
+import 'package:open_project_time_tracker/app/navigation/app_authorized_router.dart';
+import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/splash_screen.dart';
+import 'package:open_project_time_tracker/extensions/date_time.dart';
 import 'package:open_project_time_tracker/modules/authorization/ui/authorization/authorization_page.dart';
-import 'package:open_project_time_tracker/modules/authorization/ui/instance_configuration/instance_configuration_page.dart';
+import 'package:open_project_time_tracker/app/instances/domain/open_project_instance.dart';
+import 'package:open_project_time_tracker/modules/instances/ui/instance_editor/instance_editor_page.dart';
+import 'package:open_project_time_tracker/modules/instances/ui/instances_list/instances_list_page.dart';
 import 'package:open_project_time_tracker/modules/profile/ui/profile_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
+import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/notification_selection_list/notification_selection_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/projects_list/projects_list_page.dart';
-import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_filter/work_packages_filter_page.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/work_packages_list/work_packages_list_page.dart';
 import 'package:open_project_time_tracker/modules/timer/ui/comment_suggestions_page.dart';
@@ -19,10 +25,45 @@ import 'package:open_project_time_tracker/modules/task_selection/ui/export_repor
 import '../main.dart';
 
 class AppRouter {
-  // TODO: rebuild routing
-  static void routeToTimer(BuildContext context) {
-    final route = CupertinoPageRoute(builder: ((context) => TimerPage()));
-    Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
+  static Route<void> _timerRoute() {
+    return PageRouteBuilder<void>(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const TimerPage(),
+      transitionDuration: const Duration(milliseconds: 320),
+      reverseTransitionDuration: const Duration(milliseconds: 260),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+          reverseCurve: Curves.easeInCubic,
+        );
+
+        final positionAnimation = Tween<Offset>(
+          begin: const Offset(0, 0.08),
+          end: Offset.zero,
+        ).animate(curvedAnimation);
+
+        final opacityAnimation = Tween<double>(
+          begin: 0.0,
+          end: 1.0,
+        ).animate(curvedAnimation);
+
+        return FadeTransition(
+          opacity: opacityAnimation,
+          child: SlideTransition(position: positionAnimation, child: child),
+        );
+      },
+    );
+  }
+
+  // Timer is presented via a custom vertical slide+fade transition rather
+  // than the default Cupertino horizontal push. This route is used both as
+  // an initial presentation and via [routeToTimer] for reopening the
+  // running timer. Pushed on the top-level Navigator via [navigatorKey]
+  // so it overlays the whole app regardless of which nested Navigator
+  // the caller lives under — hence no BuildContext parameter.
+  static void routeToTimer() {
+    navigatorKey.currentState?.push(_timerRoute());
   }
 
   static Future<TimeEntry?> routeToWorkPackagesList({
@@ -34,17 +75,87 @@ class AppRouter {
     return navigatorKey.currentState!.push(route);
   }
 
+  /// Returns to the time entries list. Prefers popping back to the
+  /// already-mounted list under the current route (preserving the
+  /// `_KeyedAuthorizedRouter` wrapper and its instance-snapshot
+  /// subscription). Only fabricates a fresh [AppAuthorizedRouter] when
+  /// there is nothing to pop to (edge case: the app was launched
+  /// directly into the timer, e.g. via a Live Activity, so no time
+  /// entries list is on the stack yet).
   static void routeToTimeEntriesListTemporary(BuildContext context) {
+    final navigator = Navigator.of(context);
+    if (navigator.canPop()) {
+      navigator.popUntil((route) => route.isFirst);
+      return;
+    }
     final route = CupertinoPageRoute(
-      builder: ((context) => const TimeEntriesListPage()),
+      builder: ((context) => const AppAuthorizedRouter()),
     );
-    Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
+    navigator.pushAndRemoveUntil(route, (route) => false);
   }
 
-  static Future<TimeEntry?> routeToTimeEntrySummary(BuildContext context) {
+  static Future<bool> redirectToTimerIfActiveToday({
+    required BuildContext context,
+    DateTime? selectedDate,
+  }) async {
+    final timerRepository = inject<TimerRepository>();
+    final appStateRepository = inject<AppStateRepository>();
+
+    final isTimerActive = await timerRepository.isActive;
+    if (!isTimerActive) {
+      return false;
+    }
+
+    final currentSelectedDate =
+        selectedDate ?? await appStateRepository.selectedDate;
+    final isViewingToday =
+        currentSelectedDate == null || currentSelectedDate.isToday;
+
+    if (!isViewingToday) {
+      return false;
+    }
+
+    if (context.mounted) {
+      routeToTimer();
+    }
+    return true;
+  }
+
+  /// Opens the time entry summary page.
+  ///
+  /// By default, if a timer is running and the user is viewing today,
+  /// this reroutes back to the timer page instead — a safety net for
+  /// entry-creation flows (e.g. the "+" button in the time entries
+  /// list) that would otherwise let the user create a competing entry
+  /// while a timer is active.
+  ///
+  /// Callers whose explicit intent is to *save the currently running
+  /// timer* (e.g. the instance-switch "Save" prompt, the timer's
+  /// `finish` effect) must opt out via [skipActiveTimerRedirect];
+  /// otherwise the redirect would trap them in an unbreakable loop
+  /// back to the timer page.
+  static Future<TimeEntry?> routeToTimeEntrySummary(
+    BuildContext context, {
+    TimeEntry? timeEntry,
+    bool skipActiveTimerRedirect = false,
+  }) async {
+    if (!skipActiveTimerRedirect) {
+      final shouldRedirect = await redirectToTimerIfActiveToday(
+        context: context,
+      );
+      if (shouldRedirect) {
+        return null;
+      }
+    }
+
+    if (!context.mounted) {
+      return null;
+    }
+
     final route = CupertinoPageRoute<TimeEntry>(
-      builder: ((context) => TimeEntrySummaryPage()),
+      builder: ((context) => TimeEntrySummaryPage(draft: timeEntry)),
     );
+
     return Navigator.of(context).push(route);
   }
 
@@ -62,14 +173,21 @@ class AppRouter {
     Navigator.of(context).push(route);
   }
 
-  static void routeToInstanceConfiguration({
-    required BuildContext context,
-    required Function completion,
-  }) {
+  static void routeToInstances(BuildContext context) {
     final route = CupertinoPageRoute(
-      builder: ((context) => InstanceConfigurationPage(completion)),
+      builder: ((context) => const InstancesListPage()),
     );
     Navigator.of(context).push(route);
+  }
+
+  static Future<void> routeToInstanceEditor({
+    required BuildContext context,
+    OpenProjectInstance? existing,
+  }) {
+    final route = CupertinoPageRoute<void>(
+      builder: ((context) => InstanceEditorPage(existing: existing)),
+    );
+    return Navigator.of(context).push(route);
   }
 
   static void routeToAuth({required BuildContext context}) {

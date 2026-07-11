@@ -35,6 +35,10 @@
     "work_package_list_empty": "No hay tareas",
 
     "work_packages_filter__title": "Filtros",
+    "work_packages_filter__assignee_header": "Asignado a",
+    "work_packages_filter__assignee_me": "Yo",
+    "work_packages_filter__assignee_everyone": "Todos",
+    "work_packages_filter__status_header": "Estado",
 
     "analytics_title": "Analíticas",
     "analytics_empty": "No hay tiempo registrado esta semana",
@@ -136,5 +140,38 @@
     "permission_notification_settings_title": "Permiso requerido",
     "permission_notification_settings_message": "Se requiere permiso de notificación para mostrar el temporizador activo. ¿Deseas abrir la configuración?",
     "permission_notification_open_settings": "Abrir configuración",
-    "permission_notification_denied_error": "Se requiere permiso de notificación para mostrar el temporizador activo. Actívalo en Configuración > Aplicaciones > Time Tracker > Notificaciones"
+    "permission_notification_denied_error": "Se requiere permiso de notificación para mostrar el temporizador activo. Actívalo en Configuración > Aplicaciones > Time Tracker > Notificaciones",
+
+    "instances_title": "Instancias de OpenProject",
+    "instances_add": "Añadir instancia",
+    "instances_edit": "Editar",
+    "instances_delete": "Eliminar",
+    "instances_empty": "Aún no hay instancias configuradas. Añade una para empezar.",
+    "instances_manage": "Gestionar instancias",
+    "instances_none_active": "Sin instancia activa",
+    "instances_delete_title": "¿Eliminar instancia?",
+    "instances_delete_description": "¿Eliminar '{label}'? Esto elimina las credenciales guardadas y no se puede deshacer.",
+    "@instances_delete_description": {
+        "placeholders": {
+            "label": {
+                "type": "String"
+            }
+        }
+    },
+    "instances_switcher_title": "Cambiar de instancia",
+    "instances_switcher_manage": "Gestionar",
+
+    "instance_editor_add_title": "Añadir instancia",
+    "instance_editor_edit_title": "Editar instancia",
+    "instance_editor_label": "Etiqueta",
+    "instance_editor_label_hint": "p. ej. Trabajo, Personal",
+    "instance_editor_invalid_label": "La etiqueta no puede estar vacía",
+    "instance_editor_invalid_client_id": "El Client ID no puede estar vacío",
+    "instance_editor_reauth_notice": "Cambiar la URL base o el Client ID requiere volver a autenticarse.",
+
+    "instance_switch_timer_title": "Temporizador activo",
+    "instance_switch_timer_description": "Hay un temporizador activo. ¿Qué quieres hacer antes de cambiar de instancia?",
+    "instance_switch_timer_save": "Guardar y cambiar",
+    "instance_switch_timer_discard": "Descartar y cambiar",
+    "instance_switch_timer_cancel": "Cancelar"
 }
