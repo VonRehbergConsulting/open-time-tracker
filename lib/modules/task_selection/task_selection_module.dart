@@ -1,17 +1,18 @@
 import 'package:injectable/injectable.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
+import 'package:open_project_time_tracker/app/preferences/domain/user_preferences_repository.dart';
 import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/projects_repository.dart';
-import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/statuses_repository.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/task_filter_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/work_packages_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/api_projects_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/api_statuses_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/api_time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/api_work_packages_repository.dart';
-import 'package:open_project_time_tracker/modules/task_selection/infrastructure/local_settings_repository.dart';
+import 'package:open_project_time_tracker/modules/task_selection/infrastructure/local_task_filter_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/projects_api.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/statuses_api.dart';
 import 'package:open_project_time_tracker/modules/task_selection/infrastructure/time_entries_api.dart';
@@ -59,8 +60,8 @@ abstract class TaskSelectionModule {
       ApiStatusesRepository(statusesApi);
 
   @lazySingleton
-  SettingsRepository settingsRepository() =>
-      LocalSettingsRepository(PreferencesStorage());
+  TaskFilterRepository taskFilterRepository() =>
+      LocalTaskFilterRepository(PreferencesStorage());
 
   @lazySingleton
   ProjectsRepository projectsRepository(ProjectsApi projectsApi) =>
@@ -69,7 +70,7 @@ abstract class TaskSelectionModule {
   @injectable
   TimeEntriesListBloc timeEntriesListBloc(
     TimeEntriesRepository timeEntriesRepository,
-    SettingsRepository settingsRepository,
+    UserPreferencesRepository userPreferencesRepository,
     @Named('openProject') AuthService authService,
     @Named('graph') AuthService graphAuthService,
     AppStateRepository appStateRepository,
@@ -77,7 +78,7 @@ abstract class TaskSelectionModule {
     CalendarNotificationsService calendarNotificationsService,
   ) => TimeEntriesListBloc(
     timeEntriesRepository,
-    settingsRepository,
+    userPreferencesRepository,
     authService,
     graphAuthService,
     appStateRepository,
@@ -90,12 +91,12 @@ abstract class TaskSelectionModule {
     WorkPackagesRepository workPackagesRepository,
     AppStateRepository appStateRepository,
     TimerRepository timerRepository,
-    SettingsRepository settingsRepository,
+    TaskFilterRepository taskFilterRepository,
   ) => WorkPackagesListBloc(
     workPackagesRepository,
     appStateRepository,
     timerRepository,
-    settingsRepository,
+    taskFilterRepository,
   );
 
   @injectable
@@ -116,8 +117,8 @@ abstract class TaskSelectionModule {
   @injectable
   WorkPackagesFilterBloc workPackagesFilterBloc(
     StatusesRepository statusesRepository,
-    SettingsRepository settingsRepository,
-  ) => WorkPackagesFilterBloc(statusesRepository, settingsRepository);
+    TaskFilterRepository taskFilterRepository,
+  ) => WorkPackagesFilterBloc(statusesRepository, taskFilterRepository);
 
   @injectable
   ProjectsListBloc projectsListBloc(ProjectsRepository projectsRepository) =>
