@@ -103,6 +103,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get work_packages_filter__title => 'Filter';
 
   @override
+  String get work_packages_filter__assignee_header => 'Zugewiesen an';
+
+  @override
+  String get work_packages_filter__assignee_me => 'Mich';
+
+  @override
+  String get work_packages_filter__assignee_everyone => 'Alle';
+
+  @override
+  String get work_packages_filter__status_header => 'Status';
+
+  @override
   String get analytics_title => 'Wochenübersicht';
 
   @override
@@ -387,4 +399,80 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get permission_notification_denied_error =>
       'Benachrichtigungsberechtigung erforderlich, um den aktiven Timer anzuzeigen. Aktiviere sie unter Einstellungen > Apps > Time Tracker > Benachrichtigungen';
+
+  @override
+  String get instances_title => 'OpenProject-Instanzen';
+
+  @override
+  String get instances_add => 'Instanz hinzufügen';
+
+  @override
+  String get instances_edit => 'Bearbeiten';
+
+  @override
+  String get instances_delete => 'Löschen';
+
+  @override
+  String get instances_empty =>
+      'Noch keine Instanzen konfiguriert. Füge eine hinzu, um zu starten.';
+
+  @override
+  String get instances_manage => 'Instanzen verwalten';
+
+  @override
+  String get instances_none_active => 'Keine aktive Instanz';
+
+  @override
+  String get instances_delete_title => 'Instanz löschen?';
+
+  @override
+  String instances_delete_description(String label) {
+    return '\'$label\' löschen? Die gespeicherten Zugangsdaten werden entfernt. Dies kann nicht rückgängig gemacht werden.';
+  }
+
+  @override
+  String get instances_switcher_title => 'Instanz wechseln';
+
+  @override
+  String get instances_switcher_manage => 'Verwalten';
+
+  @override
+  String get instance_editor_add_title => 'Instanz hinzufügen';
+
+  @override
+  String get instance_editor_edit_title => 'Instanz bearbeiten';
+
+  @override
+  String get instance_editor_label => 'Bezeichnung';
+
+  @override
+  String get instance_editor_label_hint => 'z.B. Arbeit, Privat';
+
+  @override
+  String get instance_editor_invalid_label =>
+      'Die Bezeichnung darf nicht leer sein';
+
+  @override
+  String get instance_editor_invalid_client_id =>
+      'Die Client-ID darf nicht leer sein';
+
+  @override
+  String get instance_editor_reauth_notice =>
+      'Das Ändern der Basis-URL oder Client-ID erfordert eine erneute Authentifizierung.';
+
+  @override
+  String get instance_switch_timer_title => 'Timer läuft';
+
+  @override
+  String get instance_switch_timer_description =>
+      'Ein Timer ist aktuell aktiv. Was möchtest du vor dem Wechsel tun?';
+
+  @override
+  String get instance_switch_timer_save => 'Speichern & wechseln';
+
+  @override
+  String get instance_switch_timer_discard => 'Verwerfen & wechseln';
+
+  @override
+  String get instance_switch_timer_cancel => 'Abbrechen';
 }

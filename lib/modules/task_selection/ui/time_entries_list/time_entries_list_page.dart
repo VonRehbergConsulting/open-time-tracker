@@ -5,6 +5,8 @@ import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_shimmer.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/screens/scrollable_screen.dart';
+import 'package:open_project_time_tracker/modules/instances/ui/switcher/instance_switcher_chip.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/time_entries_list_bloc.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/widgets/total_time_list_item.dart';
 import 'package:open_project_time_tracker/modules/task_selection/ui/time_entries_list/widgets/date_navigator.dart';
@@ -19,6 +21,19 @@ class TimeEntriesListPage
           TimeEntriesListEffect
         > {
   const TimeEntriesListPage({super.key});
+
+  TimeEntry _copyTimeEntryForDate(TimeEntry source, DateTime selectedDate) {
+    return TimeEntry(
+      id: source.id,
+      workPackageSubject: source.workPackageSubject,
+      workPackageHref: source.workPackageHref,
+      projectTitle: source.projectTitle,
+      projectHref: source.projectHref,
+      hours: source.hours,
+      spentOn: selectedDate,
+      comment: source.comment,
+    );
+  }
 
   @override
   void onCreate(BuildContext context, TimeEntriesListBloc bloc) {
@@ -45,6 +60,7 @@ class TimeEntriesListPage
       title: AppLocalizations.of(context).time_entries_list_title,
       onRefresh: context.read<TimeEntriesListBloc>().reload,
       actions: [
+        const InstanceSwitcherChip(),
         IconButton(
           onPressed: () => AppRouter.routeToExportReport(context),
           icon: const Icon(Icons.file_download),
@@ -66,6 +82,25 @@ class TimeEntriesListPage
         foregroundColor: Colors.white,
         child: const Icon(Icons.add),
         onPressed: () async {
+          final selectedDate = state.maybeWhen(
+            idle:
+                (
+                  timeEntries,
+                  workingHours,
+                  totalDuration,
+                  selectedDate,
+                  isViewingToday,
+                ) => selectedDate,
+            orElse: () => null,
+          );
+          final isBlocked = await AppRouter.redirectToTimerIfActiveToday(
+            context: context,
+            selectedDate: selectedDate,
+          );
+          if (isBlocked) {
+            return;
+          }
+
           final createdEntry = await AppRouter.routeToProjectsList();
           if (createdEntry != null && context.mounted) {
             context.read<TimeEntriesListBloc>().addTimeEntry(createdEntry);
@@ -160,25 +195,44 @@ class TimeEntriesListPage
                             hours: timeEntry.hours,
                             comment: timeEntry.comment,
                             action: () async {
-                              await context
-                                  .read<TimeEntriesListBloc>()
-                                  .setTimeEntry(timeEntry);
-                              if (!isViewingToday) {
-                                // For past dates, go directly to edit screen
-                                if (context.mounted) {
-                                  final updatedEntry =
-                                      await AppRouter.routeToTimeEntrySummary(
-                                        context,
-                                      );
-                                  // Optimistic update: immediately reflect changes in the UI
-                                  if (updatedEntry != null && context.mounted) {
-                                    context
-                                        .read<TimeEntriesListBloc>()
-                                        .updateTimeEntry(updatedEntry);
-                                  }
-                                }
+                              final bloc = context.read<TimeEntriesListBloc>();
+
+                              final isBlocked =
+                                  await AppRouter.redirectToTimerIfActiveToday(
+                                    context: context,
+                                    selectedDate: selectedDate,
+                                  );
+                              if (isBlocked) {
+                                return;
                               }
-                              // For today, the automatic navigation to timer page will happen
+
+                              if (!isViewingToday) {
+                                if (!context.mounted) {
+                                  return;
+                                }
+
+                                // For past dates, go directly to edit screen
+                                final updatedEntry =
+                                    await AppRouter.routeToTimeEntrySummary(
+                                      context,
+                                      timeEntry: _copyTimeEntryForDate(
+                                        timeEntry,
+                                        selectedDate,
+                                      ),
+                                    );
+                                // Optimistic update: immediately reflect changes in the UI
+                                if (updatedEntry != null && context.mounted) {
+                                  bloc.updateTimeEntry(updatedEntry);
+                                }
+                                return;
+                              }
+
+                              await bloc.setTimeEntry(timeEntry);
+                              if (!context.mounted) {
+                                return;
+                              }
+
+                              AppRouter.routeToTimer();
                             },
                             dismissAction: () async {
                               return await context

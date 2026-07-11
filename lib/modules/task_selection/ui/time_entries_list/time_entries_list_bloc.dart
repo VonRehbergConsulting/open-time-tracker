@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
+import 'package:open_project_time_tracker/extensions/date_time.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
@@ -44,16 +45,7 @@ class TimeEntriesListBloc
   late DateTime selectedDate;
   bool _isInitialized = false;
 
-  bool get isViewingToday {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final selected = DateTime(
-      selectedDate.year,
-      selectedDate.month,
-      selectedDate.day,
-    );
-    return selected == today;
-  }
+  bool get isViewingToday => selectedDate.isToday;
 
   Duration get totalDuration {
     var result = const Duration();
@@ -82,8 +74,7 @@ class TimeEntriesListBloc
     }
 
     // Always default to today when the app starts
-    final now = DateTime.now();
-    selectedDate = DateTime(now.year, now.month, now.day);
+    selectedDate = DateTime.now().dateOnly;
     await _appStateRepository.setSelectedDate(selectedDate);
     if (isClosed) {
       return;
@@ -125,11 +116,7 @@ class TimeEntriesListBloc
         }
         emit(const TimeEntriesListState.loading());
       }
-      final dateOnly = DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day,
-      );
+      final dateOnly = selectedDate.dateOnly;
       items = await _timeEntriesRepository.list(
         userId: 'me',
         startDate: dateOnly,
@@ -204,14 +191,11 @@ class TimeEntriesListBloc
   }
 
   Future<void> goToToday() async {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-
-    if (selectedDate == today) {
+    if (selectedDate.isToday) {
       return;
     }
 
-    selectedDate = today;
+    selectedDate = DateTime.now().dateOnly;
     await _appStateRepository.setSelectedDate(selectedDate);
     await reload(showLoading: true);
   }
@@ -225,11 +209,20 @@ class TimeEntriesListBloc
   }
 
   Future<void> setTimeEntry(TimeEntry timeEntry) async {
-    // Update the spentOn date to match the currently selected date
-    // This ensures that when tracking time for a past or future date,
-    // the time entry is recorded for that specific date
-    timeEntry.spentOn = selectedDate;
-    await _timerRepository.setTimeEntry(timeEntry: timeEntry);
+    // Never mutate the caller's TimeEntry: it may be a cached list item that
+    // the UI is still rendering. Copy it and stamp the currently selected date
+    // so the entry is recorded on that day.
+    final entryForSelectedDate = TimeEntry(
+      id: timeEntry.id,
+      workPackageSubject: timeEntry.workPackageSubject,
+      workPackageHref: timeEntry.workPackageHref,
+      projectTitle: timeEntry.projectTitle,
+      projectHref: timeEntry.projectHref,
+      hours: timeEntry.hours,
+      spentOn: selectedDate,
+      comment: timeEntry.comment,
+    );
+    await _timerRepository.setTimeEntry(timeEntry: entryForSelectedDate);
   }
 
   Future<bool> deleteTimeEntry(int id) async {

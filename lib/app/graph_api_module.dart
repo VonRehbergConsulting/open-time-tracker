@@ -17,7 +17,7 @@ import 'auth/infrastructure/secure_auth_token_storage.dart';
 abstract class GraphApiModule {
   @Named('graph')
   @lazySingleton
-  AuthTokenStorage authTokenStorage() => SecureAuthTokenStorage(
+  AuthTokenStorage authTokenStorage() => SecureAuthTokenStorage.withKeys(
     const FlutterSecureStorage(),
     accessTokenKey: 'graphAccessToken',
     refreshTokenKey: 'graphRefreshToken',

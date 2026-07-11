@@ -35,6 +35,10 @@
     "work_package_list_empty": "Görev yok",
 
     "work_packages_filter__title": "Filtreler",
+    "work_packages_filter__assignee_header": "Atanan kişi",
+    "work_packages_filter__assignee_me": "Ben",
+    "work_packages_filter__assignee_everyone": "Herkes",
+    "work_packages_filter__status_header": "Durum",
 
     "analytics_title": "Analitik",
     "analytics_empty": "Bu hafta için kayıtlı süre yok",
@@ -136,5 +140,38 @@
     "permission_notification_settings_title": "İzin gerekli",
     "permission_notification_settings_message": "Aktif zamanlayıcıyı göstermek için bildirim izni gereklidir. Ayarları açmak ister misiniz?",
     "permission_notification_open_settings": "Ayarları aç",
-    "permission_notification_denied_error": "Aktif zamanlayıcıyı göstermek için bildirim izni gereklidir. Ayarlar > Uygulamalar > Time Tracker > Bildirimler'den etkinleştirin"
+    "permission_notification_denied_error": "Aktif zamanlayıcıyı göstermek için bildirim izni gereklidir. Ayarlar > Uygulamalar > Time Tracker > Bildirimler'den etkinleştirin",
+
+    "instances_title": "OpenProject örnekleri",
+    "instances_add": "Örnek ekle",
+    "instances_edit": "Düzenle",
+    "instances_delete": "Sil",
+    "instances_empty": "Henüz yapılandırılmış bir örnek yok. Başlamak için bir tane ekleyin.",
+    "instances_manage": "Örnekleri yönet",
+    "instances_none_active": "Aktif örnek yok",
+    "instances_delete_title": "Örnek silinsin mi?",
+    "instances_delete_description": "'{label}' silinsin mi? Bu, kayıtlı kimlik bilgilerini kaldırır ve geri alınamaz.",
+    "@instances_delete_description": {
+        "placeholders": {
+            "label": {
+                "type": "String"
+            }
+        }
+    },
+    "instances_switcher_title": "Örnek değiştir",
+    "instances_switcher_manage": "Yönet",
+
+    "instance_editor_add_title": "Örnek ekle",
+    "instance_editor_edit_title": "Örneği düzenle",
+    "instance_editor_label": "Etiket",
+    "instance_editor_label_hint": "örn. İş, Kişisel",
+    "instance_editor_invalid_label": "Etiket boş olamaz",
+    "instance_editor_invalid_client_id": "İstemci Kimliği boş olamaz",
+    "instance_editor_reauth_notice": "Temel URL'yi veya İstemci Kimliğini değiştirmek yeniden kimlik doğrulama gerektirir.",
+
+    "instance_switch_timer_title": "Zamanlayıcı çalışıyor",
+    "instance_switch_timer_description": "Şu anda aktif bir zamanlayıcı var. Örneği değiştirmeden önce ne yapmak istersiniz?",
+    "instance_switch_timer_save": "Kaydet ve değiştir",
+    "instance_switch_timer_discard": "İptal et ve değiştir",
+    "instance_switch_timer_cancel": "Vazgeç"
 }

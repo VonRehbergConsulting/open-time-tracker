@@ -31,22 +31,24 @@ class WorkPackagesListPage
   @override
   void onEffect(BuildContext context, WorkPackagesListEffect effect) {
     effect.when(
-      complete: (isViewingToday) {
+      complete: (isViewingToday, timeEntry) {
         // For past dates, navigate to edit screen and get the result
         if (!isViewingToday) {
-          AppRouter.routeToTimeEntrySummary(context).then((createdEntry) {
-            if (createdEntry != null && context.mounted) {
-              // Pop back to ProjectsListPage with the result
-              Navigator.of(context).pop(createdEntry);
-            } else if (context.mounted) {
-              // User cancelled, just go back to TimeEntriesListPage
-              Navigator.of(context).popUntil((route) => route.isFirst);
-            }
-          });
+          AppRouter.routeToTimeEntrySummary(context, timeEntry: timeEntry).then(
+            (createdEntry) {
+              if (createdEntry != null && context.mounted) {
+                // Pop back to ProjectsListPage with the result
+                Navigator.of(context).pop(createdEntry);
+              } else if (context.mounted) {
+                // User cancelled, just go back to TimeEntriesListPage
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
+            },
+          );
         } else {
-          // For today, go back to root and let AppAuthorizedRouter show timer
-          // The bloc has already waited for timer state confirmation
+          // For today, go back to root and open timer page explicitly
           Navigator.of(context).popUntil((route) => route.isFirst);
+          AppRouter.routeToTimer();
         }
       },
       error: () {
