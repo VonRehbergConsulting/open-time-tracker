@@ -59,8 +59,10 @@ class AppRouter {
   // Timer is presented via a custom vertical slide+fade transition rather
   // than the default Cupertino horizontal push. This route is used both as
   // an initial presentation and via [routeToTimer] for reopening the
-  // running timer, so callers use the top-level Navigator (see [routeToTimer]).
-  static void routeToTimer([BuildContext? context]) {
+  // running timer. Pushed on the top-level Navigator via [navigatorKey]
+  // so it overlays the whole app regardless of which nested Navigator
+  // the caller lives under — hence no BuildContext parameter.
+  static void routeToTimer() {
     navigatorKey.currentState?.push(_timerRoute());
   }
 

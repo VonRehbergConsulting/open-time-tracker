@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/app_router.dart';
 import 'package:open_project_time_tracker/app/di/inject.dart';
@@ -27,8 +29,12 @@ class _InstanceSwitcherChipState extends State<InstanceSwitcherChip> {
     super.initState();
     _repository = inject<InstancesRepository>();
     _stream = _repository.observe();
-    // Ensure at least one snapshot has been loaded.
-    _repository.load();
+    // Kick off an initial snapshot load. Deliberately fire-and-forget:
+    // the StreamBuilder below will render the current cached snapshot
+    // synchronously and rebuild once load() resolves. `unawaited` makes
+    // this intent explicit and satisfies `unawaited_futures` should
+    // this method ever become async.
+    unawaited(_repository.load());
   }
 
   @override

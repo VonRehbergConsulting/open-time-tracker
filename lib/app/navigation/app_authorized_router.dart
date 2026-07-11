@@ -43,11 +43,11 @@ class _AppAuthorizedRouterState extends State<AppAuthorizedRouter> {
       AppAuthorizedRouterState
     >(
       create: (context) =>
-          AppAuthorizedRouterBloc(() => inject(), () => inject())..init(),
+          AppAuthorizedRouterBloc(() => inject())..init(),
       builder: (context, state) {
         return state.when(
           initializing: () => const SplashScreen(),
-          idle: (isTimerSet, isViewingToday) {
+          idle: (isTimerSet) {
             final page = isTimerSet
                 ? _MiniTimerInset(
                     reservedBottom: _miniTimerHeight,

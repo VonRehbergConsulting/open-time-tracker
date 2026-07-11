@@ -39,7 +39,17 @@ class InstancesListPage
             // the save, the timer is cleared server-side; if they back
             // out, we do not switch. Either way we force-switch after
             // the summary page pops with a non-null result.
-            final saved = await AppRouter.routeToTimeEntrySummary(context);
+            //
+            // `skipActiveTimerRedirect: true` is required: this branch
+            // is only reachable while a timer is active, so the
+            // default active-timer redirect inside
+            // routeToTimeEntrySummary would bounce the user straight
+            // back to the timer page and make save-and-switch
+            // impossible.
+            final saved = await AppRouter.routeToTimeEntrySummary(
+              context,
+              skipActiveTimerRedirect: true,
+            );
             if (saved != null && context.mounted) {
               context.read<InstancesListBloc>().forceSelectInstance(
                 targetInstanceId,

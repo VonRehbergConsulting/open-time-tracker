@@ -25,7 +25,7 @@ class TimerStorage {
 
   Future<void> _saveDateTime(String key, DateTime? dateTime) async {
     if (dateTime == null) {
-      storage.remove(key);
+      await storage.remove(key);
       return;
     }
     final value = dateTime.toIso8601String();
@@ -58,7 +58,7 @@ class TimerStorage {
 
   Future<void> setTimeEntry(TimeEntry? timeEntry) async {
     if (timeEntry == null) {
-      storage.remove(_timeEntryKey);
+      await storage.remove(_timeEntryKey);
       return;
     }
     final string = jsonEncode(_TimeEntrySerialization.toMap(timeEntry));
@@ -74,14 +74,16 @@ class TimerStorage {
     final legacy = await _loadDateTime(_legacyStartTimeKey);
     if (legacy != null) {
       await _saveDateTime(_startTimeKey, legacy);
-      storage.remove(_legacyStartTimeKey);
+      await storage.remove(_legacyStartTimeKey);
     }
     return legacy;
   }
 
   Future<void> setStartTime(DateTime? dateTime) async {
     // Always clear the legacy key to prevent stale reads after a migration.
-    storage.remove(_legacyStartTimeKey);
+    // Awaited so the delete is sequenced before the new value is written
+    // (and before this future resolves) — see PreferencesStorage.remove.
+    await storage.remove(_legacyStartTimeKey);
     return _saveDateTime(_startTimeKey, dateTime);
   }
 
