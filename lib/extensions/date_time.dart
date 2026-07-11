@@ -30,4 +30,13 @@ extension Weekdays on DateTime {
   bool isSameDate(DateTime other) {
     return year == other.year && month == other.month && day == other.day;
   }
+
+  /// Returns the date part only (year/month/day at 00:00 local time).
+  DateTime get dateOnly => DateTime(year, month, day);
+
+  /// True when this date (ignoring time-of-day) matches today's local date.
+  bool get isToday {
+    final now = DateTime.now();
+    return year == now.year && month == now.month && day == now.day;
+  }
 }

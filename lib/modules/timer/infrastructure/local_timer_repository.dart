@@ -67,41 +67,43 @@ class LocalTimerRepository implements TimerRepository {
       _timerStorage.setStartTime(startTime),
       _timerStorage.setStopTime(stopTime),
     ]);
-    _state.add(true);
+    _state.add(await isSet);
   }
 
   @override
   Future<void> startTimer({required DateTime startTime}) async {
-    DateTime? startTime = await _timerStorage.getStartTime();
-    DateTime? stopTime = await _timerStorage.getStopTime();
+    var existingStartTime = await _timerStorage.getStartTime();
+    var existingStopTime = await _timerStorage.getStopTime();
 
-    if (startTime == null) {
-      stopTime = null;
-      startTime = DateTime.now();
-    } else if (stopTime != null) {
-      final duration = DateTime.now().difference(stopTime);
-      startTime = startTime.add(duration);
-      stopTime = null;
+    if (existingStartTime == null) {
+      existingStopTime = null;
+      existingStartTime = startTime;
+    } else if (existingStopTime != null) {
+      final pauseDuration = startTime.difference(existingStopTime);
+      existingStartTime = existingStartTime.add(pauseDuration);
+      existingStopTime = null;
     }
     await Future.wait([
-      _timerStorage.setStartTime(startTime),
-      _timerStorage.setStopTime(stopTime),
+      _timerStorage.setStartTime(existingStartTime),
+      _timerStorage.setStopTime(existingStopTime),
     ]);
+    _state.add(await isSet);
   }
 
   @override
   Future<void> stopTimer({required DateTime stopTime}) async {
     final startTime = await _timerStorage.getStartTime();
-    DateTime? stopTime = await _timerStorage.getStopTime();
+    var existingStopTime = await _timerStorage.getStopTime();
     final timeEntry = await _timerStorage.getTimeEntry();
-    if (stopTime == null) {
-      stopTime = DateTime.now();
-      await _timerStorage.setStopTime(stopTime);
+    if (existingStopTime == null) {
+      existingStopTime = stopTime;
+      await _timerStorage.setStopTime(existingStopTime);
     }
     if (startTime != null) {
-      timeEntry?.hours = stopTime.difference(startTime);
+      timeEntry?.hours = existingStopTime.difference(startTime);
       await _timerStorage.setTimeEntry(timeEntry);
     }
+    _state.add(await isSet);
   }
 
   @override
@@ -111,7 +113,7 @@ class LocalTimerRepository implements TimerRepository {
       _timerStorage.setStartTime(null),
       _timerStorage.setStopTime(null),
     ]);
-    _state.add(false);
+    _state.add(await isSet);
   }
 
   @override
@@ -124,5 +126,6 @@ class LocalTimerRepository implements TimerRepository {
     }
     final newStartTime = startTime.add(-duration);
     await _timerStorage.setStartTime(newStartTime);
+    _state.add(await isSet);
   }
 }

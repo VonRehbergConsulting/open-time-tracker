@@ -15,6 +15,6 @@ class AppStateStorage {
   }
 
   Future<void> clearSelectedDate() async {
-    _storage.remove(_selectedDateKey);
+    await _storage.remove(_selectedDateKey);
   }
 }
