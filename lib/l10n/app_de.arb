@@ -35,6 +35,10 @@
     "work_package_list_empty": "Keine Aufgaben",
 
     "work_packages_filter__title": "Filter",
+    "work_packages_filter__assignee_header": "Zugewiesen an",
+    "work_packages_filter__assignee_me": "Mich",
+    "work_packages_filter__assignee_everyone": "Alle",
+    "work_packages_filter__status_header": "Status",
 
     "analytics_title": "Wochenübersicht",
     "analytics_empty": "Keine Zeit protokolliert für diese Woche",
@@ -136,5 +140,38 @@
     "permission_notification_settings_title": "Berechtigung erforderlich",
     "permission_notification_settings_message": "Die Benachrichtigungsberechtigung ist erforderlich, um den aktiven Timer anzuzeigen. Möchtest du die Einstellungen öffnen?",
     "permission_notification_open_settings": "Einstellungen öffnen",
-    "permission_notification_denied_error": "Benachrichtigungsberechtigung erforderlich, um den aktiven Timer anzuzeigen. Aktiviere sie unter Einstellungen > Apps > Time Tracker > Benachrichtigungen"
+    "permission_notification_denied_error": "Benachrichtigungsberechtigung erforderlich, um den aktiven Timer anzuzeigen. Aktiviere sie unter Einstellungen > Apps > Time Tracker > Benachrichtigungen",
+
+    "instances_title": "OpenProject-Instanzen",
+    "instances_add": "Instanz hinzufügen",
+    "instances_edit": "Bearbeiten",
+    "instances_delete": "Löschen",
+    "instances_empty": "Noch keine Instanzen konfiguriert. Füge eine hinzu, um zu starten.",
+    "instances_manage": "Instanzen verwalten",
+    "instances_none_active": "Keine aktive Instanz",
+    "instances_delete_title": "Instanz löschen?",
+    "instances_delete_description": "'{label}' löschen? Die gespeicherten Zugangsdaten werden entfernt. Dies kann nicht rückgängig gemacht werden.",
+    "@instances_delete_description": {
+        "placeholders": {
+            "label": {
+                "type": "String"
+            }
+        }
+    },
+    "instances_switcher_title": "Instanz wechseln",
+    "instances_switcher_manage": "Verwalten",
+
+    "instance_editor_add_title": "Instanz hinzufügen",
+    "instance_editor_edit_title": "Instanz bearbeiten",
+    "instance_editor_label": "Bezeichnung",
+    "instance_editor_label_hint": "z.B. Arbeit, Privat",
+    "instance_editor_invalid_label": "Die Bezeichnung darf nicht leer sein",
+    "instance_editor_invalid_client_id": "Die Client-ID darf nicht leer sein",
+    "instance_editor_reauth_notice": "Das Ändern der Basis-URL oder Client-ID erfordert eine erneute Authentifizierung.",
+
+    "instance_switch_timer_title": "Timer läuft",
+    "instance_switch_timer_description": "Ein Timer ist aktuell aktiv. Was möchtest du vor dem Wechsel tun?",
+    "instance_switch_timer_save": "Speichern & wechseln",
+    "instance_switch_timer_discard": "Verwerfen & wechseln",
+    "instance_switch_timer_cancel": "Abbrechen"
 }

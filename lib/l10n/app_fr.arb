@@ -35,6 +35,10 @@
     "work_package_list_empty": "Aucune tâche",
 
     "work_packages_filter__title": "Filtres",
+    "work_packages_filter__assignee_header": "Assigné à",
+    "work_packages_filter__assignee_me": "Moi",
+    "work_packages_filter__assignee_everyone": "Tout le monde",
+    "work_packages_filter__status_header": "Statut",
 
     "analytics_title": "Analyses",
     "analytics_empty": "Aucun temps enregistré cette semaine",
@@ -136,5 +140,38 @@
     "permission_notification_settings_title": "Autorisation requise",
     "permission_notification_settings_message": "L'autorisation de notification est requise pour afficher le minuteur actif. Voulez-vous ouvrir les paramètres ?",
     "permission_notification_open_settings": "Ouvrir les paramètres",
-    "permission_notification_denied_error": "Autorisation de notification requise pour afficher le minuteur actif. Activez-la dans Paramètres > Applications > Time Tracker > Notifications"
+    "permission_notification_denied_error": "Autorisation de notification requise pour afficher le minuteur actif. Activez-la dans Paramètres > Applications > Time Tracker > Notifications",
+
+    "instances_title": "Instances OpenProject",
+    "instances_add": "Ajouter une instance",
+    "instances_edit": "Modifier",
+    "instances_delete": "Supprimer",
+    "instances_empty": "Aucune instance configurée pour l'instant. Ajoutez-en une pour commencer.",
+    "instances_manage": "Gérer les instances",
+    "instances_none_active": "Aucune instance active",
+    "instances_delete_title": "Supprimer l'instance ?",
+    "instances_delete_description": "Supprimer '{label}' ? Cela supprime les identifiants enregistrés et ne peut être annulé.",
+    "@instances_delete_description": {
+        "placeholders": {
+            "label": {
+                "type": "String"
+            }
+        }
+    },
+    "instances_switcher_title": "Changer d'instance",
+    "instances_switcher_manage": "Gérer",
+
+    "instance_editor_add_title": "Ajouter une instance",
+    "instance_editor_edit_title": "Modifier l'instance",
+    "instance_editor_label": "Libellé",
+    "instance_editor_label_hint": "ex. Travail, Personnel",
+    "instance_editor_invalid_label": "Le libellé ne peut pas être vide",
+    "instance_editor_invalid_client_id": "Le Client ID ne peut pas être vide",
+    "instance_editor_reauth_notice": "Modifier l'URL de base ou le Client ID nécessitera une nouvelle authentification.",
+
+    "instance_switch_timer_title": "Minuteur en cours",
+    "instance_switch_timer_description": "Un minuteur est actuellement actif. Que voulez-vous faire avant de changer d'instance ?",
+    "instance_switch_timer_save": "Enregistrer et changer",
+    "instance_switch_timer_discard": "Ignorer et changer",
+    "instance_switch_timer_cancel": "Annuler"
 }
