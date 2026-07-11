@@ -87,10 +87,9 @@ class InstancesListPage
               return _InstanceTile(
                 instance: instance,
                 isActive: instance.id == activeInstanceId,
-                onTap: () =>
-                    context.read<InstancesListBloc>().selectInstance(
-                      instance.id,
-                    ),
+                onTap: () => context.read<InstancesListBloc>().selectInstance(
+                  instance.id,
+                ),
                 onEdit: () => AppRouter.routeToInstanceEditor(
                   context: context,
                   existing: instance,
@@ -123,9 +122,7 @@ class InstancesListPage
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(l10n.instances_delete_title),
-        content: Text(
-          l10n.instances_delete_description(instance.label),
-        ),
+        content: Text(l10n.instances_delete_description(instance.label)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -164,7 +161,9 @@ class _InstanceTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         isActive ? Icons.check_circle : Icons.circle_outlined,
-        color: isActive ? Theme.of(context).primaryColor : Colors.grey,
+        color: isActive
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).colorScheme.onSurfaceVariant,
       ),
       title: Text(
         instance.label,
@@ -222,7 +221,7 @@ class _EmptyState extends StatelessWidget {
             Icon(
               Icons.dns_outlined,
               size: 64,
-              color: Colors.grey.shade400,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             const SizedBox(height: 16),
             Text(

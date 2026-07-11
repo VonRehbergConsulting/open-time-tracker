@@ -10,9 +10,7 @@ part 'app_authorized_router_bloc.freezed.dart';
 @freezed
 class AppAuthorizedRouterState with _$AppAuthorizedRouterState {
   factory AppAuthorizedRouterState.initializing() = _Initializing;
-  factory AppAuthorizedRouterState.idle({
-    required bool isTimerSet,
-  }) = _Idle;
+  factory AppAuthorizedRouterState.idle({required bool isTimerSet}) = _Idle;
 }
 
 class AppAuthorizedRouterBloc extends Cubit<AppAuthorizedRouterState> {

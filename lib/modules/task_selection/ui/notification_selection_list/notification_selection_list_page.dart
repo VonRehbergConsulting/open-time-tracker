@@ -70,6 +70,7 @@ class NotificationSelectionListPage
                 idle: (timeEntries, workPackages) => [
                   if (timeEntries.isNotEmpty)
                     _sectionHeader(
+                      context,
                       AppLocalizations.of(
                         context,
                       ).notification_selection_list__time_entries_header,
@@ -95,6 +96,7 @@ class NotificationSelectionListPage
                   ),
                   if (workPackages.isNotEmpty)
                     _sectionHeader(
+                      context,
                       AppLocalizations.of(
                         context,
                       ).notification_selection_list__work_packages_header,
@@ -124,13 +126,16 @@ class NotificationSelectionListPage
     );
   }
 
-  Widget _sectionHeader(String title) {
+  Widget _sectionHeader(BuildContext context, String title) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12.0, 16.0, 12.0, 8.0),
         child: Text(
           title,
-          style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
+          style: TextStyle(
+            fontSize: 16.0,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
       ),
     );

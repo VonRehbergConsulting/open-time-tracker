@@ -70,6 +70,12 @@
     "profile_logout_description": "Se déconnecter de votre compte",
     "profile_logout_button": "Se déconnecter",
 
+    "appearance_title": "Apparence",
+    "appearance_description": "Choisissez l'apparence de l'application",
+    "appearance_theme_system": "Système",
+    "appearance_theme_light": "Clair",
+    "appearance_theme_dark": "Sombre",
+
     "calendar_title": "Notifications du calendrier",
     "calendar_connect": "Connecter le calendrier",
     "calendar_disconnect": "Déconnecter le calendrier",

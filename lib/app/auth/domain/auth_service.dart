@@ -2,10 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'auth_service.freezed.dart';
 
-enum AuthenticationError {
-  invalidCredentials,
-  io,
-}
+enum AuthenticationError { invalidCredentials, io }
 
 @freezed
 class AuthState with _$AuthState {

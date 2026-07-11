@@ -232,6 +232,7 @@ class _ViewModeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final unselectedFg = Theme.of(context).colorScheme.onSurfaceVariant;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -239,12 +240,12 @@ class _ViewModeButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? const Color.fromRGBO(38, 92, 185, 1)
-              : Colors.white,
+              : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
                 ? const Color.fromRGBO(38, 92, 185, 1)
-                : Colors.grey.shade300,
+                : Theme.of(context).colorScheme.outlineVariant,
             width: 1,
           ),
         ),
@@ -254,7 +255,7 @@ class _ViewModeButton extends StatelessWidget {
             Icon(
               icon,
               size: 20,
-              color: isSelected ? Colors.white : Colors.grey.shade700,
+              color: isSelected ? Colors.white : unselectedFg,
             ),
             const SizedBox(width: 8),
             Text(
@@ -262,7 +263,7 @@ class _ViewModeButton extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.white : Colors.grey.shade700,
+                color: isSelected ? Colors.white : unselectedFg,
               ),
             ),
           ],

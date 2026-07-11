@@ -46,7 +46,6 @@ class WorkPackagesFilterPage
   @override
   Widget buildState(BuildContext context, WorkpackagesFilterState state) {
     return SliverScreen(
-      backgroundColor: Colors.white,
       title: AppLocalizations.of(context).work_packages_filter__title,
       actions: [
         IconButton(
@@ -91,7 +90,9 @@ class WorkPackagesFilterPage
           sliver: SliverMainAxisGroup(
             slivers: [
               _header(
-                AppLocalizations.of(context).work_packages_filter__assignee_header,
+                AppLocalizations.of(
+                  context,
+                ).work_packages_filter__assignee_header,
               ),
               SliverToBoxAdapter(
                 child: _item(
@@ -119,7 +120,9 @@ class WorkPackagesFilterPage
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
               _header(
-                AppLocalizations.of(context).work_packages_filter__status_header,
+                AppLocalizations.of(
+                  context,
+                ).work_packages_filter__status_header,
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {

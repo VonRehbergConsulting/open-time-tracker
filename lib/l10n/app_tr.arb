@@ -70,6 +70,12 @@
     "profile_logout_description": "Hesabınızdan çıkış yapın",
     "profile_logout_button": "Çıkış yap",
 
+    "appearance_title": "Görünüm",
+    "appearance_description": "Uygulamanın görünümünü seçin",
+    "appearance_theme_system": "Sistem",
+    "appearance_theme_light": "Açık",
+    "appearance_theme_dark": "Koyu",
+
     "calendar_title": "Takvim bildirimleri",
     "calendar_connect": "Takvimi bağla",
     "calendar_disconnect": "Takvimin bağlantısını kes",

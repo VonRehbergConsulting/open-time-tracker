@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/app/app_router.dart';
-import 'package:open_project_time_tracker/app/di/inject.dart';
-import 'package:open_project_time_tracker/app/instances/domain/instances_repository.dart';
 import 'package:open_project_time_tracker/app/ui/asset_images.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc_page.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/modules/profile/ui/profile_bloc.dart';
+import 'package:open_project_time_tracker/modules/profile/ui/widgets/appearance_tile.dart';
+import 'package:open_project_time_tracker/modules/profile/ui/widgets/instances_tile.dart';
 
 class ProfilePage
     extends EffectBlocPage<ProfileBloc, ProfileState, ProfileEffect> {
@@ -82,12 +81,10 @@ class ProfilePage
   @override
   Widget buildState(BuildContext context, ProfileState state) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         title: Text(AppLocalizations.of(context).profile_title),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -103,7 +100,17 @@ class ProfilePage
               AppLocalizations.of(context).instances_title,
             ),
             const SizedBox(height: 8),
-            _buildInstancesTile(context),
+            const InstancesTile(),
+
+            const SizedBox(height: 24),
+
+            // Appearance Section
+            _buildSectionTitle(
+              context,
+              AppLocalizations.of(context).appearance_title,
+            ),
+            const SizedBox(height: 8),
+            const AppearanceTile(),
 
             const SizedBox(height: 24),
 
@@ -125,7 +132,7 @@ class ProfilePage
             const SizedBox(height: 8),
             _buildLogoutTile(context),
 
-            const Spacer(),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -135,15 +142,17 @@ class ProfilePage
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: Colors.black87,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
 
   Widget _buildCalendarTile(BuildContext context, ProfileState state) {
+    final connectedColor = Colors.green;
+    final disconnectedColor = Theme.of(context).colorScheme.onSurfaceVariant;
     return ConfiguredCard(
       child: ListTile(
         leading: SizedBox(
@@ -161,14 +170,16 @@ class ProfilePage
               ? AppLocalizations.of(context).calendar_disconnect
               : AppLocalizations.of(context).calendar_connect,
           style: TextStyle(
-            color: state.isCalendarConnected ? Colors.green : Colors.grey,
+            color: state.isCalendarConnected
+                ? connectedColor
+                : disconnectedColor,
           ),
         ),
         trailing: Icon(
           state.isCalendarConnected
               ? Icons.check_circle
               : Icons.circle_outlined,
-          color: state.isCalendarConnected ? Colors.green : Colors.grey,
+          color: state.isCalendarConnected ? connectedColor : disconnectedColor,
         ),
         onTap: state.isCalendarConnected
             ? context.read<ProfileBloc>().disconnectCalendar
@@ -185,61 +196,6 @@ class ProfilePage
         trailing: const Icon(Icons.chevron_right),
         onTap: context.read<ProfileBloc>().logout,
       ),
-    );
-  }
-
-  Widget _buildInstancesTile(BuildContext context) {
-    return const _InstancesTile();
-  }
-}
-
-class _InstancesTile extends StatefulWidget {
-  const _InstancesTile();
-
-  @override
-  State<_InstancesTile> createState() => _InstancesTileState();
-}
-
-class _InstancesTileState extends State<_InstancesTile> {
-  late final InstancesRepository _repository;
-  late final Stream<InstancesSnapshot> _stream;
-
-  @override
-  void initState() {
-    super.initState();
-    _repository = inject<InstancesRepository>();
-    _stream = _repository.observe();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<InstancesSnapshot>(
-      stream: _stream,
-      initialData: _repository.current,
-      builder: (context, snap) {
-        final snapshot = snap.data ?? _repository.current;
-        final active = snapshot.activeInstance;
-        final l10n = AppLocalizations.of(context);
-        final title = active?.label ?? l10n.instances_none_active;
-        final subtitle = active?.baseUrl ?? l10n.instances_manage;
-        return ConfiguredCard(
-          child: ListTile(
-            leading: const Icon(
-              Icons.dns_outlined,
-              size: 40,
-              color: Colors.blueGrey,
-            ),
-            title: Text(title),
-            subtitle: Text(
-              subtitle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => AppRouter.routeToInstances(context),
-          ),
-        );
-      },
     );
   }
 }

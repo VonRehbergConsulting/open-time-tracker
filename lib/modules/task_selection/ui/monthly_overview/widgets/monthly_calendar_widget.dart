@@ -82,7 +82,7 @@ class MonthlyCalendarWidget extends StatelessWidget {
                         _getWeekdayName(i, context),
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: Colors.grey[700],
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontSize: 13,
                         ),
                       ),
@@ -96,7 +96,7 @@ class MonthlyCalendarWidget extends StatelessWidget {
                       AppLocalizations.of(context).monthly_overview_week,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        color: Colors.grey[700],
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 13,
                       ),
                     ),
@@ -107,7 +107,7 @@ class MonthlyCalendarWidget extends StatelessWidget {
             const SizedBox(height: 8),
 
             // Calendar grid
-            ..._buildCalendarRows(firstWeekday, daysInMonth),
+            ..._buildCalendarRows(context, firstWeekday, daysInMonth),
 
             const SizedBox(height: 16),
 
@@ -159,7 +159,11 @@ class MonthlyCalendarWidget extends StatelessWidget {
     }
   }
 
-  List<Widget> _buildCalendarRows(int firstWeekday, int daysInMonth) {
+  List<Widget> _buildCalendarRows(
+    BuildContext context,
+    int firstWeekday,
+    int daysInMonth,
+  ) {
     final List<Widget> rows = [];
     int currentDay = 1;
     int weekRow = 0;
@@ -187,7 +191,7 @@ class MonthlyCalendarWidget extends StatelessWidget {
           final hours = dailyHours[currentDay] ?? Duration.zero;
           dayCells.add(
             Expanded(
-              child: _buildDayCell(currentDay, hours),
+              child: _buildDayCell(context, currentDay, hours),
             ),
           );
           currentDay++;
@@ -215,7 +219,7 @@ class MonthlyCalendarWidget extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: weekTotal.inMinutes > 0
                           ? const Color.fromRGBO(38, 92, 185, 1)
-                          : Colors.grey[400],
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ),
@@ -231,7 +235,7 @@ class MonthlyCalendarWidget extends StatelessWidget {
     return rows;
   }
 
-  Widget _buildDayCell(int day, Duration hours) {
+  Widget _buildDayCell(BuildContext context, int day, Duration hours) {
     final hasHours = hours.inMinutes > 0;
     final now = DateTime.now();
     final isToday = day == now.day && month == now.month && year == now.year;
@@ -255,10 +259,12 @@ class MonthlyCalendarWidget extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.all(2),
           decoration: BoxDecoration(
-            color: Colors.white,
+            // Card-like surface inside the gradient border: white in
+            // light mode, elevated dark surface in dark mode.
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: _buildDayCellContent(day, hours, isToday),
+          child: _buildDayCellContent(context, day, hours, isToday),
         ),
       );
     }
@@ -270,20 +276,25 @@ class MonthlyCalendarWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: isToday
             ? const Color.fromRGBO(38, 92, 185, 0.15)
-            : Colors.grey.shade50,
+            : Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: isToday
               ? const Color.fromRGBO(38, 92, 185, 1)
-              : Colors.grey.shade200,
+              : Theme.of(context).colorScheme.outlineVariant,
           width: isToday ? 2 : 1,
         ),
       ),
-      child: _buildDayCellContent(day, hours, isToday),
+      child: _buildDayCellContent(context, day, hours, isToday),
     );
   }
 
-  Widget _buildDayCellContent(int day, Duration hours, bool isToday) {
+  Widget _buildDayCellContent(
+    BuildContext context,
+    int day,
+    Duration hours,
+    bool isToday,
+  ) {
     final hasHours = hours.inMinutes > 0;
     
     return Column(
@@ -295,7 +306,9 @@ class MonthlyCalendarWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: isToday ? FontWeight.bold : FontWeight.w500,
-            color: isToday ? const Color.fromRGBO(38, 92, 185, 1) : Colors.grey.shade800,
+            color: isToday
+                ? const Color.fromRGBO(38, 92, 185, 1)
+                : Theme.of(context).colorScheme.onSurface,
           ),
         ),
         if (hasHours) ...[
@@ -305,7 +318,7 @@ class MonthlyCalendarWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 10,
-              color: Colors.grey[700],
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w600,
             ),
           ),

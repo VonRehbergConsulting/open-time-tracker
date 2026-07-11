@@ -19,9 +19,7 @@ enum TimerSwitchDecision {
 class TimerSwitchPrompt {
   const TimerSwitchPrompt._();
 
-  static Future<TimerSwitchDecision?> show({
-    required BuildContext context,
-  }) {
+  static Future<TimerSwitchDecision?> show({required BuildContext context}) {
     final l10n = AppLocalizations.of(context);
     return showDialog<TimerSwitchDecision>(
       context: context,

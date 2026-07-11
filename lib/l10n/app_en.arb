@@ -70,6 +70,12 @@
     "profile_logout_description": "Sign out of your account",
     "profile_logout_button": "Sign out",
 
+    "appearance_title": "Appearance",
+    "appearance_description": "Choose how the app looks",
+    "appearance_theme_system": "System",
+    "appearance_theme_light": "Light",
+    "appearance_theme_dark": "Dark",
+
     "calendar_title": "Calendar notifications",
     "calendar_connect": "Connect calendar",
     "calendar_disconnect": "Disconnect calendar",
