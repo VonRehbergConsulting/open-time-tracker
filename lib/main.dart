@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:open_project_time_tracker/app/instances/domain/instances_repository.dart';
 import 'package:open_project_time_tracker/app/services/analytics_service.dart';
-import 'package:open_project_time_tracker/app/settings/domain/settings_repository.dart';
+import 'package:open_project_time_tracker/app/settings/domain/ui_settings_repository.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 import 'package:open_project_time_tracker/app/navigation/app_router.dart';
 import 'package:open_project_time_tracker/app/ui/asset_images.dart';
@@ -30,7 +30,7 @@ void main() async {
   //     flash on cold start when the user has picked dark).
   await Future.wait([
     inject<InstancesRepository>().load(),
-    inject<SettingsRepository>().load(),
+    inject<UiSettingsRepository>().load(),
   ]);
 
   inject<LocalNotificationService>().setup();
@@ -108,7 +108,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     precacheImage(AssetImage(AssetImages.logo), context);
-    final settings = inject<SettingsRepository>();
+    final settings = inject<UiSettingsRepository>();
     return StreamBuilder<ThemeMode>(
       // Rebuild MaterialApp when the user flips the theme override in
       // the profile page. Seeded with the just-hydrated current mode

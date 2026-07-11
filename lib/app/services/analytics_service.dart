@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:countly_flutter/countly_flutter.dart';
 import 'package:open_project_time_tracker/app/storage/env_vars.dart';
 import 'package:open_project_time_tracker/app/di/inject.dart';
-import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
+import 'package:open_project_time_tracker/app/preferences/domain/user_preferences_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
@@ -20,13 +20,13 @@ class AnalyticsService {
     CountlyConsent.events,
   ];
 
-  final SettingsRepository _settingsRepository = inject();
+  final UserPreferencesRepository _userPreferences = inject();
 
   // Track initialization state to prevent showing consent dialog if init failed
   bool _isInitialized = false;
 
   /// Initialize Countly and schedule consent prompt if needed.
-  /// This will read stored consent from SettingsRepository and enable
+  /// This will read stored consent from UserPreferencesRepository and enable
   /// consent at init if already granted. If consent is not set, it will
   /// initialize Countly with requiresConsent=true (no consents) and then
   /// show the consent dialog after ~2 seconds.
@@ -40,7 +40,7 @@ class AnalyticsService {
         return;
       }
 
-      final consentGiven = await _settingsRepository.analyticsConsent;
+      final consentGiven = await _userPreferences.analyticsConsent;
 
       final config = CountlyConfig(serverUrl, appKey)
         ..setLoggingEnabled(true)
@@ -151,14 +151,14 @@ class AnalyticsService {
             actions: <Widget>[
               CupertinoDialogAction(
                 onPressed: () async {
-                  await _settingsRepository.setAnalyticsConsent(false);
+                  await _userPreferences.setAnalyticsConsent(false);
                   Navigator.of(context).pop();
                 },
                 child: Text(AppLocalizations.of(context).generic_decline),
               ),
               CupertinoDialogAction(
                 onPressed: () async {
-                  await _settingsRepository.setAnalyticsConsent(true);
+                  await _userPreferences.setAnalyticsConsent(true);
                   await giveConsent();
                   Navigator.of(context).pop();
                 },

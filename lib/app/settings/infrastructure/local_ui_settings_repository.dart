@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:open_project_time_tracker/app/settings/domain/settings_repository.dart';
+import 'package:open_project_time_tracker/app/settings/domain/ui_settings_repository.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:rxdart/rxdart.dart';
 
-/// [SharedPreferences]-backed implementation of [SettingsRepository].
+/// [SharedPreferences]-backed implementation of [UiSettingsRepository].
 ///
 /// The current [themeMode] is cached in memory so synchronous reads
 /// (needed by [MaterialApp.themeMode]) never block on disk. The cache
 /// is populated lazily via [load] on first access, and kept
 /// authoritative on writes via [setThemeMode].
-class LocalSettingsRepository implements SettingsRepository {
-  LocalSettingsRepository(this._storage);
+class LocalUiSettingsRepository implements UiSettingsRepository {
+  LocalUiSettingsRepository(this._storage);
 
   final PreferencesStorage _storage;
 
@@ -77,7 +77,7 @@ class LocalSettingsRepository implements SettingsRepository {
       default:
         // Unknown value written by a future build — behave like a
         // fresh install rather than crashing on downgrade.
-        debugPrint('LocalSettingsRepository: unknown themeMode "$raw"');
+        debugPrint('LocalUiSettingsRepository: unknown themeMode "$raw"');
         return ThemeMode.system;
     }
   }

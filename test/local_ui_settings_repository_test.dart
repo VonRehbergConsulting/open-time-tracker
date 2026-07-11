@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:open_project_time_tracker/app/settings/infrastructure/local_settings_repository.dart';
+import 'package:open_project_time_tracker/app/settings/infrastructure/local_ui_settings_repository.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,14 +12,14 @@ void main() {
   });
 
   test('defaults to ThemeMode.system on a fresh install', () async {
-    final repo = LocalSettingsRepository(PreferencesStorage());
+    final repo = LocalUiSettingsRepository(PreferencesStorage());
     await repo.load();
     expect(repo.themeMode, ThemeMode.system);
   });
 
   test('setThemeMode updates the cached value and emits on the stream',
       () async {
-    final repo = LocalSettingsRepository(PreferencesStorage());
+    final repo = LocalUiSettingsRepository(PreferencesStorage());
     await repo.load();
 
     final emitted = <ThemeMode>[];
@@ -38,7 +38,7 @@ void main() {
   });
 
   test('setThemeMode is a no-op when the value is unchanged', () async {
-    final repo = LocalSettingsRepository(PreferencesStorage());
+    final repo = LocalUiSettingsRepository(PreferencesStorage());
     await repo.load();
     await repo.setThemeMode(ThemeMode.dark);
 
@@ -56,11 +56,11 @@ void main() {
   });
 
   test('persists the theme mode across repository instances', () async {
-    final first = LocalSettingsRepository(PreferencesStorage());
+    final first = LocalUiSettingsRepository(PreferencesStorage());
     await first.load();
     await first.setThemeMode(ThemeMode.dark);
 
-    final second = LocalSettingsRepository(PreferencesStorage());
+    final second = LocalUiSettingsRepository(PreferencesStorage());
     await second.load();
 
     expect(second.themeMode, ThemeMode.dark);
@@ -71,7 +71,7 @@ void main() {
     SharedPreferences.setMockInitialValues({
       'settings.themeMode': 'high-contrast', // hypothetical future value
     });
-    final repo = LocalSettingsRepository(PreferencesStorage());
+    final repo = LocalUiSettingsRepository(PreferencesStorage());
     await repo.load();
     expect(repo.themeMode, ThemeMode.system);
   });

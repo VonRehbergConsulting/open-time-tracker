@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/extensions/date_time.dart';
-import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/task_filter_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/work_packages_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
@@ -34,7 +34,7 @@ class WorkPackagesListBloc
   final WorkPackagesRepository _workPackagesRepository;
   final AppStateRepository _appStateRepository;
   final TimerRepository _timerRepository;
-  final SettingsRepository _settingsRepository;
+  final TaskFilterRepository _taskFilter;
   late String _projectId;
   CancelToken? _cancelToken;
 
@@ -42,7 +42,7 @@ class WorkPackagesListBloc
     this._workPackagesRepository,
     this._appStateRepository,
     this._timerRepository,
-    this._settingsRepository,
+    this._taskFilter,
   ) : super(const WorkPackagesListState.loading()) {
     WidgetsBinding.instance.addObserver(this);
   }
@@ -76,8 +76,8 @@ class WorkPackagesListBloc
         emit(const WorkPackagesListState.loading());
       }
 
-      final statuses = await _settingsRepository.workPackagesStatusFilter;
-      final assigneeFilter = await _settingsRepository.assigneeFilter;
+      final statuses = await _taskFilter.workPackagesStatusFilter;
+      final assigneeFilter = await _taskFilter.assigneeFilter;
 
       final List<WorkPackage> items = await _workPackagesRepository.list(
         projectId: _projectId,

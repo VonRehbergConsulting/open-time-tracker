@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
-/// User-scoped, persisted UI settings.
+/// User-scoped, persisted UI preferences (theme, and other purely
+/// presentation-layer knobs added in the future).
 ///
-/// Currently only carries the app-wide [ThemeMode] override, but is the
-/// natural home for any future preferences that shouldn't live in
-/// [AppStateRepository] (which is session/navigation state).
-abstract class SettingsRepository {
+/// Deliberately named with a `Ui` prefix to disambiguate from the
+/// pre-existing `SettingsRepository` under `lib/modules/task_selection/`
+/// which holds task-selection preferences (working hours, filters,
+/// analytics consent). Two unrelated types with identical names made
+/// imports and DI registrations ambiguous.
+abstract class UiSettingsRepository {
   /// The user's persisted theme-mode override. Defaults to
   /// [ThemeMode.system] until explicitly changed.
   ThemeMode get themeMode;
