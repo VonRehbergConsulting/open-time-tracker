@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:open_project_time_tracker/app/di/inject.dart';
-import 'package:open_project_time_tracker/app/settings/domain/settings_repository.dart';
+import 'package:open_project_time_tracker/app/settings/domain/ui_settings_repository.dart';
 import 'package:open_project_time_tracker/app/ui/widgets/configured_card.dart';
 import 'package:open_project_time_tracker/l10n/app_localizations.dart';
 
 /// Renders the current [ThemeMode] override and lets the user change
-/// it. Reads and writes [SettingsRepository] directly (no bloc) — the
-/// state is a single enum and the write path is trivial.
+/// it. Reads and writes [UiSettingsRepository] directly (no bloc) —
+/// the state is a single enum and the write path is trivial.
 class AppearanceTile extends StatefulWidget {
   const AppearanceTile({super.key});
 
@@ -17,13 +17,13 @@ class AppearanceTile extends StatefulWidget {
 }
 
 class _AppearanceTileState extends State<AppearanceTile> {
-  late final SettingsRepository _settings;
+  late final UiSettingsRepository _settings;
   late final Stream<ThemeMode> _stream;
 
   @override
   void initState() {
     super.initState();
-    _settings = inject<SettingsRepository>();
+    _settings = inject<UiSettingsRepository>();
     _stream = _settings.observeThemeMode();
   }
 

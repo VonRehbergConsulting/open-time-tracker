@@ -4,7 +4,7 @@ import 'package:open_project_time_tracker/app/auth/domain/auth_service.dart';
 import 'package:open_project_time_tracker/app/storage/app_state_repository.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/bloc.dart';
 import 'package:open_project_time_tracker/extensions/date_time.dart';
-import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
+import 'package:open_project_time_tracker/app/preferences/domain/user_preferences_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/time_entries_repository.dart';
 import 'package:open_project_time_tracker/modules/timer/domain/timer_repository.dart';
 
@@ -33,7 +33,7 @@ class TimeEntriesListBloc
     extends EffectCubit<TimeEntriesListState, TimeEntriesListEffect>
     with WidgetsBindingObserver {
   final TimeEntriesRepository _timeEntriesRepository;
-  final SettingsRepository _settingsRepository;
+  final UserPreferencesRepository _userPreferences;
   final AuthService _authService;
   final AuthService _graphAuthService;
   final AppStateRepository _appStateRepository;
@@ -57,7 +57,7 @@ class TimeEntriesListBloc
 
   TimeEntriesListBloc(
     this._timeEntriesRepository,
-    this._settingsRepository,
+    this._userPreferences,
     this._authService,
     this._graphAuthService,
     this._appStateRepository,
@@ -122,7 +122,7 @@ class TimeEntriesListBloc
         startDate: dateOnly,
         endDate: dateOnly,
       );
-      workingHours = await _settingsRepository.workingHours;
+      workingHours = await _userPreferences.workingHours;
       if (isClosed) {
         return;
       }
@@ -156,7 +156,7 @@ class TimeEntriesListBloc
   }
 
   Future<void> updateWorkingHours(Duration value) async {
-    await _settingsRepository.setWorkingHours(value);
+    await _userPreferences.setWorkingHours(value);
     if (isClosed) {
       return;
     }

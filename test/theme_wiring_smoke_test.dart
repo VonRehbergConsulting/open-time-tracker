@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:open_project_time_tracker/app/settings/infrastructure/local_settings_repository.dart';
+import 'package:open_project_time_tracker/app/settings/infrastructure/local_ui_settings_repository.dart';
 import 'package:open_project_time_tracker/app/storage/preferences_storage.dart';
 import 'package:open_project_time_tracker/app/ui/themes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Smoke test for the `MyApp` theme wiring: the `MaterialApp`'s
-/// `themeMode` must follow `SettingsRepository.observeThemeMode()`
+/// `themeMode` must follow `UiSettingsRepository.observeThemeMode()`
 /// so a tap in the profile page immediately re-tints the whole app.
 ///
 /// We don't pump `MyApp` itself — that would need the full DI graph
 /// (AppRouter, AppRouterBloc, auth stack, …). Instead we replicate
 /// the exact `StreamBuilder<ThemeMode>` shape from `MyApp.build` and
 /// verify the contract end-to-end against the real repository.
-Widget _themedApp(LocalSettingsRepository settings) {
+Widget _themedApp(LocalUiSettingsRepository settings) {
   return StreamBuilder<ThemeMode>(
     stream: settings.observeThemeMode(),
     initialData: settings.themeMode,
@@ -44,7 +44,7 @@ void main() {
     SharedPreferences.setMockInitialValues({
       'settings.themeMode': 'dark',
     });
-    final settings = LocalSettingsRepository(PreferencesStorage());
+    final settings = LocalUiSettingsRepository(PreferencesStorage());
     await settings.load();
 
     await tester.pumpWidget(_themedApp(settings));
@@ -53,7 +53,7 @@ void main() {
   });
 
   testWidgets('MaterialApp reflects setThemeMode() live', (tester) async {
-    final settings = LocalSettingsRepository(PreferencesStorage());
+    final settings = LocalUiSettingsRepository(PreferencesStorage());
     await settings.load();
 
     await tester.pumpWidget(_themedApp(settings));

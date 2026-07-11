@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:open_project_time_tracker/app/ui/bloc/effect_bloc.dart';
-import 'package:open_project_time_tracker/modules/task_selection/domain/settings_repository.dart';
+import 'package:open_project_time_tracker/modules/task_selection/domain/task_filter_repository.dart';
 import 'package:open_project_time_tracker/modules/task_selection/domain/statuses_repository.dart';
 
 part 'work_packages_filter_bloc.freezed.dart';
@@ -24,18 +24,18 @@ class WorkPackagesFilterEffect with _$WorkPackagesFilterEffect {
 class WorkPackagesFilterBloc
     extends EffectCubit<WorkpackagesFilterState, WorkPackagesFilterEffect> {
   final StatusesRepository _statusesRepository;
-  final SettingsRepository _settingsRepository;
+  final TaskFilterRepository _taskFilter;
 
   WorkPackagesFilterBloc(
     this._statusesRepository,
-    this._settingsRepository,
+    this._taskFilter,
   ) : super(const WorkpackagesFilterState.loading());
 
   Future<void> reload() async {
     final responces = await Future.wait([
       _statusesRepository.list(),
-      _settingsRepository.workPackagesStatusFilter,
-      _settingsRepository.assigneeFilter,
+      _taskFilter.workPackagesStatusFilter,
+      _taskFilter.assigneeFilter,
     ]);
     final statuses = responces[0] as List<Status>;
     var selectedIds = responces[1] as Set<int>;
@@ -102,8 +102,8 @@ class WorkPackagesFilterBloc
           assigneeFilter,
         ) async {
           await Future.wait([
-            _settingsRepository.setWorkPackagesStatusFilter(selectedIds),
-            _settingsRepository.setAssigneeFilter(assigneeFilter),
+            _taskFilter.setWorkPackagesStatusFilter(selectedIds),
+            _taskFilter.setAssigneeFilter(assigneeFilter),
           ]);
         },
       );
@@ -126,7 +126,7 @@ class WorkPackagesFilterBloc
       }
     }
     if (isChanged) {
-      await _settingsRepository.setWorkPackagesStatusFilter(selectedIds);
+      await _taskFilter.setWorkPackagesStatusFilter(selectedIds);
       print('Non-existent statuses have been removed');
     }
     return selectedIds;
