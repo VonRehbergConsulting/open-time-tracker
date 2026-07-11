@@ -12,8 +12,6 @@ class LocalInstancesRepository implements InstancesRepository {
   LocalInstancesRepository({
     this.legacyBaseUrlKey = _defaultLegacyBaseUrlKey,
     this.legacyClientIdKey = _defaultLegacyClientIdKey,
-    this.legacyAccessTokenKey = _defaultLegacyAccessTokenKey,
-    this.legacyRefreshTokenKey = _defaultLegacyRefreshTokenKey,
     this.onLegacyTokenMigration,
   });
 
@@ -22,24 +20,21 @@ class LocalInstancesRepository implements InstancesRepository {
 
   static const _defaultLegacyBaseUrlKey = 'baseUrl';
   static const _defaultLegacyClientIdKey = 'clientId';
-  static const _defaultLegacyAccessTokenKey = 'accessToken';
-  static const _defaultLegacyRefreshTokenKey = 'refreshToken';
 
   final String legacyBaseUrlKey;
   final String legacyClientIdKey;
-  final String legacyAccessTokenKey;
-  final String legacyRefreshTokenKey;
 
   /// Optional hook invoked with the newly-minted instance id when the
-  /// legacy single-instance credentials get migrated. Consumers (namely
-  /// the token storage) use this to move existing OAuth tokens to the
-  /// per-instance keyspace so the user does not have to log in again.
-  final Future<void> Function(
-    String newInstanceId,
-    String? legacyAccessToken,
-    String? legacyRefreshToken,
-  )?
-  onLegacyTokenMigration;
+  /// legacy single-instance configuration gets migrated. Consumers
+  /// (namely the secure token storage) use this signal to re-key any
+  /// existing OAuth tokens from the unscoped legacy keyspace to the
+  /// per-instance one, so the user does not have to log in again.
+  ///
+  /// The tokens themselves live in `flutter_secure_storage`, not
+  /// `SharedPreferences`, so the consumer reads and rewrites them
+  /// itself — this hook only communicates the target instance id and
+  /// the fact that migration is happening.
+  final Future<void> Function(String newInstanceId)? onLegacyTokenMigration;
 
   final _subject = BehaviorSubject<InstancesSnapshot>();
   Future<InstancesSnapshot>? _loading;
@@ -123,8 +118,10 @@ class LocalInstancesRepository implements InstancesRepository {
     );
 
     // Best-effort port of legacy tokens so the user stays signed in.
+    // The hook resolves the secure token storage lazily and re-keys
+    // any existing tokens under the new instance id.
     try {
-      await onLegacyTokenMigration?.call(id, null, null);
+      await onLegacyTokenMigration?.call(id);
     } catch (e) {
       debugPrint('Legacy token migration hook failed: $e');
     }

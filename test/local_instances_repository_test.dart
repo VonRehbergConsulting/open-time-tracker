@@ -24,7 +24,7 @@ void main() {
 
         String? migratedId;
         final repo = LocalInstancesRepository(
-          onLegacyTokenMigration: (id, _, _) async => migratedId = id,
+          onLegacyTokenMigration: (id) async => migratedId = id,
         );
 
         final snapshot = await repo.load();
@@ -81,7 +81,7 @@ void main() {
 
         var hookCalls = 0;
         final repo = LocalInstancesRepository(
-          onLegacyTokenMigration: (_, _, _) async => hookCalls++,
+          onLegacyTokenMigration: (_) async => hookCalls++,
         );
 
         final first = await repo.load();
@@ -111,7 +111,7 @@ void main() {
 
       var hookCalls = 0;
       final repo = LocalInstancesRepository(
-        onLegacyTokenMigration: (_, _, _) async => hookCalls++,
+        onLegacyTokenMigration: (_) async => hookCalls++,
       );
 
       final snapshot = await repo.load();

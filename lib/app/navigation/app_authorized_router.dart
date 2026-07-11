@@ -25,6 +25,12 @@ class _AppAuthorizedRouterState extends State<AppAuthorizedRouter> {
   double _miniTimerHeight = _kMiniTimerFallbackHeight;
 
   void _handleMiniTimerSize(Size size) {
+    // The callback is scheduled via addPostFrameCallback from
+    // _MeasureSize's render object; by the time it fires this State
+    // may have been disposed (e.g. an instance switch remounted the
+    // whole authorized subtree between layout and post-frame). Guard
+    // against setState-after-dispose.
+    if (!mounted) return;
     // Debounce sub-pixel jitter caused by e.g. animated font metrics.
     if ((size.height - _miniTimerHeight).abs() < 0.5) return;
     setState(() => _miniTimerHeight = size.height);

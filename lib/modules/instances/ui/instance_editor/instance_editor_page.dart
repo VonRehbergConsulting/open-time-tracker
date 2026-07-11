@@ -180,6 +180,10 @@ class _InstanceEditorFormState extends State<_InstanceEditorForm> {
           // ignore: use_build_context_synchronously
           final saved = await AppRouter.routeToTimeEntrySummary(
             navigator.context,
+            // Save-intent flow: bypass the active-timer redirect that
+            // would otherwise loop back to the timer page and block
+            // the save.
+            skipActiveTimerRedirect: true,
           );
           if (saved != null) {
             await switcher.switchTo(instanceId, force: true);

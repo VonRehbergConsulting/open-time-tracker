@@ -119,13 +119,31 @@ class AppRouter {
     return true;
   }
 
+  /// Opens the time entry summary page.
+  ///
+  /// By default, if a timer is running and the user is viewing today,
+  /// this reroutes back to the timer page instead — a safety net for
+  /// entry-creation flows (e.g. the "+" button in the time entries
+  /// list) that would otherwise let the user create a competing entry
+  /// while a timer is active.
+  ///
+  /// Callers whose explicit intent is to *save the currently running
+  /// timer* (e.g. the instance-switch "Save" prompt, the timer's
+  /// `finish` effect) must opt out via [skipActiveTimerRedirect];
+  /// otherwise the redirect would trap them in an unbreakable loop
+  /// back to the timer page.
   static Future<TimeEntry?> routeToTimeEntrySummary(
     BuildContext context, {
     TimeEntry? timeEntry,
+    bool skipActiveTimerRedirect = false,
   }) async {
-    final shouldRedirect = await redirectToTimerIfActiveToday(context: context);
-    if (shouldRedirect) {
-      return null;
+    if (!skipActiveTimerRedirect) {
+      final shouldRedirect = await redirectToTimerIfActiveToday(
+        context: context,
+      );
+      if (shouldRedirect) {
+        return null;
+      }
     }
 
     if (!context.mounted) {

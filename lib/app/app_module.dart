@@ -42,7 +42,7 @@ abstract class AppModule {
   InstancesRepository instancesRepository() => LocalInstancesRepository(
     // Lazy hook: resolves the token storage from GetIt at the moment
     // the migration actually runs (after both singletons are wired).
-    onLegacyTokenMigration: (newInstanceId, legacyAccess, legacyRefresh) async {
+    onLegacyTokenMigration: (newInstanceId) async {
       final storage =
           inject<AuthTokenStorage>(instanceName: 'openProject')
               as SecureAuthTokenStorage;

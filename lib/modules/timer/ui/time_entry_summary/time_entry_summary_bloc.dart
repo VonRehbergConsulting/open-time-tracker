@@ -85,9 +85,26 @@ class TimeEntrySummaryBloc
     if (isClosed) return;
     await _emitIdleState();
 
+    // Comment suggestions are a nice-to-have. Only fetch them when we
+    // can scope the request to the current work package; otherwise the
+    // repository would run the query unscoped and pull up to
+    // `pageSize` unrelated entries from across the user's entire time
+    // entry history — wasted bandwidth and, worse, suggestions from
+    // completely unrelated tickets.
+    final workPackageIdString = loaded.workPackageHref.split('/').last;
+    final workPackageId = int.tryParse(workPackageIdString);
+    if (workPackageId == null) {
+      if (isClosed) return;
+      debugPrint(
+        'Skipping comment suggestions: could not parse work package id '
+        'from "${loaded.workPackageHref}"',
+      );
+      _commentSuggestions = const [];
+      await _emitIdleState();
+      return;
+    }
+
     try {
-      final workPackageIdString = loaded.workPackageHref.split('/').last;
-      final workPackageId = int.tryParse(workPackageIdString);
       final timeEntries = await _timeEntriesRepository.list(
         workPackageId: workPackageId,
         pageSize: 100,
@@ -101,7 +118,7 @@ class TimeEntrySummaryBloc
     } catch (e) {
       if (isClosed) return;
       debugPrint('Failed to load comment suggestions: $e');
-      _commentSuggestions = [];
+      _commentSuggestions = const [];
       await _emitIdleState();
     }
   }

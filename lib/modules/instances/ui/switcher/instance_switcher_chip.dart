@@ -168,7 +168,15 @@ class _SwitcherSheet extends StatelessWidget {
         // Close the sheet before routing to the summary so the user
         // sees the summary page unobstructed.
         sheetNavigator.pop();
-        final saved = await AppRouter.routeToTimeEntrySummary(context);
+        // Opt out of the active-timer redirect: the whole point of
+        // this branch is to save the currently running timer via the
+        // summary page. Without this flag routeToTimeEntrySummary
+        // would bounce us back to the timer page and the save could
+        // never complete.
+        final saved = await AppRouter.routeToTimeEntrySummary(
+          context,
+          skipActiveTimerRedirect: true,
+        );
         if (saved != null) {
           await switcher.switchTo(instance.id, force: true);
         }

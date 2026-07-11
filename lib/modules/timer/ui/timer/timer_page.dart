@@ -59,7 +59,15 @@ class TimerPage extends EffectBlocPage<TimerBloc, TimerState, TimerEffect> {
   void onEffect(BuildContext context, TimerEffect effect) {
     effect.when(
       finish: () {
-        AppRouter.routeToTimeEntrySummary(context).then((savedEntry) {
+        // The timer just stopped and we want to save its entry.
+        // Opt out of the active-timer redirect: even if `isActive`
+        // still momentarily reports true (race between stopTime
+        // being written and this effect firing), the correct next
+        // step is the summary page, not another push of the timer.
+        AppRouter.routeToTimeEntrySummary(
+          context,
+          skipActiveTimerRedirect: true,
+        ).then((savedEntry) {
           if (savedEntry != null && context.mounted) {
             AppRouter.routeToTimeEntriesListTemporary(context);
           }
